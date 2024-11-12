@@ -3,10 +3,10 @@ import styled from '@emotion/styled';
 import { useTranslation } from 'next-i18next';
 
 export function Select<T extends string | number>({
-    options,
-    value,
-    setValue,
-}: {
+                                                      options,
+                                                      value,
+                                                      setValue,
+                                                  }: {
     options?: Array<{
         label: string;
         value: T;
@@ -19,12 +19,11 @@ export function Select<T extends string | number>({
         <Main>
             <select
                 value={value || ''}
-                placeholder={t('select-category')}
                 onChange={e => {
                     setValue(e.target.value as T);
                 }}>
                 <option value="" disabled>
-                    Select your option
+                    {t('select-category')}
                 </option>
                 {options?.map(o => (
                     <option value={o.value} key={o.value}>
@@ -40,9 +39,7 @@ const Main = styled.div`
     min-width: 20rem;
     select {
         appearance: none;
-        /* safari */
         -webkit-appearance: none;
-        /* other styles for aesthetics */
         background-color: ${thv.background.main};
         border: 1px solid ${thv.text.main};
         border-radius: ${p => p.theme.borderRadius};
