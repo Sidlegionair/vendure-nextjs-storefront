@@ -1,9 +1,8 @@
-import { BaseRemUnit } from '@/src/components/sharedStyles';
 import { thv } from '@/src/theme';
 import styled from '@emotion/styled';
 
 export type BaseProps = {
-    size: BaseRemUnit;
+    size: string | number; // Change this to accept any valid CSS unit
     weight: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
     upperCase?: boolean;
     capitalize?: boolean;
