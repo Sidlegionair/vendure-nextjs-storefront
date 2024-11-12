@@ -1,6 +1,11 @@
 // Define levels as a type for color scaling
 type Level = 0 | 25 | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 1000;
 
+// Define breakpoints with a new type to ensure consistency
+type BreakpointSizes = 'ssm' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
+
+type Breakpoints = Record<BreakpointSizes, string>;
+
 // FunctionTheme: includes functions for accent, gray, and borderRadius settings.
 type FunctionTheme = {
     accent: (l: Level) => string;
@@ -9,7 +14,6 @@ type FunctionTheme = {
     borderRadius: string;
     withOpacity: (color: string, opacity: number) => string; // New function for opacity
 };
-
 
 // DetailTheme: Defines more specific parts of the theme, such as text colors, backgrounds, buttons, etc.
 type DetailTheme = {
@@ -49,20 +53,7 @@ type DetailTheme = {
     placeholder: string;
     noteCard: string;
     outline: string;
-    breakpoints: {
-        /** 576px */
-        ssm: string;
-        /** 640px */
-        sm: string;
-        /** 768px */
-        md: string;
-        /** 1024px */
-        lg: string;
-        /** 1280px */
-        xl: string;
-        /** 1536px */
-        '2xl': string;
-    };
+    breakpoints: Breakpoints;
     price: {
         default: string;
         discount: string;
@@ -79,7 +70,6 @@ const defaultThemeFunction = (hue: number): FunctionTheme => ({
     grayAlpha: (g: Level, alpha: number) => `lch(${100.0 - g / 10.0}% 0 0 / ${alpha});`,
     borderRadius: '0rem',
     withOpacity: (color: string, opacity: number) => {
-        // Convert hex color to RGBA with the given opacity
         const r = parseInt(color.slice(1, 3), 16);
         const g = parseInt(color.slice(3, 5), 16);
         const b = parseInt(color.slice(5, 7), 16);
@@ -125,46 +115,7 @@ const themeTransform = (t: MainTheme): Gen<DetailTheme> => {
 // Factory function to create a theme with hue and details
 export const createTheme = (
     hue: number,
-    fn: (t) => {
-        border: { main: string };
-        typography: {
-            fontFamily: string;
-            fontSize: { small: string; large: string; medium: string };
-            fontWeight: { light: number; bold: number; italic: string; regular: number }
-        };
-        shadow: string;
-        error: string;
-        button: { border: string; icon: { front: string }; back: string; front: string };
-        outline: string;
-        vectors: { white: string; black: string; main: string };
-        noteCard: string;
-        background: {
-            secondary: string;
-            third: string;
-            white: string;
-            riderLevelBackground: string;
-            groupBackground: string;
-            main: string;
-            ice: string;
-            modal: string
-        };
-        success: string;
-        price: { default: string; discount: string };
-        tile: { hover: string; background: string };
-        ellipse: { lightGray: string; backgroundDark: string; backgroundLight: string };
-        text: {
-            groupHeading: string;
-            italicText: string;
-            inactive: string;
-            subtitle: string;
-            contrast: string;
-            black: string;
-            main: string
-        };
-        placeholder: string;
-        breakpoints: { xl: string; '2xl': string; md: string; sm: string; lg: string; ssm: string };
-        opacity: { light: number; veryHeavy: number; medium: number; heavy: number }
-    },
+    fn: (t) => DetailTheme,
     themeFunction = defaultThemeFunction,
 ): MainTheme => {
     const baseTheme = themeFunction(hue);
@@ -174,7 +125,7 @@ export const createTheme = (
     };
 };
 
-// Example: Light theme definition
+// Light theme definition with updated breakpoints
 export const LightTheme = createTheme(300, (t) => ({
     background: {
         main: t.gray(0),
@@ -186,7 +137,7 @@ export const LightTheme = createTheme(300, (t) => ({
         groupBackground: 'rgba(255, 255, 255, 0.006)',
         riderLevelBackground: '#FFFFFF',
         accent: 'rgba(158, 46, 58, 1)',
-        accentGreen: '#0E4632'
+        accentGreen: '#0E4632',
     },
     text: {
         main: `lch(9.72% 6.43 251.05)`,
@@ -198,7 +149,7 @@ export const LightTheme = createTheme(300, (t) => ({
         italicText: '#000000',
         accent: 'rgba(158, 46, 58, 1)',
         lightgray: '#B8B8B8',
-        accentGreen: '#0E4632'
+        accentGreen: '#0E4632',
     },
     button: {
         back: '#141C23',
@@ -238,7 +189,6 @@ export const LightTheme = createTheme(300, (t) => ({
             italic: 'italic',
         },
     },
-    outline: '#dcdcdc',
     breakpoints: {
         ssm: '576px',
         sm: '640px',
@@ -246,8 +196,8 @@ export const LightTheme = createTheme(300, (t) => ({
         lg: '1024px',
         xl: '1280px',
         '2xl': '1536px',
-        '3xl': '1920px',    // New breakpoint for large desktop screens
-        '4xl': '2560px',     // New breakpoint for ultra-wide screens
+        '3xl': '1920px',
+        '4xl': '2560px',
     },
     opacity: {
         light: 0.2,
@@ -259,7 +209,7 @@ export const LightTheme = createTheme(300, (t) => ({
         main: '#828282',
         white: '#FFFFFF',
         black: '#212121',
-        gray: '4D4D4D',
+        gray: '#4D4D4D',
     },
     ellipse: {
         backgroundLight: '#000000',
