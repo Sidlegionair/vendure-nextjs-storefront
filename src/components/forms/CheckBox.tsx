@@ -85,7 +85,7 @@ const CheckboxAnimation = styled(motion.div)`
 `;
 
 const CheckboxIcon = styled(Check)`
-    color: ${p => p.theme.black};
+    color: ${p => p.theme.text.black};
 `;
 
 const CheckboxIconHolder = styled.div`
