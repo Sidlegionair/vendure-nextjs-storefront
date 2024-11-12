@@ -95,12 +95,25 @@ const Input = styled.input`
     width: calc(100% - 3.2rem);
     height: 100%;
 
+    font-weight: 600;
+
+
     font-size: 1.6rem;
+
+    /* Placeholder styles */
+    &::placeholder {
+        font-size: 16px;
+        weight: 600;
+        color: ${p => p.theme.text.lightgray}
+
+    }
+
 `;
 
 const FakeForm = styled(Stack)`
     width: 100%;
     position: relative;
+
 
     padding: 1rem;
 
@@ -108,6 +121,6 @@ const FakeForm = styled(Stack)`
     align-items: center;
     gap: 1.6rem;
 
-    border-radius: 2px;
-    border: 1px solid ${p => p.theme.gray(100)};
+    border-radius: 8px;
+    border: 1px solid ${p => p.theme.border.lightgray};
 `;

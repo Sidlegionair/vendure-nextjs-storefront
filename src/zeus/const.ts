@@ -578,7 +578,7 @@ export const ReturnTypes: Record<string,any> = {
 		children:"Collection",
 		filters:"ConfigurableOperation",
 		translations:"CollectionTranslation",
-		productVariants:"ProductVariantList",
+		Variants:"ProductVariantList",
 		customFields:"JSON"
 	},
 	CollectionBreadcrumb:{
@@ -1410,7 +1410,7 @@ export const ReturnTypes: Record<string,any> = {
 		options:"ProductOption",
 		facetValues:"FacetValue",
 		translations:"ProductVariantTranslation",
-		customFields:"JSON"
+		customFields:"Object"
 	},
 	ProductVariantTranslation:{
 		id:"ID",
@@ -1762,6 +1762,6 @@ export const ReturnTypes: Record<string,any> = {
 }
 
 export const Ops = {
-query: "Query" as const,
+	query: "Query" as const,
 	mutation: "Mutation" as const
 }

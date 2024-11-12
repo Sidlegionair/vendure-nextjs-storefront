@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, SearchIcon, X } from 'lucide-react';
 import styled from '@emotion/styled';
 import { Link, Stack, TP, TypoGraphy } from '@/src/components/atoms';
@@ -8,18 +8,52 @@ import { useNavigationSearch } from './hooks';
 import { PopularSearches } from './PopularSearches';
 
 export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> = ({
-    loading,
-    searchQuery,
-    searchResults,
-    totalItems,
-    setSearchQuery,
-    closeSearch,
-    onSubmit,
-}) => {
+                                                                                       loading,
+                                                                                       searchQuery,
+                                                                                       searchResults,
+                                                                                       totalItems,
+                                                                                       setSearchQuery,
+                                                                                       closeSearch,
+                                                                                       onSubmit,
+                                                                                   }) => {
     const { t } = useTranslation('common');
     const popularSearches = ['Computer', 'Tablet', 'Plant', 'Gloves', 'Mouse'];
 
     const inputRef = useRef<HTMLInputElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [isPanelVisible, setIsPanelVisible] = useState(false);
+
+    // Show panel on input focus
+    const handleFocus = () => setIsPanelVisible(true);
+
+    // Hide panel when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+                setIsPanelVisible(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
+    // Close panel when Escape key is pressed
+    useEffect(() => {
+        const handleEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                closeSearch();
+            }
+        };
+        document.addEventListener('keydown', handleEscape);
+
+        return () => {
+            document.removeEventListener('keydown', handleEscape);
+        };
+    }, [closeSearch]);
+
     useEffect(() => {
         setTimeout(() => {
             inputRef.current?.focus();
@@ -27,54 +61,70 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
     }, []);
 
     return (
-        <Stack w100 itemsCenter style={{ position: 'relative' }}>
+        <Stack itemsCenter style={{ position: 'relative', 'width': '50%' }} ref={containerRef}>
             <Stack w100 itemsCenter gap="1rem">
-                <CrossButton onClick={closeSearch}>
-                    <X size="2rem" />
-                </CrossButton>
                 <Form onSubmit={onSubmit}>
                     <Input
-                        onKeyDown={e => e.key === 'Escape' && closeSearch()}
+                        onKeyDown={e => {
+                            if (e.key === 'Escape') {
+                                closeSearch();
+                                setIsPanelVisible(false);
+                            }
+                        }}
                         ref={inputRef}
                         placeholder={t('search-for-best-products')}
                         value={searchQuery}
-                        onChange={e => setSearchQuery(e.target.value)}
+                        onFocus={handleFocus}
+                        onChange={e => {
+                            setSearchQuery(e.target.value);
+                            setIsPanelVisible(true);
+                        }}
                         type="text"
                     />
-                    <SearchButton type="submit">
-                        <SearchIcon size="1.5rem" />
-                    </SearchButton>
+                    {searchQuery ? (
+                        <SearchButton onClick={() => {
+                            setSearchQuery('');
+                            closeSearch();
+                            setIsPanelVisible(false)
+                        }}>
+                            <X size="1.5rem" />
+                        </SearchButton>
+                    ) : (
+                        <SearchButton type="submit">
+                            <SearchIcon size="1.5rem" />
+                        </SearchButton>
+                    )}
                 </Form>
             </Stack>
-            <SearchPosition w100>
-                <SearchContent w100>
-                    <PopularSearches popularSearches={popularSearches} onClick={item => setSearchQuery(item)}>
-                        <TypoGraphy size="2rem" weight={400} noWrap>
-                            {t('popular-searches-heading')}
-                        </TypoGraphy>
-                    </PopularSearches>
-                    {searchQuery.length < 3 ? (
-                        <TP>{t('search-query-to-short')}</TP>
-                    ) : loading ? (
-                        <TP>{t('search-results-loading')}</TP>
-                    ) : searchResults.length === 0 ? (
-                        <TP>
-                            <Trans
-                                i18nKey="search-results-no-results"
-                                values={{ searchQuery }}
-                                components={{ 1: <strong></strong> }}
-                            />
-                        </TP>
-                    ) : (
-                        <Wrapper column w100 gap={'2rem'}>
-                            <Container>
-                                <Stack column w100 gap={'2rem'}>
-                                    <TypoGraphy size={'2rem'} weight={400}>
-                                        {t('search-results-header')}
-                                    </TypoGraphy>
-                                    <Results w100 flexWrap>
-                                        {searchResults.slice(0, 6).map(result => {
-                                            return (
+            {isPanelVisible && (
+                <SearchPosition w100>
+                    <SearchContent w100>
+                        <PopularSearches popularSearches={popularSearches} onClick={item => setSearchQuery(item)}>
+                            <TypoGraphy size="2rem" weight={400} noWrap>
+                                {t('popular-searches-heading')}
+                            </TypoGraphy>
+                        </PopularSearches>
+                        {searchQuery.length < 3 ? (
+                            <TP>{t('search-query-to-short')}</TP>
+                        ) : loading ? (
+                            <TP>{t('search-results-loading')}</TP>
+                        ) : searchResults.length === 0 ? (
+                            <TP>
+                                <Trans
+                                    i18nKey="search-results-no-results"
+                                    values={{ searchQuery }}
+                                    components={{ 1: <strong></strong> }}
+                                />
+                            </TP>
+                        ) : (
+                            <Wrapper column w100 gap={'2rem'}>
+                                <Container>
+                                    <Stack column w100 gap={'2rem'}>
+                                        <TypoGraphy size={'2rem'} weight={400}>
+                                            {t('search-results-header')}
+                                        </TypoGraphy>
+                                        <Results w100 flexWrap>
+                                            {searchResults.slice(0, 6).map(result => (
                                                 <ResultCard gap="0.5rem" itemsCenter column key={result.slug}>
                                                     <ProductImageWithInfo
                                                         size="thumbnail-big"
@@ -87,28 +137,29 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                                                         </TP>
                                                     </Stack>
                                                 </ResultCard>
-                                            );
-                                        })}
-                                    </Results>
-                                </Stack>
-                            </Container>
-                            <StyledLink href={`/search?q=${searchQuery}`}>
-                                <Trans
-                                    i18nKey="search-results-total"
-                                    components={{ 1: <strong></strong> }}
-                                    values={{ totalItems, searchQuery }}
-                                />
-                                <IconWrapper>
-                                    <ArrowRight size="1.5rem" />
-                                </IconWrapper>
-                            </StyledLink>
-                        </Wrapper>
-                    )}
-                </SearchContent>
-            </SearchPosition>
+                                            ))}
+                                        </Results>
+                                    </Stack>
+                                </Container>
+                                <StyledLink href={`/search?q=${searchQuery}`}>
+                                    <Trans
+                                        i18nKey="search-results-total"
+                                        components={{ 1: <strong></strong> }}
+                                        values={{ totalItems, searchQuery }}
+                                    />
+                                    <IconWrapper>
+                                        <ArrowRight size="1.5rem" />
+                                    </IconWrapper>
+                                </StyledLink>
+                            </Wrapper>
+                        )}
+                    </SearchContent>
+                </SearchPosition>
+            )}
         </Stack>
     );
 };
+
 
 const StyledLink = styled(Link)`
     display: flex;
@@ -180,9 +231,10 @@ const Form = styled.form`
 
 const Input = styled.input`
     width: 100%;
+    height: 55px;
     padding: 1rem 2rem;
-    border: 1px solid ${p => p.theme.gray(100)};
-    border-radius: ${({ theme }) => theme.borderRadius};
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 37.5px;
     outline: none;
     font-size: 1.5rem;
     color: ${p => p.theme.gray(1000)};

@@ -13,7 +13,7 @@ export const CheckoutPage: React.FC<InferGetServerSidePropsType<typeof getServer
     const { availableCountries, alsoBoughtProducts, eligibleShippingMethods, activeCustomer } = props;
 
     return (
-        <CheckoutLayout pageTitle={`${t('seoTitles.checkout')}`}>
+        <CheckoutLayoutStyled pageTitle={`${t('seoTitles.checkout')}`}>
             <Content>
                 <OrderForm
                     availableCountries={availableCountries}
@@ -22,17 +22,42 @@ export const CheckoutPage: React.FC<InferGetServerSidePropsType<typeof getServer
                 />
                 <CheckoutCarousel alsoBoughtProducts={alsoBoughtProducts} />
             </Content>
-        </CheckoutLayout>
+        </CheckoutLayoutStyled>
     );
 };
+
+const CheckoutLayoutStyled = styled(CheckoutLayout)`
+    position: relative;
+    height: 100%;
+    min-height: 100vh;
+    width: 100%;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('/images/bg/checkout.jpeg') no-repeat center center;
+        background-size: cover;
+        opacity: 0.2;
+        z-index: -1; /* Set the background behind the content */
+    }
+`;
+
 
 const Content = styled(ContentContainer)`
     position: relative;
     width: 1280px;
-    padding: 0;
+    padding: 119px 0 90px 0px;
 
     @media (max-width: 1560px) {
         width: 1440px;
         padding: 0 4rem;
+    }
+
+    @media(min-width: 1560px) {
+        max-width: 1528px;
     }
 `;

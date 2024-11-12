@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import { AllTypesProps, ReturnTypes, Ops } from './const';
-export const HOST = 'http://localhost:3000/shop-api';
+export const HOST = 'http`://localhost:3000/shop-api';
 
 export const HEADERS = {};
 export const apiSubscription = (options: chainOptions) => (query: string) => {
@@ -56,10 +56,26 @@ const handleFetchResponse = (response: Response): Promise<GraphQLResponse> => {
 
 export const apiFetch =
     (options: fetchOptions) =>
-    (query: string, variables: Record<string, unknown> = {}) => {
-        const fetchOptions = options[1] || {};
-        if (fetchOptions.method && fetchOptions.method === 'GET') {
-            return fetch(`${options[0]}?query=${encodeURIComponent(query)}`, fetchOptions)
+        (query: string, variables: Record<string, unknown> = {}) => {
+            const fetchOptions = options[1] || {};
+            if (fetchOptions.method && fetchOptions.method === 'GET') {
+                return fetch(`${options[0]}?query=${encodeURIComponent(query)}`, fetchOptions)
+                    .then(handleFetchResponse)
+                    .then((response: GraphQLResponse) => {
+                        if (response.errors) {
+                            throw new GraphQLError(response);
+                        }
+                        return response.data;
+                    });
+            }
+            return fetch(`${options[0]}`, {
+                body: JSON.stringify({ query, variables }),
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                ...fetchOptions,
+            })
                 .then(handleFetchResponse)
                 .then((response: GraphQLResponse) => {
                     if (response.errors) {
@@ -67,31 +83,15 @@ export const apiFetch =
                     }
                     return response.data;
                 });
-        }
-        return fetch(`${options[0]}`, {
-            body: JSON.stringify({ query, variables }),
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            ...fetchOptions,
-        })
-            .then(handleFetchResponse)
-            .then((response: GraphQLResponse) => {
-                if (response.errors) {
-                    throw new GraphQLError(response);
-                }
-                return response.data;
-            });
-    };
+        };
 
 export const InternalsBuildQuery = ({
-    ops,
-    props,
-    returns,
-    options,
-    scalars,
-}: {
+                                        ops,
+                                        props,
+                                        returns,
+                                        options,
+                                        scalars,
+                                    }: {
     props: AllTypesPropsType;
     returns: ReturnTypesType;
     ops: Operations;
@@ -157,73 +157,73 @@ export const InternalsBuildQuery = ({
 
 export const Thunder =
     (fn: FetchFunction) =>
-    <O extends keyof typeof Ops, SCLR extends ScalarDefinition, R extends keyof ValueTypes = GenericOperation<O>>(
-        operation: O,
-        graphqlOptions?: ThunderGraphQLOptions<SCLR>,
-    ) =>
-    <Z extends ValueTypes[R]>(
-        o: (Z & ValueTypes[R]) | ValueTypes[R],
-        ops?: OperationOptions & { variables?: Record<string, unknown> },
-    ) =>
-        fn(
-            Zeus(operation, o, {
-                operationOptions: ops,
-                scalars: graphqlOptions?.scalars,
-            }),
-            ops?.variables,
-        ).then(data => {
-            if (graphqlOptions?.scalars) {
-                return decodeScalarsInResponse({
-                    response: data,
-                    initialOp: operation,
-                    initialZeusQuery: o as VType,
-                    returns: ReturnTypes,
-                    scalars: graphqlOptions.scalars,
-                    ops: Ops,
-                });
-            }
-            return data;
-        }) as Promise<InputType<GraphQLTypes[R], Z, SCLR>>;
+        <O extends keyof typeof Ops, SCLR extends ScalarDefinition, R extends keyof ValueTypes = GenericOperation<O>>(
+            operation: O,
+            graphqlOptions?: ThunderGraphQLOptions<SCLR>,
+        ) =>
+            <Z extends ValueTypes[R]>(
+                o: (Z & ValueTypes[R]) | ValueTypes[R],
+                ops?: OperationOptions & { variables?: Record<string, unknown> },
+            ) =>
+                fn(
+                    Zeus(operation, o, {
+                        operationOptions: ops,
+                        scalars: graphqlOptions?.scalars,
+                    }),
+                    ops?.variables,
+                ).then(data => {
+                    if (graphqlOptions?.scalars) {
+                        return decodeScalarsInResponse({
+                            response: data,
+                            initialOp: operation,
+                            initialZeusQuery: o as VType,
+                            returns: ReturnTypes,
+                            scalars: graphqlOptions.scalars,
+                            ops: Ops,
+                        });
+                    }
+                    return data;
+                }) as Promise<InputType<GraphQLTypes[R], Z, SCLR>>;
 
 export const Chain = (...options: chainOptions) => Thunder(apiFetch(options));
 
 export const SubscriptionThunder =
     (fn: SubscriptionFunction) =>
-    <O extends keyof typeof Ops, SCLR extends ScalarDefinition, R extends keyof ValueTypes = GenericOperation<O>>(
-        operation: O,
-        graphqlOptions?: ThunderGraphQLOptions<SCLR>,
-    ) =>
-    <Z extends ValueTypes[R]>(
-        o: (Z & ValueTypes[R]) | ValueTypes[R],
-        ops?: OperationOptions & { variables?: ExtractVariables<Z> },
-    ) => {
-        const returnedFunction = fn(
-            Zeus(operation, o, {
-                operationOptions: ops,
-                scalars: graphqlOptions?.scalars,
-            }),
-        ) as SubscriptionToGraphQL<Z, GraphQLTypes[R], SCLR>;
-        if (returnedFunction?.on && graphqlOptions?.scalars) {
-            const wrapped = returnedFunction.on;
-            returnedFunction.on = (fnToCall: (args: InputType<GraphQLTypes[R], Z, SCLR>) => void) =>
-                wrapped((data: InputType<GraphQLTypes[R], Z, SCLR>) => {
-                    if (graphqlOptions?.scalars) {
-                        return fnToCall(
-                            decodeScalarsInResponse({
-                                response: data,
-                                initialOp: operation,
-                                initialZeusQuery: o as VType,
-                                returns: ReturnTypes,
-                                scalars: graphqlOptions.scalars,
-                                ops: Ops,
-                            }),
-                        );
-                    }
-                    return fnToCall(data);
-                });
-        }
-        return returnedFunction;
-    };
+        <O extends keyof typeof Ops, SCLR extends ScalarDefinition, R extends keyof ValueTypes = GenericOperation<O>>(
+            operation: O,
+            graphqlOptions?: ThunderGraphQLOptions<SCLR>,
+        ) =>
+            <Z extends ValueTypes[R]>(
+                o: (Z & ValueTypes[R]) | ValueTypes[R],
+                ops?: OperationOptions & { variables?: ExtractVariables<Z> },
+            ) => {
+                const returnedFunction = fn(
+                    Zeus(operation, o, {
+                        operationOptions: ops,
+                        scalars: graphqlOptions?.scalars,
+                    }),
+                ) as SubscriptionToGraphQL<Z, GraphQLTypes[R], SCLR>;
+                if (returnedFunction?.on && graphqlOptions?.scalars) {
+                    const wrapped = returnedFunction.on;
+                    returnedFunction.on = (fnToCall: (args: InputType<GraphQLTypes[R], Z, SCLR>) => void) =>
+                        wrapped((data: InputType<GraphQLTypes[R], Z, SCLR>) => {
+                            if (graphqlOptions?.scalars) {
+                                return fnToCall(
+                                    decodeScalarsInResponse({
+                                        response: data,
+                                        initialOp: operation,
+                                        initialZeusQuery: o as VType,
+                                        returns: ReturnTypes,
+                                        scalars: graphqlOptions.scalars,
+                                        ops: Ops,
+                                    }),
+                                );
+                            }
+                            return fnToCall(data);
+                        });
+                }
+                return returnedFunction;
+            };
 
 export const Subscription = (...options: chainOptions) => SubscriptionThunder(apiSubscription(options));
 export const Zeus = <
@@ -261,13 +261,13 @@ export const Gql = Chain(HOST, {
 export const ZeusScalars = ZeusSelect<ScalarCoders>();
 
 export const decodeScalarsInResponse = <O extends Operations>({
-    response,
-    scalars,
-    returns,
-    ops,
-    initialZeusQuery,
-    initialOp,
-}: {
+                                                                  response,
+                                                                  scalars,
+                                                                  returns,
+                                                                  ops,
+                                                                  initialZeusQuery,
+                                                                  initialOp,
+                                                              }: {
     ops: O;
     response: any;
     returns: ReturnTypesType;
@@ -294,9 +294,9 @@ export const decodeScalarsInResponse = <O extends Operations>({
 };
 
 export const traverseResponse = ({
-    resolvers,
-    scalarPaths,
-}: {
+                                     resolvers,
+                                     scalarPaths,
+                                 }: {
     scalarPaths: { [x: string]: `scalar.${string}` };
     resolvers: {
         [x: string]: ScalarResolver | undefined;
@@ -336,20 +336,20 @@ export type AllTypesPropsType = {
         | `scalar.${string}`
         | 'enum'
         | {
-              [x: string]:
-                  | undefined
-                  | string
-                  | {
-                        [x: string]: string | undefined;
-                    };
-          };
+        [x: string]:
+            | undefined
+            | string
+            | {
+            [x: string]: string | undefined;
+        };
+    };
 };
 
 export type ReturnTypesType = {
     [x: string]:
         | {
-              [x: string]: string | undefined;
-          }
+        [x: string]: string | undefined;
+    }
         | `scalar.${string}`
         | undefined;
 };
@@ -368,8 +368,8 @@ export type PlainType = boolean | number | string | null | undefined;
 export type ZeusArgsType =
     | PlainType
     | {
-          [x: string]: ZeusArgsType;
-      }
+    [x: string]: ZeusArgsType;
+}
     | Array<ZeusArgsType>;
 
 export type Operations = Record<string, string>;
@@ -589,12 +589,12 @@ export const ResolveFromPath = (props: AllTypesPropsType, returns: ReturnTypesTy
 };
 
 export const InternalArgsBuilt = ({
-    props,
-    ops,
-    returns,
-    scalars,
-    vars,
-}: {
+                                      props,
+                                      ops,
+                                      returns,
+                                      scalars,
+                                      vars,
+                                  }: {
     props: AllTypesPropsType;
     returns: ReturnTypesType;
     ops: Operations;
@@ -701,27 +701,27 @@ type IsInterfaced<SRC extends DeepAnify<DST>, DST, SCLR extends ScalarDefinition
     | ZEUS_INTERFACES
     | ZEUS_UNIONS
     ? {
-          [P in keyof SRC]: SRC[P] extends '__union' & infer R
-              ? P extends keyof DST
-                  ? IsArray<R, '__typename' extends keyof DST ? DST[P] & { __typename: true } : DST[P], SCLR>
-                  : IsArray<R, '__typename' extends keyof DST ? { __typename: true } : Record<string, never>, SCLR>
-              : never;
-      }[keyof SRC] & {
-          [P in keyof Omit<
-              Pick<
-                  SRC,
-                  {
-                      [P in keyof DST]: SRC[P] extends '__union' & infer R ? never : P;
-                  }[keyof DST]
-              >,
-              '__typename'
-          >]: IsPayLoad<DST[P]> extends BaseZeusResolver ? IsScalar<SRC[P], SCLR> : IsArray<SRC[P], DST[P], SCLR>;
-      }
+    [P in keyof SRC]: SRC[P] extends '__union' & infer R
+        ? P extends keyof DST
+            ? IsArray<R, '__typename' extends keyof DST ? DST[P] & { __typename: true } : DST[P], SCLR>
+            : IsArray<R, '__typename' extends keyof DST ? { __typename: true } : Record<string, never>, SCLR>
+        : never;
+}[keyof SRC] & {
+    [P in keyof Omit<
+        Pick<
+            SRC,
+            {
+                [P in keyof DST]: SRC[P] extends '__union' & infer R ? never : P;
+            }[keyof DST]
+        >,
+        '__typename'
+    >]: IsPayLoad<DST[P]> extends BaseZeusResolver ? IsScalar<SRC[P], SCLR> : IsArray<SRC[P], DST[P], SCLR>;
+}
     : {
-          [P in keyof Pick<SRC, keyof DST>]: IsPayLoad<DST[P]> extends BaseZeusResolver
-              ? IsScalar<SRC[P], SCLR>
-              : IsArray<SRC[P], DST[P], SCLR>;
-      };
+        [P in keyof Pick<SRC, keyof DST>]: IsPayLoad<DST[P]> extends BaseZeusResolver
+            ? IsScalar<SRC[P], SCLR>
+            : IsArray<SRC[P], DST[P], SCLR>;
+    };
 
 export type MapType<SRC, DST, SCLR extends ScalarDefinition> = SRC extends DeepAnify<DST>
     ? IsInterfaced<SRC, DST, SCLR>
@@ -729,8 +729,8 @@ export type MapType<SRC, DST, SCLR extends ScalarDefinition> = SRC extends DeepA
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type InputType<SRC, DST, SCLR extends ScalarDefinition = {}> = IsPayLoad<DST> extends { __alias: infer R }
     ? {
-          [P in keyof R]: MapType<SRC, R[P], SCLR>[keyof MapType<SRC, R[P], SCLR>];
-      } & MapType<SRC, Omit<IsPayLoad<DST>, '__alias'>, SCLR>
+    [P in keyof R]: MapType<SRC, R[P], SCLR>[keyof MapType<SRC, R[P], SCLR>];
+} & MapType<SRC, Omit<IsPayLoad<DST>, '__alias'>, SCLR>
     : MapType<SRC, IsPayLoad<DST>, SCLR>;
 export type SubscriptionToGraphQL<Z, T, SCLR extends ScalarDefinition> = {
     ws: WebSocket;
@@ -782,14 +782,14 @@ type ExtractVariableTypeString<T extends string> = T extends VR<infer R1>
 type DecomposeType<T, Type> = T extends `[${infer R}]`
     ? Array<DecomposeType<R, Type>> | undefined
     : T extends `${infer R}!`
-      ? NonNullable<DecomposeType<R, Type>>
-      : Type | undefined;
+        ? NonNullable<DecomposeType<R, Type>>
+        : Type | undefined;
 
 type ExtractTypeFromGraphQLType<T extends string> = T extends keyof ZEUS_VARIABLES
     ? ZEUS_VARIABLES[T]
     : T extends keyof BuiltInVariableTypes
-      ? BuiltInVariableTypes[T]
-      : any;
+        ? BuiltInVariableTypes[T]
+        : any;
 
 export type GetVariableType<T extends string> = DecomposeType<
     T,
@@ -817,11 +817,11 @@ export type Variable<T extends GraphQLVariableType, Name extends string> = {
 export type ExtractVariables<Query> = Query extends Variable<infer VType, infer VName>
     ? { [key in VName]: GetVariableType<VType> }
     : Query extends [infer Inputs, infer Outputs]
-      ? ExtractVariables<Inputs> & ExtractVariables<Outputs>
-      : Query extends string | number | boolean
-        ? // eslint-disable-next-line @typescript-eslint/ban-types
-          {}
-        : UnionToIntersection<{ [K in keyof Query]: WithOptionalNullables<ExtractVariables<Query[K]>> }[keyof Query]>;
+        ? ExtractVariables<Inputs> & ExtractVariables<Outputs>
+        : Query extends string | number | boolean
+            ? // eslint-disable-next-line @typescript-eslint/ban-types
+            {}
+            : UnionToIntersection<{ [K in keyof Query]: WithOptionalNullables<ExtractVariables<Query[K]>> }[keyof Query]>;
 
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
 
@@ -872,8 +872,8 @@ export type ValueTypes = {
         /** The active Customer */
         activeCustomer?: ValueTypes['Customer'];
         /** The active Order. Will be `null` until an Order is created via `addItemToOrder`. Once an Order reaches the
-state of `PaymentAuthorized` or `PaymentSettled`, then that Order is no longer considered "active" and this
-query will once again return `null`. */
+         state of `PaymentAuthorized` or `PaymentSettled`, then that Order is no longer considered "active" and this
+         query will once again return `null`. */
         activeOrder?: ValueTypes['Order'];
         /** An array of supported Countries */
         availableCountries?: ValueTypes['Country'];
@@ -1150,35 +1150,35 @@ query will once again return `null`. */
     ['AdjustmentType']: AdjustmentType;
     ['DeletionResult']: DeletionResult;
     /** @description
-Permissions for administrators and customers. Used to control access to
-GraphQL resolvers via the {@link Allow} decorator.
+     Permissions for administrators and customers. Used to control access to
+     GraphQL resolvers via the {@link Allow} decorator.
 
-## Understanding Permission.Owner
+     ## Understanding Permission.Owner
 
-`Permission.Owner` is a special permission which is used in some Vendure resolvers to indicate that that resolver should only
-be accessible to the "owner" of that resource.
+     `Permission.Owner` is a special permission which is used in some Vendure resolvers to indicate that that resolver should only
+     be accessible to the "owner" of that resource.
 
-For example, the Shop API `activeCustomer` query resolver should only return the Customer object for the "owner" of that Customer, i.e.
-based on the activeUserId of the current session. As a result, the resolver code looks like this:
+     For example, the Shop API `activeCustomer` query resolver should only return the Customer object for the "owner" of that Customer, i.e.
+     based on the activeUserId of the current session. As a result, the resolver code looks like this:
 
-@example
-```TypeScript
-\@Query()
-\@Allow(Permission.Owner)
-async activeCustomer(\@Ctx() ctx: RequestContext): Promise<Customer | undefined> {
-  const userId = ctx.activeUserId;
-  if (userId) {
-    return this.customerService.findOneByUserId(ctx, userId);
-  }
-}
-```
+     @example
+     ```TypeScript
+     \@Query()
+     \@Allow(Permission.Owner)
+     async activeCustomer(\@Ctx() ctx: RequestContext): Promise<Customer | undefined> {
+     const userId = ctx.activeUserId;
+     if (userId) {
+     return this.customerService.findOneByUserId(ctx, userId);
+     }
+     }
+     ```
 
-Here we can see that the "ownership" must be enforced by custom logic inside the resolver. Since "ownership" cannot be defined generally
-nor statically encoded at build-time, any resolvers using `Permission.Owner` **must** include logic to enforce that only the owner
-of the resource has access. If not, then it is the equivalent of using `Permission.Public`.
+     Here we can see that the "ownership" must be enforced by custom logic inside the resolver. Since "ownership" cannot be defined generally
+     nor statically encoded at build-time, any resolvers using `Permission.Owner` **must** include logic to enforce that only the owner
+     of the resource has access. If not, then it is the equivalent of using `Permission.Public`.
 
 
-@docsCategory common */
+     @docsCategory common */
     ['Permission']: Permission;
     ['SortOrder']: SortOrder;
     ['ErrorCode']: ErrorCode;
@@ -1274,7 +1274,7 @@ of the resource has access. If not, then it is the equivalent of using `Permissi
         __typename?: boolean | `@${string}`;
     }>;
     /** Returned when invoking a mutation which depends on there being an active Order on the
-current session. */
+     current session. */
     ['NoActiveOrderError']: AliasType<{
         errorCode?: boolean | `@${string}`;
         message?: boolean | `@${string}`;
@@ -1547,11 +1547,11 @@ current session. */
         inList: ValueTypes['DateTime'] | Variable<any, string>;
     };
     /** Used to construct boolean expressions for filtering search results
-by FacetValue ID. Examples:
+     by FacetValue ID. Examples:
 
-* ID=1 OR ID=2: `{ facetValueFilters: [{ or: [1,2] }] }`
-* ID=1 AND ID=2: `{ facetValueFilters: [{ and: 1 }, { and: 2 }] }`
-* ID=1 AND (ID=2 OR ID=3): `{ facetValueFilters: [{ and: 1 }, { or: [2,3] }] }` */
+     * ID=1 OR ID=2: `{ facetValueFilters: [{ or: [1,2] }] }`
+     * ID=1 AND ID=2: `{ facetValueFilters: [{ and: 1 }, { and: 2 }] }`
+     * ID=1 AND (ID=2 OR ID=3): `{ facetValueFilters: [{ and: 1 }, { or: [2,3] }] }` */
     ['FacetValueFilterInput']: {
         and?: string | undefined | null | Variable<any, string>;
         or?: Array<string> | undefined | null | Variable<any, string>;
@@ -1663,9 +1663,9 @@ by FacetValue ID. Examples:
         __typename?: boolean | `@${string}`;
     }>;
     /** @description
-ISO 4217 currency code
+     ISO 4217 currency code
 
-@docsCategory common */
+     @docsCategory common */
     ['CurrencyCode']: CurrencyCode;
     ['CustomField']: AliasType<{
         name?: boolean | `@${string}`;
@@ -1783,7 +1783,7 @@ ISO 4217 currency code
         __typename?: boolean | `@${string}`;
     }>;
     /** Expects the same validation formats as the `<input type="datetime-local">` HTML element.
-See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local#Additional_attributes */
+     See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local#Additional_attributes */
     ['DateTimeCustomFieldConfig']: AliasType<{
         name?: boolean | `@${string}`;
         type?: boolean | `@${string}`;
@@ -1995,12 +1995,12 @@ See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-loc
         filterOperator?: ValueTypes['LogicalOperator'] | undefined | null | Variable<any, string>;
     };
     /** @description
-Languages in the form of a ISO 639-1 language code with optional
-region or script modifier (e.g. de_AT). The selection available is based
-on the [Unicode CLDR summary list](https://unicode-org.github.io/cldr-staging/charts/37/summary/root.html)
-and includes the major spoken languages of the world and any widely-used variants.
+     Languages in the form of a ISO 639-1 language code with optional
+     region or script modifier (e.g. de_AT). The selection available is based
+     on the [Unicode CLDR summary list](https://unicode-org.github.io/cldr-staging/charts/37/summary/root.html)
+     and includes the major spoken languages of the world and any widely-used variants.
 
-@docsCategory common */
+     @docsCategory common */
     ['LanguageCode']: LanguageCode;
     ['OrderType']: OrderType;
     ['Order']: AliasType<{
@@ -2009,7 +2009,7 @@ and includes the major spoken languages of the world and any widely-used variant
         updatedAt?: boolean | `@${string}`;
         type?: boolean | `@${string}`;
         /** The date & time that the Order was placed, i.e. the Customer
-completed the checkout and the Order is no longer "active" */
+         completed the checkout and the Order is no longer "active" */
         orderPlacedAt?: boolean | `@${string}`;
         /** A unique code for the Order */
         code?: boolean | `@${string}`;
@@ -2021,9 +2021,9 @@ completed the checkout and the Order is no longer "active" */
         billingAddress?: ValueTypes['OrderAddress'];
         lines?: ValueTypes['OrderLine'];
         /** Surcharges are arbitrary modifications to the Order total which are neither
-ProductVariants nor discounts resulting from applied Promotions. For example,
-one-off discounts based on customer interaction, or surcharges based on payment
-methods. */
+         ProductVariants nor discounts resulting from applied Promotions. For example,
+         one-off discounts based on customer interaction, or surcharges based on payment
+         methods. */
         surcharges?: ValueTypes['Surcharge'];
         discounts?: ValueTypes['Discount'];
         /** An array of all coupon codes applied to the Order */
@@ -2034,9 +2034,9 @@ methods. */
         fulfillments?: ValueTypes['Fulfillment'];
         totalQuantity?: boolean | `@${string}`;
         /** The subTotal is the total of all OrderLines in the Order. This figure also includes any Order-level
-discounts which have been prorated (proportionally distributed) amongst the items of each OrderLine.
-To get a total of all OrderLines which does not account for prorated discounts, use the
-sum of `OrderLine.discountedLinePrice` values. */
+         discounts which have been prorated (proportionally distributed) amongst the items of each OrderLine.
+         To get a total of all OrderLines which does not account for prorated discounts, use the
+         sum of `OrderLine.discountedLinePrice` values. */
         subTotal?: boolean | `@${string}`;
         /** Same as subTotal, but inclusive of tax */
         subTotalWithTax?: boolean | `@${string}`;
@@ -2058,7 +2058,7 @@ sum of `OrderLine.discountedLinePrice` values. */
         __typename?: boolean | `@${string}`;
     }>;
     /** A summary of the taxes being applied to this order, grouped
-by taxRate. */
+     by taxRate. */
     ['OrderTaxSummary']: AliasType<{
         /** A description of this tax */
         description?: boolean | `@${string}`;
@@ -2123,16 +2123,16 @@ by taxRate. */
         unitPriceWithTaxChangeSinceAdded?: boolean | `@${string}`;
         /** The price of a single unit including discounts, excluding tax.
 
-If Order-level discounts have been applied, this will not be the
-actual taxable unit price (see `proratedUnitPrice`), but is generally the
-correct price to display to customers to avoid confusion
-about the internal handling of distributed Order-level discounts. */
+         If Order-level discounts have been applied, this will not be the
+         actual taxable unit price (see `proratedUnitPrice`), but is generally the
+         correct price to display to customers to avoid confusion
+         about the internal handling of distributed Order-level discounts. */
         discountedUnitPrice?: boolean | `@${string}`;
         /** The price of a single unit including discounts and tax */
         discountedUnitPriceWithTax?: boolean | `@${string}`;
         /** The actual unit price, taking into account both item discounts _and_ prorated (proportionally-distributed)
-Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
-and refund calculations. */
+         Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
+         and refund calculations. */
         proratedUnitPrice?: boolean | `@${string}`;
         /** The proratedUnitPrice including tax */
         proratedUnitPriceWithTax?: boolean | `@${string}`;
@@ -2150,8 +2150,8 @@ and refund calculations. */
         /** The price of the line including discounts and tax */
         discountedLinePriceWithTax?: boolean | `@${string}`;
         /** The actual line price, taking into account both item discounts _and_ prorated (proportionally-distributed)
-Order-level discounts. This value is the true economic value of the OrderLine, and is used in tax
-and refund calculations. */
+         Order-level discounts. This value is the true economic value of the OrderLine, and is used in tax
+         and refund calculations. */
         proratedLinePrice?: boolean | `@${string}`;
         /** The proratedLinePrice including tax */
         proratedLinePriceWithTax?: boolean | `@${string}`;
@@ -2161,7 +2161,7 @@ and refund calculations. */
         taxLines?: ValueTypes['TaxLine'];
         order?: ValueTypes['Order'];
         fulfillmentLines?: ValueTypes['FulfillmentLine'];
-        customFields?: boolean | `@${string}`;
+        customFields?: ValueTypes['Object'] | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     ['Payment']: AliasType<{
@@ -2310,14 +2310,14 @@ and refund calculations. */
         __typename?: boolean | `@${string}`;
     }>;
     /** Which FacetValues are present in the products returned
-by the search, and in what quantity. */
+     by the search, and in what quantity. */
     ['FacetValueResult']: AliasType<{
         facetValue?: ValueTypes['FacetValue'];
         count?: boolean | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     /** Which Collections are present in the products returned
-by the search, and in what quantity. */
+     by the search, and in what quantity. */
     ['CollectionResult']: AliasType<{
         collection?: ValueTypes['Collection'];
         count?: boolean | `@${string}`;
@@ -2388,7 +2388,7 @@ by the search, and in what quantity. */
         facetValues?: ValueTypes['FacetValue'];
         translations?: ValueTypes['ProductTranslation'];
         collections?: ValueTypes['Collection'];
-        customFields?: boolean | `@${string}`;
+        customFields?: Object | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     ['ProductTranslation']: AliasType<{
@@ -2431,7 +2431,7 @@ by the search, and in what quantity. */
         options?: ValueTypes['ProductOption'];
         facetValues?: ValueTypes['FacetValue'];
         translations?: ValueTypes['ProductVariantTranslation'];
-        customFields?: boolean | `@${string}`;
+        customFields?: Object | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     ['ProductVariantTranslation']: AliasType<{
@@ -2710,49 +2710,49 @@ by the search, and in what quantity. */
         __typename?: boolean | `@${string}`;
     }>;
     /** Returned if the verification token (used to verify a Customer's email address) is either
-invalid or does not match any expected tokens. */
+     invalid or does not match any expected tokens. */
     ['VerificationTokenInvalidError']: AliasType<{
         errorCode?: boolean | `@${string}`;
         message?: boolean | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     /** Returned if the verification token (used to verify a Customer's email address) is valid, but has
-expired according to the `verificationTokenDuration` setting in the AuthOptions. */
+     expired according to the `verificationTokenDuration` setting in the AuthOptions. */
     ['VerificationTokenExpiredError']: AliasType<{
         errorCode?: boolean | `@${string}`;
         message?: boolean | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     /** Returned if the token used to change a Customer's email address is either
-invalid or does not match any expected tokens. */
+     invalid or does not match any expected tokens. */
     ['IdentifierChangeTokenInvalidError']: AliasType<{
         errorCode?: boolean | `@${string}`;
         message?: boolean | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     /** Returned if the token used to change a Customer's email address is valid, but has
-expired according to the `verificationTokenDuration` setting in the AuthOptions. */
+     expired according to the `verificationTokenDuration` setting in the AuthOptions. */
     ['IdentifierChangeTokenExpiredError']: AliasType<{
         errorCode?: boolean | `@${string}`;
         message?: boolean | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     /** Returned if the token used to reset a Customer's password is either
-invalid or does not match any expected tokens. */
+     invalid or does not match any expected tokens. */
     ['PasswordResetTokenInvalidError']: AliasType<{
         errorCode?: boolean | `@${string}`;
         message?: boolean | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     /** Returned if the token used to reset a Customer's password is valid, but has
-expired according to the `verificationTokenDuration` setting in the AuthOptions. */
+     expired according to the `verificationTokenDuration` setting in the AuthOptions. */
     ['PasswordResetTokenExpiredError']: AliasType<{
         errorCode?: boolean | `@${string}`;
         message?: boolean | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     /** Returned if `authOptions.requireVerification` is set to `true` (which is the default)
-and an unverified user attempts to authenticate. */
+     and an unverified user attempts to authenticate. */
     ['NotVerifiedError']: AliasType<{
         errorCode?: boolean | `@${string}`;
         message?: boolean | `@${string}`;
@@ -2784,8 +2784,8 @@ and an unverified user attempts to authenticate. */
         /** This field should correspond to the `code` property of a PaymentMethod. */
         method: string | Variable<any, string>;
         /** This field should contain arbitrary data passed to the specified PaymentMethodHandler's `createPayment()` method
-as the "metadata" argument. For example, it could contain an ID for the payment and other
-data generated by the payment provider. */
+         as the "metadata" argument. For example, it could contain an ID for the payment and other
+         data generated by the payment provider. */
         metadata: ValueTypes['JSON'] | Variable<any, string>;
     };
     ['CollectionListOptions']: {
@@ -3118,8 +3118,8 @@ export type ResolverInputTypes = {
         /** The active Customer */
         activeCustomer?: ResolverInputTypes['Customer'];
         /** The active Order. Will be `null` until an Order is created via `addItemToOrder`. Once an Order reaches the
-state of `PaymentAuthorized` or `PaymentSettled`, then that Order is no longer considered "active" and this
-query will once again return `null`. */
+         state of `PaymentAuthorized` or `PaymentSettled`, then that Order is no longer considered "active" and this
+         query will once again return `null`. */
         activeOrder?: ResolverInputTypes['Order'];
         /** An array of supported Countries */
         availableCountries?: ResolverInputTypes['Country'];
@@ -3356,35 +3356,35 @@ query will once again return `null`. */
     ['AdjustmentType']: AdjustmentType;
     ['DeletionResult']: DeletionResult;
     /** @description
-Permissions for administrators and customers. Used to control access to
-GraphQL resolvers via the {@link Allow} decorator.
+     Permissions for administrators and customers. Used to control access to
+     GraphQL resolvers via the {@link Allow} decorator.
 
-## Understanding Permission.Owner
+     ## Understanding Permission.Owner
 
-`Permission.Owner` is a special permission which is used in some Vendure resolvers to indicate that that resolver should only
-be accessible to the "owner" of that resource.
+     `Permission.Owner` is a special permission which is used in some Vendure resolvers to indicate that that resolver should only
+     be accessible to the "owner" of that resource.
 
-For example, the Shop API `activeCustomer` query resolver should only return the Customer object for the "owner" of that Customer, i.e.
-based on the activeUserId of the current session. As a result, the resolver code looks like this:
+     For example, the Shop API `activeCustomer` query resolver should only return the Customer object for the "owner" of that Customer, i.e.
+     based on the activeUserId of the current session. As a result, the resolver code looks like this:
 
-@example
-```TypeScript
-\@Query()
-\@Allow(Permission.Owner)
-async activeCustomer(\@Ctx() ctx: RequestContext): Promise<Customer | undefined> {
-  const userId = ctx.activeUserId;
-  if (userId) {
-    return this.customerService.findOneByUserId(ctx, userId);
-  }
-}
-```
+     @example
+     ```TypeScript
+     \@Query()
+     \@Allow(Permission.Owner)
+     async activeCustomer(\@Ctx() ctx: RequestContext): Promise<Customer | undefined> {
+     const userId = ctx.activeUserId;
+     if (userId) {
+     return this.customerService.findOneByUserId(ctx, userId);
+     }
+     }
+     ```
 
-Here we can see that the "ownership" must be enforced by custom logic inside the resolver. Since "ownership" cannot be defined generally
-nor statically encoded at build-time, any resolvers using `Permission.Owner` **must** include logic to enforce that only the owner
-of the resource has access. If not, then it is the equivalent of using `Permission.Public`.
+     Here we can see that the "ownership" must be enforced by custom logic inside the resolver. Since "ownership" cannot be defined generally
+     nor statically encoded at build-time, any resolvers using `Permission.Owner` **must** include logic to enforce that only the owner
+     of the resource has access. If not, then it is the equivalent of using `Permission.Public`.
 
 
-@docsCategory common */
+     @docsCategory common */
     ['Permission']: Permission;
     ['SortOrder']: SortOrder;
     ['ErrorCode']: ErrorCode;
@@ -3480,7 +3480,7 @@ of the resource has access. If not, then it is the equivalent of using `Permissi
         __typename?: boolean | `@${string}`;
     }>;
     /** Returned when invoking a mutation which depends on there being an active Order on the
-current session. */
+     current session. */
     ['NoActiveOrderError']: AliasType<{
         errorCode?: boolean | `@${string}`;
         message?: boolean | `@${string}`;
@@ -3816,11 +3816,11 @@ current session. */
         inList: ResolverInputTypes['DateTime'];
     };
     /** Used to construct boolean expressions for filtering search results
-by FacetValue ID. Examples:
+     by FacetValue ID. Examples:
 
-* ID=1 OR ID=2: `{ facetValueFilters: [{ or: [1,2] }] }`
-* ID=1 AND ID=2: `{ facetValueFilters: [{ and: 1 }, { and: 2 }] }`
-* ID=1 AND (ID=2 OR ID=3): `{ facetValueFilters: [{ and: 1 }, { or: [2,3] }] }` */
+     * ID=1 OR ID=2: `{ facetValueFilters: [{ or: [1,2] }] }`
+     * ID=1 AND ID=2: `{ facetValueFilters: [{ and: 1 }, { and: 2 }] }`
+     * ID=1 AND (ID=2 OR ID=3): `{ facetValueFilters: [{ and: 1 }, { or: [2,3] }] }` */
     ['FacetValueFilterInput']: {
         and?: string | undefined | null;
         or?: Array<string> | undefined | null;
@@ -3932,9 +3932,9 @@ by FacetValue ID. Examples:
         __typename?: boolean | `@${string}`;
     }>;
     /** @description
-ISO 4217 currency code
+     ISO 4217 currency code
 
-@docsCategory common */
+     @docsCategory common */
     ['CurrencyCode']: CurrencyCode;
     ['CustomField']: AliasType<{
         name?: boolean | `@${string}`;
@@ -4061,7 +4061,7 @@ ISO 4217 currency code
         __typename?: boolean | `@${string}`;
     }>;
     /** Expects the same validation formats as the `<input type="datetime-local">` HTML element.
-See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local#Additional_attributes */
+     See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local#Additional_attributes */
     ['DateTimeCustomFieldConfig']: AliasType<{
         name?: boolean | `@${string}`;
         type?: boolean | `@${string}`;
@@ -4273,12 +4273,12 @@ See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-loc
         filterOperator?: ResolverInputTypes['LogicalOperator'] | undefined | null;
     };
     /** @description
-Languages in the form of a ISO 639-1 language code with optional
-region or script modifier (e.g. de_AT). The selection available is based
-on the [Unicode CLDR summary list](https://unicode-org.github.io/cldr-staging/charts/37/summary/root.html)
-and includes the major spoken languages of the world and any widely-used variants.
+     Languages in the form of a ISO 639-1 language code with optional
+     region or script modifier (e.g. de_AT). The selection available is based
+     on the [Unicode CLDR summary list](https://unicode-org.github.io/cldr-staging/charts/37/summary/root.html)
+     and includes the major spoken languages of the world and any widely-used variants.
 
-@docsCategory common */
+     @docsCategory common */
     ['LanguageCode']: LanguageCode;
     ['OrderType']: OrderType;
     ['Order']: AliasType<{
@@ -4287,7 +4287,7 @@ and includes the major spoken languages of the world and any widely-used variant
         updatedAt?: boolean | `@${string}`;
         type?: boolean | `@${string}`;
         /** The date & time that the Order was placed, i.e. the Customer
-completed the checkout and the Order is no longer "active" */
+         completed the checkout and the Order is no longer "active" */
         orderPlacedAt?: boolean | `@${string}`;
         /** A unique code for the Order */
         code?: boolean | `@${string}`;
@@ -4299,9 +4299,9 @@ completed the checkout and the Order is no longer "active" */
         billingAddress?: ResolverInputTypes['OrderAddress'];
         lines?: ResolverInputTypes['OrderLine'];
         /** Surcharges are arbitrary modifications to the Order total which are neither
-ProductVariants nor discounts resulting from applied Promotions. For example,
-one-off discounts based on customer interaction, or surcharges based on payment
-methods. */
+         ProductVariants nor discounts resulting from applied Promotions. For example,
+         one-off discounts based on customer interaction, or surcharges based on payment
+         methods. */
         surcharges?: ResolverInputTypes['Surcharge'];
         discounts?: ResolverInputTypes['Discount'];
         /** An array of all coupon codes applied to the Order */
@@ -4312,9 +4312,9 @@ methods. */
         fulfillments?: ResolverInputTypes['Fulfillment'];
         totalQuantity?: boolean | `@${string}`;
         /** The subTotal is the total of all OrderLines in the Order. This figure also includes any Order-level
-discounts which have been prorated (proportionally distributed) amongst the items of each OrderLine.
-To get a total of all OrderLines which does not account for prorated discounts, use the
-sum of `OrderLine.discountedLinePrice` values. */
+         discounts which have been prorated (proportionally distributed) amongst the items of each OrderLine.
+         To get a total of all OrderLines which does not account for prorated discounts, use the
+         sum of `OrderLine.discountedLinePrice` values. */
         subTotal?: boolean | `@${string}`;
         /** Same as subTotal, but inclusive of tax */
         subTotalWithTax?: boolean | `@${string}`;
@@ -4336,7 +4336,7 @@ sum of `OrderLine.discountedLinePrice` values. */
         __typename?: boolean | `@${string}`;
     }>;
     /** A summary of the taxes being applied to this order, grouped
-by taxRate. */
+     by taxRate. */
     ['OrderTaxSummary']: AliasType<{
         /** A description of this tax */
         description?: boolean | `@${string}`;
@@ -4401,16 +4401,16 @@ by taxRate. */
         unitPriceWithTaxChangeSinceAdded?: boolean | `@${string}`;
         /** The price of a single unit including discounts, excluding tax.
 
-If Order-level discounts have been applied, this will not be the
-actual taxable unit price (see `proratedUnitPrice`), but is generally the
-correct price to display to customers to avoid confusion
-about the internal handling of distributed Order-level discounts. */
+         If Order-level discounts have been applied, this will not be the
+         actual taxable unit price (see `proratedUnitPrice`), but is generally the
+         correct price to display to customers to avoid confusion
+         about the internal handling of distributed Order-level discounts. */
         discountedUnitPrice?: boolean | `@${string}`;
         /** The price of a single unit including discounts and tax */
         discountedUnitPriceWithTax?: boolean | `@${string}`;
         /** The actual unit price, taking into account both item discounts _and_ prorated (proportionally-distributed)
-Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
-and refund calculations. */
+         Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
+         and refund calculations. */
         proratedUnitPrice?: boolean | `@${string}`;
         /** The proratedUnitPrice including tax */
         proratedUnitPriceWithTax?: boolean | `@${string}`;
@@ -4428,8 +4428,8 @@ and refund calculations. */
         /** The price of the line including discounts and tax */
         discountedLinePriceWithTax?: boolean | `@${string}`;
         /** The actual line price, taking into account both item discounts _and_ prorated (proportionally-distributed)
-Order-level discounts. This value is the true economic value of the OrderLine, and is used in tax
-and refund calculations. */
+         Order-level discounts. This value is the true economic value of the OrderLine, and is used in tax
+         and refund calculations. */
         proratedLinePrice?: boolean | `@${string}`;
         /** The proratedLinePrice including tax */
         proratedLinePriceWithTax?: boolean | `@${string}`;
@@ -4588,14 +4588,14 @@ and refund calculations. */
         __typename?: boolean | `@${string}`;
     }>;
     /** Which FacetValues are present in the products returned
-by the search, and in what quantity. */
+     by the search, and in what quantity. */
     ['FacetValueResult']: AliasType<{
         facetValue?: ResolverInputTypes['FacetValue'];
         count?: boolean | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     /** Which Collections are present in the products returned
-by the search, and in what quantity. */
+     by the search, and in what quantity. */
     ['CollectionResult']: AliasType<{
         collection?: ResolverInputTypes['Collection'];
         count?: boolean | `@${string}`;
@@ -4709,7 +4709,7 @@ by the search, and in what quantity. */
         options?: ResolverInputTypes['ProductOption'];
         facetValues?: ResolverInputTypes['FacetValue'];
         translations?: ResolverInputTypes['ProductVariantTranslation'];
-        customFields?: boolean | `@${string}`;
+        customFields?: ResolverInputTypes['Object'] | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     ['ProductVariantTranslation']: AliasType<{
@@ -4988,49 +4988,49 @@ by the search, and in what quantity. */
         __typename?: boolean | `@${string}`;
     }>;
     /** Returned if the verification token (used to verify a Customer's email address) is either
-invalid or does not match any expected tokens. */
+     invalid or does not match any expected tokens. */
     ['VerificationTokenInvalidError']: AliasType<{
         errorCode?: boolean | `@${string}`;
         message?: boolean | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     /** Returned if the verification token (used to verify a Customer's email address) is valid, but has
-expired according to the `verificationTokenDuration` setting in the AuthOptions. */
+     expired according to the `verificationTokenDuration` setting in the AuthOptions. */
     ['VerificationTokenExpiredError']: AliasType<{
         errorCode?: boolean | `@${string}`;
         message?: boolean | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     /** Returned if the token used to change a Customer's email address is either
-invalid or does not match any expected tokens. */
+     invalid or does not match any expected tokens. */
     ['IdentifierChangeTokenInvalidError']: AliasType<{
         errorCode?: boolean | `@${string}`;
         message?: boolean | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     /** Returned if the token used to change a Customer's email address is valid, but has
-expired according to the `verificationTokenDuration` setting in the AuthOptions. */
+     expired according to the `verificationTokenDuration` setting in the AuthOptions. */
     ['IdentifierChangeTokenExpiredError']: AliasType<{
         errorCode?: boolean | `@${string}`;
         message?: boolean | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     /** Returned if the token used to reset a Customer's password is either
-invalid or does not match any expected tokens. */
+     invalid or does not match any expected tokens. */
     ['PasswordResetTokenInvalidError']: AliasType<{
         errorCode?: boolean | `@${string}`;
         message?: boolean | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     /** Returned if the token used to reset a Customer's password is valid, but has
-expired according to the `verificationTokenDuration` setting in the AuthOptions. */
+     expired according to the `verificationTokenDuration` setting in the AuthOptions. */
     ['PasswordResetTokenExpiredError']: AliasType<{
         errorCode?: boolean | `@${string}`;
         message?: boolean | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     /** Returned if `authOptions.requireVerification` is set to `true` (which is the default)
-and an unverified user attempts to authenticate. */
+     and an unverified user attempts to authenticate. */
     ['NotVerifiedError']: AliasType<{
         errorCode?: boolean | `@${string}`;
         message?: boolean | `@${string}`;
@@ -5062,8 +5062,8 @@ and an unverified user attempts to authenticate. */
         /** This field should correspond to the `code` property of a PaymentMethod. */
         method: string;
         /** This field should contain arbitrary data passed to the specified PaymentMethodHandler's `createPayment()` method
-as the "metadata" argument. For example, it could contain an ID for the payment and other
-data generated by the payment provider. */
+         as the "metadata" argument. For example, it could contain an ID for the payment and other
+         data generated by the payment provider. */
         metadata: ResolverInputTypes['JSON'];
     };
     ['CollectionListOptions']: {
@@ -5401,8 +5401,8 @@ export type ModelTypes = {
         /** The active Customer */
         activeCustomer?: ModelTypes['Customer'] | undefined;
         /** The active Order. Will be `null` until an Order is created via `addItemToOrder`. Once an Order reaches the
-state of `PaymentAuthorized` or `PaymentSettled`, then that Order is no longer considered "active" and this
-query will once again return `null`. */
+         state of `PaymentAuthorized` or `PaymentSettled`, then that Order is no longer considered "active" and this
+         query will once again return `null`. */
         activeOrder?: ModelTypes['Order'] | undefined;
         /** An array of supported Countries */
         availableCountries: Array<ModelTypes['Country']>;
@@ -5423,12 +5423,12 @@ query will once again return `null`. */
         /** Returns the possible next states that the activeOrder can transition to */
         nextOrderStates: Array<string>;
         /** Returns an Order based on the id. Note that in the Shop API, only orders belonging to the
-currently-authenticated User may be queried. */
+         currently-authenticated User may be queried. */
         order?: ModelTypes['Order'] | undefined;
         /** Returns an Order based on the order `code`. For guest Orders (i.e. Orders placed by non-authenticated Customers)
-this query will only return the Order within 2 hours of the Order being placed. This allows an Order confirmation
-screen to be shown immediately after completion of a guest checkout, yet prevents security risks of allowing
-general anonymous access to Order data. */
+         this query will only return the Order within 2 hours of the Order being placed. This allows an Order confirmation
+         screen to be shown immediately after completion of a guest checkout, yet prevents security risks of allowing
+         general anonymous access to Order data. */
         orderByCode?: ModelTypes['Order'] | undefined;
         /** Get a Product either by id or slug. If neither 'id' nor 'slug' is specified, an error will result. */
         product?: ModelTypes['Product'] | undefined;
@@ -5459,9 +5459,9 @@ general anonymous access to Order data. */
         /** Allows any custom fields to be set for the active order */
         setOrderCustomFields: ModelTypes['ActiveOrderResult'];
         /** Sets the shipping method by id, which can be obtained with the `eligibleShippingMethods` query.
-An Order can have multiple shipping methods, in which case you can pass an array of ids. In this case,
-you should configure a custom ShippingLineAssignmentStrategy in order to know which OrderLines each
-shipping method will apply to. */
+         An Order can have multiple shipping methods, in which case you can pass an array of ids. In this case,
+         you should configure a custom ShippingLineAssignmentStrategy in order to know which OrderLines each
+         shipping method will apply to. */
         setOrderShippingMethod: ModelTypes['SetOrderShippingMethodResult'];
         /** Add a Payment to the Order */
         addPaymentToOrder: ModelTypes['AddPaymentToOrderResult'];
@@ -5475,18 +5475,18 @@ shipping method will apply to. */
         logout: ModelTypes['Success'];
         /** Register a Customer account with the given credentials. There are three possible registration flows:
 
-_If `authOptions.requireVerification` is set to `true`:_
+         _If `authOptions.requireVerification` is set to `true`:_
 
-1. **The Customer is registered _with_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
-   verificationToken would then be passed to the `verifyCustomerAccount` mutation _without_ a password. The Customer is then
-   verified and authenticated in one step.
-2. **The Customer is registered _without_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
-   verificationToken would then be passed to the `verifyCustomerAccount` mutation _with_ the chosen password of the Customer. The Customer is then
-   verified and authenticated in one step.
+         1. **The Customer is registered _with_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
+         verificationToken would then be passed to the `verifyCustomerAccount` mutation _without_ a password. The Customer is then
+         verified and authenticated in one step.
+         2. **The Customer is registered _without_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
+         verificationToken would then be passed to the `verifyCustomerAccount` mutation _with_ the chosen password of the Customer. The Customer is then
+         verified and authenticated in one step.
 
-_If `authOptions.requireVerification` is set to `false`:_
+         _If `authOptions.requireVerification` is set to `false`:_
 
-3. The Customer _must_ be registered _with_ a password. No further action is needed - the Customer is able to authenticate immediately. */
+         3. The Customer _must_ be registered _with_ a password. No further action is needed - the Customer is able to authenticate immediately. */
         registerCustomerAccount: ModelTypes['RegisterCustomerAccountResult'];
         /** Regenerate and send a verification token for a new Customer registration. Only applicable if `authOptions.requireVerification` is set to true. */
         refreshCustomerVerification: ModelTypes['RefreshCustomerVerificationResult'];
@@ -5500,18 +5500,18 @@ _If `authOptions.requireVerification` is set to `false`:_
         deleteCustomerAddress: ModelTypes['Success'];
         /** Verify a Customer email address with the token sent to that address. Only applicable if `authOptions.requireVerification` is set to true.
 
-If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the password _must_ be
-provided here. */
+         If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the password _must_ be
+         provided here. */
         verifyCustomerAccount: ModelTypes['VerifyCustomerAccountResult'];
         /** Update the password of the active Customer */
         updateCustomerPassword: ModelTypes['UpdateCustomerPasswordResult'];
         /** Request to update the emailAddress of the active Customer. If `authOptions.requireVerification` is enabled
-(as is the default), then the `identifierChangeToken` will be assigned to the current User and
-a IdentifierChangeRequestEvent will be raised. This can then be used e.g. by the EmailPlugin to email
-that verification token to the Customer, which is then used to verify the change of email address. */
+         (as is the default), then the `identifierChangeToken` will be assigned to the current User and
+         a IdentifierChangeRequestEvent will be raised. This can then be used e.g. by the EmailPlugin to email
+         that verification token to the Customer, which is then used to verify the change of email address. */
         requestUpdateCustomerEmailAddress: ModelTypes['RequestUpdateCustomerEmailAddressResult'];
         /** Confirm the update of the emailAddress with the provided token, which has been generated by the
-`requestUpdateCustomerEmailAddress` mutation. */
+         `requestUpdateCustomerEmailAddress` mutation. */
         updateCustomerEmailAddress: ModelTypes['UpdateCustomerEmailAddressResult'];
         /** Requests a password reset email to be sent */
         requestPasswordReset?: ModelTypes['RequestPasswordResetResult'] | undefined;
@@ -5715,7 +5715,7 @@ that verification token to the Customer, which is then used to verify the change
         message: string;
     };
     /** Returned when invoking a mutation which depends on there being an active Order on the
-current session. */
+     current session. */
     ['NoActiveOrderError']: {
         errorCode: ModelTypes['ErrorCode'];
         message: string;
@@ -5927,11 +5927,11 @@ current session. */
         inList: ModelTypes['DateTime'];
     };
     /** Used to construct boolean expressions for filtering search results
-by FacetValue ID. Examples:
+     by FacetValue ID. Examples:
 
-* ID=1 OR ID=2: `{ facetValueFilters: [{ or: [1,2] }] }`
-* ID=1 AND ID=2: `{ facetValueFilters: [{ and: 1 }, { and: 2 }] }`
-* ID=1 AND (ID=2 OR ID=3): `{ facetValueFilters: [{ and: 1 }, { or: [2,3] }] }` */
+     * ID=1 OR ID=2: `{ facetValueFilters: [{ or: [1,2] }] }`
+     * ID=1 AND ID=2: `{ facetValueFilters: [{ and: 1 }, { and: 2 }] }`
+     * ID=1 AND (ID=2 OR ID=3): `{ facetValueFilters: [{ and: 1 }, { or: [2,3] }] }` */
     ['FacetValueFilterInput']: {
         and?: string | undefined;
         or?: Array<string> | undefined;
@@ -6111,7 +6111,7 @@ by FacetValue ID. Examples:
         ui?: ModelTypes['JSON'] | undefined;
     };
     /** Expects the same validation formats as the `<input type="datetime-local">` HTML element.
-See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local#Additional_attributes */
+     See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local#Additional_attributes */
     ['DateTimeCustomFieldConfig']: {
         name: string;
         type: string;
@@ -6304,7 +6304,7 @@ See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-loc
         updatedAt: ModelTypes['DateTime'];
         type: ModelTypes['OrderType'];
         /** The date & time that the Order was placed, i.e. the Customer
-completed the checkout and the Order is no longer "active" */
+         completed the checkout and the Order is no longer "active" */
         orderPlacedAt?: ModelTypes['DateTime'] | undefined;
         /** A unique code for the Order */
         code: string;
@@ -6316,9 +6316,9 @@ completed the checkout and the Order is no longer "active" */
         billingAddress?: ModelTypes['OrderAddress'] | undefined;
         lines: Array<ModelTypes['OrderLine']>;
         /** Surcharges are arbitrary modifications to the Order total which are neither
-ProductVariants nor discounts resulting from applied Promotions. For example,
-one-off discounts based on customer interaction, or surcharges based on payment
-methods. */
+         ProductVariants nor discounts resulting from applied Promotions. For example,
+         one-off discounts based on customer interaction, or surcharges based on payment
+         methods. */
         surcharges: Array<ModelTypes['Surcharge']>;
         discounts: Array<ModelTypes['Discount']>;
         /** An array of all coupon codes applied to the Order */
@@ -6329,9 +6329,9 @@ methods. */
         fulfillments?: Array<ModelTypes['Fulfillment']> | undefined;
         totalQuantity: number;
         /** The subTotal is the total of all OrderLines in the Order. This figure also includes any Order-level
-discounts which have been prorated (proportionally distributed) amongst the items of each OrderLine.
-To get a total of all OrderLines which does not account for prorated discounts, use the
-sum of `OrderLine.discountedLinePrice` values. */
+         discounts which have been prorated (proportionally distributed) amongst the items of each OrderLine.
+         To get a total of all OrderLines which does not account for prorated discounts, use the
+         sum of `OrderLine.discountedLinePrice` values. */
         subTotal: ModelTypes['Money'];
         /** Same as subTotal, but inclusive of tax */
         subTotalWithTax: ModelTypes['Money'];
@@ -6349,7 +6349,7 @@ sum of `OrderLine.discountedLinePrice` values. */
         customFields?: ModelTypes['JSON'] | undefined;
     };
     /** A summary of the taxes being applied to this order, grouped
-by taxRate. */
+     by taxRate. */
     ['OrderTaxSummary']: {
         /** A description of this tax */
         description: string;
@@ -6409,16 +6409,16 @@ by taxRate. */
         unitPriceWithTaxChangeSinceAdded: ModelTypes['Money'];
         /** The price of a single unit including discounts, excluding tax.
 
-If Order-level discounts have been applied, this will not be the
-actual taxable unit price (see `proratedUnitPrice`), but is generally the
-correct price to display to customers to avoid confusion
-about the internal handling of distributed Order-level discounts. */
+         If Order-level discounts have been applied, this will not be the
+         actual taxable unit price (see `proratedUnitPrice`), but is generally the
+         correct price to display to customers to avoid confusion
+         about the internal handling of distributed Order-level discounts. */
         discountedUnitPrice: ModelTypes['Money'];
         /** The price of a single unit including discounts and tax */
         discountedUnitPriceWithTax: ModelTypes['Money'];
         /** The actual unit price, taking into account both item discounts _and_ prorated (proportionally-distributed)
-Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
-and refund calculations. */
+         Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
+         and refund calculations. */
         proratedUnitPrice: ModelTypes['Money'];
         /** The proratedUnitPrice including tax */
         proratedUnitPriceWithTax: ModelTypes['Money'];
@@ -6436,8 +6436,8 @@ and refund calculations. */
         /** The price of the line including discounts and tax */
         discountedLinePriceWithTax: ModelTypes['Money'];
         /** The actual line price, taking into account both item discounts _and_ prorated (proportionally-distributed)
-Order-level discounts. This value is the true economic value of the OrderLine, and is used in tax
-and refund calculations. */
+         Order-level discounts. This value is the true economic value of the OrderLine, and is used in tax
+         and refund calculations. */
         proratedLinePrice: ModelTypes['Money'];
         /** The proratedLinePrice including tax */
         proratedLinePriceWithTax: ModelTypes['Money'];
@@ -6581,13 +6581,13 @@ and refund calculations. */
         collections: Array<ModelTypes['CollectionResult']>;
     };
     /** Which FacetValues are present in the products returned
-by the search, and in what quantity. */
+     by the search, and in what quantity. */
     ['FacetValueResult']: {
         facetValue: ModelTypes['FacetValue'];
         count: number;
     };
     /** Which Collections are present in the products returned
-by the search, and in what quantity. */
+     by the search, and in what quantity. */
     ['CollectionResult']: {
         collection: ModelTypes['Collection'];
         count: number;
@@ -6647,7 +6647,7 @@ by the search, and in what quantity. */
         facetValues: Array<ModelTypes['FacetValue']>;
         translations: Array<ModelTypes['ProductTranslation']>;
         collections: Array<ModelTypes['Collection']>;
-        customFields?: ModelTypes['JSON'] | undefined;
+        customFields?: ModelTypes['Object'] | undefined;
     };
     ['ProductTranslation']: {
         id: string;
@@ -6686,7 +6686,7 @@ by the search, and in what quantity. */
         options: Array<ModelTypes['ProductOption']>;
         facetValues: Array<ModelTypes['FacetValue']>;
         translations: Array<ModelTypes['ProductVariantTranslation']>;
-        customFields?: ModelTypes['JSON'] | undefined;
+        customFields?: ModelTypes['Object'] | undefined;
     };
     ['ProductVariantTranslation']: {
         id: string;
@@ -6918,43 +6918,43 @@ by the search, and in what quantity. */
         message: string;
     };
     /** Returned if the verification token (used to verify a Customer's email address) is either
-invalid or does not match any expected tokens. */
+     invalid or does not match any expected tokens. */
     ['VerificationTokenInvalidError']: {
         errorCode: ModelTypes['ErrorCode'];
         message: string;
     };
     /** Returned if the verification token (used to verify a Customer's email address) is valid, but has
-expired according to the `verificationTokenDuration` setting in the AuthOptions. */
+     expired according to the `verificationTokenDuration` setting in the AuthOptions. */
     ['VerificationTokenExpiredError']: {
         errorCode: ModelTypes['ErrorCode'];
         message: string;
     };
     /** Returned if the token used to change a Customer's email address is either
-invalid or does not match any expected tokens. */
+     invalid or does not match any expected tokens. */
     ['IdentifierChangeTokenInvalidError']: {
         errorCode: ModelTypes['ErrorCode'];
         message: string;
     };
     /** Returned if the token used to change a Customer's email address is valid, but has
-expired according to the `verificationTokenDuration` setting in the AuthOptions. */
+     expired according to the `verificationTokenDuration` setting in the AuthOptions. */
     ['IdentifierChangeTokenExpiredError']: {
         errorCode: ModelTypes['ErrorCode'];
         message: string;
     };
     /** Returned if the token used to reset a Customer's password is either
-invalid or does not match any expected tokens. */
+     invalid or does not match any expected tokens. */
     ['PasswordResetTokenInvalidError']: {
         errorCode: ModelTypes['ErrorCode'];
         message: string;
     };
     /** Returned if the token used to reset a Customer's password is valid, but has
-expired according to the `verificationTokenDuration` setting in the AuthOptions. */
+     expired according to the `verificationTokenDuration` setting in the AuthOptions. */
     ['PasswordResetTokenExpiredError']: {
         errorCode: ModelTypes['ErrorCode'];
         message: string;
     };
     /** Returned if `authOptions.requireVerification` is set to `true` (which is the default)
-and an unverified user attempts to authenticate. */
+     and an unverified user attempts to authenticate. */
     ['NotVerifiedError']: {
         errorCode: ModelTypes['ErrorCode'];
         message: string;
@@ -6985,8 +6985,8 @@ and an unverified user attempts to authenticate. */
         /** This field should correspond to the `code` property of a PaymentMethod. */
         method: string;
         /** This field should contain arbitrary data passed to the specified PaymentMethodHandler's `createPayment()` method
-as the "metadata" argument. For example, it could contain an ID for the payment and other
-data generated by the payment provider. */
+         as the "metadata" argument. For example, it could contain an ID for the payment and other
+         data generated by the payment provider. */
         metadata: ModelTypes['JSON'];
     };
     ['CollectionListOptions']: {
@@ -7288,8 +7288,8 @@ export type GraphQLTypes = {
         /** The active Customer */
         activeCustomer?: GraphQLTypes['Customer'] | undefined;
         /** The active Order. Will be `null` until an Order is created via `addItemToOrder`. Once an Order reaches the
-state of `PaymentAuthorized` or `PaymentSettled`, then that Order is no longer considered "active" and this
-query will once again return `null`. */
+         state of `PaymentAuthorized` or `PaymentSettled`, then that Order is no longer considered "active" and this
+         query will once again return `null`. */
         activeOrder?: GraphQLTypes['Order'] | undefined;
         /** An array of supported Countries */
         availableCountries: Array<GraphQLTypes['Country']>;
@@ -7310,12 +7310,12 @@ query will once again return `null`. */
         /** Returns the possible next states that the activeOrder can transition to */
         nextOrderStates: Array<string>;
         /** Returns an Order based on the id. Note that in the Shop API, only orders belonging to the
-currently-authenticated User may be queried. */
+         currently-authenticated User may be queried. */
         order?: GraphQLTypes['Order'] | undefined;
         /** Returns an Order based on the order `code`. For guest Orders (i.e. Orders placed by non-authenticated Customers)
-this query will only return the Order within 2 hours of the Order being placed. This allows an Order confirmation
-screen to be shown immediately after completion of a guest checkout, yet prevents security risks of allowing
-general anonymous access to Order data. */
+         this query will only return the Order within 2 hours of the Order being placed. This allows an Order confirmation
+         screen to be shown immediately after completion of a guest checkout, yet prevents security risks of allowing
+         general anonymous access to Order data. */
         orderByCode?: GraphQLTypes['Order'] | undefined;
         /** Get a Product either by id or slug. If neither 'id' nor 'slug' is specified, an error will result. */
         product?: GraphQLTypes['Product'] | undefined;
@@ -7347,9 +7347,9 @@ general anonymous access to Order data. */
         /** Allows any custom fields to be set for the active order */
         setOrderCustomFields: GraphQLTypes['ActiveOrderResult'];
         /** Sets the shipping method by id, which can be obtained with the `eligibleShippingMethods` query.
-An Order can have multiple shipping methods, in which case you can pass an array of ids. In this case,
-you should configure a custom ShippingLineAssignmentStrategy in order to know which OrderLines each
-shipping method will apply to. */
+         An Order can have multiple shipping methods, in which case you can pass an array of ids. In this case,
+         you should configure a custom ShippingLineAssignmentStrategy in order to know which OrderLines each
+         shipping method will apply to. */
         setOrderShippingMethod: GraphQLTypes['SetOrderShippingMethodResult'];
         /** Add a Payment to the Order */
         addPaymentToOrder: GraphQLTypes['AddPaymentToOrderResult'];
@@ -7363,18 +7363,18 @@ shipping method will apply to. */
         logout: GraphQLTypes['Success'];
         /** Register a Customer account with the given credentials. There are three possible registration flows:
 
-_If `authOptions.requireVerification` is set to `true`:_
+         _If `authOptions.requireVerification` is set to `true`:_
 
-1. **The Customer is registered _with_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
-   verificationToken would then be passed to the `verifyCustomerAccount` mutation _without_ a password. The Customer is then
-   verified and authenticated in one step.
-2. **The Customer is registered _without_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
-   verificationToken would then be passed to the `verifyCustomerAccount` mutation _with_ the chosen password of the Customer. The Customer is then
-   verified and authenticated in one step.
+         1. **The Customer is registered _with_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
+         verificationToken would then be passed to the `verifyCustomerAccount` mutation _without_ a password. The Customer is then
+         verified and authenticated in one step.
+         2. **The Customer is registered _without_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
+         verificationToken would then be passed to the `verifyCustomerAccount` mutation _with_ the chosen password of the Customer. The Customer is then
+         verified and authenticated in one step.
 
-_If `authOptions.requireVerification` is set to `false`:_
+         _If `authOptions.requireVerification` is set to `false`:_
 
-3. The Customer _must_ be registered _with_ a password. No further action is needed - the Customer is able to authenticate immediately. */
+         3. The Customer _must_ be registered _with_ a password. No further action is needed - the Customer is able to authenticate immediately. */
         registerCustomerAccount: GraphQLTypes['RegisterCustomerAccountResult'];
         /** Regenerate and send a verification token for a new Customer registration. Only applicable if `authOptions.requireVerification` is set to true. */
         refreshCustomerVerification: GraphQLTypes['RefreshCustomerVerificationResult'];
@@ -7388,18 +7388,18 @@ _If `authOptions.requireVerification` is set to `false`:_
         deleteCustomerAddress: GraphQLTypes['Success'];
         /** Verify a Customer email address with the token sent to that address. Only applicable if `authOptions.requireVerification` is set to true.
 
-If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the password _must_ be
-provided here. */
+         If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the password _must_ be
+         provided here. */
         verifyCustomerAccount: GraphQLTypes['VerifyCustomerAccountResult'];
         /** Update the password of the active Customer */
         updateCustomerPassword: GraphQLTypes['UpdateCustomerPasswordResult'];
         /** Request to update the emailAddress of the active Customer. If `authOptions.requireVerification` is enabled
-(as is the default), then the `identifierChangeToken` will be assigned to the current User and
-a IdentifierChangeRequestEvent will be raised. This can then be used e.g. by the EmailPlugin to email
-that verification token to the Customer, which is then used to verify the change of email address. */
+         (as is the default), then the `identifierChangeToken` will be assigned to the current User and
+         a IdentifierChangeRequestEvent will be raised. This can then be used e.g. by the EmailPlugin to email
+         that verification token to the Customer, which is then used to verify the change of email address. */
         requestUpdateCustomerEmailAddress: GraphQLTypes['RequestUpdateCustomerEmailAddressResult'];
         /** Confirm the update of the emailAddress with the provided token, which has been generated by the
-`requestUpdateCustomerEmailAddress` mutation. */
+         `requestUpdateCustomerEmailAddress` mutation. */
         updateCustomerEmailAddress: GraphQLTypes['UpdateCustomerEmailAddressResult'];
         /** Requests a password reset email to be sent */
         requestPasswordReset?: GraphQLTypes['RequestPasswordResetResult'] | undefined;
@@ -7533,35 +7533,35 @@ that verification token to the Customer, which is then used to verify the change
     ['AdjustmentType']: AdjustmentType;
     ['DeletionResult']: DeletionResult;
     /** @description
-Permissions for administrators and customers. Used to control access to
-GraphQL resolvers via the {@link Allow} decorator.
+     Permissions for administrators and customers. Used to control access to
+     GraphQL resolvers via the {@link Allow} decorator.
 
-## Understanding Permission.Owner
+     ## Understanding Permission.Owner
 
-`Permission.Owner` is a special permission which is used in some Vendure resolvers to indicate that that resolver should only
-be accessible to the "owner" of that resource.
+     `Permission.Owner` is a special permission which is used in some Vendure resolvers to indicate that that resolver should only
+     be accessible to the "owner" of that resource.
 
-For example, the Shop API `activeCustomer` query resolver should only return the Customer object for the "owner" of that Customer, i.e.
-based on the activeUserId of the current session. As a result, the resolver code looks like this:
+     For example, the Shop API `activeCustomer` query resolver should only return the Customer object for the "owner" of that Customer, i.e.
+     based on the activeUserId of the current session. As a result, the resolver code looks like this:
 
-@example
-```TypeScript
-\@Query()
-\@Allow(Permission.Owner)
-async activeCustomer(\@Ctx() ctx: RequestContext): Promise<Customer | undefined> {
-  const userId = ctx.activeUserId;
-  if (userId) {
-    return this.customerService.findOneByUserId(ctx, userId);
-  }
-}
-```
+     @example
+     ```TypeScript
+     \@Query()
+     \@Allow(Permission.Owner)
+     async activeCustomer(\@Ctx() ctx: RequestContext): Promise<Customer | undefined> {
+     const userId = ctx.activeUserId;
+     if (userId) {
+     return this.customerService.findOneByUserId(ctx, userId);
+     }
+     }
+     ```
 
-Here we can see that the "ownership" must be enforced by custom logic inside the resolver. Since "ownership" cannot be defined generally
-nor statically encoded at build-time, any resolvers using `Permission.Owner` **must** include logic to enforce that only the owner
-of the resource has access. If not, then it is the equivalent of using `Permission.Public`.
+     Here we can see that the "ownership" must be enforced by custom logic inside the resolver. Since "ownership" cannot be defined generally
+     nor statically encoded at build-time, any resolvers using `Permission.Owner` **must** include logic to enforce that only the owner
+     of the resource has access. If not, then it is the equivalent of using `Permission.Public`.
 
 
-@docsCategory common */
+     @docsCategory common */
     ['Permission']: Permission;
     ['SortOrder']: SortOrder;
     ['ErrorCode']: ErrorCode;
@@ -7657,7 +7657,7 @@ of the resource has access. If not, then it is the equivalent of using `Permissi
         message: string;
     };
     /** Returned when invoking a mutation which depends on there being an active Order on the
-current session. */
+     current session. */
     ['NoActiveOrderError']: {
         __typename: 'NoActiveOrderError';
         errorCode: GraphQLTypes['ErrorCode'];
@@ -7966,11 +7966,11 @@ current session. */
         inList: GraphQLTypes['DateTime'];
     };
     /** Used to construct boolean expressions for filtering search results
-by FacetValue ID. Examples:
+     by FacetValue ID. Examples:
 
-* ID=1 OR ID=2: `{ facetValueFilters: [{ or: [1,2] }] }`
-* ID=1 AND ID=2: `{ facetValueFilters: [{ and: 1 }, { and: 2 }] }`
-* ID=1 AND (ID=2 OR ID=3): `{ facetValueFilters: [{ and: 1 }, { or: [2,3] }] }` */
+     * ID=1 OR ID=2: `{ facetValueFilters: [{ or: [1,2] }] }`
+     * ID=1 AND ID=2: `{ facetValueFilters: [{ and: 1 }, { and: 2 }] }`
+     * ID=1 AND (ID=2 OR ID=3): `{ facetValueFilters: [{ and: 1 }, { or: [2,3] }] }` */
     ['FacetValueFilterInput']: {
         and?: string | undefined;
         or?: Array<string> | undefined;
@@ -8087,9 +8087,9 @@ by FacetValue ID. Examples:
         ['...on CouponCodeLimitError']: '__union' & GraphQLTypes['CouponCodeLimitError'];
     };
     /** @description
-ISO 4217 currency code
+     ISO 4217 currency code
 
-@docsCategory common */
+     @docsCategory common */
     ['CurrencyCode']: CurrencyCode;
     ['CustomField']: {
         __typename:
@@ -8198,7 +8198,7 @@ ISO 4217 currency code
         ui?: GraphQLTypes['JSON'] | undefined;
     };
     /** Expects the same validation formats as the `<input type="datetime-local">` HTML element.
-See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local#Additional_attributes */
+     See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local#Additional_attributes */
     ['DateTimeCustomFieldConfig']: {
         __typename: 'DateTimeCustomFieldConfig';
         name: string;
@@ -8411,12 +8411,12 @@ See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-loc
         filterOperator?: GraphQLTypes['LogicalOperator'] | undefined;
     };
     /** @description
-Languages in the form of a ISO 639-1 language code with optional
-region or script modifier (e.g. de_AT). The selection available is based
-on the [Unicode CLDR summary list](https://unicode-org.github.io/cldr-staging/charts/37/summary/root.html)
-and includes the major spoken languages of the world and any widely-used variants.
+     Languages in the form of a ISO 639-1 language code with optional
+     region or script modifier (e.g. de_AT). The selection available is based
+     on the [Unicode CLDR summary list](https://unicode-org.github.io/cldr-staging/charts/37/summary/root.html)
+     and includes the major spoken languages of the world and any widely-used variants.
 
-@docsCategory common */
+     @docsCategory common */
     ['LanguageCode']: LanguageCode;
     ['OrderType']: OrderType;
     ['Order']: {
@@ -8426,7 +8426,7 @@ and includes the major spoken languages of the world and any widely-used variant
         updatedAt: GraphQLTypes['DateTime'];
         type: GraphQLTypes['OrderType'];
         /** The date & time that the Order was placed, i.e. the Customer
-completed the checkout and the Order is no longer "active" */
+         completed the checkout and the Order is no longer "active" */
         orderPlacedAt?: GraphQLTypes['DateTime'] | undefined;
         /** A unique code for the Order */
         code: string;
@@ -8438,9 +8438,9 @@ completed the checkout and the Order is no longer "active" */
         billingAddress?: GraphQLTypes['OrderAddress'] | undefined;
         lines: Array<GraphQLTypes['OrderLine']>;
         /** Surcharges are arbitrary modifications to the Order total which are neither
-ProductVariants nor discounts resulting from applied Promotions. For example,
-one-off discounts based on customer interaction, or surcharges based on payment
-methods. */
+         ProductVariants nor discounts resulting from applied Promotions. For example,
+         one-off discounts based on customer interaction, or surcharges based on payment
+         methods. */
         surcharges: Array<GraphQLTypes['Surcharge']>;
         discounts: Array<GraphQLTypes['Discount']>;
         /** An array of all coupon codes applied to the Order */
@@ -8451,9 +8451,9 @@ methods. */
         fulfillments?: Array<GraphQLTypes['Fulfillment']> | undefined;
         totalQuantity: number;
         /** The subTotal is the total of all OrderLines in the Order. This figure also includes any Order-level
-discounts which have been prorated (proportionally distributed) amongst the items of each OrderLine.
-To get a total of all OrderLines which does not account for prorated discounts, use the
-sum of `OrderLine.discountedLinePrice` values. */
+         discounts which have been prorated (proportionally distributed) amongst the items of each OrderLine.
+         To get a total of all OrderLines which does not account for prorated discounts, use the
+         sum of `OrderLine.discountedLinePrice` values. */
         subTotal: GraphQLTypes['Money'];
         /** Same as subTotal, but inclusive of tax */
         subTotalWithTax: GraphQLTypes['Money'];
@@ -8468,10 +8468,10 @@ sum of `OrderLine.discountedLinePrice` values. */
         /** A summary of the taxes being applied to this Order */
         taxSummary: Array<GraphQLTypes['OrderTaxSummary']>;
         history: GraphQLTypes['HistoryEntryList'];
-        customFields?: GraphQLTypes['JSON'] | undefined;
+        customFields?: GraphQLTypes['Object'] | undefined;
     };
     /** A summary of the taxes being applied to this order, grouped
-by taxRate. */
+     by taxRate. */
     ['OrderTaxSummary']: {
         __typename: 'OrderTaxSummary';
         /** A description of this tax */
@@ -8537,16 +8537,16 @@ by taxRate. */
         unitPriceWithTaxChangeSinceAdded: GraphQLTypes['Money'];
         /** The price of a single unit including discounts, excluding tax.
 
-If Order-level discounts have been applied, this will not be the
-actual taxable unit price (see `proratedUnitPrice`), but is generally the
-correct price to display to customers to avoid confusion
-about the internal handling of distributed Order-level discounts. */
+         If Order-level discounts have been applied, this will not be the
+         actual taxable unit price (see `proratedUnitPrice`), but is generally the
+         correct price to display to customers to avoid confusion
+         about the internal handling of distributed Order-level discounts. */
         discountedUnitPrice: GraphQLTypes['Money'];
         /** The price of a single unit including discounts and tax */
         discountedUnitPriceWithTax: GraphQLTypes['Money'];
         /** The actual unit price, taking into account both item discounts _and_ prorated (proportionally-distributed)
-Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
-and refund calculations. */
+         Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
+         and refund calculations. */
         proratedUnitPrice: GraphQLTypes['Money'];
         /** The proratedUnitPrice including tax */
         proratedUnitPriceWithTax: GraphQLTypes['Money'];
@@ -8564,8 +8564,8 @@ and refund calculations. */
         /** The price of the line including discounts and tax */
         discountedLinePriceWithTax: GraphQLTypes['Money'];
         /** The actual line price, taking into account both item discounts _and_ prorated (proportionally-distributed)
-Order-level discounts. This value is the true economic value of the OrderLine, and is used in tax
-and refund calculations. */
+         Order-level discounts. This value is the true economic value of the OrderLine, and is used in tax
+         and refund calculations. */
         proratedLinePrice: GraphQLTypes['Money'];
         /** The proratedLinePrice including tax */
         proratedLinePriceWithTax: GraphQLTypes['Money'];
@@ -8723,14 +8723,14 @@ and refund calculations. */
         collections: Array<GraphQLTypes['CollectionResult']>;
     };
     /** Which FacetValues are present in the products returned
-by the search, and in what quantity. */
+     by the search, and in what quantity. */
     ['FacetValueResult']: {
         __typename: 'FacetValueResult';
         facetValue: GraphQLTypes['FacetValue'];
         count: number;
     };
     /** Which Collections are present in the products returned
-by the search, and in what quantity. */
+     by the search, and in what quantity. */
     ['CollectionResult']: {
         __typename: 'CollectionResult';
         collection: GraphQLTypes['Collection'];
@@ -8800,7 +8800,7 @@ by the search, and in what quantity. */
         facetValues: Array<GraphQLTypes['FacetValue']>;
         translations: Array<GraphQLTypes['ProductTranslation']>;
         collections: Array<GraphQLTypes['Collection']>;
-        customFields?: GraphQLTypes['JSON'] | undefined;
+        customFields?: GraphQLTypes['Object'] | undefined;
     };
     ['ProductTranslation']: {
         __typename: 'ProductTranslation';
@@ -8843,7 +8843,7 @@ by the search, and in what quantity. */
         options: Array<GraphQLTypes['ProductOption']>;
         facetValues: Array<GraphQLTypes['FacetValue']>;
         translations: Array<GraphQLTypes['ProductVariantTranslation']>;
-        customFields?: GraphQLTypes['JSON'] | undefined;
+        customFields?: GraphQLTypes['Object'] | undefined;
     };
     ['ProductVariantTranslation']: {
         __typename: 'ProductVariantTranslation';
@@ -9121,49 +9121,49 @@ by the search, and in what quantity. */
         message: string;
     };
     /** Returned if the verification token (used to verify a Customer's email address) is either
-invalid or does not match any expected tokens. */
+     invalid or does not match any expected tokens. */
     ['VerificationTokenInvalidError']: {
         __typename: 'VerificationTokenInvalidError';
         errorCode: GraphQLTypes['ErrorCode'];
         message: string;
     };
     /** Returned if the verification token (used to verify a Customer's email address) is valid, but has
-expired according to the `verificationTokenDuration` setting in the AuthOptions. */
+     expired according to the `verificationTokenDuration` setting in the AuthOptions. */
     ['VerificationTokenExpiredError']: {
         __typename: 'VerificationTokenExpiredError';
         errorCode: GraphQLTypes['ErrorCode'];
         message: string;
     };
     /** Returned if the token used to change a Customer's email address is either
-invalid or does not match any expected tokens. */
+     invalid or does not match any expected tokens. */
     ['IdentifierChangeTokenInvalidError']: {
         __typename: 'IdentifierChangeTokenInvalidError';
         errorCode: GraphQLTypes['ErrorCode'];
         message: string;
     };
     /** Returned if the token used to change a Customer's email address is valid, but has
-expired according to the `verificationTokenDuration` setting in the AuthOptions. */
+     expired according to the `verificationTokenDuration` setting in the AuthOptions. */
     ['IdentifierChangeTokenExpiredError']: {
         __typename: 'IdentifierChangeTokenExpiredError';
         errorCode: GraphQLTypes['ErrorCode'];
         message: string;
     };
     /** Returned if the token used to reset a Customer's password is either
-invalid or does not match any expected tokens. */
+     invalid or does not match any expected tokens. */
     ['PasswordResetTokenInvalidError']: {
         __typename: 'PasswordResetTokenInvalidError';
         errorCode: GraphQLTypes['ErrorCode'];
         message: string;
     };
     /** Returned if the token used to reset a Customer's password is valid, but has
-expired according to the `verificationTokenDuration` setting in the AuthOptions. */
+     expired according to the `verificationTokenDuration` setting in the AuthOptions. */
     ['PasswordResetTokenExpiredError']: {
         __typename: 'PasswordResetTokenExpiredError';
         errorCode: GraphQLTypes['ErrorCode'];
         message: string;
     };
     /** Returned if `authOptions.requireVerification` is set to `true` (which is the default)
-and an unverified user attempts to authenticate. */
+     and an unverified user attempts to authenticate. */
     ['NotVerifiedError']: {
         __typename: 'NotVerifiedError';
         errorCode: GraphQLTypes['ErrorCode'];
@@ -9195,8 +9195,8 @@ and an unverified user attempts to authenticate. */
         /** This field should correspond to the `code` property of a PaymentMethod. */
         method: string;
         /** This field should contain arbitrary data passed to the specified PaymentMethodHandler's `createPayment()` method
-as the "metadata" argument. For example, it could contain an ID for the payment and other
-data generated by the payment provider. */
+         as the "metadata" argument. For example, it could contain an ID for the payment and other
+         data generated by the payment provider. */
         metadata: GraphQLTypes['JSON'];
     };
     ['CollectionListOptions']: {
@@ -9570,35 +9570,35 @@ export const enum DeletionResult {
     NOT_DELETED = 'NOT_DELETED',
 }
 /** @description
-Permissions for administrators and customers. Used to control access to
-GraphQL resolvers via the {@link Allow} decorator.
+ Permissions for administrators and customers. Used to control access to
+ GraphQL resolvers via the {@link Allow} decorator.
 
-## Understanding Permission.Owner
+ ## Understanding Permission.Owner
 
-`Permission.Owner` is a special permission which is used in some Vendure resolvers to indicate that that resolver should only
-be accessible to the "owner" of that resource.
+ `Permission.Owner` is a special permission which is used in some Vendure resolvers to indicate that that resolver should only
+ be accessible to the "owner" of that resource.
 
-For example, the Shop API `activeCustomer` query resolver should only return the Customer object for the "owner" of that Customer, i.e.
-based on the activeUserId of the current session. As a result, the resolver code looks like this:
+ For example, the Shop API `activeCustomer` query resolver should only return the Customer object for the "owner" of that Customer, i.e.
+ based on the activeUserId of the current session. As a result, the resolver code looks like this:
 
-@example
-```TypeScript
-\@Query()
-\@Allow(Permission.Owner)
-async activeCustomer(\@Ctx() ctx: RequestContext): Promise<Customer | undefined> {
-  const userId = ctx.activeUserId;
-  if (userId) {
-    return this.customerService.findOneByUserId(ctx, userId);
-  }
-}
-```
+ @example
+ ```TypeScript
+ \@Query()
+ \@Allow(Permission.Owner)
+ async activeCustomer(\@Ctx() ctx: RequestContext): Promise<Customer | undefined> {
+ const userId = ctx.activeUserId;
+ if (userId) {
+ return this.customerService.findOneByUserId(ctx, userId);
+ }
+ }
+ ```
 
-Here we can see that the "ownership" must be enforced by custom logic inside the resolver. Since "ownership" cannot be defined generally
-nor statically encoded at build-time, any resolvers using `Permission.Owner` **must** include logic to enforce that only the owner
-of the resource has access. If not, then it is the equivalent of using `Permission.Public`.
+ Here we can see that the "ownership" must be enforced by custom logic inside the resolver. Since "ownership" cannot be defined generally
+ nor statically encoded at build-time, any resolvers using `Permission.Owner` **must** include logic to enforce that only the owner
+ of the resource has access. If not, then it is the equivalent of using `Permission.Public`.
 
 
-@docsCategory common */
+ @docsCategory common */
 export const enum Permission {
     Authenticated = 'Authenticated',
     SuperAdmin = 'SuperAdmin',
@@ -9735,9 +9735,9 @@ export const enum LogicalOperator {
     OR = 'OR',
 }
 /** @description
-ISO 4217 currency code
+ ISO 4217 currency code
 
-@docsCategory common */
+ @docsCategory common */
 export const enum CurrencyCode {
     AED = 'AED',
     AFN = 'AFN',
@@ -9924,12 +9924,12 @@ export const enum HistoryEntryType {
     ORDER_MODIFIED = 'ORDER_MODIFIED',
 }
 /** @description
-Languages in the form of a ISO 639-1 language code with optional
-region or script modifier (e.g. de_AT). The selection available is based
-on the [Unicode CLDR summary list](https://unicode-org.github.io/cldr-staging/charts/37/summary/root.html)
-and includes the major spoken languages of the world and any widely-used variants.
+ Languages in the form of a ISO 639-1 language code with optional
+ region or script modifier (e.g. de_AT). The selection available is based
+ on the [Unicode CLDR summary list](https://unicode-org.github.io/cldr-staging/charts/37/summary/root.html)
+ and includes the major spoken languages of the world and any widely-used variants.
 
-@docsCategory common */
+ @docsCategory common */
 export const enum LanguageCode {
     af = 'af',
     ak = 'ak',

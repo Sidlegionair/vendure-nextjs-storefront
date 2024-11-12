@@ -94,8 +94,8 @@ export const Picker: React.FC<{
                     channelAsLocale?.channel === DEFAULT_CHANNEL
                         ? ''
                         : channelAsLocale?.nationalLocale === channelAsLocale.slug
-                          ? ''
-                          : channelAsLocale?.nationalLocale;
+                            ? ''
+                            : channelAsLocale?.nationalLocale;
                 const _newLang = newLang === DEFAULT_LOCALE ? '' : newLang;
                 const correctPathname = '/' + (_channel + '/' + _newLang) + asPath;
 
@@ -203,15 +203,15 @@ export const Picker: React.FC<{
                                             channels
                                                 .find(c => c.nationalLocale === watch('channel'))
                                                 ?.locales.map(l => {
-                                                    return {
-                                                        key: l,
-                                                        children: (
-                                                            <LocaleInList itemsCenter gap="1rem">
-                                                                {getFlagByCode(l)}
-                                                            </LocaleInList>
-                                                        ),
-                                                    };
-                                                }) ?? []
+                                                return {
+                                                    key: l,
+                                                    children: (
+                                                        <LocaleInList itemsCenter gap="1rem">
+                                                            {getFlagByCode(l)}
+                                                        </LocaleInList>
+                                                    ),
+                                                };
+                                            }) ?? []
                                         }
                                         placeholder={t('picker.change-language')}
                                         setSelected={onChange}
@@ -258,10 +258,12 @@ const LocaleInList = styled(Stack)`
 `;
 
 const CurrentLocale = styled.button`
+    width: 21px;
+    height: 21px;
+
     border: none;
     background-color: transparent;
     cursor: pointer;
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -269,8 +271,8 @@ const CurrentLocale = styled.button`
         outline: none;
     }
     svg {
-        width: 2.5rem;
-        height: 2.5rem;
+        width: 21px;
+        height: 21px;
     }
 `;
 

@@ -45,10 +45,10 @@ export const Cart = ({ activeOrder }: { activeOrder?: ActiveOrderType }) => {
                         <ContentContainer>
                             <CartContainer column gap="2rem">
                                 <Stack justifyBetween>
-                                    <Stack itemsCenter gap="1.25rem">
+                                    <Stack justifyEnd gap="1.25rem">
                                         <TH2>{t('your-cart')}</TH2>
                                         {activeOrder?.totalQuantity ? (
-                                            <TP style={{ marginTop: '0.8rem' }}>
+                                            <TP>
                                                 ({activeOrder?.totalQuantity} {t('items')})
                                             </TP>
                                         ) : null}
@@ -62,13 +62,13 @@ export const Cart = ({ activeOrder }: { activeOrder?: ActiveOrderType }) => {
                                     <CartList column>
                                         {activeOrder?.lines.map(
                                             ({
-                                                productVariant,
-                                                id,
-                                                featuredAsset,
-                                                quantity,
-                                                linePriceWithTax,
-                                                discountedLinePriceWithTax,
-                                            }) => {
+                                                 productVariant,
+                                                 id,
+                                                 featuredAsset,
+                                                 quantity,
+                                                 linePriceWithTax,
+                                                 discountedLinePriceWithTax,
+                                             }) => {
                                                 const optionInName =
                                                     productVariant.name.replace(productVariant.product.name, '') !== '';
                                                 const isPriceDiscounted =

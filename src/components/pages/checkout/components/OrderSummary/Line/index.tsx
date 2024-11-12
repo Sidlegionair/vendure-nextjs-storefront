@@ -18,21 +18,23 @@ interface LineProps {
 }
 
 export const Line: React.FC<LineProps> = ({
-    isForm,
-    line: {
-        id,
-        productVariant,
-        quantity,
-        featuredAsset,
-        unitPriceWithTax,
-        linePriceWithTax,
-        discountedLinePriceWithTax,
-    },
-    currencyCode = CurrencyCode.USD,
-}) => {
+                                              isForm,
+                                              line: {
+                                                  id,
+                                                  productVariant,
+                                                  quantity,
+                                                  featuredAsset,
+                                                  unitPriceWithTax,
+                                                  linePriceWithTax,
+                                                  discountedLinePriceWithTax,
+                                              },
+                                              currencyCode = CurrencyCode.USD,
+                                          }) => {
     const { removeFromCheckout, changeQuantity } = useCheckout();
     const { t } = useTranslation('checkout');
     const optionInName = productVariant.name.replace(productVariant.product.name, '') !== '';
+    const customFields = productVariant.product.customFields as { brand?: string }; // Casting customFields to an object with brand
+
     const isPriceDiscounted = linePriceWithTax !== discountedLinePriceWithTax;
     return (
         <Stack column style={{ paddingBottom: '2rem' }}>
@@ -47,16 +49,19 @@ export const Line: React.FC<LineProps> = ({
                     <Stack column gap="0.75rem" justifyBetween style={{ height: '100%' }}>
                         <Stack gap="1.25rem">
                             <Stack column gap="0.5rem">
-                                <TypoGraphy size="1.5rem" weight={500} noWrap>
-                                    {productVariant.product.name}
-                                </TypoGraphy>
-                                {optionInName && (
-                                    <TypoGraphy size="1.25rem" weight={400} capitalize>
-                                        {productVariant.name.replace(productVariant.product.name, '')}
+                                <Stack gap="0.5rem">
+                                    {customFields?.brand && (
+                                        <TypoGraphy size="18px" weight={700} noWrap>
+                                            {customFields.brand}
+                                        </TypoGraphy>
+                                    )}
+
+                                    <TypoGraphy size="18px" weight={300} noWrap>
+                                        {productVariant.product.name}
                                     </TypoGraphy>
-                                )}
-                                <TypoGraphy size="1.25rem" weight={600}>
-                                    {t('orderSummary.quantity')} {quantity}
+                                </Stack>
+                                <TypoGraphy size="16px" weight={400}>
+                                    {t('orderSummary.quantity')}: {quantity}
                                 </TypoGraphy>
                             </Stack>
                         </Stack>
@@ -66,6 +71,8 @@ export const Line: React.FC<LineProps> = ({
                     <Stack gap="2rem">
                         {isPriceDiscounted ? (
                             <Price
+                                size={'20px'}
+                                weight={500}
                                 price={discountedLinePriceWithTax}
                                 // beforePrice={productVariant.customFields?.beforePrice}
                                 currencyCode={currencyCode}
@@ -73,6 +80,8 @@ export const Line: React.FC<LineProps> = ({
                             />
                         ) : (
                             <Price
+                                size={'20px'}
+                                weight={500}
                                 price={unitPriceWithTax}
                                 // beforePrice={productVariant.customFields?.beforePrice}
                                 currencyCode={currencyCode}
@@ -114,5 +123,5 @@ const Action = styled.button`
     align-items: center;
     width: fit-content;
 
-    gap: 0.5rem;
+    gap: 40px;
 `;

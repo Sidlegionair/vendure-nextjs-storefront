@@ -78,7 +78,7 @@ const Quantity = styled(TP)`
 
 const CartComponentMain = styled(motion.div)`
     width: 100%;
-    max-width: 55rem;
+    max-width: 52rem;
     height: 100dvh;
 
     z-index: 2147483647;

@@ -100,7 +100,7 @@ export const ForgotPasswordPage: React.FC<InferGetServerSidePropsType<typeof get
                                     type="text"
                                     {...register('emailAddress')}
                                 />
-                                <Button loading={isSubmitting} type="submit">
+                                <Button disabled={isSubmitting} type="submit">
                                     {t('newPassword')}
                                 </Button>
                             </Form>

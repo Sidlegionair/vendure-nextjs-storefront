@@ -19,7 +19,7 @@
         "shippingDifferentThanBilling": "Is shipping address different than billing address?",
         "userNeedInvoice": "Do you need an invoice?",
         "orderSummary": "Order Summary",
-        "contactInfo": "Contact Information",
+        "contactInfo": "Account Information",
         "emailAddress": "Email Address",
         "firstName": "First Name",
         "lastName": "Last Name",

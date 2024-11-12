@@ -15,14 +15,14 @@ interface ProductVariantTileProps {
 }
 
 export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
-    variant,
-    addToCart,
-    lazy,
-    // this is temp until we have ratings
-    withoutRatings = true,
-    withoutRedirect,
-    displayAllCategories,
-}) => {
+                                                                          variant,
+                                                                          addToCart,
+                                                                          lazy,
+                                                                          // this is temp until we have ratings
+                                                                          withoutRatings = true,
+                                                                          withoutRedirect,
+                                                                          displayAllCategories,
+                                                                      }) => {
     const src = variant.featuredAsset?.preview ?? variant.product?.featuredAsset?.preview;
     const ImageLink = withoutRedirect ? ImageContainer : LinkContainer;
     const TextWrapper = withoutRedirect ? TextContainer : TextRedirectContainer;
@@ -31,30 +31,30 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
     return (
         <Stack column key={variant.name} gap="0.5rem">
             <Stack style={{ position: 'relative', width: '32rem' }}>
-                <Categories>
-                    {variant.product.collections
-                        .filter(c => c.slug !== 'all' && c.slug !== 'search')
-                        .sort(() => -1)
-                        .slice(0, displayAllCategories ? undefined : 1)
-                        .map(c => {
-                            const href =
-                                c?.parent?.slug !== '__root_collection__'
-                                    ? `/collections/${c?.parent?.slug}/${c?.slug}`
-                                    : `/collections/${c?.slug}`;
-                            return (
-                                <CategoryWrapper href={href} key={c.slug}>
-                                    <TP
-                                        size="1.25rem"
-                                        color="contrast"
-                                        upperCase
-                                        weight={500}
-                                        style={{ letterSpacing: '0.5px' }}>
-                                        {c.name}
-                                    </TP>
-                                </CategoryWrapper>
-                            );
-                        })}
-                </Categories>
+                {/*<Categories>*/}
+                {/*    {variant.product.collections*/}
+                {/*        .filter(c => c.slug !== 'all' && c.slug !== 'search')*/}
+                {/*        .sort(() => -1)*/}
+                {/*        .slice(0, displayAllCategories ? undefined : 1)*/}
+                {/*        .map(c => {*/}
+                {/*            const href =*/}
+                {/*                c?.parent?.slug !== '__root_collection__'*/}
+                {/*                    ? `/collections/${c?.parent?.slug}/${c?.slug}`*/}
+                {/*                    : `/collections/${c?.slug}`;*/}
+                {/*            return (*/}
+                {/*                <CategoryWrapper href={href} key={c.slug}>*/}
+                {/*                    <TP*/}
+                {/*                        size="1.25rem"*/}
+                {/*                        color="contrast"*/}
+                {/*                        upperCase*/}
+                {/*                        weight={500}*/}
+                {/*                        style={{ letterSpacing: '0.5px' }}>*/}
+                {/*                        {c.name}*/}
+                {/*                    </TP>*/}
+                {/*                </CategoryWrapper>*/}
+                {/*            );*/}
+                {/*        })}*/}
+                {/*</Categories>*/}
                 <ImageLink href={`/products/${variant.product.slug}?variant=${variant.id}`}>
                     <ProductImage
                         {...(lazy ? { lazy: true } : {})}
