@@ -3,7 +3,6 @@ type Level = 0 | 25 | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 |
 
 // Define breakpoints with a new type to ensure consistency
 type BreakpointSizes = 'ssm' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
-
 type Breakpoints = Record<BreakpointSizes, string>;
 
 // FunctionTheme: includes functions for accent, gray, and borderRadius settings.
@@ -12,17 +11,11 @@ type FunctionTheme = {
     gray: (l: Level) => string;
     grayAlpha: (l: Level, alpha: number) => string;
     borderRadius: string;
-    withOpacity: (color: string, opacity: number) => string; // New function for opacity
+    withOpacity: (color: string, opacity: number) => string;
 };
 
-// DetailTheme: Defines more specific parts of the theme, such as text colors, backgrounds, buttons, etc.
+// DetailTheme: Defines detailed theme structure, with alignment to LightTheme properties.
 type DetailTheme = {
-    text: {
-        main: string;
-        inactive: string;
-        subtitle: string;
-        contrast: string;
-    };
     background: {
         main: string;
         secondary: string;
@@ -30,22 +23,41 @@ type DetailTheme = {
         ice: string;
         white: string;
         modal: string;
+        groupBackground: string;
+        riderLevelBackground: string;
+        accent: string;
+        accentGreen: string;
+    };
+    text: {
+        main: string;
+        inactive: string;
+        subtitle: string;
+        contrast: string;
+        black: string;
+        groupHeading: string;
+        italicText: string;
+        accent: string;
+        lightgray: string;
+        accentGreen: string;
     };
     button: {
         back: string;
         front: string;
-        hover?: {
-            back?: string;
-            front?: string;
-        };
-        icon: {
-            front: string;
-            back?: string;
-        };
+        icon: { front: string; back: string; };
+        hover: { front: string; back: string; };
+        border: string;
+    };
+    border: {
+        main: string;
+        lightgray: string;
     };
     shadow: string;
     error: string;
     success: string;
+    price: {
+        default: string;
+        discount: string;
+    };
     tile: {
         background: string;
         hover: string;
@@ -53,53 +65,69 @@ type DetailTheme = {
     placeholder: string;
     noteCard: string;
     outline: string;
+    typography: {
+        fontFamily: string;
+        fontSize: {
+            small: string;
+            medium: string;
+            large: string;
+        };
+        fontWeight: {
+            light: number;
+            regular: number;
+            bold: number;
+            italic: string;
+        };
+    };
     breakpoints: Breakpoints;
-    price: {
-        default: string;
-        discount: string;
+    opacity: {
+        light: number;
+        medium: number;
+        heavy: number;
+        veryHeavy: number;
+    };
+    vectors: {
+        main: string;
+        white: string;
+        black: string;
+        gray: string;
+    };
+    ellipse: {
+        backgroundLight: string;
+        backgroundDark: string;
+        lightGray: string;
     };
 };
 
 // MainTheme combines both the FunctionTheme and DetailTheme
 export type MainTheme = FunctionTheme & DetailTheme;
 
-// Default function to generate theme settings based on hue
-const defaultThemeFunction = (hue: number): FunctionTheme => ({
-    accent: (l: Level) => `lch(${100.0 - l / 10.0}% ${l / 10.0} ${hue});`,
-    gray: (g: Level) => `lch(${100.0 - g / 10.0}% 0 0);`,
-    grayAlpha: (g: Level, alpha: number) => `lch(${100.0 - g / 10.0}% 0 0 / ${alpha});`,
-    borderRadius: '0rem',
-    withOpacity: (color: string, opacity: number) => {
-        const r = parseInt(color.slice(1, 3), 16);
-        const g = parseInt(color.slice(3, 5), 16);
-        const b = parseInt(color.slice(5, 7), 16);
-        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
-    },
-});
-
-// Emotional type for theme context
+// Helper function for theme transformation
 type Emotional = {
     theme: MainTheme;
 };
 
-// Generic type generator to allow theme functions in DetailTheme
 type Gen<T> = {
     [P in keyof T]: T[P] extends string ? (emotionHtmlTheme: Emotional) => string : Gen<T[P]>;
 };
 
-// Helper function to recursively transform the theme object
 const themeTransform = (t: MainTheme): Gen<DetailTheme> => {
     const tree = (obj: Record<string, unknown>, prefix: string[] = []): void => {
         Object.entries(obj).forEach(([key, value]) => {
             if (typeof value === 'string') {
                 obj[key] = (fn: Emotional) => {
                     const result = prefix.concat(key).reduce(
-                        (acc: Record<string, unknown> | string | undefined, prop) =>
-                            typeof acc === 'object' && acc ? acc[prop] : undefined,
+                        (acc: Record<string, unknown> | string | undefined, prop: string): string | Record<string, unknown> | undefined => {
+                            if (typeof acc === 'object' && acc !== null) {
+                                return acc[prop] as string | Record<string, unknown> | undefined;
+                            }
+                            return undefined;
+                        },
                         fn.theme as Record<string, unknown>,
                     );
                     return result as string;
                 };
+
             } else if (value && typeof value === 'object') {
                 tree(value as Record<string, unknown>, [...prefix, key]);
             }
@@ -115,7 +143,7 @@ const themeTransform = (t: MainTheme): Gen<DetailTheme> => {
 // Factory function to create a theme with hue and details
 export const createTheme = (
     hue: number,
-    fn: (t) => DetailTheme,
+    fn: (t: FunctionTheme) => DetailTheme, // Specify the type for 't' here
     themeFunction = defaultThemeFunction,
 ): MainTheme => {
     const baseTheme = themeFunction(hue);
@@ -125,7 +153,17 @@ export const createTheme = (
     };
 };
 
-// Light theme definition with updated breakpoints
+
+const defaultThemeFunction = (hue: number): FunctionTheme => ({
+    accent: (l) => `hsl(${hue}, 100%, ${l}%)`,
+    gray: (l) => `hsl(0, 0%, ${l}%)`,
+    grayAlpha: (l, alpha) => `hsla(0, 0%, ${l}%, ${alpha})`,
+    borderRadius: "4px",
+    withOpacity: (color, opacity) => `rgba(${color}, ${opacity})`,
+});
+
+
+// Define default theme settings
 export const LightTheme = createTheme(300, (t) => ({
     background: {
         main: t.gray(0),
@@ -154,7 +192,8 @@ export const LightTheme = createTheme(300, (t) => ({
     button: {
         back: '#141C23',
         front: t.gray(0),
-        icon: { front: t.gray(900) },
+        icon: { front: t.gray(900), back: t.gray(900) },
+        hover: { front: t.gray(0), back: t.gray(100) }, // Added hover back
         border: '#4D4D4D',
     },
     border: {
@@ -217,6 +256,7 @@ export const LightTheme = createTheme(300, (t) => ({
         lightGray: '#5F5F5F',
     },
 }));
+
 
 // Transform the theme object for use in a UI
 export const thv = themeTransform(LightTheme);

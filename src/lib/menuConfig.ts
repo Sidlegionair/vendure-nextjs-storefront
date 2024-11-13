@@ -1,96 +1,110 @@
 // src/config/menuConfig.ts
-export const mainNavigation = [
+import { CollectionTileProductVariantType } from '@/src/graphql/selectors';
+
+type NavigationItemType = {
+    name: string;
+    id: string;
+    parentId: string;
+    slug: string;
+    description: string;
+    productVariants: {
+        totalItems: number;
+        items: CollectionTileProductVariantType[];
+    };
+    children: NavigationItemType[];
+};
+
+// Default empty productVariants structure
+const emptyProductVariants = {
+    totalItems: 0,
+    items: [] as CollectionTileProductVariantType[],
+};
+
+// Define the mainNavigation array with productVariants always defined
+export const mainNavigation: NavigationItemType[] = [
     {
         name: 'Home',
-        id: null,
+        id: 'home',
+        parentId: '',
         slug: '#',
         description: '',
-        featuredAsset: null,
-        productVariants: null,
+        productVariants: emptyProductVariants, // Use default empty structure
         children: [],
     },
     {
         name: 'Boardfinder',
-        id: null,
-        slug: 'stories/boardfinder',
+        id: 'boardfinder',
         parentId: '1',
+        slug: 'stories/boardfinder',
         description: '',
-        featuredAsset: null,
-        productVariants: null,
+        productVariants: emptyProductVariants, // Use default empty structure
         children: [],
     },
-    // Add any other global entries
 ];
 
-export const subNavigation = [
+// Define the subNavigation array with productVariants always defined
+export const subNavigation: NavigationItemType[] = [
     {
         name: 'Sustainable',
-        id: null,
+        id: 'sustainable',
+        parentId: '1',
         slug: 'stories/sustainable',
-        // parentId: '1',
         description: '',
-        featuredAsset: null,
-        productVariants: null,
-        children: []
+        productVariants: emptyProductVariants, // Use default empty structure
+        children: [],
     },
     {
         name: 'Outlet',
-        id: null,
+        id: 'outlet',
+        parentId: '1',
         slug: 'stories/outlet',
-        // parentId: '1',
         description: '',
-        featuredAsset: null,
-        productVariants: null,
-        children: []
+        productVariants: emptyProductVariants, // Use default empty structure
+        children: [],
     },
     {
         name: 'Travel',
-        id: null,
+        id: 'travel',
+        parentId: '1',
         slug: 'stories/travel',
-        // parentId: '1',
         description: '',
-        featuredAsset: null,
-        productVariants: null,
-        children: []
+        productVariants: emptyProductVariants, // Use default empty structure
+        children: [],
     },
     {
         name: 'Rent',
-        id: null,
+        id: 'rent',
+        parentId: '1',
         slug: 'stories/rent',
-        // parentId: '1',
         description: '',
-        featuredAsset: null,
-        productVariants: null,
-        children: []
+        productVariants: emptyProductVariants, // Use default empty structure
+        children: [],
     },
     {
         name: 'Maintenance',
-        id: null,
+        id: 'maintenance',
+        parentId: '1',
         slug: 'stories/maintenance',
-        // parentId: '1',
         description: '',
-        featuredAsset: null,
-        productVariants: null,
-        children: []
+        productVariants: emptyProductVariants, // Use default empty structure
+        children: [],
     },
     {
         name: 'Tutorials',
-        id: null,
+        id: 'tutorials',
+        parentId: '1',
         slug: 'stories/tutorials',
-        // parentId: '1',
         description: '',
-        featuredAsset: null,
-        productVariants: null,
-        children: []
+        productVariants: emptyProductVariants, // Use default empty structure
+        children: [],
     },
     {
         name: 'Stories',
-        id: null,
+        id: 'stories',
+        parentId: '1',
         slug: 'stories/stories',
-        // parentId: '1',
         description: '',
-        featuredAsset: null,
-        productVariants: null,
-        children: []
+        productVariants: emptyProductVariants, // Use default empty structure
+        children: [],
     }
 ];

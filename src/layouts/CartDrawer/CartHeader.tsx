@@ -17,7 +17,7 @@ export const CartHeader: React.FC<Props> = ({ activeOrder }) => {
     const { close } = useCart();
     return (
         <CartHeaderWrapper justifyBetween itemsCenter>
-            <Stack itemsEnd gap="13px">
+            <Stack itemsEnd gap={13}>
                 <TH2>{t('your-cart')}</TH2>
                 {activeOrder?.totalQuantity ? (
                     <TP style={{ color: '#4D4D4D' }}> {/* Fixed the style syntax here */}

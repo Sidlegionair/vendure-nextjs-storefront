@@ -2161,7 +2161,7 @@ export type ValueTypes = {
         taxLines?: ValueTypes['TaxLine'];
         order?: ValueTypes['Order'];
         fulfillmentLines?: ValueTypes['FulfillmentLine'];
-        customFields?: ValueTypes['Object'] | `@${string}`;
+        customFields?: Object | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     ['Payment']: AliasType<{
@@ -4709,7 +4709,7 @@ export type ResolverInputTypes = {
         options?: ResolverInputTypes['ProductOption'];
         facetValues?: ResolverInputTypes['FacetValue'];
         translations?: ResolverInputTypes['ProductVariantTranslation'];
-        customFields?: ResolverInputTypes['Object'] | `@${string}`;
+        customFields?: Object | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     ['ProductVariantTranslation']: AliasType<{
@@ -6647,7 +6647,7 @@ export type ModelTypes = {
         facetValues: Array<ModelTypes['FacetValue']>;
         translations: Array<ModelTypes['ProductTranslation']>;
         collections: Array<ModelTypes['Collection']>;
-        customFields?: ModelTypes['Object'] | undefined;
+        customFields?: Object | undefined;
     };
     ['ProductTranslation']: {
         id: string;
@@ -6686,7 +6686,7 @@ export type ModelTypes = {
         options: Array<ModelTypes['ProductOption']>;
         facetValues: Array<ModelTypes['FacetValue']>;
         translations: Array<ModelTypes['ProductVariantTranslation']>;
-        customFields?: ModelTypes['Object'] | undefined;
+        customFields?: Object | undefined;
     };
     ['ProductVariantTranslation']: {
         id: string;
@@ -8468,7 +8468,7 @@ export type GraphQLTypes = {
         /** A summary of the taxes being applied to this Order */
         taxSummary: Array<GraphQLTypes['OrderTaxSummary']>;
         history: GraphQLTypes['HistoryEntryList'];
-        customFields?: GraphQLTypes['Object'] | undefined;
+        customFields?: Object | undefined;
     };
     /** A summary of the taxes being applied to this order, grouped
      by taxRate. */
@@ -8800,7 +8800,7 @@ export type GraphQLTypes = {
         facetValues: Array<GraphQLTypes['FacetValue']>;
         translations: Array<GraphQLTypes['ProductTranslation']>;
         collections: Array<GraphQLTypes['Collection']>;
-        customFields?: GraphQLTypes['Object'] | undefined;
+        customFields?: Object | undefined;
     };
     ['ProductTranslation']: {
         __typename: 'ProductTranslation';
@@ -8843,7 +8843,7 @@ export type GraphQLTypes = {
         options: Array<GraphQLTypes['ProductOption']>;
         facetValues: Array<GraphQLTypes['FacetValue']>;
         translations: Array<GraphQLTypes['ProductVariantTranslation']>;
-        customFields?: GraphQLTypes['Object'] | undefined;
+        customFields?: Object | undefined;
     };
     ['ProductVariantTranslation']: {
         __typename: 'ProductVariantTranslation';

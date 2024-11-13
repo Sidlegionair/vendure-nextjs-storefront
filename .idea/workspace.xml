@@ -97,7 +97,7 @@
       <workItem from="1730717386409" duration="34472000" />
       <workItem from="1730878578331" duration="20905000" />
       <workItem from="1730993073374" duration="9600000" />
-      <workItem from="1731412277895" duration="2693000" />
+      <workItem from="1731412277895" duration="16733000" />
     </task>
     <servers />
   </component>
@@ -119,5 +119,17 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/components/pages/checkout/components/OrderForm/index.tsx</url>
+          <line>813</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

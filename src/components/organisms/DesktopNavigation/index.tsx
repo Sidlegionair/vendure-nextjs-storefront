@@ -11,8 +11,8 @@ import { useCart } from '@/src/state/cart';
 
 interface NavProps {
     navigation: RootNode<NavigationType> | null;
-    gap?: number; // Make the gap prop optional
-    isSubMenu?: boolean; // New prop to differentiate submenu styling
+    gap?: number; // Restricting to number for simplicity
+    isSubMenu?: boolean;
 }
 
 export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, isSubMenu = false }) => {
@@ -21,8 +21,24 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
 
     const StackComponent = isSubMenu ? SubMenuStack : DesktopStack;
 
+    // Define the mapping for numbers to rem strings
+    const gapMapping: { [key: number]: '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' } = {
+        10: '0.125rem',
+        20: '0.25rem',
+        30: '0.5rem',
+        40: '0.75rem',
+        50: '1rem',
+        60: '1.5rem',
+        70: '1.75rem',
+        80: '2rem',
+        90: '2.5rem'
+    };
+
+    // Get the gap value from mapping or undefined
+    const gapValue = gapMapping[gap] || undefined;
+
     return (
-        <StackComponent itemsCenter gap={`${gap}px`}>
+        <StackComponent itemsCenter gap={gapValue}>
             {navigation?.children.map((collection) => {
                 const href = collection.id === null
                     ? `/${collection.slug}`
@@ -45,7 +61,7 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
                             <ContentContainer>
                                 <Background w100 justifyBetween>
                                     <NavigationLinks collection={collection} />
-                                    <Stack gap="3.5rem">
+                                    <Stack gap="1.5rem">
                                         <ProductsSellout
                                             title={t('featured-products')}
                                             addToCart={addToCart}
@@ -64,14 +80,16 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
     );
 };
 
-const DesktopStack = styled(Stack)`
+// Main Desktop Stack with default styling for large screens
+const DesktopStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | number }>`
     @media (max-width: ${p => p.theme.breakpoints.lg}) {
         display: none;
     }
 `;
 
-const SubMenuStack = styled(Stack)`
-    gap: ${p => p.gap}; // Smaller gap for submenu items
+// Submenu styling with dynamic gap based on prop
+const SubMenuStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | number }>`
+    gap: ${({ gap }) => (typeof gap === 'number' ? `${gap}px` : gap)};
     font-size: 16px;
     font-weight: 400;
 

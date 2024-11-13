@@ -19,7 +19,7 @@ interface LayoutProps {
     children: React.ReactNode;
     categories: CollectionTileType[];
     navigation: RootNode<NavigationType> | null;
-    subnavigation: RootNode<NavigationType> | null;
+    subnavigation?: RootNode<NavigationType> | null;
 }
 
 interface CheckoutLayoutProps {
@@ -101,7 +101,12 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, categories,
                 variant={variant}
                 collection={collection}
             />
-            <Navigation changeModal={changeModal} navigation={navigation} categories={categories} subnavigation={subnavigation} />
+            <Navigation
+                changeModal={changeModal}
+                navigation={navigation ?? null}
+                categories={categories}
+                subnavigation={subnavigation ?? null}
+            />
             <Stack w100 itemsCenter column>
                 {children}
             </Stack>

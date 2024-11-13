@@ -20,8 +20,10 @@ export type NavigationType = CollectionTileType & {
     productVariants?: {
         items: CollectionTileProductVariantType[];
         totalItems: number;
-    };
+    } | null;
 };
+
+
 
 export type FiltersFacetType = FacetType & { values: (FacetType & { count: number })[] };
 

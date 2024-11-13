@@ -40,7 +40,7 @@ export const OrderSummary: React.FC<PropsWithChildren<OrderSummaryProps>> = ({ f
                         {activeOrder?.lines.map(line => (
                             <Line currencyCode={currencyCode} isForm={!!shipping} key={line.id} line={line} />
                         ))}
-                        <Stack column gap="17px">
+                        <Stack column gap={17}>
                             <Stack justifyBetween>
                                 <TP size={'18px'} weight={300}>{t('orderSummary.subtotal')}</TP>
                                 <TP size={'18px'} weight={300}>{priceFormatter(activeOrder?.subTotalWithTax ?? 0, currencyCode)}</TP>

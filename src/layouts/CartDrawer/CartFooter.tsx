@@ -37,8 +37,8 @@ export const CartFooter: React.FC<Props> = ({ activeOrder, currencyCode, discoun
                                 currencyCode={currencyCode}
                             />
                         </Stack>
-                        <Stack column w100 gap="20px" style={{ padding: '1rem', width: '60%' }}>
-                            <Stack column gap='14px'>
+                        <Stack column w100 gap={20} style={{ padding: '1rem', width: '60%' }}>
+                            <Stack column gap={14}>
                                 <Stack justifyBetween>
                                     <TP>{t('subtotal')}</TP>
                                     <TP>

@@ -1,11 +1,12 @@
 import React from 'react';
 import { InferGetStaticPropsType } from 'next';
-import type { getStaticProps } from '@/src/components/pages/home/props';
+// import type { getStaticProps } from '@/src/components/pages/storyblok';
 import { Layout } from '@/src/layouts';
 import Head from 'next/head';
 import { StoryblokComponent } from "@storyblok/react";
+import { getStaticProps } from '@/src/pages/stories/[...slug].page';
 
-const StoryPage = ({ story, relatedArticles, navigation, categories }: InferGetStaticPropsType<typeof getStaticProps>) => {
+const StoryPage = ({ story, relatedArticles, navigation, categories, articleGridProps }: InferGetStaticPropsType<typeof getStaticProps>) => {
     console.log("Story received in StoryPage:", story);
 
     // console.log()

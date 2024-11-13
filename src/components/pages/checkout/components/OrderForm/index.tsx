@@ -332,7 +332,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
         <Stack w100 column>
             <Banner ref={errorRef} clearErrors={() => clearErrors('root')} error={errors?.root} />
             <Form onSubmit={handleSubmit(onSubmit)} noValidate>
-                <Container w100 gap="80px">
+                <Container w100 gap={80}>
                     <OrderSummary
                         shipping={
                             shippingMethods ? (
@@ -362,8 +362,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                             </Stack>
                         }
                     />
-                    <Stack w100 column gap="50px">
-                        <Stack column gap="50px">
+                    <Stack w100 column gap={50}>
+                        <Stack column gap={50}>
                             {/* Customer Part */}
                             <Stack column gap="2rem">
                                 <Stack gap="0.75rem" itemsCenter style={{ height: '2.6rem' }}>
@@ -379,8 +379,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                     </TH2>
                                 </Stack>
 
-                                <Stack w100 column gap="20px">
-                                    <Stack w100 gap="20px">
+                                <Stack w100 column gap={20}>
+                                    <Stack w100 gap={20}>
                                         <Input
                                             {...register('firstName')}
                                             placeholder={t('orderForm.placeholders.firstName')}
@@ -396,7 +396,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                             required
                                         />
                                     </Stack>
-                                    <Stack w100 gap="20px">
+                                    <Stack w100 gap={20}>
                                         <Input
                                             {...register('phoneNumber', {
                                                 onChange: e => (e.target.value = e.target.value.replace(/[^0-9]/g, '')),
@@ -418,7 +418,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
 
                                     {/* Password fields */}
                                     {!activeCustomer?.id && (
-                                        <Stack w100 gap="20px">
+                                        <Stack w100 gap={20}>
                                             <CreateAccountWrapper>
                                                 <Input
                                                     {...register('password', { required: 'Password is required' })}
@@ -451,8 +451,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                 <TH2 size="30px" weight={600} style={{ marginBottom: '30px' }}>
                                     {t('orderForm.billingInfo')}
                                 </TH2>
-                                <Stack w100 column gap="20px">
-                                    <Stack w100 gap="20px">
+                                <Stack w100 column gap={20}>
+                                    <Stack w100 gap={20}>
                                         <Input
                                             {...register('billing.fullName')}
                                             placeholder={t('orderForm.placeholders.fullName')}
@@ -468,7 +468,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                             required
                                         />
                                     </Stack>
-                                    <Stack w100 gap="20px">
+                                    <Stack w100 gap={20}>
                                         <Input
                                             {...register('billing.streetLine1')}
                                             placeholder={t('orderForm.placeholders.streetLine1')}
@@ -483,7 +483,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                             error={errors.billing?.streetLine2}
                                         />
                                     </Stack>
-                                    <Stack w100 gap="20px">
+                                    <Stack w100 gap={20}>
                                         <Input
                                             {...register('billing.province')}
                                             placeholder={t('orderForm.placeholders.province')}
@@ -509,7 +509,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                         {availableCountries && (
                                             <CountrySelect
                                                 {...register('billing.countryCode')}
-                                                placeholder={t('orderForm.placeholders.countryCode')}
+                                                // placeholder={t('orderForm.placeholders.countryCode')}
                                                 label={t('orderForm.countryCode')}
                                                 defaultValue={countryCode}
                                                 options={availableCountries}
@@ -521,7 +521,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                 </Stack>
                             </BillingWrapper>
                         </Stack>
-                        <Stack column gap="20px">
+                        <Stack column gap={20}>
                             <Stack justifyBetween itemsCenter>
                                 {/* <CheckBox
                         {...register('userNeedInvoice', {
@@ -569,8 +569,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                         <TH2 size="30px" weight={600} style={{ marginBottom: '30px' }}>
                                             {t('orderForm.shippingInfo')}
                                         </TH2>
-                                        <Stack column gap="20px">
-                                            <Stack w100 gap="20px">
+                                        <Stack column gap={20}>
+                                            <Stack w100 gap={20}>
                                                 <Input
                                                     {...register('shipping.fullName')}
                                                     label={t('orderForm.fullName')}
@@ -583,7 +583,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                                     error={errors.shipping?.company}
                                                 />
                                             </Stack>
-                                            <Stack w100 gap="20px">
+                                            <Stack w100 gap={20}>
                                                 <Input
                                                     {...register('shipping.streetLine1')}
                                                     label={t('orderForm.streetLine1')}
@@ -597,7 +597,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                                     required
                                                 />
                                             </Stack>
-                                            <Stack w100 gap="20px">
+                                            <Stack w100 gap={20}>
                                                 <Input
                                                     {...register('shipping.city')}
                                                     label={t('orderForm.city')}
@@ -615,7 +615,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                                     />
                                                 )}
                                             </Stack>
-                                            <Stack gap="20px">
+                                            <Stack gap={20}>
                                                 <Input
                                                     {...register('shipping.province')}
                                                     label={t('orderForm.province')}
@@ -811,7 +811,7 @@ const StyledLink = styled(Link)`
     text-decoration: none; /* Example of additional styling */
 
     &:hover {
-        color: ${p => p.theme.text.hoverGreen}; /* Add hover effect if needed */
+        color: ${p => p.theme.text.accentGreen}; /* Add hover effect if needed */
     }
 `;
 

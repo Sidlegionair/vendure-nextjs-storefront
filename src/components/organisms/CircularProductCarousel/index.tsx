@@ -357,7 +357,17 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                             <b>{products[activeIndex % products.length]?.brand}</b>
                             {products[activeIndex % products.length]?.productName} ({products[activeIndex % products.length]?.productVariantName})
                         </ProductTitle>
-                        <Link style={{ 'width': '100%', 'height': '100%', 'display': 'flex', 'justify-content': 'end' }} href={`/products/${products[activeIndex % products.length]?.slug}`} passHref key={`${products[activeIndex % products.length]?.slug}-${products[activeIndex % products.length]?.index}`}>
+                        <Link
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                display: 'flex',
+                                justifyContent: 'end', // Changed to camelCase
+                            }}
+                            href={`/products/${products[activeIndex % products.length]?.slug}`}
+                            passHref
+                            key={`${products[activeIndex % products.length]?.slug}-${products[activeIndex % products.length]?.index}`}
+                        >
 
                             <StockButton inStock={products[activeIndex % products.length]?.inStock}>
                                 {products[activeIndex % products.length]?.inStock ? 'In Stock' : 'Out of Stock'}
@@ -368,11 +378,11 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                         </Link>
 
                     </Stack>
-                    <Divider marginBlock="15px"></Divider>
+                    <Divider marginBlock="1.5rem"></Divider>
                     <Stack>
                         <ProductDetails>
                             <span>
-                                Price: <span class="amount">&euro;{(products[activeIndex % products.length]?.priceWithTax?.min / 100).toFixed(2)}{' '}</span>
+                                Price: <span className="amount">&euro;{(products[activeIndex % products.length]?.priceWithTax?.min / 100).toFixed(2)}{' '}</span>
                                 {/*{products[activeIndex % products.length]?.currencyCode}*/}
                             </span>
                         </ProductDetails>

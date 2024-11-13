@@ -10,7 +10,7 @@ import styled from '@emotion/styled';
 import { Trash2 } from 'lucide-react';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
-import { $ } from 'execa';
+// import { $ } from 'execa';
 
 interface Props {
     activeOrder?: ActiveOrderType;
@@ -38,7 +38,7 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
                                         href={`/products/${productVariant.product.slug}`}
                                         imageSrc={featuredAsset?.preview}
                                     />
-                                    <Stack column gap="18px">
+                                    <Stack column gap={18}>
                                         <Stack column gap="0.125rem">
                                             <Stack gap="0.5rem">
                                                 {customFields?.brand && (
@@ -57,7 +57,7 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
                                                 </TP>
                                             )}
                                         </Stack>
-                                        <Stack column gap="18px">
+                                        <Stack column gap={18}>
                                             <QuantityCounter v={quantity} onChange={v => setItemQuantityInCart(id, v)} />
                                             <Remove onClick={async () => await removeFromCart(id)}>
                                                 <Trash2 size={'16px'} />
@@ -70,7 +70,7 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
                                 </Stack>
                                 <Price
                                     size="20px"
-                                    weight="500"
+                                    weight={500}
                                     currencyCode={currencyCode}
                                     price={unitPriceWithTax}
                                     discountPrice={discountedLinePriceWithTax / quantity}

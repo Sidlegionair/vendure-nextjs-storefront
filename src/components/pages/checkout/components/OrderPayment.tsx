@@ -102,7 +102,7 @@ export const OrderPayment: React.FC<OrderPaymentProps> = ({ availablePaymentMeth
                         // Redirect to Mollie payment page
                         window.location.href = redirectUrl;
                     } else {
-                        setError(tError('errors.backend.MOLLIE_REDIRECT_FAILED'));
+                        setError(tError(['errors.backend.MOLLIE_REDIRECT_FAILED'], { defaultValue: 'Mollie redirect failed' }));
                     }
                 } else {
                     // Redirect to the confirmation page for non-Mollie payments

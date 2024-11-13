@@ -1,13 +1,16 @@
 import { BaseFlexParams } from '@/src/components/sharedStyles';
 import styled from '@emotion/styled';
 
+
 export const Stack = styled.div<BaseFlexParams>`
-    gap: ${p => p.gap || 0};
+    gap: ${({ gap = 0 }) => (typeof gap === 'number' ? `${gap}px` : gap)};
     display: flex;
-    flex-direction: ${p => (p.column ? (p.reverse ? 'column-reverse' : 'column') : p.reverse ? 'row-reverse' : 'row')};
-    flex-wrap: ${p => (p.flexWrap ? 'wrap' : 'nowrap')};
-    justify-content: ${p =>
-        p.justifyBetween ? 'space-between' : p.justifyCenter ? 'center' : p.justifyEnd ? 'end' : 'start'};
-    align-items: ${p => (p.itemsCenter ? 'center' : p.itemsStart ? 'flex-start' : p.itemsEnd ? 'flex-end' : 'initial')};
-    width: ${p => (p.w100 ? '100%' : 'auto')};
-`;
+    flex-direction: ${({ column, reverse }) =>
+            column ? (reverse ? 'column-reverse' : 'column') : reverse ? 'row-reverse' : 'row'};
+    flex-wrap: ${({ flexWrap }) => (flexWrap ? 'wrap' : 'nowrap')};
+    justify-content: ${({ justifyBetween, justifyCenter, justifyEnd }) =>
+            justifyBetween ? 'space-between' : justifyCenter ? 'center' : justifyEnd ? 'flex-end' : 'flex-start'};
+    align-items: ${({ itemsCenter, itemsStart, itemsEnd }) =>
+            itemsCenter ? 'center' : itemsStart ? 'flex-start' : itemsEnd ? 'flex-end' : 'stretch'};
+    width: ${({ w100 }) => (w100 ? '100%' : 'auto')};
+`

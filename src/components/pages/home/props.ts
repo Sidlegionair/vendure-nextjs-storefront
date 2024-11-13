@@ -8,7 +8,7 @@ import { arrayToTree } from '@/src/util/arrayToTree';
 import { SortOrder } from '@/src/zeus';
 import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
 import { HomePageSlidersType, homePageSlidersSelector } from '@/src/graphql/selectors';
-import { ValueTypes } from '/mnt/data/index';
+// import { ValueTypes } from '/mnt/data/index';
 
 const slugsOfBestOf = ['home-garden'];
 
@@ -62,11 +62,13 @@ export const getStaticProps = async (ctx: ContextModel) => {
                     },
                 ],
             });
+
             // Determine if any variant has stockLevel "IN_STOCK"
-            const inStock = stockData.product.variants.some((variant) => variant.stockLevel === "IN_STOCK");
+            const inStock = stockData.product?.variants?.some((variant) => variant.stockLevel === "IN_STOCK") || false;
+
             return {
                 productId: product.productId,
-                variants: stockData.product.variants,
+                variants: stockData.product?.variants || [],
                 inStock,
             };
         })

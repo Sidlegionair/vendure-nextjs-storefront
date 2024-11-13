@@ -60,19 +60,22 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
         };
     }, []);
 
-    // This should come from a plugin or CMS
+    const announcementsBar = typeof t('announcements-bar', { defaultValue: '' }) === 'string'
+        ? (t('announcements-bar', { defaultValue: '' }) as string).split('|')
+        : [];
+
     const entries = [
-        { text: t('announcements-bar')[0], href: '/collections/all' },
-        { text: t('announcements-bar')[1], href: '/' },
-        { text: t('announcements-bar')[2], href: '/' },
-        { text: t('announcements-bar')[3], href: '/' },
+        { text: announcementsBar[0] || '', href: '/collections/all' },
+        { text: announcementsBar[1] || '', href: '/' },
+        { text: announcementsBar[2] || '', href: '/' },
+        { text: announcementsBar[3] || '', href: '/' },
     ];
 
     return (
         <>
             <StickyContainer>
                 <ContentContainer style={{ gap: '25px' }}>
-                    <Stack itemsCenter justifyBetween gap="50px" w100>
+                    <Stack itemsCenter justifyBetween gap={50} w100>
                         <Stack style={{ width: '100%', maxWidth: '33%' }} gap="1rem" itemsCenter>
                             <DesktopNavigation navigation={navigation} />
 
