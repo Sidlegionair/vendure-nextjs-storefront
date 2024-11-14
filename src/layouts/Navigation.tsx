@@ -152,7 +152,8 @@ const StickyContainer = styled.nav`
     padding: 25px;
     position: sticky;
     top: 0;
-    background: #FFFFFF;    z-index: 2137;
+    background: #FFFFFF;
+    z-index: 2137;
         // border-bottom: 1px solid ${p => p.theme.gray(100)};
     svg {
         max-height: 4rem;

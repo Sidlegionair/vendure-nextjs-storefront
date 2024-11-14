@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { BaseRemUnit } from '../sharedStyles';
 
 export const Divider = styled.div<{ vertical?: boolean; marginBlock?: BaseRemUnit }>`
-    background-color: ${({ theme }) => theme.gray(100)};
+    background-color: ${({ theme }) => theme.outline};
     margin-block: ${({ marginBlock }) => marginBlock || 0};
     ${({ vertical }) =>
         !vertical

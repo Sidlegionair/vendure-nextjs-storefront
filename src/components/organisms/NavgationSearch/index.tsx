@@ -207,8 +207,8 @@ const SearchContent = styled(Stack)`
     border-radius: ${({ theme }) => theme.borderRadius};
     outline: none;
     font-size: 1.5rem;
-    color: ${p => p.theme.gray(1000)};
-    background: ${p => p.theme.gray(0)};
+    color: ${p => p.theme.text.main};
+    background: ${p => p.theme.background.main};
     transition: all 0.2s ease-in-out;
     overflow: hidden;
 
@@ -237,8 +237,8 @@ const Input = styled.input`
     border-radius: 37.5px;
     outline: none;
     font-size: 1.5rem;
-    color: ${p => p.theme.gray(1000)};
-    background: ${p => p.theme.gray(0)};
+    color: ${p => p.theme.text.main};
+    background: ${p => p.theme.background.main};
     transition: all 0.2s ease-in-out;
 `;
 

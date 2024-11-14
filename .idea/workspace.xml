@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="46c46c96-dbae-454b-a0c0-91173b5d1f10" name="Changes" comment="" />
+    <list default="true" id="46c46c96-dbae-454b-a0c0-91173b5d1f10" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/atoms/Divider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/atoms/Divider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/NavigationLinks/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/NavigationLinks/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/NavgationSearch/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/NavgationSearch/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/ArticlesOverviewPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/ArticlesOverviewPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/Navigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Navigation.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theme/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/theme/index.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,7 +33,7 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/aexol-studio/vendure-nextjs-storefront.git&quot;,
+    &quot;url&quot;: &quot;git@github.com:Sidlegionair/vendure-nextjs-storefront.git&quot;,
     &quot;accountId&quot;: &quot;b19ed66f-4a64-4d12-b9a3-fd73a6223f68&quot;
   }
 }</component>
@@ -46,8 +55,8 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/public/images/bg&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;development&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/floris/PhpstormProjects/participatiekeuken&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -97,7 +106,9 @@
       <workItem from="1730717386409" duration="34472000" />
       <workItem from="1730878578331" duration="20905000" />
       <workItem from="1730993073374" duration="9600000" />
-      <workItem from="1731412277895" duration="16733000" />
+      <workItem from="1731412277895" duration="18840000" />
+      <workItem from="1731504979279" duration="7409000" />
+      <workItem from="1731588755374" duration="7459000" />
     </task>
     <servers />
   </component>
@@ -126,7 +137,6 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/components/pages/checkout/components/OrderForm/index.tsx</url>
           <line>813</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

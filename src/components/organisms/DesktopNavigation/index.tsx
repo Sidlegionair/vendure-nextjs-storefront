@@ -89,6 +89,7 @@ const DesktopStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '
 
 // Submenu styling with dynamic gap based on prop
 const SubMenuStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | number }>`
+    
     gap: ${({ gap }) => (typeof gap === 'number' ? `${gap}px` : gap)};
     font-size: 16px;
     font-weight: 400;
@@ -106,14 +107,18 @@ const SubMenuStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '
 
 const Background = styled(Stack)`
     height: 100%;
-    background: ${p => p.theme.gray(0)};
-    box-shadow: 0.1rem 0.25rem 0.2rem ${p => p.theme.shadow};
+    z-index: 1;
+    background: ${p => p.theme.background.main};
+    box-shadow: 0px 0px 12px ${p => p.theme.shadow};
     border: 1px solid ${p => p.theme.gray(100)};
     margin-top: 4rem;
-    padding: 2rem 2rem 10rem 2rem;
+    //padding: 2rem 2rem 10rem 2rem;
+    padding: 40px;
 `;
 
 const RelativeStack = styled(Stack)`
+    z-index: 9999;
+
     & > div {
         opacity: 0;
         visibility: hidden;
@@ -123,6 +128,8 @@ const RelativeStack = styled(Stack)`
 
     &:hover {
         & > a {
+            color: ${p => p.theme.text.main};
+
             text-decoration: underline;
             text-decoration-thickness: 0.1rem;
             text-underline-offset: 0.5rem;
@@ -147,10 +154,10 @@ const AbsoluteStack = styled(Stack)`
 `;
 
 const StyledLink = styled(Link)<{ isSubMenu?: boolean }>`
+    color: ${p => p.theme.text.main} !important; // Apply color directly with !important to increase specificity
     display: flex;
     align-items: center;
     justify-content: center;
-    color: ${p => p.theme.text.main};
     font-weight: ${p => (p.isSubMenu ? 400 : 600)};
     font-size: ${p => (p.isSubMenu ? '18px' : '20px')};
     white-space: nowrap;

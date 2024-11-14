@@ -6,18 +6,22 @@ const ArticlesOverviewPage = ({ stories }) => {
         <div className="article-overview">
             <h1>Articles Archive</h1>
             <div className="grid">
-                {stories.map((story) => (
-                    <Link href={`/articles/${story.slug}`} key={story.id}>
-                        <a>
-                            <StoryblokComponent blok={{
-                                component: "card",
-                                title: story.name,
-                                image: story.content.featuredImage,
-                                description: story.content.description || "",
-                            }} />
-                        </a>
-                    </Link>
-                ))}
+                {stories?.length ? (
+                    stories.map((story) => (
+                        <Link href={`/articles/${story.slug}`} key={story.id}>
+                            <a>
+                                <StoryblokComponent blok={{
+                                    component: "card",
+                                    title: story.name,
+                                    image: story.content.featuredImage,
+                                    description: story.content.description || "",
+                                }} />
+                            </a>
+                        </Link>
+                    ))
+                ) : (
+                    <p>No articles available.</p>
+                )}
             </div>
 
             <style jsx>{`

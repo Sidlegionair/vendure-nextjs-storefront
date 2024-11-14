@@ -166,21 +166,21 @@ const defaultThemeFunction = (hue: number): FunctionTheme => ({
 // Define default theme settings
 export const LightTheme = createTheme(300, (t) => ({
     background: {
-        main: t.gray(0),
-        secondary: t.gray(25),
-        third: t.gray(50),
+        main: '#fff',
+        secondary: '#fff',
+        third: '#fff',
         ice: '#f8f8f8',
         white: '#ffffff',
-        modal: 'rgba(0, 0, 0, 0.5)',
+        modal: '#fff',
         groupBackground: 'rgba(255, 255, 255, 0.006)',
         riderLevelBackground: '#FFFFFF',
         accent: 'rgba(158, 46, 58, 1)',
         accentGreen: '#0E4632',
     },
     text: {
-        main: `lch(9.72% 6.43 251.05)`,
+        main: `rgba(0, 0, 0, 1)`,
         inactive: t.gray(200),
-        subtitle: `lch(47.82% 6.77 249.38)`,
+        subtitle: `rgba(0, 0, 0, 0.6)`,
         contrast: t.gray(0),
         black: '#000000',
         groupHeading: '#FFFFFF',
@@ -198,9 +198,9 @@ export const LightTheme = createTheme(300, (t) => ({
     },
     border: {
         main: '#4D4D4D',
-        lightgray: '#BBBBBB',
+        lightgray: '#B8B8B8',
     },
-    shadow: `#69737c30`,
+    shadow: `rgba(0, 0, 0, 0.12)`,
     error: '#eb1b19',
     success: '#1beb1b',
     price: {
