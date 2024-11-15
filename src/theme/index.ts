@@ -190,9 +190,9 @@ export const LightTheme = createTheme(300, (t) => ({
         accentGreen: '#0E4632',
     },
     button: {
-        back: '#141C23',
-        front: t.gray(0),
-        icon: { front: t.gray(900), back: t.gray(900) },
+        back: '#FFFFFF',
+        front: '#000',
+        icon: { front: '#000000', back: '#fff' },
         hover: { front: t.gray(0), back: t.gray(100) }, // Added hover back
         border: '#4D4D4D',
     },

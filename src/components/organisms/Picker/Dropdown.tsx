@@ -79,7 +79,7 @@ const DropdownButton = styled.div`
     background-color: ${({ theme }) => theme.background.main};
     border: 1px solid ${({ theme }) => theme.gray(100)};
     font-weight: bold;
-    color: ${({ theme }) => theme.gray(900)};
+    color: ${({ theme }) => theme.background.main};
     cursor: pointer;
 `;
 

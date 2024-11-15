@@ -73,13 +73,13 @@ export const StyledSelect = styled.select<{ error?: boolean }>`
     outline: none;
     //margin-top: 0.6rem;
     padding: 15px 0px;
-    color: ${p => p.theme.gray(900)};
+    color: ${p => p.theme.background.main};
     border-bottom: 1px solid ${p => p.theme.border.lightgray};
     font-size: 16px;
     line-height: 16px;
     //background: #ffff;
 
-    color: ${p => p.theme.gray(900)};
+    color: ${p => p.theme.background.main};
         // border: 1px solid ${p => p.theme.gray(600)};
     :focus {
         border-color: ${p => p.theme.gray(400)};

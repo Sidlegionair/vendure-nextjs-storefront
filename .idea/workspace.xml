@@ -6,11 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="46c46c96-dbae-454b-a0c0-91173b5d1f10" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/storyblok/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/storyblok/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/CartDrawer/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/CartDrawer/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/menuConfig.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/menuConfig.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/stories/[...slug].page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/stories/[...slug].page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/forms/CountrySelect.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forms/CountrySelect.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/forms/Input.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forms/Input.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/Breadcrumbs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/Breadcrumbs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductTile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductTile.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/QuantityCounter.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/QuantityCounter.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/Picker/Dropdown.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/Picker/Dropdown.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/ProductOptions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/ProductOptions.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/addresses/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/addresses/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/components/OrderBox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/components/OrderBox.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theme/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/theme/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,21 +55,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "development",
-    "last_opened_file_path": "/home/floris/PhpstormProjects/one-click-deploy",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "prettierjs.PrettierConfiguration.Package": "/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/prettier",
-    "ts.external.directory.path": "/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;development&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/floris/PhpstormProjects/one-click-deploy&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/prettier&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/public/images/bg" />
@@ -106,7 +111,8 @@
       <workItem from="1730993073374" duration="9600000" />
       <workItem from="1731412277895" duration="18840000" />
       <workItem from="1731504979279" duration="7409000" />
-      <workItem from="1731588755374" duration="13127000" />
+      <workItem from="1731588755374" duration="15102000" />
+      <workItem from="1731672176725" duration="2005000" />
     </task>
     <servers />
   </component>

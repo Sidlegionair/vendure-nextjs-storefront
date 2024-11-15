@@ -34,7 +34,7 @@ const IconButtonStatic = styled(IconButton)`
 const Main = styled(Stack)`
     border: 1px solid ${p => p.theme.border.main};
     border-radius: 8px;
-    color: ${p => p.theme.gray(900)};
+    color: ${p => p.theme.background.main};
     align-self: flex-start;
     width: auto;
     font-size: 16px;

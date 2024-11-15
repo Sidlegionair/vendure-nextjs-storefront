@@ -83,7 +83,7 @@ const ColorSwatch = styled(VariantButton)<{ color: string; outOfStock: boolean; 
 
 const SizeSelector = styled(VariantButton)<{ selected: boolean; outOfStock: boolean }>`
     background: ${p => p.theme.gray(0)};
-    color: ${p => p.theme.gray(900)};
+    color: ${p => p.theme.background.main};
     :hover {
         background: ${p => p.theme.gray(500)};
         color: ${p => p.theme.gray(0)};

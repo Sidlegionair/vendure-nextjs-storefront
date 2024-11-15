@@ -79,7 +79,7 @@ export const OrderBox: React.FC<{ order: ActiveOrderType }> = ({ order }) => {
 
 const Styled = styled(motion.div)`
     position: relative;
-    color: ${p => p.theme.gray(900)};
+    color: ${p => p.theme.background.main};
 `;
 
 const ContentStack = styled(Stack)`
