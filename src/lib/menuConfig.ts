@@ -24,7 +24,7 @@ const emptyProductVariants = {
 export const mainNavigation: NavigationItemType[] = [
     {
         name: 'Home',
-        id: 'home',
+        id: 'none',
         parentId: '',
         slug: '#',
         description: '',
@@ -33,7 +33,7 @@ export const mainNavigation: NavigationItemType[] = [
     },
     {
         name: 'Boardfinder',
-        id: 'boardfinder',
+        id: 'none',
         parentId: '1',
         slug: 'stories/boardfinder',
         description: '',
@@ -46,7 +46,7 @@ export const mainNavigation: NavigationItemType[] = [
 export const subNavigation: NavigationItemType[] = [
     {
         name: 'Sustainable',
-        id: 'sustainable',
+        id: 'none',
         parentId: '1',
         slug: 'stories/sustainable',
         description: '',
@@ -55,7 +55,7 @@ export const subNavigation: NavigationItemType[] = [
     },
     {
         name: 'Outlet',
-        id: 'outlet',
+        id: 'none',
         parentId: '1',
         slug: 'stories/outlet',
         description: '',
@@ -64,7 +64,7 @@ export const subNavigation: NavigationItemType[] = [
     },
     {
         name: 'Travel',
-        id: 'travel',
+        id: 'none',
         parentId: '1',
         slug: 'stories/travel',
         description: '',
@@ -73,7 +73,7 @@ export const subNavigation: NavigationItemType[] = [
     },
     {
         name: 'Rent',
-        id: 'rent',
+        id: 'none',
         parentId: '1',
         slug: 'stories/rent',
         description: '',
@@ -82,7 +82,7 @@ export const subNavigation: NavigationItemType[] = [
     },
     {
         name: 'Maintenance',
-        id: 'maintenance',
+        id: 'none',
         parentId: '1',
         slug: 'stories/maintenance',
         description: '',
@@ -91,7 +91,7 @@ export const subNavigation: NavigationItemType[] = [
     },
     {
         name: 'Tutorials',
-        id: 'tutorials',
+        id: 'none',
         parentId: '1',
         slug: 'stories/tutorials',
         description: '',
@@ -100,9 +100,9 @@ export const subNavigation: NavigationItemType[] = [
     },
     {
         name: 'Stories',
-        id: 'stories',
+        id: 'none',
         parentId: '1',
-        slug: 'stories/stories',
+        slug: 'stories/articles',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],

@@ -89,6 +89,9 @@ export const getStaticProps = async (ctx: ContextModel) => {
             const overviewContent = await storyblokApi.get('cdn/stories/stories/articles', { version: 'draft' });
             const overviewStory = overviewContent?.data?.story;
 
+            console.log(overviewStory);
+
+            console.log(data.stories);
             const articleGridProps = {
                 component: 'article-grid',
                 columns: 3,

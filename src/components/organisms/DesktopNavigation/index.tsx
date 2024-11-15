@@ -40,7 +40,7 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
     return (
         <StackComponent itemsCenter gap={gapValue}>
             {navigation?.children.map((collection) => {
-                const href = collection.id === null
+                const href = collection.id === 'none'
                     ? `/${collection.slug}`
                     : collection.parent?.slug !== '__root_collection__'
                         ? `/collections/${collection.parent?.slug}/${collection.slug}`
@@ -89,7 +89,10 @@ const DesktopStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '
 
 // Submenu styling with dynamic gap based on prop
 const SubMenuStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | number }>`
-    
+    width: 100%; // Make submenu span full width
+    display: flex; // Ensure it behaves as a flex container
+    justify-content: space-between; // Distribute links evenly across the width
+
     gap: ${({ gap }) => (typeof gap === 'number' ? `${gap}px` : gap)};
     font-size: 16px;
     font-weight: 400;

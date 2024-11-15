@@ -6,13 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="46c46c96-dbae-454b-a0c0-91173b5d1f10" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/atoms/Divider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/atoms/Divider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/NavigationLinks/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/NavigationLinks/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/NavgationSearch/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/NavgationSearch/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/storyblok/ArticlesOverviewPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/ArticlesOverviewPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/Navigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Navigation.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/theme/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/theme/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/storyblok/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/storyblok/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/CartDrawer/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/CartDrawer/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/menuConfig.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/menuConfig.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/stories/[...slug].page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/stories/[...slug].page.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,21 +50,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;development&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/floris/PhpstormProjects/participatiekeuken&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/prettier&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "development",
+    "last_opened_file_path": "/home/floris/PhpstormProjects/one-click-deploy",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/prettier",
+    "ts.external.directory.path": "/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/public/images/bg" />
@@ -108,7 +106,7 @@
       <workItem from="1730993073374" duration="9600000" />
       <workItem from="1731412277895" duration="18840000" />
       <workItem from="1731504979279" duration="7409000" />
-      <workItem from="1731588755374" duration="7459000" />
+      <workItem from="1731588755374" duration="13127000" />
     </task>
     <servers />
   </component>
