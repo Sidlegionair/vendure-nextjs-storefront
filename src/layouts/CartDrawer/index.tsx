@@ -78,7 +78,7 @@ const Quantity = styled(TP)`
 
 const CartComponentMain = styled(motion.div)`
     width: 100%;
-    max-width: 55rem;
+    max-width: 52rem;
     height: 100dvh;
 
     z-index: 2147483647;
@@ -89,7 +89,7 @@ const CartComponentMain = styled(motion.div)`
 
     overflow-y: auto;
 
-    background: ${p => p.theme.gray(0)};
+    background: ${p => p.theme.background.main};
     border-left: 1px solid ${p => p.theme.gray(100)};
     box-shadow: 0rem 0.2rem 1rem ${p => p.theme.shadow};
 `;

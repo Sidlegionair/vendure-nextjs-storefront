@@ -20,8 +20,10 @@ export type NavigationType = CollectionTileType & {
     productVariants?: {
         items: CollectionTileProductVariantType[];
         totalItems: number;
-    };
+    } | null;
 };
+
+
 
 export type FiltersFacetType = FacetType & { values: (FacetType & { count: number })[] };
 
@@ -77,6 +79,7 @@ export const FacetSelector = Selector('Facet')({
 export type FacetType = FromSelector<typeof FacetSelector, 'Facet', typeof scalars>;
 
 export const CollectionSelector = Selector('Collection')({
+    id: true,
     name: true,
     slug: true,
     description: true,
@@ -93,6 +96,46 @@ export const CollectionSelector = Selector('Collection')({
 });
 
 export type CollectionType = FromSelector<typeof CollectionSelector, 'Collection', typeof scalars>;
+
+// Define the SearchResponseSelector based on SearchResponse with nested SearchResult items
+export const SearchResponseSelector = Selector('SearchResponse')({
+    items: {
+        productId: true,
+        productName: true,
+        slug: true,
+        sku: true,
+        description: true,
+        priceWithTax: {
+            '...on PriceRange': {
+                max: true,
+                min: true,
+            },
+            '...on SinglePrice': {
+                value: true,
+            },
+        },
+        productVariantId: true,
+        productVariantName: true,
+        productAsset: {
+            preview: true,
+        },
+        currencyCode: true,
+        facetValueIds: true,
+        collectionIds: true,
+    },
+    totalItems: true,
+});
+
+export const FacetsSelector = Selector('Facet')({
+    items: {
+        id: true,
+        name: true,
+        values: {
+            id: true,
+            name: true,
+        },
+    },
+});
 
 export const SearchSelector = Selector('SearchResponse')({
     items: ProductSearchSelector,
@@ -329,6 +372,7 @@ export const shippingLineSelector = Selector('ShippingLine')({
 });
 export type ShippingLineType = FromSelector<typeof shippingLineSelector, 'ShippingLine', typeof scalars>;
 
+// ActiveOrderSelector
 export const ActiveOrderSelector = Selector('Order')({
     id: true,
     createdAt: true,
@@ -336,8 +380,13 @@ export const ActiveOrderSelector = Selector('Order')({
     totalQuantity: true,
     couponCodes: true,
     code: true,
-    customer: { id: true, emailAddress: true, firstName: true, lastName: true, phoneNumber: true },
-
+    customer: {
+        id: true,
+        emailAddress: true,
+        firstName: true,
+        lastName: true,
+        phoneNumber: true,
+    },
     shippingWithTax: true,
     totalWithTax: true,
     subTotalWithTax: true,
@@ -347,7 +396,6 @@ export const ActiveOrderSelector = Selector('Order')({
     payments: paymentSelector,
     currencyCode: true,
     shippingLines: shippingLineSelector,
-
     lines: {
         id: true,
         quantity: true,
@@ -371,11 +419,15 @@ export const ActiveOrderSelector = Selector('Order')({
             product: {
                 name: true,
                 slug: true,
+                customFields: {
+                    brand: true,
+                },
             },
         },
     },
 });
 
+// Infer ActiveOrderType based on ActiveOrderSelector and scalars
 export type ActiveOrderType = FromSelector<typeof ActiveOrderSelector, 'Order', typeof scalars>;
 
 export const OrderSelector = Selector('Order')({
@@ -410,6 +462,9 @@ export const OrderSelector = Selector('Order')({
             product: {
                 slug: true,
                 name: true,
+                customFields: {
+                    brand: true
+                }
             },
         },
     },
@@ -521,6 +576,9 @@ export const productVariantTileSelector = Selector('ProductVariant')({
         collections: { slug: true, name: true, parent: { slug: true } },
         slug: true,
         featuredAsset: { preview: true },
+        customFields: {
+            brand: true
+        }
     },
 });
 

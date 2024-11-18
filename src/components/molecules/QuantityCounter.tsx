@@ -32,17 +32,18 @@ const IconButtonStatic = styled(IconButton)`
 `;
 
 const Main = styled(Stack)`
-    border: 1px solid ${p => p.theme.gray(100)};
-    color: ${p => p.theme.gray(900)};
+    border: 1px solid ${p => p.theme.border.main};
+    border-radius: 8px;
+    color: ${p => p.theme.background.main};
     align-self: flex-start;
     width: auto;
-    font-size: 2rem;
+    font-size: 16px;
     font-weight: 600;
     span {
         margin: 0 1rem;
-        font-size: 1.8rem;
+        font-size: 16px;
         font-weight: 600;
-        line-height: 1.5rem;
+        line-height: 16px;
         user-select: none;
     }
 `;

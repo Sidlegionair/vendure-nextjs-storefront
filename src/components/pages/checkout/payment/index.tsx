@@ -20,7 +20,6 @@ export const PaymentPage: React.FC<InferGetServerSidePropsType<typeof getServerS
                 <Wrapper justifyBetween>
                     <OrderPayment
                         availablePaymentMethods={props.eligiblePaymentMethods}
-                        stripeData={props.stripeData}
                     />
                     <OrderSummary />
                 </Wrapper>

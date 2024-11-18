@@ -9,8 +9,18 @@ export const scalars = ZeusScalars({
         decode: e => e as number,
     },
     JSON: {
-        encode: (e: unknown) => JSON.stringify(JSON.stringify(e)),
-        decode: (e: unknown) => JSON.parse(e as string),
+        encode: (e: unknown) => JSON.stringify(e),  // Encode as JSON string once
+        decode: (e: unknown) => {
+            if (typeof e === 'string') {
+                try {
+                    return JSON.parse(e);  // Only decode if it's still a string
+                } catch (err) {
+                    console.error(e);
+                    console.error("Error decoding JSON:", err);
+                }
+            }
+            return e;  // Return as-is if it's already decoded
+        },
     },
     DateTime: {
         decode: (e: unknown) => new Date(e as string).toISOString(),
@@ -20,47 +30,47 @@ export const scalars = ZeusScalars({
 
 //use 'http://localhost:3000/shop-api/' in local .env file for localhost development and provide env to use on prod/dev envs
 
-export const VENDURE_HOST = `${process.env.NEXT_PUBLIC_HOST ?? 'https://shop.aexol.com'}/shop-api`;
+export const VENDURE_HOST = `${process.env.NEXT_PUBLIC_HOST || 'https://vendure-dev.aexol.com'}/shop-api`;
 
 const apiFetchVendure =
     (options: fetchOptions) =>
-    (query: string, variables: Record<string, unknown> = {}) => {
-        const fetchOptions = options[1] || {};
-        if (fetchOptions.method && fetchOptions.method === 'GET') {
-            return fetch(`${options[0]}?query=${encodeURIComponent(query)}`, fetchOptions)
-                .then(handleFetchResponse)
+        (query: string, variables: Record<string, unknown> = {}) => {
+            const fetchOptions = options[1] || {};
+            if (fetchOptions.method && fetchOptions.method === 'GET') {
+                return fetch(`${options[0]}?query=${encodeURIComponent(query)}`, fetchOptions)
+                    .then(handleFetchResponse)
+                    .then((response: GraphQLResponse) => {
+                        if (response.errors) {
+                            throw new GraphQLError(response);
+                        }
+                        return response.data;
+                    });
+            }
+            const additionalHeaders: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
+            return fetch(`${options[0]}`, {
+                body: JSON.stringify({ query, variables }),
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...additionalHeaders,
+                },
+                ...fetchOptions,
+            })
+                .then(r => {
+                    const authToken = r.headers.get('vendure-auth-token');
+                    if (authToken != null) {
+                        token = authToken;
+                    }
+                    return handleFetchResponse(r);
+                })
                 .then((response: GraphQLResponse) => {
                     if (response.errors) {
                         throw new GraphQLError(response);
                     }
                     return response.data;
                 });
-        }
-        const additionalHeaders: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
-        return fetch(`${options[0]}`, {
-            body: JSON.stringify({ query, variables }),
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                ...additionalHeaders,
-            },
-            ...fetchOptions,
-        })
-            .then(r => {
-                const authToken = r.headers.get('vendure-auth-token');
-                if (authToken != null) {
-                    token = authToken;
-                }
-                return handleFetchResponse(r);
-            })
-            .then((response: GraphQLResponse) => {
-                if (response.errors) {
-                    throw new GraphQLError(response);
-                }
-                return response.data;
-            });
-    };
+        };
 
 export const VendureChain = (...options: chainOptions) => Thunder(apiFetchVendure(options));
 

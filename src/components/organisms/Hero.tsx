@@ -33,7 +33,6 @@ export const Hero: React.FC<{
                     </StandAloneLink>
                 </TextWrapper>
                 <HeroImage
-                    fetchPriority="high"
                     src={optimizeImage({
                         size: { width: 700, height: 500, format: 'webp', mode: 'resize' },
                         src: image,

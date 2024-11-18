@@ -12,13 +12,14 @@ import { RootNode } from '@/src/util/arrayToTree';
 import { useChannels } from '@/src/state/channels';
 import { channels } from '@/src/lib/consts';
 
-export const siteTitle = 'Aexol Next.js Storefront';
+export const siteTitle = 'Boardrush Network';
 
 interface LayoutProps {
     pageTitle?: string;
     children: React.ReactNode;
     categories: CollectionTileType[];
     navigation: RootNode<NavigationType> | null;
+    subnavigation?: RootNode<NavigationType> | null;
 }
 
 interface CheckoutLayoutProps {
@@ -27,12 +28,37 @@ interface CheckoutLayoutProps {
 }
 
 const MainStack = styled.main`
+    position: relative;
+    height: 100%;
     min-height: 100vh;
     width: 100%;
+
     background: ${p => p.theme.background.main};
 `;
 
-export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, categories, navigation }) => {
+const MainStackStyled = styled.main`
+        position: relative;
+        height: 100%;
+        min-height: 100vh;
+        width: 100%;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/images/bg/checkout.jpeg') no-repeat center center;
+            background-size: cover;
+            opacity: 0.2;
+            z-index: -1; /* Set the background behind the content */
+        }
+`;
+
+
+
+export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, categories, navigation, subnavigation }) => {
     const { fetchActiveOrder } = useCart();
     const { product, variant } = useProduct();
     const { collection } = useCollection();
@@ -75,7 +101,12 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, categories,
                 variant={variant}
                 collection={collection}
             />
-            <Navigation changeModal={changeModal} navigation={navigation} categories={categories} />
+            <Navigation
+                changeModal={changeModal}
+                navigation={navigation ?? null}
+                categories={categories}
+                subnavigation={subnavigation ?? null}
+            />
             <Stack w100 itemsCenter column>
                 {children}
             </Stack>
@@ -86,11 +117,11 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, categories,
 
 export const CheckoutLayout: React.FC<CheckoutLayoutProps> = ({ pageTitle, children }) => {
     return (
-        <MainStack>
+        <MainStackStyled>
             <CustomHelmet pageTitle={pageTitle ? `${pageTitle} | ${siteTitle}` : siteTitle} />
             <Stack w100 itemsCenter column>
                 {children}
             </Stack>
-        </MainStack>
+        </MainStackStyled>
     );
 };

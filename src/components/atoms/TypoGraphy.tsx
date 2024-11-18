@@ -1,9 +1,8 @@
-import { BaseRemUnit } from '@/src/components/sharedStyles';
 import { thv } from '@/src/theme';
 import styled from '@emotion/styled';
 
 export type BaseProps = {
-    size: BaseRemUnit;
+    size: string | number; // Change this to accept any valid CSS unit
     weight: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
     upperCase?: boolean;
     capitalize?: boolean;
@@ -22,10 +21,10 @@ export const TypoGraphy = styled.div<BaseProps>`
 type TypoGraphyProps = Partial<Parameters<typeof TypoGraphy>[0]>;
 
 export const TH1 = (props: TypoGraphyProps) => <TypoGraphy size="5.5rem" weight={600} as="h1" {...props} />;
-export const TH2 = (props: TypoGraphyProps) => <TypoGraphy size="3rem" weight={400} as="h2" {...props} />;
+export const TH2 = (props: TypoGraphyProps) => <TypoGraphy size="35px" weight={600} as="h2" {...props} />;
 export const TCategory = (props: TypoGraphyProps) => <TypoGraphy size="4rem" weight={400} as="h2" {...props} />;
 
-export const TP = (props: TypoGraphyProps) => <TypoGraphy size="1.5rem" weight={400} as="p" {...props} />;
+export const TP = (props: TypoGraphyProps) => <TypoGraphy size="16px" weight={400} as="p" {...props} />;
 export const TPriceBig = (props: TypoGraphyProps) => <TypoGraphy size="2.5rem" weight={700} as="p" {...props} />;
 
 export const TFacetHeading = (props: TypoGraphyProps) => <TypoGraphy size="1.5rem" weight={400} as="div" {...props} />;

@@ -19,7 +19,7 @@ export const Input = forwardRef((props: InputType, ref: React.ForwardedRef<HTMLI
     return (
         <Stack w100 column gap="0.25rem">
             <InputWrapper w100 column>
-                <Label htmlFor={props.name} style={{ letterSpacing: '0.5px', fontWeight: 600 }}>
+                <Label htmlFor={props.name} style={{ fontSize: 14, fontWeight: 400 }}>
                     {label}
                     {props.required && <FormRequired>&nbsp;*</FormRequired>}
                 </Label>
@@ -65,8 +65,11 @@ export const FormError = styled(motion.span)`
 
 const InputWrapper = styled(Stack)`
     position: relative;
-    padding: 1.5rem;
-    border: 1px solid ${p => p.theme.gray(100)};
+    padding: 25px;
+    border: 1px solid ${p => p.theme.border.lightgray};
+    background: #ffffff;
+    border-radius: 8px;
+
 `;
 
 const EyeWrapper = styled(Stack)<{ active: boolean }>`
@@ -89,9 +92,11 @@ export const StyledInput = styled.input<{ error?: boolean }>`
     border: 0;
     outline: none;
     margin-top: 0.6rem;
-    padding: 0.5rem 0.25rem;
-    color: ${p => p.theme.gray(900)};
-    border-bottom: 1px solid ${p => p.theme.gray(100)};
+    padding: 15px 0px;
+    color: ${p => p.theme.background.main};
+    border-bottom: 1px solid ${p => p.theme.border.lightgray};
+    font-size: 16px;
+    line-height: 16px;
 
     :focus {
         border-color: ${p => p.theme.gray(1000)};

@@ -33,21 +33,21 @@ export const OrderSummary: React.FC<PropsWithChildren<OrderSummaryProps>> = ({ f
             <SummaryContent w100 column gap="2.5rem">
                 <Stack w100 column gap="2.5rem">
                     {/* <CheckoutStatus step={step} /> */}
-                    <TH2 size="3rem" weight={500}>
+                    <TH2 weight={600} size={'40px'}>
                         {t('orderSummary.title')}
                     </TH2>
                     <Stack column>
                         {activeOrder?.lines.map(line => (
                             <Line currencyCode={currencyCode} isForm={!!shipping} key={line.id} line={line} />
                         ))}
-                        <Stack column gap="2.5rem">
+                        <Stack column gap={17}>
                             <Stack justifyBetween>
-                                <TP>{t('orderSummary.subtotal')}</TP>
-                                <TP>{priceFormatter(activeOrder?.subTotalWithTax ?? 0, currencyCode)}</TP>
+                                <TP size={'18px'} weight={300}>{t('orderSummary.subtotal')}</TP>
+                                <TP size={'18px'} weight={300}>{priceFormatter(activeOrder?.subTotalWithTax ?? 0, currencyCode)}</TP>
                             </Stack>
                             <Stack justifyBetween>
-                                <TP>{t('orderSummary.shipping')}</TP>
-                                <TP>{priceFormatter(activeOrder?.shippingWithTax ?? 0, currencyCode)}</TP>
+                                <TP size={'18px'} weight={300}>{t('orderSummary.shipping')}</TP>
+                                <TP size={'18px'} weight={300}>{priceFormatter(activeOrder?.shippingWithTax ?? 0, currencyCode)}</TP>
                             </Stack>
                             {!!shipping && jsEnabled && (
                                 <Stack w100 column gap="2.5rem">
@@ -87,11 +87,14 @@ const SummaryContainer = styled(Stack)<{ isForm?: boolean }>`
         max-width: 52rem;
     }
 
+    background: #ffffff;
+    border-radius: 8px;
+
     width: ${({ isForm }) => (isForm ? 'auto' : '100%')};
     position: ${({ isForm }) => (isForm ? 'sticky' : 'relative')};
     top: ${({ isForm }) => (isForm ? '1.5rem' : '0')};
-    border: 1px solid ${p => p.theme.gray(100)};
-    padding: 3.25rem;
+    border: 1px solid ${p => p.theme.border.lightgray};
+    padding: 40px;
     height: fit-content;
 
     @media (max-width: 1024px) {

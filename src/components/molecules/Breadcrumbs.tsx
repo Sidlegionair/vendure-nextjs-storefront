@@ -39,5 +39,5 @@ export const Breadcrumbs: React.FC<{
 const StyledLink = styled(Link)<{ blocked?: number }>`
     text-decoration: none;
     pointer-events: ${p => (p.blocked === 1 ? 'none' : 'auto')};
-    color: ${p => p.theme.gray(900)};
+    color: ${p => p.theme.background.main};
 `;

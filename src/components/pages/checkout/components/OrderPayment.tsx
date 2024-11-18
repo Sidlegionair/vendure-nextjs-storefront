@@ -1,9 +1,7 @@
 import { storefrontApiMutation } from '@/src/graphql/client';
 import { AvailablePaymentMethodsType } from '@/src/graphql/selectors';
-import React, { InputHTMLAttributes, forwardRef, useEffect, useState } from 'react';
+import React, { InputHTMLAttributes, forwardRef, useState } from 'react';
 import { Stack, TP } from '@/src/components/atoms';
-
-import { loadStripe, Stripe } from '@stripe/stripe-js';
 import { useCheckout } from '@/src/state/checkout';
 import { Banner } from '@/src/components/forms';
 import { useTranslation } from 'next-i18next';
@@ -15,35 +13,23 @@ import { usePush } from '@/src/lib/redirect';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useChannels } from '@/src/state/channels';
 
-const STRIPE_PUBLIC_KEY = process.env.NEXT_PUBLIC_STRIPE_KEY;
-
 interface OrderPaymentProps {
     availablePaymentMethods?: AvailablePaymentMethodsType[];
-    stripeData?: { paymentIntent: string | null };
+    mollieData?: { paymentIntent: string | null };
 }
 
 type FormValues = {
-    payment: 'dummy-method-success' | 'dummy-method-error' | 'dummy-method-decline';
-};
-
-type StandardMethodMetadata = {
-    shouldDecline: boolean;
-    shouldError: boolean;
-    shouldErrorOnSettle: boolean;
+    payment: string;
 };
 
 const POSITIVE_DEFAULT_PAYMENT_STATUSES = ['PaymentAuthorized', 'PaymentSettled'];
 
-export const OrderPayment: React.FC<OrderPaymentProps> = ({ availablePaymentMethods, stripeData }) => {
+export const OrderPayment: React.FC<OrderPaymentProps> = ({ availablePaymentMethods, mollieData }) => {
     const ctx = useChannels();
     const { t } = useTranslation('checkout');
     const { t: tError } = useTranslation('common');
     const { activeOrder } = useCheckout();
     const push = usePush();
-
-    //For stripe
-    /* eslint-disable @typescript-eslint/no-unused-vars */
-    const [stripe, setStripe] = useState<Stripe | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const {
@@ -53,27 +39,21 @@ export const OrderPayment: React.FC<OrderPaymentProps> = ({ availablePaymentMeth
         formState: { isSubmitting, isValid },
     } = useForm<FormValues>({});
 
-    useEffect(() => {
-        const initStripe = async () => {
-            if (STRIPE_PUBLIC_KEY) {
-                const stripePromise = await loadStripe(STRIPE_PUBLIC_KEY);
-                if (stripePromise) setStripe(stripePromise);
-            }
-        };
-        if (stripeData?.paymentIntent) initStripe();
-    }, []);
-
-    const defaultMethod = availablePaymentMethods?.find(m => m.code === 'standard-payment');
-
-    const standardMethod = async (method: string, metadata: StandardMethodMetadata) => {
+    const handlePayment = async (paymentMethod: string) => {
         try {
             setError(null);
             const { addPaymentToOrder } = await storefrontApiMutation(ctx)({
                 addPaymentToOrder: [
-                    { input: { method, metadata } },
+                    { input: { method: paymentMethod, metadata: {} } },
                     {
                         __typename: true,
-                        '...on Order': { state: true, code: true },
+                        '...on Order': {
+                            state: true,
+                            code: true,
+                            payments: {
+                                metadata: true, // Metadata field now on payments
+                            },
+                        },
                         '...on IneligiblePaymentMethodError': {
                             message: true,
                             errorCode: true,
@@ -107,47 +87,37 @@ export const OrderPayment: React.FC<OrderPaymentProps> = ({ availablePaymentMeth
                     },
                 ],
             });
+
             if (addPaymentToOrder.__typename !== 'Order') {
+                // Handle non-Order result
                 setError(tError(`errors.backend.${addPaymentToOrder.errorCode}`));
             } else if (POSITIVE_DEFAULT_PAYMENT_STATUSES.includes(addPaymentToOrder.state)) {
-                push(`/checkout/confirmation/${addPaymentToOrder.code}`);
+                // Check if the selected payment method is Mollie
+                if (paymentMethod === 'connected-payment-method') {
+                    const molliePayment = addPaymentToOrder.payments?.[0]; // Assuming the metadata is in the first payment
+
+                    const redirectUrl = molliePayment?.metadata?.public?.redirectUrl; // Assuming redirect URL is stored in the metadata
+
+                    if (redirectUrl) {
+                        // Redirect to Mollie payment page
+                        window.location.href = redirectUrl;
+                    } else {
+                        setError(tError(['errors.backend.MOLLIE_REDIRECT_FAILED'], { defaultValue: 'Mollie redirect failed' }));
+                    }
+                } else {
+                    // Redirect to the confirmation page for non-Mollie payments
+                    push(`/checkout/confirmation/${addPaymentToOrder.code}`);
+                }
             }
         } catch (e) {
-            console.log(e);
-            setError(tError(`errors.backend.UNKNOWN_ERROR`));
+            console.error(e);
+            setError(tError('errors.backend.UNKNOWN_ERROR'));
         }
     };
 
-    const onSubmit: SubmitHandler<FormValues> = async data => {
-        if (!defaultMethod) {
-            return;
-        }
-        if (data.payment === 'dummy-method-success') {
-            await standardMethod(defaultMethod.code, {
-                shouldDecline: false,
-                shouldError: false,
-                shouldErrorOnSettle: false,
-            });
-            return;
-        }
 
-        if (data.payment === 'dummy-method-error') {
-            await standardMethod(defaultMethod.code, {
-                shouldDecline: false,
-                shouldError: true,
-                shouldErrorOnSettle: false,
-            });
-            return;
-        }
-
-        if (data.payment === 'dummy-method-decline') {
-            await standardMethod(defaultMethod.code, {
-                shouldDecline: true,
-                shouldError: false,
-                shouldErrorOnSettle: false,
-            });
-            return;
-        }
+    const onSubmit: SubmitHandler<FormValues> = async (data) => {
+        await handlePayment(data.payment);
     };
 
     return activeOrder ? (
@@ -162,43 +132,25 @@ export const OrderPayment: React.FC<OrderPaymentProps> = ({ availablePaymentMeth
                         </TP>
                     </GridTitle>
                     <Grid>
-                        <GridEntry column itemsCenter justifyCenter>
-                            {defaultMethod && (
-                                <>
-                                    <PaymentButton
-                                        id="dummy-method-success"
-                                        value="dummy-method-success"
-                                        label={t('paymentMethod.dummyMethods.success')}
-                                        icon={<StyledCreditCard method="success" />}
-                                        checked={watch('payment') === 'dummy-method-success'}
-                                        {...register('payment', { required: true })}
-                                    />
-                                    {/* <PaymentButton
-                                        id="dummy-method-error"
-                                        value="dummy-method-error"
-                                        label={t('paymentMethod.dummyMethods.error')}
-                                        icon={<StyledCreditCard method="error" />}
-                                        checked={watch('payment') === 'dummy-method-error'}
-                                        {...register('payment', { required: true })}
-                                    />
-                                    <PaymentButton
-                                        id="dummy-method-decline"
-                                        value="dummy-method-decline"
-                                        label={t('paymentMethod.dummyMethods.decline')}
-                                        icon={<StyledCreditCard method="decline" />}
-                                        checked={watch('payment') === 'dummy-method-decline'}
-                                        {...register('payment', { required: true })}
-                                    /> */}
-                                </>
-                            )}
-                        </GridEntry>
+                        {availablePaymentMethods?.map((method) => (
+                            <GridEntry key={method.code} column itemsCenter justifyCenter>
+                                <PaymentButton
+                                    id={method.code}
+                                    value={method.code}
+                                    label={method.name}
+                                    icon={<StyledCreditCard method={method.code} />}
+                                    checked={watch('payment') === method.code}
+                                    {...register('payment', { required: true })}
+                                />
+                            </GridEntry>
+                        ))}
                     </Grid>
                 </Stack>
 
                 <AnimatePresence>
                     {isValid ? (
                         <AnimationStack initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                            <Button loading={isSubmitting} type="submit">
+                            <Button disabled={isSubmitting} type="submit">
                                 {t('paymentMethod.submit')}
                             </Button>
                         </AnimationStack>
@@ -214,6 +166,7 @@ export const OrderPayment: React.FC<OrderPaymentProps> = ({ availablePaymentMeth
         </Stack>
     ) : null;
 };
+
 
 const GridTitle = styled(Stack)`
     padding: 1.5rem 3rem;
@@ -244,9 +197,45 @@ const GridEntry = styled(Stack)`
     overflow: hidden;
 `;
 
-const StyledCreditCard = styled(CreditCard)<{ method: 'success' | 'decline' | 'error' }>`
-    color: ${({ theme, method }) => (method === 'success' ? theme.success : theme.error)};
+const StyledCreditCard = styled(CreditCard)<{ method: string }>`
+    color: ${({ theme }) => theme.success};
 `;
+
+const PaymentForm = styled.form`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 2rem;
+    height: 100%;
+`;
+
+const AnimationStack = styled(motion.div)`
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+`;
+
+type InputType = InputHTMLAttributes<HTMLInputElement> & {
+    label: string;
+    icon?: React.ReactNode;
+};
+
+const PaymentButton = forwardRef((props: InputType, ref: React.ForwardedRef<HTMLInputElement>) => {
+    const { label, icon, ...rest } = props;
+    return (
+        <Stack w100 column itemsCenter gap="0.25rem">
+            <StyledButton style={{ width: '100%', justifyContent: 'start' }} active={rest.checked}>
+                {icon}
+                <AbsoluteRadio ref={ref} {...rest} type="radio" />
+                <label htmlFor={props.name}>{label}</label>
+            </StyledButton>
+        </Stack>
+    );
+});
 
 const AbsoluteRadio = styled.input`
     position: absolute;
@@ -275,40 +264,3 @@ const StyledButton = styled.button<{ active?: boolean }>`
         background-color: ${p => p.theme.background.ice};
     }
 `;
-
-const PaymentForm = styled.form`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    gap: 2rem;
-    height: 100%;
-`;
-
-const AnimationStack = styled(motion.div)`
-    position: relative;
-    width: 100%;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-`;
-
-type InputType = InputHTMLAttributes<HTMLInputElement> & {
-    label: string;
-    icon?: React.ReactNode;
-};
-
-const PaymentButton = forwardRef((props: InputType, ref: React.ForwardedRef<HTMLInputElement>) => {
-    const { label, icon, ...rest } = props;
-    return (
-        <Stack w100 column itemsCenter gap="0.25rem">
-            <StyledButton style={{ width: '100%', justifyContent: 'start' }} active={rest.checked}>
-                {icon}
-                <AbsoluteRadio ref={ref} {...rest} type="radio" />
-                <label htmlFor={props.name}>{label}</label>
-            </StyledButton>
-        </Stack>
-    );
-});

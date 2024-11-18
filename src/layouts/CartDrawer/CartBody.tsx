@@ -10,6 +10,7 @@ import styled from '@emotion/styled';
 import { Trash2 } from 'lucide-react';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
+// import { $ } from 'execa';
 
 interface Props {
     activeOrder?: ActiveOrderType;
@@ -19,12 +20,16 @@ interface Props {
 export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
     const { t } = useTranslation('common');
     const { setItemQuantityInCart, removeFromCart } = useCart();
+
+
     return (
         <CartList w100 column>
             {activeOrder && activeOrder.totalQuantity > 0 ? (
                 activeOrder.lines.map(
                     ({ productVariant, id, featuredAsset, quantity, unitPriceWithTax, discountedLinePriceWithTax }) => {
                         const optionInName = productVariant.name.replace(productVariant.product.name, '') !== '';
+                        const customFields = productVariant.product.customFields as { brand?: string }; // Casting customFields to an object with brand
+
                         return (
                             <CartRow w100 justifyBetween key={id}>
                                 <Stack gap="2rem">
@@ -33,27 +38,39 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
                                         href={`/products/${productVariant.product.slug}`}
                                         imageSrc={featuredAsset?.preview}
                                     />
-                                    <Stack column gap="2rem">
-                                        <Stack column>
-                                            <TP size="1.75rem" weight={500} noWrap>
-                                                {productVariant.product.name}
-                                            </TP>
+                                    <Stack column gap={18}>
+                                        <Stack column gap="0.125rem">
+                                            <Stack gap="0.5rem">
+                                                {customFields?.brand && (
+                                                    <TP size="18px" weight={700} noWrap>
+                                                        {customFields.brand}
+                                                    </TP>
+                                                )}
+
+                                                <TP size="18px" weight={300} noWrap>
+                                                    {productVariant.product.name}
+                                                </TP>
+                                            </Stack>
                                             {optionInName && (
-                                                <TP size="1.5rem" weight={400}>
+                                                <TP size="16px" weight={200}>
                                                     {productVariant.name.replace(productVariant.product.name, '')}
                                                 </TP>
                                             )}
                                         </Stack>
-                                        <QuantityCounter v={quantity} onChange={v => setItemQuantityInCart(id, v)} />
-                                        <Remove onClick={async () => await removeFromCart(id)}>
-                                            <Trash2 size={'2rem'} />
-                                            <TP weight={600} size="1rem" upperCase>
-                                                {t('remove')}
-                                            </TP>
-                                        </Remove>
+                                        <Stack column gap={18}>
+                                            <QuantityCounter v={quantity} onChange={v => setItemQuantityInCart(id, v)} />
+                                            <Remove onClick={async () => await removeFromCart(id)}>
+                                                <Trash2 size={'16px'} />
+                                                <RemoveText weight={400} size="16px">
+                                                    {t('remove')}
+                                                </RemoveText>
+                                            </Remove>
+                                        </Stack>
                                     </Stack>
                                 </Stack>
                                 <Price
+                                    size="20px"
+                                    weight={500}
                                     currencyCode={currencyCode}
                                     price={unitPriceWithTax}
                                     discountPrice={discountedLinePriceWithTax / quantity}
@@ -74,7 +91,7 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
 
 const CartList = styled(Stack)`
     flex: 1;
-    padding: 1.5rem 2rem;
+    padding: 30px;
     overflow-y: auto;
     ::-webkit-scrollbar {
         height: 0.8rem;
@@ -95,7 +112,7 @@ const CartList = styled(Stack)`
 `;
 const CartRow = styled(Stack)`
     padding: 2rem 0;
-    border-bottom: 1px solid ${p => p.theme.gray(50)};
+    border-bottom: 1px solid ${p => p.theme.withOpacity(p.theme.border.main, 0.3)};
 `;
 
 const Remove = styled.button`
@@ -106,6 +123,11 @@ const Remove = styled.button`
     display: flex;
     align-items: center;
     width: fit-content;
+    color: ${p => p.theme.text.accent};
 
     gap: 0.4rem;
+`;
+
+const RemoveText = styled(TP)`
+    color: ${p => p.theme.text.accent};
 `;

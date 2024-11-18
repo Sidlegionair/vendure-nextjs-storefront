@@ -36,7 +36,14 @@ export const Tooltip: React.FC<{
                             transition={{ duration: 0.1 }}
                             {...layerProps}>
                             <TP size="1.25rem">{text}</TP>
-                            <StyledArrow {...arrowProps} size={6} />
+                            <StyledArrow
+                                {...{
+                                    ...arrowProps,
+                                    onPointerEnterCapture: () => {},
+                                    onPointerLeaveCapture: () => {},
+                                }}
+                                size={6}
+                            />
                         </StyledTooltip>
                     )}
                 </AnimatePresence>,
@@ -45,11 +52,11 @@ export const Tooltip: React.FC<{
     );
 };
 
-const StyledArrow = styled(Arrow)``;
+// Define StyledArrow as a functional component
+const StyledArrow: React.FC<React.ComponentProps<typeof Arrow>> = (props) => <Arrow {...props} />;
 
 const StyledTooltip = styled(motion.div)`
     max-width: 20rem;
-
     display: flex;
     align-items: center;
     justify-content: center;

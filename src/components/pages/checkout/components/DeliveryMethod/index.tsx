@@ -15,12 +15,12 @@ interface Props {
 }
 
 export const DeliveryMethod: React.FC<Props> = ({
-    selected,
-    onChange,
-    error,
-    shippingMethods,
-    currencyCode = CurrencyCode.USD,
-}) => {
+                                                    selected,
+                                                    onChange,
+                                                    error,
+                                                    shippingMethods,
+                                                    currencyCode = CurrencyCode.USD,
+                                                }) => {
     return (
         <Stack w100 column>
             <Wrapper gap="2rem">
@@ -34,9 +34,9 @@ export const DeliveryMethod: React.FC<Props> = ({
                         key={id}
                         column
                         onClick={() => onChange(id)}>
-                        <TP size="1.5rem" weight={400}>
+                        <StyledTP selected={selected === id} error={!!error}>
                             {name}
-                        </TP>
+                        </StyledTP>
                         <Price price={price} currencyCode={currencyCode} />
                     </Box>
                 ))}
@@ -49,19 +49,34 @@ const Wrapper = styled(Stack)`
     margin: 1.6rem 0;
 `;
 
+const StyledTP = styled(TP)<{ selected: boolean; error: boolean }>`
+    color: ${p => (p.error ? p.theme.error : p.selected ? '#fff' : '#000')};
+    font-size: 1.5rem;
+    font-weight: 400;
+`;
+
 const Box = styled(Stack)<{ selected: boolean; error: boolean }>`
     cursor: pointer;
-    padding: 2rem;
+    padding: 23px 0px;
+    text-align: center;
     border: 1px solid ${p => (p.error ? p.theme.error : p.selected ? p.theme.gray(800) : p.theme.gray(200))};
-
+    font-size: 16px;
+    font-weight: 400;
+    color: ${p => (p.error ? p.theme.error : p.selected ? '#fff' : '#000')} !important;
+    background-color: ${p => (p.error ? p.theme.error : p.selected ? '#000' : '#fff')} !important;
+    border-radius: 8px;
+    
     &:hover {
         border: 1px solid ${p => p.theme.gray(400)};
     }
 
     & > div {
-        color: ${p => (p.selected ? p.theme.gray(1000) : p.theme.text.subtitle)};
+        color: ${p => (p.error ? p.theme.error : p.selected ? '#fff' : '#000')}; /* Adjusted color logic for div */
+
         & > p {
-            font-size: 1rem;
+            font-size: 20px;
+            font-weight: 600;
+            color: ${p => (p.error ? p.theme.error : p.selected ? '#fff' : '#000')}; /* Color logic for p element */
         }
     }
 `;

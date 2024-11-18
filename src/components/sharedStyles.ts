@@ -33,15 +33,15 @@ type BaseUnit =
 export type BaseRemUnit = `${BaseUnit}rem`;
 
 export interface BaseFlexParams {
-    column?: boolean;
-    reverse?: boolean;
-    flexWrap?: boolean;
+    gap?: '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.25rem' |'1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3rem' | '3.5rem' | '4rem' | '5rem' | '6rem' | '12rem' | number | undefined;
+    justifyEnd?: boolean;
+    justifyCenter?: boolean;
+    justifyBetween?: boolean;
     itemsCenter?: boolean;
     itemsStart?: boolean;
     itemsEnd?: boolean;
-    justifyEnd?: boolean;
-    justifyBetween?: boolean;
-    justifyCenter?: boolean;
+    column?: boolean;
+    reverse?: boolean;
+    flexWrap?: boolean;
     w100?: boolean;
-    gap?: BaseRemUnit;
 }

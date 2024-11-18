@@ -85,7 +85,7 @@ const CheckboxAnimation = styled(motion.div)`
 `;
 
 const CheckboxIcon = styled(Check)`
-    color: ${p => p.theme.gray(1000)};
+    color: ${p => p.theme.text.black};
 `;
 
 const CheckboxIconHolder = styled.div`
@@ -96,7 +96,9 @@ const CheckboxIconHolder = styled.div`
 
     min-width: calc(3rem - 1px);
     min-height: calc(3rem - 1px);
-    border: 1px solid ${p => p.theme.gray(1000)};
+    border: 1px solid ${p => p.theme.border.lightgray};
+    background: #FFFFFF;
+    border-radius: 5px;
 `;
 
 const CheckboxStack = styled(Stack)`

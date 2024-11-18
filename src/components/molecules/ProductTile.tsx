@@ -76,7 +76,7 @@ const Categories = styled(Stack)`
 
 const ProductName = styled.div`
     font-weight: 400;
-    color: ${p => p.theme.gray(900)};
+    color: ${p => p.theme.background.main};
     font-size: 1.5rem;
 `;
 

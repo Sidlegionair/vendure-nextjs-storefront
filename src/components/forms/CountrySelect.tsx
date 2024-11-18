@@ -54,23 +54,34 @@ const Error = styled.div`
 `;
 
 const Wrapper = styled(Stack)`
-    border: 1px solid ${p => p.theme.gray(100)};
+    border: 1px solid ${p => p.theme.border.lightgray};
+    border-radius: 8px;
+    background: #ffffff;
     height: 100%;
 `;
 
 const SelectWrapper = styled(Stack)`
     position: relative;
-    padding: 1.5rem 1.5rem 1rem 1.5rem;
+    padding: 25px;
+    border: none;
 `;
 
 export const StyledSelect = styled.select<{ error?: boolean }>`
     width: 100%;
-    padding: 0.5rem 0.75rem;
 
-    color: ${p => p.theme.gray(900)};
-    border: 1px solid ${p => p.theme.gray(600)};
+    border: 0;
+    outline: none;
+    //margin-top: 0.6rem;
+    padding: 15px 0px;
+    color: ${p => p.theme.background.main};
+    border-bottom: 1px solid ${p => p.theme.border.lightgray};
+    font-size: 16px;
+    line-height: 16px;
+    //background: #ffff;
+
+    color: ${p => p.theme.background.main};
+        // border: 1px solid ${p => p.theme.gray(600)};
     :focus {
         border-color: ${p => p.theme.gray(400)};
     }
-    outline: none;
 `;

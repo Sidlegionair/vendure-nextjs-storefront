@@ -12,7 +12,12 @@ export default class MyDocument extends Document {
         return (
             <Html lang={lang}>
                 <Head>
-                <meta name="robots" content="noindex"/>
+                    <meta name="robots" content="noindex" />
+                    <link
+                        href="https://fonts.cdnfonts.com/css/calibri"
+                        rel="stylesheet"
+                    />
+
                     {/* enable analytics script only for production */}
                     {/* {isProduction && (
                         <>
@@ -34,8 +39,8 @@ export default class MyDocument extends Document {
                     )} */}
                 </Head>
                 <body>
-                    <Main />
-                    <NextScript />
+                <Main />
+                <NextScript />
                 </body>
             </Html>
         );

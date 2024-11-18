@@ -46,7 +46,7 @@ export const FacetFilterCheckbox: React.FC<FacetProps> = ({ facet: { id, name, v
 
 const GridWrapper = styled(Stack)`
     margin-top: 1.7rem;
-    min-width: 420px;
+    //min-width: 420px;
     max-width: 100%;
 `;
 
@@ -78,10 +78,11 @@ const GridEntry = styled(Stack)`
 
 const CheckGrid = styled.div`
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr; /* Changed from '1fr 1fr' to '1fr' */
     gap: 2rem;
     padding-bottom: 2rem;
     width: 100%;
+
     & > label {
         font-size: 1.5rem;
         letter-spacing: -0.64px;

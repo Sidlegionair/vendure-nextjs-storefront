@@ -7,9 +7,9 @@ export const NavigationLinks: React.FC<{ collection: RootNode<CollectionTileType
     collection,
 }) => {
     return (
-        <Stack column gap="1.5rem">
+        <Stack column gap={22}>
             <TH2>{collection.name}</TH2>
-            <Stack column>
+            <LinkWrapper column>
                 {collection.children.map(cc => {
                     const href =
                         cc.parent?.slug === '__root_collection__'
@@ -21,10 +21,17 @@ export const NavigationLinks: React.FC<{ collection: RootNode<CollectionTileType
                         </Stack>
                     );
                 })}
-            </Stack>
+            </LinkWrapper>
         </Stack>
     );
 };
+
+const LinkWrapper = styled(Stack)`
+    a {
+        color: ${p => p.theme.text.subtitle}
+    }
+
+`
 
 const NavigationLink = styled(Link)`
     display: flex;

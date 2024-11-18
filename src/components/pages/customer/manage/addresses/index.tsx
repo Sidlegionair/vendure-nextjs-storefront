@@ -115,7 +115,7 @@ const Wrap = styled(Stack)`
 const ModalContent = styled(Stack)`
     width: fit-content;
     padding: 3.5rem;
-    background-color: ${p => p.theme.background.white};
+    background-color: ${p => p.theme.background.main};
     border-radius: ${p => p.theme.borderRadius};
 `;
 

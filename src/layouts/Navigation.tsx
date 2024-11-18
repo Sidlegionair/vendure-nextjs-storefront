@@ -1,15 +1,10 @@
 import { LogoAexol } from '@/src/assets';
-import { ContentContainer } from '@/src/components/atoms';
+import { ContentContainer, Divider } from '@/src/components/atoms';
 import { UserMenu } from '@/src/components/molecules/UserMenu';
-
 import { Stack } from '@/src/components/atoms/Stack';
 import styled from '@emotion/styled';
 import { Link } from '@/src/components/atoms/Link';
 import { useCart } from '@/src/state/cart';
-
-// import { Cart } from '@/src/layouts/Cart';
-// import { LanguageSwitcher } from '@/src/components';
-
 import { CartDrawer } from '@/src/layouts/CartDrawer';
 import { CollectionTileType, NavigationType } from '@/src/graphql/selectors';
 import { RootNode } from '@/src/util/arrayToTree';
@@ -34,9 +29,10 @@ interface NavigationProps {
         locale: string;
         country_name: string;
     };
+    subnavigation: RootNode<NavigationType> | null;
 }
 
-export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, changeModal }) => {
+export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, changeModal, subnavigation }) => {
     const { t } = useTranslation('common');
     const { isLogged, cart } = useCart();
     const navigationSearch = useNavigationSearch();
@@ -64,52 +60,71 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
         };
     }, []);
 
-    // THIS SHOULD COME FROM PLUGIN
+    const announcementsBar = typeof t('announcements-bar', { defaultValue: '' }) === 'string'
+        ? (t('announcements-bar', { defaultValue: '' }) as string).split('|')
+        : [];
+
     const entries = [
-        { text: t('announcements-bar')[0], href: '/collections/all' },
-        { text: t('announcements-bar')[1], href: '/' },
-        { text: t('announcements-bar')[2], href: '/' },
-        { text: t('announcements-bar')[3], href: '/' },
+        { text: announcementsBar[0] || '', href: '/collections/all' },
+        { text: announcementsBar[1] || '', href: '/' },
+        { text: announcementsBar[2] || '', href: '/' },
+        { text: announcementsBar[3] || '', href: '/' },
     ];
 
     return (
         <>
-            <AnnouncementBar entries={entries} secondsBetween={5} />
             <StickyContainer>
-                <ContentContainer>
-                    <Stack itemsCenter justifyBetween gap="5rem" w100>
-                        <Stack itemsCenter>
-                            <Link ariaLabel={'Home'} href={'/'}>
-                                <LogoAexol width={60} />
+                <ContentContainer style={{ gap: '25px' }}>
+                    <Stack itemsCenter justifyBetween gap={50} w100>
+                        <Stack style={{ width: '100%', maxWidth: '33%' }} gap="1rem" itemsCenter>
+                            <DesktopNavigation navigation={navigation} />
+
+                        </Stack>
+                        <Stack style={{ width: '100%', maxWidth: '33%' }} justifyCenter itemsCenter>
+                            <Link ariaLabel="Home" href="/">
+                                <LogoAexol width={256} />
                             </Link>
                         </Stack>
-                        <AnimatePresence>
-                            {navigationSearch.searchOpen ? (
-                                <DesktopNavigationContainer
-                                    style={{ width: '100%' }}
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ duration: 0.2 }}
-                                    ref={searchRef}>
-                                    <NavigationSearch {...navigationSearch} />
-                                </DesktopNavigationContainer>
-                            ) : (
-                                <DesktopNavigation navigation={navigation} />
-                            )}
-                        </AnimatePresence>
-                        <Stack gap="1rem" itemsCenter>
-                            <IconButton
-                                aria-label="Search products"
-                                onClick={navigationSearch.toggleSearch}
-                                ref={iconRef}>
-                                <SearchIcon />
-                            </IconButton>
-                            <Picker changeModal={changeModal} />
+                        <Stack style={{ width: '100%', maxWidth: '33%' }} gap="1rem" itemsCenter flexWrap justifyEnd>
+                            {/*<IconButton*/}
+                            {/*    aria-label="Search products"*/}
+                            {/*    onClick={navigationSearch.toggleSearch}*/}
+                            {/*    ref={iconRef}*/}
+                            {/*>*/}
+                            {/*    <SearchIcon />*/}
+                            {/*</IconButton>*/}
                             <UserMenu isLogged={isLogged} />
                             <CartDrawer activeOrder={cart} />
+                            <Picker changeModal={changeModal} />
                         </Stack>
                     </Stack>
+                    <Divider />
+                    <Stack>
+                        {subnavigation ? (
+                            <DesktopNavigation gap={135} navigation={subnavigation} isSubMenu={true} />
+                        ) : (
+                            <Stack />
+                        )}
+                    </Stack>
+                    <SearchStack>
+                        <AnimatePresence>
+                            <DesktopNavigationContainer
+                                style={{ width: '100%' }}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                ref={searchRef}
+                            >
+                                <NavigationSearch {...navigationSearch} />
+                            </DesktopNavigationContainer>
+
+                            {/*{navigationSearch.searchOpen ? (*/}
+                            {/*) : (*/}
+                            {/*    <DesktopNavigation navigation={navigation} />*/}
+                            {/*)}*/}
+                        </AnimatePresence>
+                    </SearchStack>
                 </ContentContainer>
                 {navigationSearch.searchOpen && (
                     <MobileNavigationContainer ref={searchMobileRef}>
@@ -123,6 +138,10 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
     );
 };
 
+const SearchStack = styled(Stack)`
+    margin-bottom: -50px;
+`;
+
 const StickyContainer = styled.nav`
     display: flex;
     flex-direction: column;
@@ -130,19 +149,24 @@ const StickyContainer = styled.nav`
     align-items: center;
 
     width: 100%;
-    padding: 2rem;
+    padding: 25px;
     position: sticky;
     top: 0;
-    background: ${p => p.theme.gray(0)};
+    background: #FFFFFF;
     z-index: 2137;
-    border-bottom: 1px solid ${p => p.theme.gray(100)};
+        // border-bottom: 1px solid ${p => p.theme.gray(100)};
     svg {
         max-height: 4rem;
     }
+
+    box-shadow: 0px 6px 4px rgba(0, 0, 0, 0.06);
 `;
 
 const MobileNavigationContainer = styled.div`
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     padding: 2.5rem 2rem 0 2rem;
     width: 100%;
     @media (min-width: ${p => p.theme.breakpoints.md}) {
@@ -153,6 +177,8 @@ const MobileNavigationContainer = styled.div`
 const DesktopNavigationContainer = styled(motion.div)`
     display: none;
     @media (min-width: ${p => p.theme.breakpoints.md}) {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 `;
