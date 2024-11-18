@@ -2,8 +2,10 @@ import React from 'react';
 import { InferGetStaticPropsType } from 'next';
 import { Layout } from '@/src/layouts';
 import Head from 'next/head';
-import { StoryblokComponent } from "@storyblok/react";
+import { StoryblokComponent, SbBlokData } from "@storyblok/react";
 import { getStaticProps } from '@/src/pages/stories/[...slug].page';
+
+type StoryPageProps = InferGetStaticPropsType<typeof getStaticProps>;
 
 const StoryPage = ({
                        story,
@@ -14,7 +16,7 @@ const StoryPage = ({
                        articleGridProps,
                        contentAboveGrid = [],
                        contentBelowGrid = []
-                   }: InferGetStaticPropsType<typeof getStaticProps>) => {
+                   }: StoryPageProps) => {
 
     console.log("Story received in StoryPage:", story);
     console.log("Number of articles:", articles.length);
@@ -36,14 +38,14 @@ const StoryPage = ({
                 <title>{story?.name || 'Boardrush'}</title>
             </Head>
 
-            {/*/!* Render Content Above Grid *!/*/}
-            {/*{contentAboveGrid.length > 0 && (*/}
-            {/*    <div className="content-above-grid">*/}
-            {/*        {contentAboveGrid.map((blok, index) => (*/}
-            {/*            <StoryblokComponent key={`above-grid-${index}`} blok={blok} />*/}
-            {/*        ))}*/}
-            {/*    </div>*/}
-            {/*)}*/}
+            {/* Render Content Above Grid */}
+            {contentAboveGrid.length > 0 && (
+                <div className="content-above-grid">
+                    {contentAboveGrid.map((blok: SbBlokData, index: number) => (
+                        <StoryblokComponent key={`above-grid-${index}`} blok={blok} />
+                    ))}
+                </div>
+            )}
 
             {/* Render the Grid if there are articles */}
             {articles.length > 0 && (
@@ -55,13 +57,12 @@ const StoryPage = ({
             {/* Render Content Below Grid */}
             {contentBelowGrid.length > 0 && (
                 <div className="content-below-grid">
-                    {contentBelowGrid.map((blok, index) => (
+                    {contentBelowGrid.map((blok: SbBlokData, index: number) => (
                         <StoryblokComponent key={`below-grid-${index}`} blok={blok} />
                     ))}
                 </div>
             )}
 
-            {/*console.log(articles.length === 0 && story?.content);*/}
             {/* Render the main story component only if articles are not present */}
             {articles.length === 0 && story?.content && (
                 <StoryblokComponent blok={story.content} articles={relatedArticles} />
