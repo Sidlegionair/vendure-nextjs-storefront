@@ -231,13 +231,26 @@ export const ProductDetailSelector = Selector('Product')({
             code: true,
             name: true,
         },
+        customFields: {
+            tab1Visible: true,
+            tab1Label: true,
+            tab1Content: true,
+            tab2Visible: true,
+            tab2Label: true,
+            tab2Content: true,
+            tab3Visible: true,
+            tab3Label: true,
+            tab3Content: true,
+        }
     },
     collections: { slug: true, name: true, parent: { slug: true } },
     featuredAsset: {
         source: true,
         preview: true,
     },
-
+    customFields: {
+        brand: true
+    },
     facetValues: ProductDetailsFacetSelector,
 });
 

@@ -8,7 +8,7 @@
         "url": "https://aexol.com"
     },
     "scripts": {
-        "dev": " next dev --experimental-https -p 3001",
+        "dev": "next dev -p 3001",
         "build": "next build",
         "start": "next start",
         "zeus": "zeus http://localhost:3000/shop-api ./src --td",
@@ -32,6 +32,7 @@
         "autoprefixer": "^10.4.20",
         "country-flag-icons": "^1.5.9",
         "date-fns": "^4.1.0",
+        "dompurify": "^3.2.1",
         "embla-carousel-autoplay": "^8.3.1",
         "embla-carousel-react": "^8.3.1",
         "framer-motion": "^10.16.14",

@@ -159,7 +159,33 @@ const defaultThemeFunction = (hue: number): FunctionTheme => ({
     gray: (l) => `hsl(0, 0%, ${l}%)`,
     grayAlpha: (l, alpha) => `hsla(0, 0%, ${l}%, ${alpha})`,
     borderRadius: "4px",
-    withOpacity: (color, opacity) => `rgba(${color}, ${opacity})`,
+    withOpacity: (color, opacity) => {
+        // Helper function to convert hex to RGB
+        const hexToRgb = (hex: string): [number, number, number] => {
+            let cleanHex = hex.replace('#', '');
+            if (cleanHex.length === 3) {
+                cleanHex = cleanHex.split('').map((x) => x + x).join('');
+            }
+            const bigint = parseInt(cleanHex, 16);
+            return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
+        };
+
+        // Check if color is hex, and convert to RGB if necessary
+        let rgb: [number, number, number];
+        if (color.startsWith('#')) {
+            rgb = hexToRgb(color);
+        } else if (color.startsWith('rgb') || color.startsWith('hsl')) {
+            // Return the color directly if it is already in a valid format
+            return color.replace(/(rgba?|hsla?)\((.*?)\)/, (_, prefix, inner) =>
+                `${prefix}(${inner}, ${opacity})`
+            );
+        } else {
+            throw new Error(`Invalid color format: ${color}`);
+        }
+
+        // Return the color in RGBA format
+        return `rgba(${rgb.join(', ')}, ${opacity})`;
+    },
 });
 
 
@@ -180,7 +206,7 @@ export const LightTheme = createTheme(300, (t) => ({
     text: {
         main: `rgba(0, 0, 0, 1)`,
         inactive: t.gray(200),
-        subtitle: `rgba(0, 0, 0, 0.6)`,
+        subtitle: `#4D4D4D`,
         contrast: t.gray(0),
         black: '#000000',
         groupHeading: '#FFFFFF',
@@ -198,7 +224,7 @@ export const LightTheme = createTheme(300, (t) => ({
     },
     border: {
         main: '#4D4D4D',
-        lightgray: '#B8B8B8',
+        lightgray: '#E7E7E7',
     },
     shadow: `rgba(0, 0, 0, 0.12)`,
     error: '#eb1b19',

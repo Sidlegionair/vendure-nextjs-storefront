@@ -2,12 +2,13 @@ import { thv } from '@/src/theme';
 import styled from '@emotion/styled';
 
 export type BaseProps = {
-    size: string | number; // Change this to accept any valid CSS unit
+    size: string | number; // Any valid CSS unit
     weight: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
     upperCase?: boolean;
     capitalize?: boolean;
     color?: keyof (typeof thv)['text'];
     noWrap?: boolean;
+    lineHeight?: string | number; // Add lineHeight to enable custom line height
 };
 
 export const TypoGraphy = styled.div<BaseProps>`
@@ -16,6 +17,7 @@ export const TypoGraphy = styled.div<BaseProps>`
     text-transform: ${p => (p.upperCase ? 'uppercase' : p.capitalize ? 'capitalize' : 'none')};
     color: ${p => (p.color ? thv.text[p.color] : thv.text.main)};
     white-space: ${p => (p.noWrap ? 'nowrap' : 'normal')};
+    line-height: ${p => (p.lineHeight ? p.lineHeight : 'normal')}; // Apply line-height if provided
 `;
 
 type TypoGraphyProps = Partial<Parameters<typeof TypoGraphy>[0]>;

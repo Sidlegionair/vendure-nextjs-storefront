@@ -64,7 +64,9 @@ export const getStaticProps = async (ctx: ContextModel) => {
             });
 
             // Determine if any variant has stockLevel "IN_STOCK"
-            const inStock = stockData.product?.variants?.some((variant) => variant.stockLevel === "IN_STOCK") || false;
+            const inStock = stockData.product?.variants?.some(
+                (variant) => Number(variant.stockLevel) > 0
+            ) || false;
 
             return {
                 productId: product.productId,

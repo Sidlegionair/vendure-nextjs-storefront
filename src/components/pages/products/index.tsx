@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import { TH1, TP, ContentContainer, Stack, Price, Link } from '@/src/components/atoms';
+import { TH1, TP, ContentContainer, Stack, Price, Link, Divider, TH2 } from '@/src/components/atoms';
 import { FullWidthButton, FullWidthSecondaryButton } from '@/src/components/molecules/Button';
 import { NotifyMeForm } from '@/src/components/molecules/NotifyMeForm';
 import { ProductPageProductsSlider } from '@/src/components/organisms/ProductPageProductsSlider';
 // import { ProductPhotosPreview } from '@/src/components/organisms/ProductPhotosPreview';
 import { Layout } from '@/src/layouts';
 import styled from '@emotion/styled';
-import { Check, X } from 'lucide-react';
+import { ArrowRight, ArrowRightIcon, Check, ShoppingBasket, ShoppingCartIcon, X } from 'lucide-react';
 import { InferGetStaticPropsType } from 'next';
 
 import { Trans, useTranslation } from 'next-i18next';
@@ -20,6 +20,7 @@ import { ProductDescription } from '@/src/components/molecules/ProductDescriptio
 import { storefrontApiQuery } from '@/src/graphql/client';
 import { useChannels } from '@/src/state/channels';
 import { ProductVariantTileType, productVariantTileSelector } from '@/src/graphql/selectors';
+import { ProductTabs } from '@/src/components/molecules/ProductTabs';
 
 export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = props => {
     const { t } = useTranslation('products');
@@ -74,42 +75,42 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                 name={product?.name}
                             />
                         </StickyLeft>
-                        <StyledStack w100 column gap="2rem">
-                            <ProductInfoStack w100 column gap="1rem">
-                                {product?.collections
-                                    .filter(c => c.slug !== 'all' && c.slug !== 'search')
-                                    .sort(() => -1)
-                                    .slice(0, 1)
-                                    .map(c => {
-                                        const href =
-                                            c.parent?.slug !== '__root_collection__'
-                                                ? `/collections/${c.parent?.slug}/${c.slug}`
-                                                : `/collections/${c.slug}`;
-                                        return (
-                                            <CategoryBlock href={href} key={c.slug}>
-                                                <TP
-                                                    size="1.25rem"
-                                                    color="subtitle"
-                                                    upperCase
-                                                    weight={500}
-                                                    style={{ letterSpacing: '0.5px' }}>
-                                                    {c.name}
-                                                </TP>
-                                            </CategoryBlock>
-                                        );
-                                    })}
-                                <TH1 size="2.5rem">{product?.name}</TH1>
-                                {variant && <Price price={variant.priceWithTax} currencyCode={variant.currencyCode} />}
+                        <StyledStack w100 column>
+                            <ProductInfoStack w100 column gap={30}>
+                                {/*{product?.collections*/}
+                                {/*    .filter(c => c.slug !== 'all' && c.slug !== 'search')*/}
+                                {/*    .sort(() => -1)*/}
+                                {/*    .slice(0, 1)*/}
+                                {/*    .map(c => {*/}
+                                {/*        const href =*/}
+                                {/*            c.parent?.slug !== '__root_collection__'*/}
+                                {/*                ? `/collections/${c.parent?.slug}/${c.slug}`*/}
+                                {/*                : `/collections/${c.slug}`;*/}
+                                {/*        return (*/}
+                                {/*            <CategoryBlock href={href} key={c.slug}>*/}
+                                {/*                <TP*/}
+                                {/*                    size="1.25rem"*/}
+                                {/*                    color="subtitle"*/}
+                                {/*                    upperCase*/}
+                                {/*                    weight={500}*/}
+                                {/*                    style={{ letterSpacing: '0.5px' }}>*/}
+                                {/*                    {c.name}*/}
+                                {/*                </TP>*/}
+                                {/*            </CategoryBlock>*/}
+                                {/*        );*/}
+                                {/*    })}*/}
+
+                                <Stack gap={15}>
+                                    {product?.customFields?.brand === 'string' && (
+                                        <TH1 size="35px" weight={700} noWrap>
+                                            {product?.customFields?.brand}
+                                        </TH1>
+                                    )}
+
+                                    <TH1 weight={300} size="35px">{product?.name}</TH1>
+                                </Stack>
+                                {variant && <Price size="40px" price={variant.priceWithTax} currencyCode={variant.currencyCode} />}
                             </ProductInfoStack>
-                            <Stack w100>
-                                {product && product.variants.length > 1 ? (
-                                    <ProductOptions
-                                        productOptionsGroups={productOptionsGroups}
-                                        handleClick={handleOptionClick}
-                                        addingError={addingError}
-                                    />
-                                ) : null}
-                            </Stack>
                             <Stack w100 gap="1rem" column>
                                 {variant && Number(variant.stockLevel) > 0 && Number(variant.stockLevel) <= 10 && (
                                     <MakeItQuick size="1.5rem" weight={500}>
@@ -122,75 +123,137 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                     </MakeItQuick>
                                 )}
                                 <StockInfo
-                                    comingSoon={!variant}
-                                    outOfStock={Number(variant?.stockLevel) <= 0}
-                                    itemsCenter
-                                    gap="0.25rem">
-                                    {!variant ? null : Number(variant.stockLevel) > 0 ? (
-                                        <Check size="1.75rem" />
-                                    ) : (
-                                        <X />
-                                    )}
-                                    <TP>
-                                        {!variant
-                                            ? null
-                                            : Number(variant.stockLevel) > 0
-                                              ? t('stock-levels.in-stock')
-                                              : t('stock-levels.out-of-stock')}
-                                    </TP>
+                                           comingSoon={!variant}
+                                           outOfStock={Number(variant?.stockLevel) <= 0}
+                                           itemsCenter
+                                           gap="0.25rem"
+                                >
+                                    <StockDisplay>
+                                        <TP>
+                                            {!variant
+                                                ? null
+                                                : Number(variant.stockLevel) > 0
+                                                    ? (
+                                                        <span>
+                        <b>{variant.stockLevel}</b> {t('stock-levels.left-in-stock')}
+                    </span>
+                                                    )
+                                                    : t('stock-levels.out-of-stock')}
+                                        </TP>
+                                    </StockDisplay>
                                 </StockInfo>
+                                <TP color="main" style={{ marginTop: '1.5rem' }}>
+                                    {product?.description}
+                                </TP>
                             </Stack>
+
+
+
+
+
+                            <StyledDivider></StyledDivider>
+                            <Stack w100>
+                                {product && product.variants.length > 1 ? (
+                                    <ProductOptions
+                                        productOptionsGroups={productOptionsGroups}
+                                        handleClick={handleOptionClick}
+                                        addingError={addingError}
+                                    />
+                                ) : null}
+                            </Stack>
+                            <StyledDivider></StyledDivider>
+                            <Stack justifyBetween>
+                                <TP weight={700} size={18}>FREE SHIPPING</TP>
+                            </Stack>
+                            <StyledDivider></StyledDivider>
                             {!variant ? null : Number(variant.stockLevel) <= 0 ? (
                                 <NotifyMeForm />
                             ) : (
-                                <Stack w100 gap="2.5rem" justifyBetween column>
-                                    <FullWidthButton
-                                        style={{ textTransform: 'uppercase', padding: '1.5rem' }}
+                                <Stack gap="2.5rem" justifyBetween column>
+                                    <StyledFullWidthButton
+                                        style={{ display: 'flex', alignItems: 'center', gap: '15px', textTransform: 'uppercase', padding: '1.5rem' }}
                                         onClick={handleAddToCart}>
-                                        {t('add-to-cart')}
-                                    </FullWidthButton>
-                                    <FullWidthSecondaryButton
-                                        style={{ textTransform: 'uppercase', padding: '1.5rem' }}
-                                        onClick={handleBuyNow}>
-                                        {t('buy-now')}
-                                    </FullWidthSecondaryButton>
+                                        <ShoppingBasket />{t('add-to-cart')}<ArrowRightIcon />
+                                    </StyledFullWidthButton>
+                                    {/*<FullWidthSecondaryButton*/}
+                                    {/*    style={{ textTransform: 'uppercase', padding: '1.5rem' }}*/}
+                                    {/*    onClick={handleBuyNow}>*/}
+                                    {/*    {t('buy-now')}*/}
+                                    {/*</FullWidthSecondaryButton>*/}
                                 </Stack>
                             )}
-                            <ProductDescription
-                                defaultOpenIndexes={[1]}
+                            {/*<ProductDescription*/}
+                            {/*    defaultOpenIndexes={[1]}*/}
+                            {/*    data={[*/}
+                            {/*        {*/}
+                            {/*            title: t('details'),*/}
+                            {/*            children: (*/}
+                            {/*                <Stack column style={{ marginTop: '1.5rem' }}>*/}
+                            {/*                    <Stack>*/}
+                            {/*                        <TP color="subtitle">{t('sku')}</TP>*/}
+                            {/*                        <TP color="subtitle">&nbsp;{variant?.sku}</TP>*/}
+                            {/*                    </Stack>*/}
+                            {/*                    {variant?.options.length ? (*/}
+                            {/*                        <Stack column>*/}
+                            {/*                            {variant?.options.map(option => (*/}
+                            {/*                                <Stack key={option.code}>*/}
+                            {/*                                    <TP color="subtitle">{option.name}</TP>*/}
+                            {/*                                </Stack>*/}
+                            {/*                            ))}*/}
+                            {/*                        </Stack>*/}
+                            {/*                    ) : null}*/}
+                            {/*                </Stack>*/}
+                            {/*            ),*/}
+                            {/*        },*/}
+                            {/*        {*/}
+                            {/*            title: t('description'),*/}
+                            {/*            children: (*/}
+                            {/*                <TP color="subtitle" style={{ marginTop: '1.5rem' }}>*/}
+                            {/*                    {product?.description}*/}
+                            {/*                </TP>*/}
+                            {/*            ),*/}
+                            {/*        },*/}
+                            {/*    ]}*/}
+                            {/*/>*/}
+                        </StyledStack>
+                    </Main>
+                    <Stack>
+                        <Stack w100>
+                            <ProductTabs
+                                defaultOpenIndex={0} // Set the default open tab (index 0)
                                 data={[
+                                    // Dynamically generated tabs from customFields
+                                    ...(variant?.customFields
+                                        ? Array.from({ length: 10 }, (_, i) => i + 1)
+                                            .filter(tabIndex => (variant.customFields as Record<string, any>)[`tab${tabIndex}Visible`])
+                                            .map(tabIndex => ({
+                                                title: (variant.customFields as Record<string, any>)[`tab${tabIndex}Label`] || `Tab ${tabIndex}`,
+                                                children: (
+                                                    <div
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: (variant.customFields as Record<string, any>)[`tab${tabIndex}Content`] || 'No content available',
+                                                        }}
+                                                    />
+                                                ),
+                                            }))
+                                        : []),
+
+
+                                    // Default Reviews tab
                                     {
-                                        title: t('details'),
+                                        title: 'Reviews',
                                         children: (
-                                            <Stack column style={{ marginTop: '1.5rem' }}>
-                                                <Stack>
-                                                    <TP color="subtitle">{t('sku')}</TP>
-                                                    <TP color="subtitle">&nbsp;{variant?.sku}</TP>
-                                                </Stack>
-                                                {variant?.options.length ? (
-                                                    <Stack column>
-                                                        {variant?.options.map(option => (
-                                                            <Stack key={option.code}>
-                                                                <TP color="subtitle">{option.name}</TP>
-                                                            </Stack>
-                                                        ))}
-                                                    </Stack>
-                                                ) : null}
+                                            <Stack>
+                                                {/* Render your reviews component or content here */}
+                                                <p>No reviews yet. Be the first to review this product!</p>
                                             </Stack>
-                                        ),
-                                    },
-                                    {
-                                        title: t('description'),
-                                        children: (
-                                            <TP color="subtitle" style={{ marginTop: '1.5rem' }}>
-                                                {product?.description}
-                                            </TP>
                                         ),
                                     },
                                 ]}
                             />
-                        </StyledStack>
-                    </Main>
+                        </Stack>
+                    </Stack>
+
                     <ProductPageProductsSlider
                         title={t('clients-also-bought')}
                         products={props.clientsAlsoBought?.collection?.productVariants?.items ?? []}
@@ -208,8 +271,8 @@ const CategoryBlock = styled(Link)`
 
 const ProductInfoStack = styled(Stack)`
     border-bottom: 2px solid ${({ theme }) => theme.gray(100)};
-    padding-bottom: 7.5rem;
-`;
+    //padding-bottom: 7.5rem;
+// `;
 
 const Wrapper = styled(Stack)`
     padding-top: 2rem;
@@ -238,13 +301,33 @@ const StockInfo = styled(Stack)<{ outOfStock?: boolean; comingSoon?: boolean }>`
     }
 `;
 
+
+
+const StyledDivider = styled(Divider) `
+    background-color: ${p => p.theme.border.main};
+    height: 1px;
+    mix-blend-mode: normal;
+    margin-top: 25px;
+    margin-bottom: 25px;
+`
+
 const StyledStack = styled(Stack)`
+    //border: 1px solid #4D4D4D;
+    border-radius: 15px;
+
+    //padding: 25px;
     justify-content: center;
     align-items: center;
     @media (min-width: 1024px) {
         justify-content: flex-start;
         align-items: flex-start;
     }
+`;
+
+const StyledFullWidthButton = styled(FullWidthButton)`
+    background: ${p => p.theme.background.accentGreen};
+    color: white;
+    border-radius: 12px;
 `;
 
 const Main = styled(Stack)`
@@ -258,3 +341,16 @@ const Main = styled(Stack)`
     margin-bottom: 2rem;
     border-bottom: 1px solid ${({ theme }) => theme.gray(100)};
 `;
+
+const StockDisplay = styled(Stack)`
+    font-size: 18px;
+    font-weight: 400;
+    gap: 3px;
+    margin-top: 20px;
+    
+    b {
+        color: ${p => p.theme.text.accentGreen};
+        font-weight: 700;
+        
+    }
+`

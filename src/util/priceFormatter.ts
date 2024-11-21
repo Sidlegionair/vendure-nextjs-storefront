@@ -1,16 +1,16 @@
 import { CurrencyCode } from '@/src/zeus';
+
 /**
  * @param price - price to format
  * @param currencyCode - currency code e.g. USD
  */
 export function priceFormatter(price: number, currencyCode: CurrencyCode) {
-    //TODO: more universal solution
     const translations: Partial<Record<CurrencyCode, { country: string }>> = {
         [CurrencyCode.USD]: {
             country: 'en-US',
         },
         [CurrencyCode.EUR]: {
-            country: 'de-DE',
+            country: 'nl-NL', // Changed for proper Euro formatting in the Netherlands
         },
         [CurrencyCode.PLN]: {
             country: 'pl-PL',
@@ -19,6 +19,7 @@ export function priceFormatter(price: number, currencyCode: CurrencyCode) {
             country: 'cs-CZ',
         },
     };
+
     const c = translations[currencyCode];
     if (!c) {
         const formatterCode = new Intl.NumberFormat('en-US', {

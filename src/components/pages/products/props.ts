@@ -54,6 +54,8 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string }>) =
         };
     });
 
+    console.log(product.variants);
+
     const returnedStuff = {
         ...r.props,
         ...r.context,

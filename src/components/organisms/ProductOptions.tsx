@@ -82,15 +82,50 @@ const ColorSwatch = styled(VariantButton)<{ color: string; outOfStock: boolean; 
 `;
 
 const SizeSelector = styled(VariantButton)<{ selected: boolean; outOfStock: boolean }>`
-    background: ${p => p.theme.gray(0)};
-    color: ${p => p.theme.background.main};
+    font-family: 'Calibri', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+    
+    width: 49px;
+    height: 49px;
+    border-radius: 50%;
+    border: 1px solid ${p => p.theme.button.front};
+    color: ${p => p.theme.button.front};
+    background: ${p => (p.selected ? p.theme.button.front : 'transparent')};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    ${p => p.selected && `
+        color: ${p.theme.button.back};
+    `}
+
+    ${p => p.outOfStock && `
+        opacity: 0.5;
+        position: relative;
+
+        ::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: ${p.theme.button.front};
+            transform: rotate(-135deg);
+            top: 50%;
+            left: 50%;
+            transform-origin: center;
+            translate: -50% -50%;
+        }
+    `}
+
     :hover {
-        background: ${p => p.theme.gray(500)};
-        color: ${p => p.theme.gray(0)};
+        background: ${p => (p.selected || p.outOfStock ? null : p.theme.gray(500))};
+        color: ${p => (p.selected || p.outOfStock ? null : p.theme.gray(0))};
     }
-    ${p =>
-        p.selected ? `background: ${p.theme.button.back}; color: ${p.theme.gray(0)};` : p.outOfStock && `opacity: 0.5;`}
 `;
+
 
 const StyledStack = styled(Stack)`
     justify-content: center;

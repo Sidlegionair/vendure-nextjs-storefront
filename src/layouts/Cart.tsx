@@ -57,7 +57,7 @@ export const Cart = ({ activeOrder }: { activeOrder?: ActiveOrderType }) => {
                                         <X />
                                     </IconButton>
                                 </Stack>
-
+                                {/*<Divider />*/}
                                 <Stack gap="12rem">
                                     <CartList column>
                                         {activeOrder?.lines.map(
@@ -278,7 +278,7 @@ const CartList = styled(Stack)`
 `;
 const CartRow = styled(Stack)`
     padding: 3rem 0;
-    border-bottom: 1px solid ${p => p.theme.gray(50)};
+    border-bottom: 1px solid ${p => p.theme.border.main};
 `;
 const CartImage = styled.img`
     object-fit: cover;

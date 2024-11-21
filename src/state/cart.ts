@@ -18,6 +18,7 @@ const useCartContainer = createContainer(() => {
                 storefrontApiQuery(ctx)({ activeOrder: ActiveOrderSelector }),
                 storefrontApiQuery(ctx)({ activeCustomer: { id: true } }),
             ]);
+            console.log('Fetched activeOrder:', activeOrder);  // Debug log
             setActiveOrder(activeOrder);
             setIsLogged(!!activeCustomer?.id);
             return activeOrder;
