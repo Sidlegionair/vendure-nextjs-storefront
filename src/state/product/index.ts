@@ -19,6 +19,7 @@ const useProductContainer = createContainer<ProductContainerType, { product: Pro
     const [variant, setVariant] = useState<Variant | undefined>(initialState.product?.variants[0]);
     const [addingError, setAddingError] = useState<string | undefined>();
     const { asPath } = useRouter();
+    const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
         setVariant(initialState.product?.variants[0]);
@@ -83,9 +84,16 @@ const useProductContainer = createContainer<ProductContainerType, { product: Pro
     };
 
     const handleAddToCart = async () => {
-        if (variant?.id) await addToCart(variant.id, 1, true);
+        if (variant?.id) await addToCart(variant.id, quantity, true);
         else setAddingError(t('select-options'));
     };
+
+    const handleSetItemQuantityInCart = async (quantity: number) => {
+        // Ensure quantity is at least 1
+        const validQuantity = Math.max(1, quantity);
+        setQuantity(validQuantity);
+    };
+
 
     const handleBuyNow = async () => {
         if (variant?.id) {
@@ -132,12 +140,14 @@ const useProductContainer = createContainer<ProductContainerType, { product: Pro
     return {
         product: initialState.product,
         variant,
+        quantity,
         setVariant,
         handleVariant,
         addingError,
         setAddingError,
         handleAddToCart,
         handleBuyNow,
+        handleSetItemQuantityInCart,
         handleOptionClick,
         productOptionsGroups,
     };

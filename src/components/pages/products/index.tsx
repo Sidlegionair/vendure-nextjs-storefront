@@ -21,12 +21,13 @@ import { storefrontApiQuery } from '@/src/graphql/client';
 import { useChannels } from '@/src/state/channels';
 import { ProductVariantTileType, productVariantTileSelector } from '@/src/graphql/selectors';
 import { ProductTabs } from '@/src/components/molecules/ProductTabs';
+import { QuantityCounter } from '@/src/components/molecules/QuantityCounter';
 
 export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = props => {
     const { t } = useTranslation('products');
     const { t: breadcrumb } = useTranslation('common');
     const ctx = useChannels();
-    const { product, variant, addingError, productOptionsGroups, handleOptionClick, handleBuyNow, handleAddToCart } =
+    const { product, variant, quantity, addingError, productOptionsGroups, handleOptionClick, handleBuyNow, handleAddToCart, handleSetItemQuantityInCart } =
         useProduct();
 
     const breadcrumbs = [
@@ -169,7 +170,13 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                             {!variant ? null : Number(variant.stockLevel) <= 0 ? (
                                 <NotifyMeForm />
                             ) : (
-                                <Stack gap="2.5rem" justifyBetween column>
+                                <Stack gap="2.5rem" justifyBetween>
+                                    <QuantityCounter
+                                        size="14px"
+                                        height="56px"
+                                        v={quantity}
+                                        onChange={v => handleSetItemQuantityInCart(v)}
+                                    />
                                     <StyledFullWidthButton
                                         style={{ display: 'flex', alignItems: 'center', gap: '15px', textTransform: 'uppercase', padding: '1.5rem' }}
                                         onClick={handleAddToCart}>

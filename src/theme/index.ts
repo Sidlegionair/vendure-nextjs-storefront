@@ -30,6 +30,7 @@ type DetailTheme = {
     };
     text: {
         main: string;
+        white: string;
         inactive: string;
         subtitle: string;
         contrast: string;
@@ -205,6 +206,7 @@ export const LightTheme = createTheme(300, (t) => ({
     },
     text: {
         main: `rgba(0, 0, 0, 1)`,
+        white: '#ffff',
         inactive: t.gray(200),
         subtitle: `#4D4D4D`,
         contrast: t.gray(0),

@@ -64,7 +64,7 @@ export const CartFooter: React.FC<Props> = ({ activeOrder, currencyCode, discoun
                         </Stack>
                     </Stack>
                     <StyledButton
-                        dark
+                        // dark
                         loading={loading}
                         onClick={() => {
                             setLoading(true);
@@ -89,15 +89,17 @@ export const CartFooter: React.FC<Props> = ({ activeOrder, currencyCode, discoun
 
 const CartFooterWrapper = styled(Stack)<{ haveItems?: boolean }>`
     padding: 30px;
-    border-top: 1px solid ${p => p.theme.gray(100)};
+    border-top: 1px solid ${p => p.theme.border.main};
     height: ${p => (p.haveItems ? '30%' : 'fit-content')};
 `;
 
 const StyledButton = styled(Button)<{ dark?: boolean }>`
     appearance: none;
     border: none;
-    background: ${p => (p.dark ? p.theme.background.accentGreen : p.theme.gray(0))};
-
+    background: ${p => p.theme.background.accentGreen};
+    //div {
+    color: ${p => p.theme.text.white});
+    //}
     width: 100%;
     display: flex;
     align-items: center;
@@ -105,7 +107,6 @@ const StyledButton = styled(Button)<{ dark?: boolean }>`
 
     padding: 1.6rem 0.8rem;
 
-    color: ${p => (p.dark ? p.theme.gray(0) : p.theme.gray(1000))};
     text-align: center;
     text-transform: capitalize;
     font-weight: 600;

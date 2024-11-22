@@ -1,12 +1,15 @@
 import { ProductDetailType } from '@/src/graphql/selectors';
 import { ProductContainerType } from '@/src/state/product/types';
+import { number } from 'property-information/lib/util/types';
 
 export const productEmptyState: ProductContainerType = {
     product: undefined,
     variant: undefined,
+    quantity: number,
     addingError: undefined,
     handleVariant: () => {},
     handleAddToCart: () => {},
+    handleSetItemQuantityInCart: () => {},
     handleBuyNow: () => {},
     handleOptionClick: () => {},
     productOptionsGroups: [],

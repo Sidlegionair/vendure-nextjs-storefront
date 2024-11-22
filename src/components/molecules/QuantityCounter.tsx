@@ -3,18 +3,30 @@ import { IconButton } from '@/src/components/molecules/Button';
 import styled from '@emotion/styled';
 import { Minus, Plus } from 'lucide-react';
 
-export const QuantityCounter = ({ onChange, v }: { onChange: (v: number) => void; v: number }) => {
+interface QuantityCounterProps {
+    onChange: (v: number) => void;
+    v: number;
+    size?: string; // Icon and font size
+    height?: string; // Overall height of the component
+}
+
+export const QuantityCounter = ({
+                                    onChange,
+                                    v,
+                                    size = '16px', // Default icon and font size
+                                    height = '35px', // Default overall height
+                                }: QuantityCounterProps) => {
     return (
-        <Main itemsCenter>
-            <IconButtonStatic onClick={() => onChange(v - 1)}>
+        <Main>
+            <IconButtonStatic height={height} onClick={() => onChange(v - 1)}>
                 <MinWidth>
-                    <Minus size={'2.5rem'} />
+                    <Minus size={size} />
                 </MinWidth>
             </IconButtonStatic>
-            <span>{v}</span>
-            <IconButtonStatic onClick={() => onChange(v + 1)}>
+            <span style={{ fontSize: size, lineHeight: height }}>{v}</span>
+            <IconButtonStatic height={height} onClick={() => onChange(v + 1)}>
                 <MinWidth>
-                    <Plus size={'2.5rem'} />
+                    <Plus size={size} />
                 </MinWidth>
             </IconButtonStatic>
         </Main>
@@ -23,27 +35,38 @@ export const QuantityCounter = ({ onChange, v }: { onChange: (v: number) => void
 
 const MinWidth = styled.div`
     display: flex;
+    
     align-items: center;
     justify-content: center;
 `;
 
-const IconButtonStatic = styled(IconButton)`
-    padding: 1.75rem;
+const IconButtonStatic = styled(IconButton)<{ height?: string }>`
+    height: ${({ height }) => {
+        const numericValue = parseFloat(height || '0');
+        const unit = height?.replace(/[\d.]/g, '') || 'px'; // Extract unit or default to 'px'
+        return `${numericValue - 1}${unit}`;
+    }};
+    width: ${({ height }) => height}; // Width remains the same as height
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0; // Remove default padding for better customization
 `;
 
-const Main = styled(Stack)`
-    border: 1px solid ${p => p.theme.border.main};
+
+const Main = styled(Stack)<{ height?: string }>`
+    width: fit-content;
+    height: ${({ height }) => height};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid ${({ theme }) => theme.border.main};
     border-radius: 8px;
-    color: ${p => p.theme.text.main};
-    align-self: flex-start;
-    width: auto;
-    font-size: 16px;
+    color: ${({ theme }) => theme.text.main};
     font-weight: 600;
     span {
         margin: 0 1rem;
-        font-size: 16px;
         font-weight: 600;
-        line-height: 16px;
         user-select: none;
     }
 `;
