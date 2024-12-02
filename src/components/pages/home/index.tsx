@@ -32,7 +32,7 @@ export const Home: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = pr
 
 
     return (
-        <Layout navigation={props.navigation} categories={props.categories} subnavigation={props.subnavigation} pageTitle={t('seo.home')}>
+        <Layout navigation={props.navigation} subnavigation={props.subnavigation} categories={props.categories} pageTitle={t('seo.home')}>
             <Main w100 column gap="4rem">
 
                 {/* Default Carousel */}

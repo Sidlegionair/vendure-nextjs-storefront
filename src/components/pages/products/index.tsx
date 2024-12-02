@@ -4,10 +4,9 @@ import { TH1, TP, ContentContainer, Stack, Price, Link, Divider, TH2 } from '@/s
 import { FullWidthButton, FullWidthSecondaryButton } from '@/src/components/molecules/Button';
 import { NotifyMeForm } from '@/src/components/molecules/NotifyMeForm';
 import { ProductPageProductsSlider } from '@/src/components/organisms/ProductPageProductsSlider';
-// import { ProductPhotosPreview } from '@/src/components/organisms/ProductPhotosPreview';
 import { Layout } from '@/src/layouts';
 import styled from '@emotion/styled';
-import { ArrowRight, ArrowRightIcon, Check, ShoppingBasket, ShoppingCartIcon, X } from 'lucide-react';
+import { ArrowRightIcon, ShoppingBasket } from 'lucide-react';
 import { InferGetStaticPropsType } from 'next';
 
 import { Trans, useTranslation } from 'next-i18next';
@@ -16,19 +15,31 @@ import { Breadcrumbs } from '@/src/components/molecules';
 import { useProduct } from '@/src/state/product';
 import { ProductPhotosPreview } from '@/src/components/organisms/ProductPhotosPreview';
 import { getStaticProps } from '@/src/components/pages/products/props';
-import { ProductDescription } from '@/src/components/molecules/ProductDescription';
 import { storefrontApiQuery } from '@/src/graphql/client';
 import { useChannels } from '@/src/state/channels';
 import { ProductVariantTileType, productVariantTileSelector } from '@/src/graphql/selectors';
 import { ProductTabs } from '@/src/components/molecules/ProductTabs';
 import { QuantityCounter } from '@/src/components/molecules/QuantityCounter';
+import { OptionTabContent } from '@/src/components/organisms/OptionTabContent';
+import { ProductOptionTabs } from '@/src/components/molecules/ProductOptionTabs';
+import { ProductStory } from '@/src/components/organisms/ProductStory';
+import { Ratings } from '@/src/components/molecules/Ratings';
 
 export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = props => {
     const { t } = useTranslation('products');
     const { t: breadcrumb } = useTranslation('common');
     const ctx = useChannels();
-    const { product, variant, quantity, addingError, productOptionsGroups, handleOptionClick, handleBuyNow, handleAddToCart, handleSetItemQuantityInCart } =
-        useProduct();
+    const {
+        product,
+        variant,
+        quantity,
+        addingError,
+        productOptionsGroups,
+        handleOptionClick,
+        handleBuyNow,
+        handleAddToCart,
+        handleSetItemQuantityInCart
+    } = useProduct();
 
     const breadcrumbs = [
         { name: breadcrumb('breadcrumbs.home'), href: '/' },
@@ -64,7 +75,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
     }, [product?.id]);
 
     return (
-        <Layout categories={props.collections} navigation={props.navigation}>
+        <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation}>
             <ContentContainer>
                 <Wrapper column>
                     <Breadcrumbs breadcrumbs={breadcrumbs} />
@@ -78,38 +89,17 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                         </StickyLeft>
                         <StyledStack w100 column>
                             <ProductInfoStack w100 column gap={30}>
-                                {/*{product?.collections*/}
-                                {/*    .filter(c => c.slug !== 'all' && c.slug !== 'search')*/}
-                                {/*    .sort(() => -1)*/}
-                                {/*    .slice(0, 1)*/}
-                                {/*    .map(c => {*/}
-                                {/*        const href =*/}
-                                {/*            c.parent?.slug !== '__root_collection__'*/}
-                                {/*                ? `/collections/${c.parent?.slug}/${c.slug}`*/}
-                                {/*                : `/collections/${c.slug}`;*/}
-                                {/*        return (*/}
-                                {/*            <CategoryBlock href={href} key={c.slug}>*/}
-                                {/*                <TP*/}
-                                {/*                    size="1.25rem"*/}
-                                {/*                    color="subtitle"*/}
-                                {/*                    upperCase*/}
-                                {/*                    weight={500}*/}
-                                {/*                    style={{ letterSpacing: '0.5px' }}>*/}
-                                {/*                    {c.name}*/}
-                                {/*                </TP>*/}
-                                {/*            </CategoryBlock>*/}
-                                {/*        );*/}
-                                {/*    })}*/}
-
                                 <Stack gap={15}>
-                                    {product?.customFields?.brand === 'string' && (
+                                    {typeof product?.customFields?.brand === 'string' && (
                                         <TH1 size="35px" weight={700} noWrap>
-                                            {product?.customFields?.brand}
+                                            {product.customFields.brand}
                                         </TH1>
                                     )}
 
                                     <TH1 weight={300} size="35px">{product?.name}</TH1>
                                 </Stack>
+                                <Ratings rating={Math.random() * 5} />
+
                                 {variant && <Price size="40px" price={variant.priceWithTax} currencyCode={variant.currencyCode} />}
                             </ProductInfoStack>
                             <Stack w100 gap="1rem" column>
@@ -124,10 +114,10 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                     </MakeItQuick>
                                 )}
                                 <StockInfo
-                                           comingSoon={!variant}
-                                           outOfStock={Number(variant?.stockLevel) <= 0}
-                                           itemsCenter
-                                           gap="0.25rem"
+                                    comingSoon={!variant}
+                                    outOfStock={Number(variant?.stockLevel) <= 0}
+                                    itemsCenter
+                                    gap="0.25rem"
                                 >
                                     <StockDisplay>
                                         <TP>
@@ -136,41 +126,60 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                                 : Number(variant.stockLevel) > 0
                                                     ? (
                                                         <span>
-                        <b>{variant.stockLevel}</b> {t('stock-levels.left-in-stock')}
-                    </span>
+                                                            <b>{variant.stockLevel}</b> {t('stock-levels.left-in-stock')}
+                                                        </span>
                                                     )
                                                     : t('stock-levels.out-of-stock')}
                                         </TP>
                                     </StockDisplay>
                                 </StockInfo>
-                                <TP color="main" style={{ marginTop: '1.5rem' }}>
+                                <TP color="main" size="16px" lineHeight="24px" style={{ marginTop: '1.5rem' }}>
                                     {product?.description}
                                 </TP>
                             </Stack>
 
-
-
-
-
-                            <StyledDivider></StyledDivider>
                             <Stack w100>
-                                {product && product.variants.length > 1 ? (
-                                    <ProductOptions
-                                        productOptionsGroups={productOptionsGroups}
-                                        handleClick={handleOptionClick}
-                                        addingError={addingError}
-                                    />
-                                ) : null}
+                                {/* Product Options Section with Tabs */}
+                                <ProductOptionTabs
+                                    defaultOpenIndex={0} // Default to the first tab
+                                    data={[
+                                        // Tab for Product Options
+                                        {
+                                            title: 'Product Options',
+                                            children: (
+                                                <ProductOptions
+                                                    productOptionsGroups={productOptionsGroups}
+                                                    handleClick={handleOptionClick}
+                                                    addingError={addingError}
+                                                />
+                                            ),
+                                        },
+                                        // Additional Option Tabs
+                                        ...(variant?.customFields
+                                            ? Array.from({ length: 3 }, (_, i) => i + 1) // MAX_OPTION_TABS = 3
+                                                .filter(tabIndex => (variant.customFields as Record<string, any>)[`optionTab${tabIndex}Visible`])
+                                                .map(tabIndex => ({
+                                                    title: (variant.customFields as Record<string, any>)[`optionTab${tabIndex}Label`] || `Option Tab ${tabIndex}`,
+                                                    children: (
+                                                        <OptionTabContent
+                                                            customFields={variant.customFields}
+                                                            tabIndex={tabIndex}
+                                                        />
+                                                    ),
+                                                }))
+                                            : []),
+                                    ]}
+                                />
                             </Stack>
-                            <StyledDivider></StyledDivider>
+                            <StyledDividerTop></StyledDividerTop>
                             <Stack justifyBetween>
                                 <TP weight={700} size={18}>FREE SHIPPING</TP>
                             </Stack>
-                            <StyledDivider></StyledDivider>
+                            <StyledDividerTop></StyledDividerTop>
                             {!variant ? null : Number(variant.stockLevel) <= 0 ? (
                                 <NotifyMeForm />
                             ) : (
-                                <Stack gap="2.5rem" justifyBetween>
+                                <Stack gap={20} justifyBetween>
                                     <QuantityCounter
                                         size="14px"
                                         height="56px"
@@ -182,108 +191,74 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                         onClick={handleAddToCart}>
                                         <ShoppingBasket />{t('add-to-cart')}<ArrowRightIcon />
                                     </StyledFullWidthButton>
-                                    {/*<FullWidthSecondaryButton*/}
-                                    {/*    style={{ textTransform: 'uppercase', padding: '1.5rem' }}*/}
-                                    {/*    onClick={handleBuyNow}>*/}
-                                    {/*    {t('buy-now')}*/}
-                                    {/*</FullWidthSecondaryButton>*/}
                                 </Stack>
                             )}
-                            {/*<ProductDescription*/}
-                            {/*    defaultOpenIndexes={[1]}*/}
-                            {/*    data={[*/}
-                            {/*        {*/}
-                            {/*            title: t('details'),*/}
-                            {/*            children: (*/}
-                            {/*                <Stack column style={{ marginTop: '1.5rem' }}>*/}
-                            {/*                    <Stack>*/}
-                            {/*                        <TP color="subtitle">{t('sku')}</TP>*/}
-                            {/*                        <TP color="subtitle">&nbsp;{variant?.sku}</TP>*/}
-                            {/*                    </Stack>*/}
-                            {/*                    {variant?.options.length ? (*/}
-                            {/*                        <Stack column>*/}
-                            {/*                            {variant?.options.map(option => (*/}
-                            {/*                                <Stack key={option.code}>*/}
-                            {/*                                    <TP color="subtitle">{option.name}</TP>*/}
-                            {/*                                </Stack>*/}
-                            {/*                            ))}*/}
-                            {/*                        </Stack>*/}
-                            {/*                    ) : null}*/}
-                            {/*                </Stack>*/}
-                            {/*            ),*/}
-                            {/*        },*/}
-                            {/*        {*/}
-                            {/*            title: t('description'),*/}
-                            {/*            children: (*/}
-                            {/*                <TP color="subtitle" style={{ marginTop: '1.5rem' }}>*/}
-                            {/*                    {product?.description}*/}
-                            {/*                </TP>*/}
-                            {/*            ),*/}
-                            {/*        },*/}
-                            {/*    ]}*/}
-                            {/*/>*/}
                         </StyledStack>
                     </Main>
-                    <Stack>
-                        <Stack w100>
-                            <ProductTabs
-                                defaultOpenIndex={0} // Set the default open tab (index 0)
-                                data={[
-                                    // Dynamically generated tabs from customFields
-                                    ...(variant?.customFields
-                                        ? Array.from({ length: 10 }, (_, i) => i + 1)
-                                            .filter(tabIndex => (variant.customFields as Record<string, any>)[`tab${tabIndex}Visible`])
-                                            .map(tabIndex => ({
-                                                title: (variant.customFields as Record<string, any>)[`tab${tabIndex}Label`] || `Tab ${tabIndex}`,
-                                                children: (
-                                                    <div
-                                                        dangerouslySetInnerHTML={{
-                                                            __html: (variant.customFields as Record<string, any>)[`tab${tabIndex}Content`] || 'No content available',
-                                                        }}
-                                                    />
-                                                ),
-                                            }))
-                                        : []),
 
-
-                                    // Default Reviews tab
-                                    {
-                                        title: 'Reviews',
-                                        children: (
-                                            <Stack>
-                                                {/* Render your reviews component or content here */}
-                                                <p>No reviews yet. Be the first to review this product!</p>
-                                            </Stack>
-                                        ),
-                                    },
-                                ]}
-                            />
-                        </Stack>
+                    {/* Description Tabs Section */}
+                    <Stack w100>
+                        <ProductTabs
+                            defaultOpenIndex={0} // Default to the first tab
+                            data={[
+                                // Description Tabs
+                                ...(variant?.customFields
+                                    ? Array.from({ length: 3 }, (_, i) => i + 1) // MAX_DESCRIPTION_TABS = 3
+                                        .filter(tabIndex => (variant.customFields as Record<string, any>)[`descriptionTab${tabIndex}Visible`])
+                                        .map(tabIndex => ({
+                                            title: (variant.customFields as Record<string, any>)[`descriptionTab${tabIndex}Label`] || `Description Tab ${tabIndex}`,
+                                            children: (
+                                                <div
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: (variant.customFields as Record<string, any>)[`descriptionTab${tabIndex}Content`] || 'No content available',
+                                                    }}
+                                                />
+                                            ),
+                                        }))
+                                    : []),
+                                // Default Reviews Tab
+                                {
+                                    title: 'Reviews',
+                                    children: (
+                                        <Stack>
+                                            <p>No reviews yet. Be the first to review this product!</p>
+                                        </Stack>
+                                    ),
+                                },
+                            ]}
+                        />
                     </Stack>
 
-                    <ProductPageProductsSlider
-                        title={t('clients-also-bought')}
-                        products={props.clientsAlsoBought?.collection?.productVariants?.items ?? []}
-                    />
-                    <ProductPageProductsSlider title={t('recently-viewed')} products={recentlyProducts ?? []} />
+
                 </Wrapper>
+                <Stack w100 column gap={20}>
+                    <TH2>{t('clients-also-bought')}</TH2>
+                    <TP>Aenean faucibus egestas ipsum, nec consequat urna fermentum sit amet. Ut scelerisque elit in leo hendrerit, pretium ultricies nisi euismod.</TP>
+                </Stack>
             </ContentContainer>
+            <ProductPageProductsSlider title={t('recently-viewed')}
+                products={props.clientsAlsoBought?.collection?.productVariants?.items ?? []}
+            />
+            <ProductPageProductsSlider title={t('recently-viewed')} products={recentlyProducts ?? []} />
+            <ProductStory slug={props.product.slug} />
+
         </Layout>
     );
 };
 
+
+// Styled Components (Unchanged)
 const CategoryBlock = styled(Link)`
     width: fit-content;
 `;
 
 const ProductInfoStack = styled(Stack)`
     border-bottom: 2px solid ${({ theme }) => theme.gray(100)};
-    //padding-bottom: 7.5rem;
-// `;
+`;
 
 const Wrapper = styled(Stack)`
     padding-top: 2rem;
-    @media (min-width: ${p => p.theme.breakpoints.xl}) {
+    @media (min-width: ${({ theme }) => theme.breakpoints.xl}) {
         padding: 3.5rem 0;
     }
 `;
@@ -308,21 +283,24 @@ const StockInfo = styled(Stack)<{ outOfStock?: boolean; comingSoon?: boolean }>`
     }
 `;
 
-
-
-const StyledDivider = styled(Divider) `
-    background-color: ${p => p.theme.border.main};
+const StyledTabDivider = styled(Divider)`
+    background-color: ${p => p.theme.border.thin};
     height: 1px;
     mix-blend-mode: normal;
     margin-top: 25px;
     margin-bottom: 25px;
-`
+`;
+
+const StyledDividerTop = styled(Divider)`
+    background-color: ${p => p.theme.border.thin};
+    height: 1px;
+    mix-blend-mode: normal;
+    margin-top: 25px;
+    margin-bottom: 25px;
+`;
 
 const StyledStack = styled(Stack)`
-    //border: 1px solid #4D4D4D;
     border-radius: 15px;
-
-    //padding: 25px;
     justify-content: center;
     align-items: center;
     @media (min-width: 1024px) {
@@ -332,7 +310,7 @@ const StyledStack = styled(Stack)`
 `;
 
 const StyledFullWidthButton = styled(FullWidthButton)`
-    background: ${p => p.theme.background.accentGreen};
+    background: ${({ theme }) => theme.background.accentGreen};
     color: white;
     border-radius: 12px;
 `;
@@ -354,10 +332,9 @@ const StockDisplay = styled(Stack)`
     font-weight: 400;
     gap: 3px;
     margin-top: 20px;
-    
+
     b {
-        color: ${p => p.theme.text.accentGreen};
+        color: ${({ theme }) => theme.text.accentGreen};
         font-weight: 700;
-        
     }
-`
+`;

@@ -33,7 +33,7 @@ const AboutUsBlockInverted = ({ blok }) => {
                     <h2>{blok.title || 'About Us'}</h2>
                     <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
                     {blok.buttonLink && (
-                        <a style={{ color: blok.backgroundColor}} className="learn-more-button" href={blok.buttonLink.url}>
+                        <a style={{ color: blok.backgroundColor}} className="learn-more-button" href={blok.buttonLink.url.cached_url}>
                             {blok.buttonText || 'Learn More'} →
                         </a>
                     )}

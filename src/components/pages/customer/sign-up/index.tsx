@@ -93,7 +93,7 @@ export const SignUpPage: React.FC<InferGetServerSidePropsType<typeof getServerSi
     };
 
     return (
-        <Layout categories={props.collections} navigation={props.navigation} pageTitle={t('signUpTitle')}>
+        <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation} pageTitle={t('signUpTitle')}>
             <ContentContainer>
                 <FormContainer>
                     <FormWrapper column itemsCenter gap="3.5rem">

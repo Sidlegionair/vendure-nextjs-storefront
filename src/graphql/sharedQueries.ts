@@ -6,6 +6,15 @@ import {
 } from '@/src/graphql/selectors';
 import { SortOrder } from '@/src/zeus';
 
+
+export const GetMainNavigation = (params: { locale: string; channel: string }) => {
+
+};
+
+export const GetSubNavigation = () => {
+
+}
+
 export const getCollections = async (params: { locale: string; channel: string }) => {
     const _collections = await SSGQuery(params)({
         collections: [{ options: { filter: { slug: { notEq: 'search' } } } }, { items: CollectionTileSelector }],

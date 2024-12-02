@@ -11,6 +11,7 @@ const StoryPage = ({
                        story,
                        relatedArticles,
                        navigation,
+                       subnavigation,
                        categories,
                        articles = [],
                        articleGridProps,
@@ -33,7 +34,7 @@ const StoryPage = ({
     }
 
     return (
-        <Layout navigation={navigation} categories={categories} pageTitle={story?.name || 'Boardrush'}>
+        <Layout navigation={navigation} subnavigation={subnavigation} categories={categories} pageTitle={story?.name || 'Boardrush'}>
             <Head>
                 <title>{story?.name || 'Boardrush'}</title>
             </Head>

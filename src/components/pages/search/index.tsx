@@ -34,7 +34,7 @@ export const SearchPage: React.FC<InferGetServerSidePropsType<typeof getServerSi
     return (
         <Layout
             categories={props.collections}
-            navigation={props.navigation}
+            navigation={props.navigation} subnavigation={props.subnavigation}
             pageTitle={t('search-results') + ' ' + searchPhrase}>
             <ContentContainer>
                 <AnimatePresence>

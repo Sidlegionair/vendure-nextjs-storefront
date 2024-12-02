@@ -96,7 +96,7 @@ export const HistoryPage: React.FC<InferGetServerSidePropsType<typeof getServerS
     };
 
     return (
-        <Layout categories={props.collections} navigation={props.navigation} pageTitle={t('ordersPage.title')}>
+        <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation} pageTitle={t('ordersPage.title')}>
             <ContentContainer>
                 <Stack w100 justifyEnd>
                     <CustomerNavigation />

@@ -48,7 +48,7 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
     ].filter(b => b.name !== '__root_collection__');
 
     return (
-        <Layout categories={props.collections} navigation={props.navigation}>
+        <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation}>
             <HeadingStack>
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
                 <TH1>{collection?.name}</TH1>

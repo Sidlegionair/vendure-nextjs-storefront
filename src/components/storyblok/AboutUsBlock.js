@@ -34,7 +34,7 @@ const AboutUsBlock = ({ blok }) => {
                     <h2>{blok.title || 'About Us'}</h2>
                     <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
                     {blok.buttonLink && (
-                        <a className="learn-more-button" href={blok.buttonLink.url}>
+                        <a className="learn-more-button" href={blok.buttonLink.url.cached_url}>
                             {blok.buttonText || 'Learn More'} →
                         </a>
                     )}

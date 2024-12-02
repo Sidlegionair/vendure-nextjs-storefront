@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { Divider, Stack, TP } from '@/src/components/atoms';
 import DOMPurify from 'dompurify';
 
-export const ProductTabs: React.FC<{
+export const ProductOptionTabs: React.FC<{
     data: { title: string; children: React.ReactNode | string }[];
     defaultOpenIndex?: number;
 }> = ({ data, defaultOpenIndex = 0 }) => {
@@ -64,27 +64,27 @@ const TabWrapper = styled(Stack)`
     width: 100%;
     margin-top: 3.5rem;
     flex-direction: column;
-    border: 1px solid ${({ theme }) => theme.border.main};
-    padding: 30px;
+    // border: 1px solid ${({ theme }) => theme.border.main};
+    //padding: 30px;
     border-radius: 15px;
 `;
 
 const TabHeaders = styled.div`
     display: flex;
     gap: 2rem;
-    // border-bottom: 2px solid ${({ theme }) => theme.gray(100)};
+    border-bottom: 2px solid ${({ theme }) => theme.gray(100)};
 `;
 
 const TabHeader = styled.button<{ active: boolean }>`
-    padding-bottom: 20px;
+    padding: 20px 0;
     background: none;
     border: none;
     cursor: pointer;
     position: relative;
-    font-size: 30px;
-    line-height: 30px;
-    font-weight: ${({ active }) => (active ? '600' : '400')};
-    color: ${({ theme }) => theme.text.main};
+    font-size: 18px;
+    font-weight: 600;
+    color: ${({ theme, active }) =>
+            active ? theme.text.main : theme.text.subtitle};
     transition: color 0.3s ease-in-out;
 
     &:after {
@@ -93,7 +93,7 @@ const TabHeader = styled.button<{ active: boolean }>`
         bottom: -2px;
         left: 0;
         right: 0;
-        height: 6px;
+        height: 5px;
         background-color: ${({ theme, active }) =>
                 active ? theme.button.front : 'transparent'};
         transition: background-color 0.3s ease-in-out;
@@ -113,7 +113,6 @@ const EmptyMessage = styled.div`
     color: ${({ theme }) => theme.text.subtitle};
     padding: 20px;
     border: 1px solid ${({ theme }) => theme.border.main};
-    //margin-top: 3px;
     border-radius: 10px;
 `;
 

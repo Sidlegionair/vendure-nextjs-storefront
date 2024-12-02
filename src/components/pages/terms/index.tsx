@@ -9,7 +9,7 @@ import { termsContent } from './terms';
 export const Terms: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = props => {
     const { t } = useTranslation('homepage');
     return (
-        <Layout navigation={props.navigation} categories={props.categories} pageTitle={t('seo.home')}>
+        <Layout navigation={props.navigation} subnavigation={props.subnavigation} categories={props.categories} pageTitle={t('seo.home')}>
             <HtmlContentTerms dangerouslySetInnerHTML={{ __html: termsContent }} />
         </Layout>
     );

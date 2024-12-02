@@ -1,6 +1,8 @@
 import { SSRQuery } from '@/src/graphql/client';
 import { ActiveCustomerSelector, ActiveOrderSelector } from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
+import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
+
 import { makeServerSideProps } from '@/src/lib/getStatic';
 import { prepareSSRRedirect, redirectFromDefaultChannelSSR } from '@/src/lib/redirect';
 import { arrayToTree } from '@/src/util/arrayToTree';
@@ -14,6 +16,12 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
     const collections = await getCollections(r.context);
     const navigation = arrayToTree(collections);
+
+    // Append main and sub-navigation from menuConfig
+    navigation.children.unshift(...mainNavigation);
+    const subnavigation = {
+        children: [...subNavigation],
+    };
     const homePageRedirect = prepareSSRRedirect('/')(context);
 
     try {
@@ -37,6 +45,8 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
             activeCustomer: customer,
             lastOrder: orders.items && orders.items.length > 0 ? orders.items[0] : null,
             navigation,
+            subnavigation,
+
         };
 
         return { props: returnedStuff };

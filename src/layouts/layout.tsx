@@ -110,7 +110,7 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, categories,
             <Stack w100 itemsCenter column>
                 {children}
             </Stack>
-            <Footer navigation={navigation} />
+            <Footer />
         </MainStack>
     );
 };

@@ -4,6 +4,9 @@ import { InferGetStaticPropsType } from 'next';
 import StoryPage from '@/src/components/pages/storyblok/index';
 import { ContextModel, makeStaticProps } from '@/src/lib/getStatic';
 import { getStoryblokApi } from '@storyblok/react';
+import { getCollections } from '@/src/graphql/sharedQueries';
+import { arrayToTree } from '@/src/util/arrayToTree';
+import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
 
 // Define the type for Story items manually
 interface StoryItem {
@@ -24,15 +27,14 @@ const StoryPageWrapper = ({
                               articles = [],
                               contentAboveGrid = [],
                               contentBelowGrid = [],
-                              story = null, // Ensure story defaults to null
-                              relatedArticles = [], // Ensure relatedArticles defaults to an empty array
-                              navigation,
-                              subnavigation,
-                              categories,
+                              story = null,
+                              relatedArticles = [],
+                              navigation = { children: [] }, // Provide a fallback value
+                              subnavigation = { children: [] }, // Provide a fallback value
+                              categories = [],
                               articleGridProps,
                               key,
                           }: InferGetStaticPropsType<typeof getStaticProps>) => {
-
     return (
         <StoryPage
             story={story}
@@ -61,7 +63,7 @@ export const getStaticPaths = async () => {
         if (!data?.stories) throw new Error('No stories found');
 
         const paths = data.stories.map((story: StoryItem) => ({
-            params: { slug: story.full_slug.split('/') }
+            params: { slug: story.full_slug.split('/') },
         }));
 
         return { paths, fallback: 'blocking' };
@@ -78,6 +80,14 @@ export const getStaticProps = async (ctx: ContextModel) => {
     const isOverview = fullSlug === 'articles';
 
     try {
+        const collections = await getCollections(r.context);
+        const navigation = arrayToTree(collections) || { children: [] }; // Ensure navigation has a default
+        navigation.children.unshift(...mainNavigation);
+
+        const subnavigation = {
+            children: [...subNavigation],
+        };
+
         if (isOverview) {
             const { data } = await storyblokApi.get('cdn/stories', {
                 starts_with: 'stories/articles',
@@ -86,12 +96,10 @@ export const getStaticProps = async (ctx: ContextModel) => {
                 per_page: 10,
                 is_startpage: false,
             });
+
             const overviewContent = await storyblokApi.get('cdn/stories/stories/articles', { version: 'draft' });
             const overviewStory = overviewContent?.data?.story;
 
-            console.log(overviewStory);
-
-            console.log(data.stories);
             const articleGridProps = {
                 component: 'article-grid',
                 columns: 3,
@@ -107,8 +115,8 @@ export const getStaticProps = async (ctx: ContextModel) => {
                 })),
                 content_above_grid: overviewStory?.content?.content_above_grid || [],
                 content_below_grid: overviewStory?.content?.content_below_grid || [],
-                navigation: [{ children: [] }],
-                subnavigation: [{ children: [] }],
+                navigation,
+                subnavigation,
             };
 
             return {
@@ -121,11 +129,11 @@ export const getStaticProps = async (ctx: ContextModel) => {
                     articles: data?.stories || [],
                     contentAboveGrid: overviewStory?.content?.content_above_grid || [],
                     contentBelowGrid: overviewStory?.content?.content_below_grid || [],
-                    navigation: null,
-                    subnavigation: null,
+                    navigation,
+                    subnavigation,
                     categories: [],
-                    articleGridProps, // Add articleGridProps here for overview
-                    key: 'overview', // Provide a unique key for the overview
+                    articleGridProps,
+                    key: 'overview',
                 },
                 revalidate: 3600,
             };
@@ -134,14 +142,13 @@ export const getStaticProps = async (ctx: ContextModel) => {
             const { data } = await storyblokApi.get(`cdn/stories/${apiSlug}`, { version: 'draft' });
             if (!data?.story) return { notFound: true };
 
-
             const relatedData = await storyblokApi.get('cdn/stories', {
                 starts_with: 'stories/articles',
                 sort_by: 'published_at:desc',
                 version: 'draft',
                 per_page: 3,
                 is_startpage: false,
-                excluding_ids: data.story.id,  // Join multiple IDs into a single string
+                excluding_ids: data.story.id,
             });
 
             return {
@@ -163,10 +170,10 @@ export const getStaticProps = async (ctx: ContextModel) => {
                     articles: [],
                     contentAboveGrid: [],
                     contentBelowGrid: [],
-                    navigation: null,
-                    subnavigation: null,
+                    navigation,
+                    subnavigation,
                     categories: [],
-                    articleGridProps: null, // Set to null if not in overview
+                    articleGridProps: null,
                 },
                 revalidate: 3600,
             };

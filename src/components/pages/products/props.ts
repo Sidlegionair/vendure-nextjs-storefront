@@ -1,6 +1,8 @@
 import { SSGQuery } from '@/src/graphql/client';
 import { ProductDetailSelector, homePageSlidersSelector } from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
+import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
+
 import { ContextModel, makeStaticProps } from '@/src/lib/getStatic';
 import { arrayToTree } from '@/src/util/arrayToTree';
 
@@ -22,11 +24,18 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string }>) =
     const collections = await getCollections(r.context);
     const navigation = arrayToTree(collections);
 
+    // Append main and sub-navigation from menuConfig
+    navigation.children.unshift(...mainNavigation);
+    const subnavigation = {
+        children: [...subNavigation],
+    };
+
     const relatedProducts = await api({
-        collection: [{ slug: response.product?.collections[0]?.slug || 'search' }, homePageSlidersSelector],
+        collection: [{ slug: response.product?.collections?.[0]?.slug || 'search' }, homePageSlidersSelector],
     });
+
     const clientsAlsoBought = await api({
-        collection: [{ slug: 'search' }, homePageSlidersSelector],
+        collection: [{ slug: response.product?.collections?.[0]?.slug || 'search' }, homePageSlidersSelector],
     });
 
     const { optionGroups: _optionGroups, ...product } = response.product;
@@ -54,7 +63,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string }>) =
         };
     });
 
-    console.log(product.variants);
+    console.log(clientsAlsoBought);
 
     const returnedStuff = {
         ...r.props,
@@ -68,6 +77,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string }>) =
         relatedProducts,
         clientsAlsoBought,
         navigation,
+        subnavigation,
         language,
     };
 

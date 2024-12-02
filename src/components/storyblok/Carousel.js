@@ -44,7 +44,7 @@ const Carousel = ({ blok }) => {
                     >
                         <div className="slideOverlay">
                             <h2>{slide.title}</h2>
-                            <a href={slide.link.url} target="_blank" rel="noopener noreferrer">
+                            <a href={slide.link.url.cached_url} target="_blank" rel="noopener noreferrer">
                                 {slide.ctaText}
                             </a>
                         </div>

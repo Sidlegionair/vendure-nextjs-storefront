@@ -12,7 +12,7 @@ import { Stack } from '@/src/components/atoms';
 export const ManageAccountPage: React.FC<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
     const { t } = useTranslation('customer');
     return (
-        <Layout categories={props.collections} navigation={props.navigation} pageTitle={t('accountPage.title')}>
+        <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation} pageTitle={t('accountPage.title')}>
             <ContentContainer>
                 <Stack w100 justifyEnd>
                     <CustomerNavigation />

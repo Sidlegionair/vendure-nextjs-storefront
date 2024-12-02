@@ -5,15 +5,61 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="46c46c96-dbae-454b-a0c0-91173b5d1f10" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/molecules/ProductOptionTabs.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/organisms/OptionTabContent.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/organisms/ProductStory.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/atoms/TypoGraphy.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/atoms/TypoGraphy.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/QuantityCounter.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/QuantityCounter.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductTabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductTabs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductVariantTile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductVariantTile.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/Ratings.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/Ratings.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/ProductPageProductsSlider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/ProductPageProductsSlider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/about/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/about/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/confirmation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/confirmation/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/confirmation/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/confirmation/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/collections/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/collections/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/collections/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/collections/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/forgot-password/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/forgot-password/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/forgot-password/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/forgot-password/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/addresses/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/addresses/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/addresses/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/addresses/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/order/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/order/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/order/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/order/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/reset-password/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/reset-password/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/reset-password/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/reset-password/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/sign-in/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/sign-in/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/sign-in/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/sign-in/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/sign-up/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/sign-up/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/sign-up/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/sign-up/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/verify/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/verify/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/verify/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/verify/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/home/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/home/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/home/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/home/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/privacy/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/privacy/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/products/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/products/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/CartDrawer/CartFooter.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/CartDrawer/CartFooter.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/state/product/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/state/product/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/state/product/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/state/product/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/state/product/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/state/product/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/products/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/products/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/search/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/search/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/search/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/search/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/storyblok/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/storyblok/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/terms/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/terms/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlockInverted.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlockInverted.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/Carousel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/Carousel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/Footer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/Footer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/MosaicBlock.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/MosaicBlock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphql/selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/selectors.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphql/sharedQueries.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/sharedQueries.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/Footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Footer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/menuConfig.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/menuConfig.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/stories/[...slug].page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/stories/[...slug].page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/theme/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/theme/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/zeus/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/zeus/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +87,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/node_modules/typescript/lib/lib.es5.d.ts" root0="SKIP_INSPECTION" />
   </component>
+  <component name="PhpDebugGeneral" listening_started="true" />
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php" />
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
@@ -53,22 +100,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/floris/PhpstormProjects/vendure-nextjs-storefront/src/components/molecules",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "prettierjs.PrettierConfiguration.Package": "/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/prettier",
-    "ts.external.directory.path": "/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/floris/PhpstormProjects/one-click-deploy&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/prettier&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/components/molecules" />
@@ -84,8 +131,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PS-242.23726.107" />
-        <option value="bundled-php-predefined-a98d8de5180a-90914f2295cb-com.jetbrains.php.sharedIndexes-PS-242.23726.107" />
+        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-PS-243.21565.202" />
+        <option value="bundled-php-predefined-a98d8de5180a-5fbe0c30323e-com.jetbrains.php.sharedIndexes-PS-243.21565.202" />
       </set>
     </attachedChunks>
   </component>
@@ -115,7 +162,15 @@
       <workItem from="1731672176725" duration="2007000" />
       <workItem from="1731938684123" duration="3565000" />
       <workItem from="1732007756169" duration="1292000" />
-      <workItem from="1732009465043" duration="50064000" />
+      <workItem from="1732009465043" duration="63103000" />
+      <workItem from="1732631375721" duration="20336000" />
+      <workItem from="1732720366536" duration="203000" />
+      <workItem from="1732720582635" duration="571000" />
+      <workItem from="1732721209103" duration="2239000" />
+      <workItem from="1732779338245" duration="1118000" />
+      <workItem from="1732780594042" duration="14366000" />
+      <workItem from="1732888552108" duration="650000" />
+      <workItem from="1733131021122" duration="3778000" />
     </task>
     <servers />
   </component>
@@ -149,7 +204,6 @@
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$APPLICATION_CONFIG_DIR$/scratches/scratch_2.tsx</url>
           <line>18</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>

@@ -15,7 +15,7 @@ export const VerifyPage: React.FC<InferGetServerSidePropsType<typeof getServerSi
     const { t } = useTranslation('customer');
     const { t: tError } = useTranslation('common');
     return (
-        <Layout categories={props.collections} navigation={props.navigation} pageTitle={t('verify.title')}>
+        <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation} pageTitle={t('verify.title')}>
             <ContentContainer>
                 <FormContainer>
                     <FormWrapper column itemsCenter gap="3.5rem">

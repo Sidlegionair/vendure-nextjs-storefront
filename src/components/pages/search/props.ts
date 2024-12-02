@@ -1,6 +1,8 @@
 import { SSRQuery } from '@/src/graphql/client';
 import { CollectionSelector, FacetSelector, ProductSearchSelector } from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
+import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
+
 import { makeServerSideProps } from '@/src/lib/getStatic';
 import { redirectFromDefaultChannelSSR } from '@/src/lib/redirect';
 import { PER_PAGE, prepareFilters, reduceFacets } from '@/src/state/collection/utils';
@@ -15,6 +17,12 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 
     const collections = await getCollections(r.context);
     const navigation = arrayToTree(collections);
+
+    // Append main and sub-navigation from menuConfig
+    navigation.children.unshift(...mainNavigation);
+    const subnavigation = {
+        children: [...subNavigation],
+    };
     const api = SSRQuery(context);
 
     let page = 1;
@@ -71,6 +79,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         collections,
         facets,
         navigation,
+        subnavigation,
         collection,
         products: productsQuery.search.items,
         totalProducts: productsQuery.search.totalItems,

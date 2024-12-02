@@ -1,7 +1,7 @@
 import React from 'react';
 import { storyblokEditable, renderRichText } from '@storyblok/react';
 import sanitizeHtml from 'sanitize-html';
-import { ContentContainer } from '@/src/components';
+import { ContentContainer, Stack } from '@/src/components';
 
 const RichTextEditor = ({ blok }) => {
     // Render and sanitize the rich text content
@@ -18,7 +18,7 @@ const RichTextEditor = ({ blok }) => {
     const textColor = blok.textColor || 'rgba(77, 77, 77, 1)';
 
     return (
-        <ContentContainer className="rich-text-editor">
+        <Stack w100 className="rich-text-editor">
             <div className="rich-text-editor" {...storyblokEditable(blok)}>
                 <div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
 
@@ -149,7 +149,7 @@ const RichTextEditor = ({ blok }) => {
                     }
                 `}</style>
             </div>
-        </ContentContainer>
+        </Stack>
     );
 };
 

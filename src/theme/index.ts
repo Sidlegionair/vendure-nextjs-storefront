@@ -51,6 +51,7 @@ type DetailTheme = {
     border: {
         main: string;
         lightgray: string;
+        thin: string;
     };
     shadow: string;
     error: string;
@@ -227,6 +228,7 @@ export const LightTheme = createTheme(300, (t) => ({
     border: {
         main: '#4D4D4D',
         lightgray: '#E7E7E7',
+        thin: 'rgba(207, 207, 207, 1)',
     },
     shadow: `rgba(0, 0, 0, 0.12)`,
     error: '#eb1b19',

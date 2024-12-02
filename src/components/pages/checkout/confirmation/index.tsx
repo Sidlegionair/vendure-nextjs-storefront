@@ -42,7 +42,7 @@ export const ConfirmationPage: React.FC<InferGetServerSidePropsType<typeof getSe
     return (
         <Layout
             categories={props.collections}
-            navigation={props.navigation}
+            navigation={props.navigation} subnavigation={props.subnavigation}
             pageTitle={`${t('seoTitles.confirmation')}`}>
             {order ? (
                 <Content>

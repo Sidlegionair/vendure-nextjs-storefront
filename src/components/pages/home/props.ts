@@ -3,10 +3,12 @@
 import { SSGQuery } from '@/src/graphql/client';
 import { SearchResponseSelector, FacetsSelector, CollectionSelector } from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
+
+import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
+
 import { ContextModel, makeStaticProps } from '@/src/lib/getStatic';
 import { arrayToTree } from '@/src/util/arrayToTree';
 import { SortOrder } from '@/src/zeus';
-import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
 import { HomePageSlidersType, homePageSlidersSelector } from '@/src/graphql/selectors';
 // import { ValueTypes } from '/mnt/data/index';
 

@@ -7506,7 +7506,7 @@ export type GraphQLTypes = {
         filters: Array<GraphQLTypes['ConfigurableOperation']>;
         translations: Array<GraphQLTypes['CollectionTranslation']>;
         productVariants: GraphQLTypes['ProductVariantList'];
-        customFields?: GraphQLTypes['JSON'] | undefined;
+        customFields?: Object | undefined;
     };
     ['CollectionBreadcrumb']: {
         __typename: 'CollectionBreadcrumb';
@@ -8843,7 +8843,7 @@ export type GraphQLTypes = {
         options: Array<GraphQLTypes['ProductOption']>;
         facetValues: Array<GraphQLTypes['FacetValue']>;
         translations: Array<GraphQLTypes['ProductVariantTranslation']>;
-        customFields?: Object | undefined;
+        customFields?: Object | string;
     };
     ['ProductVariantTranslation']: {
         __typename: 'ProductVariantTranslation';

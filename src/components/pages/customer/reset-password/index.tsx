@@ -93,7 +93,7 @@ export const ResetPasswordPage: React.FC<InferGetServerSidePropsType<typeof getS
     };
 
     return (
-        <Layout categories={props.collections} navigation={props.navigation} pageTitle={t('resetPasswordTitle')}>
+        <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation} pageTitle={t('resetPasswordTitle')}>
             <ContentContainer>
                 <FormContainer>
                     <Absolute w100>

@@ -26,16 +26,16 @@ export const mainNavigation: NavigationItemType[] = [
         name: 'Home',
         id: 'none',
         parentId: '',
-        slug: '#',
+        slug: '',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],
     },
     {
-        name: 'Boardfinder',
+        name: 'Snowboards',
         id: 'none',
         parentId: '1',
-        slug: 'stories/boardfinder',
+        slug: 'stories/snowboards',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],
@@ -44,6 +44,15 @@ export const mainNavigation: NavigationItemType[] = [
 
 // Define the subNavigation array with productVariants always defined
 export const subNavigation: NavigationItemType[] = [
+    {
+        name: 'Boardbrands',
+        id: 'none',
+        parentId: '1',
+        slug: 'stories/boardbrands',
+        description: '',
+        productVariants: emptyProductVariants, // Use default empty structure
+        children: [],
+    },
     {
         name: 'Sustainable',
         id: 'none',
@@ -54,37 +63,37 @@ export const subNavigation: NavigationItemType[] = [
         children: [],
     },
     {
-        name: 'Outlet',
+        name: 'Powder',
         id: 'none',
         parentId: '1',
-        slug: 'stories/outlet',
+        slug: 'stories/powder',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],
     },
     {
-        name: 'Travel',
+        name: 'Freeride',
         id: 'none',
         parentId: '1',
-        slug: 'stories/travel',
+        slug: 'stories/freeride',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],
     },
     {
-        name: 'Rent',
+        name: 'All mountain',
         id: 'none',
         parentId: '1',
-        slug: 'stories/rent',
+        slug: 'stories/all_mountain',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],
     },
     {
-        name: 'Maintenance',
+        name: 'Park',
         id: 'none',
         parentId: '1',
-        slug: 'stories/maintenance',
+        slug: 'stories/park',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],
@@ -99,12 +108,13 @@ export const subNavigation: NavigationItemType[] = [
         children: [],
     },
     {
-        name: 'Stories',
+        name: 'About us',
         id: 'none',
         parentId: '1',
-        slug: 'stories/articles',
+        slug: 'stories/about-us',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],
     }
+
 ];

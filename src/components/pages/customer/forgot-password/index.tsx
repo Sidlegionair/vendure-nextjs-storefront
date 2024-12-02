@@ -77,7 +77,7 @@ export const ForgotPasswordPage: React.FC<InferGetServerSidePropsType<typeof get
     };
 
     return (
-        <Layout categories={props.collections} navigation={props.navigation} pageTitle={t('forgotPasswordTitle')}>
+        <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation} pageTitle={t('forgotPasswordTitle')}>
             <ContentContainer>
                 <FormContainer>
                     <FormWrapper column itemsCenter gap="3.5rem">

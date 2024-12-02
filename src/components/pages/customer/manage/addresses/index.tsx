@@ -30,7 +30,7 @@ export const AddressesPage: React.FC<InferGetServerSidePropsType<typeof getServe
     useOutsideClick(ref, () => onModalClose());
 
     return (
-        <Layout categories={props.collections} navigation={props.navigation} pageTitle={t('addressesPageTitle')}>
+        <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation} pageTitle={t('addressesPageTitle')}>
             <AnimatePresence>
                 {addressToEdit && (
                     <Modal initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>

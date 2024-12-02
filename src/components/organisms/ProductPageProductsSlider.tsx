@@ -15,8 +15,8 @@ export const ProductPageProductsSlider: React.FC<ProductPageProductsSliderProps>
     const slides = products.map((variant, index) => <ProductVariantTile lazy key={index} variant={variant} />);
 
     return (
-        <Stack column gap="2rem" style={{ marginBottom: '2rem' }}>
-            <TH2>{title}</TH2>
+        <Stack w100 column gap="2rem" style={{ marginTop: '20px', marginBottom: '2rem' }}>
+            {/*<TH2>{title}</TH2>*/}
             <Slider withArrows={4} spacing={32} slides={slides} />
         </Stack>
     );

@@ -20,7 +20,14 @@ const MosaicBlock = ({ blok }) => {
                     <h2 className="mosaic__title">{blok.title || 'Our Story'}</h2>
                     <div className="mosaic__description" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
                     {blok.buttonLink && (
-                        <a className="mosaic__button" href={blok.buttonLink.url}>
+                        <a
+                            className="mosaic__button"
+                            href={blok.buttonLink.url.cached_url}
+                            style={{
+                                color: blok.backgroundColor || '#355047', // Matches text color to background color
+                                backgroundColor: '#FFFFFF', // Keeps the background white
+                            }}
+                        >
                             {blok.buttonText || 'Read More'} →
                         </a>
                     )}
@@ -49,6 +56,7 @@ const MosaicBlock = ({ blok }) => {
                     height: 785.12px;
                     color: #fff;
                     overflow-x: hidden;
+                    text-align: left;
                 }
 
                 .mosaic__container {
@@ -63,6 +71,8 @@ const MosaicBlock = ({ blok }) => {
                 }
 
                 .mosaic__text {
+                    opacity: 0.95;
+
                     position: absolute; /* Overlay text over gallery */
                     z-index: 10; /* Bring text above gallery */
                     top: 50%; /* Center vertically */

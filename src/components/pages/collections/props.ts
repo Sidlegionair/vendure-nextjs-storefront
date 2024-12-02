@@ -1,6 +1,8 @@
 import { SSGQuery } from '@/src/graphql/client';
 import { CollectionSelector, SearchSelector } from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
+import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
+
 import { ContextModel, makeStaticProps } from '@/src/lib/getStatic';
 import { PER_PAGE, reduceFacets } from '@/src/state/collection/utils';
 import { arrayToTree } from '@/src/util/arrayToTree';
@@ -17,6 +19,12 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
     const r = await makeStaticProps(['common', 'collections'])(_context);
     const collections = await getCollections(r.context);
     const navigation = arrayToTree(collections);
+
+    // Append main and sub-navigation from menuConfig
+    navigation.children.unshift(...mainNavigation);
+    const subnavigation = {
+        children: [...subNavigation],
+    };
     const api = SSGQuery(r.context);
 
     const { collection } = await api({
@@ -50,6 +58,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
         totalProducts: productsQuery.search?.totalItems,
         collection,
         navigation,
+        subnavigation
     };
 
     return {
