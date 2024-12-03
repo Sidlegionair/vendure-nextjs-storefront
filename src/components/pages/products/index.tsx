@@ -133,9 +133,15 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                         </TP>
                                     </StockDisplay>
                                 </StockInfo>
-                                <TP dangerouslySetInnerHTML={{ __html: product?.description}} color="main" size="16px" lineHeight="24px" style={{ marginTop: '1.5rem' }}>
-
-                                </TP>
+                                {product?.description && (
+                                    <TP
+                                        dangerouslySetInnerHTML={{ __html: product.description }}
+                                        color="main"
+                                        size="16px"
+                                        lineHeight="24px"
+                                        style={{ marginTop: '1.5rem' }}
+                                    />
+                                )}
                             </Stack>
 
                             <Stack w100>
