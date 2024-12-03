@@ -330,7 +330,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                     >
                         <ProductImageContainer height={height}>
                             <img
-                                src={product.productAsset.preview}
+                                src={product.productAsset?.preview}
                                 alt={product.productName}
                                 style={{
                                     width: '100%',

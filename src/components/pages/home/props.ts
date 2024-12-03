@@ -12,7 +12,7 @@ import { SortOrder } from '@/src/zeus';
 import { HomePageSlidersType, homePageSlidersSelector } from '@/src/graphql/selectors';
 // import { ValueTypes } from '/mnt/data/index';
 
-const slugsOfBestOf = ['home-garden'];
+const slugsOfBestOf = ['snowboards'];
 
 export const getStaticProps = async (ctx: ContextModel) => {
     const r = await makeStaticProps(['common', 'homepage'])(ctx);
@@ -26,6 +26,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
         ],
     });
 
+
     // Facet query without input argument to get all facets and their values
     const facetData = await api({
         facets: [
@@ -36,6 +37,9 @@ export const getStaticProps = async (ctx: ContextModel) => {
 
     // Extract unique collection IDs from product search
     const uniqueCollectionIds = [...new Set(products.search.items.flatMap((item) => item.collectionIds))];
+
+    console.error('hi');
+    console.error(products.search.items);
 
     // Fetch collection details for each unique ID
     const collectionsData = await Promise.all(
