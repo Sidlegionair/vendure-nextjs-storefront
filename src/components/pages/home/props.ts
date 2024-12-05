@@ -48,22 +48,25 @@ export const getStaticProps = async (ctx: ContextModel) => {
             );
 
             return {
-                productId: product.id,
+                product: product.productId,
                 brand: stockAndBrand.product?.customFields?.brand || null,
                 inStock,
             };
         })
     );
 
-    // Merge the stock and brand details with the original product data
+// Merge the stock and brand details with the original product data
     const productsWithStockAndBrand = products.search.items.map((product) => {
-        const stockAndBrand = stockAndBrandData.find((data) => data.productId === product.id);
+        const stockAndBrand = stockAndBrandData.find((data) => data.product === product.productId); // Corrected to productId
         return {
             ...product,
-            brand: stockAndBrand?.brand || null,
+            customFields: {
+                brand: stockAndBrand?.brand || null
+            },
             inStock: stockAndBrand?.inStock || false,
         };
     });
+
 
     // Facet query without input argument to get all facets and their values
     const facetData = await api({

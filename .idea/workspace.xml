@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="46c46c96-dbae-454b-a0c0-91173b5d1f10" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/home/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/home/props.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -124,7 +123,7 @@
       <workItem from="1733218496142" duration="1888000" />
       <workItem from="1733220959815" duration="1511000" />
       <workItem from="1733231174949" duration="7828000" />
-      <workItem from="1733319428559" duration="12832000" />
+      <workItem from="1733319428559" duration="13804000" />
     </task>
     <servers />
   </component>

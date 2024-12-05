@@ -362,7 +362,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                 <InfoBlock>
                     <Stack justifyBetween itemsCenter>
                         <ProductTitle>
-                            <b>{products[activeIndex % products.length]?.brand}</b>
+                            <b>{products[activeIndex % products.length]?.customFields.brand}</b>
                             {products[activeIndex % products.length]?.productName} ({products[activeIndex % products.length]?.productVariantName})
                         </ProductTitle>
                         <Link
