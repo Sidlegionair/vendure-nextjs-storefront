@@ -8,6 +8,9 @@ import { PER_PAGE, collectionsEmptyState, prepareFilters, reduceFacets } from '.
 import { CollectionContainerType, Sort } from './types';
 import { useChannels } from '../channels';
 
+
+
+
 const useCollectionContainer = createContainer<
     CollectionContainerType,
     {
@@ -143,11 +146,33 @@ const useCollectionContainer = createContainer<
             term: q,
         };
 
+        // Fetch initial product data
         const { search } = await storefrontApiQuery(ctx)({
             search: [{ input }, SearchSelector],
         });
 
-        setProducts(search?.items);
+        // Fetch brands for the products
+        const brandPromises = search.items.map(async product => {
+            const { product: brandData } = await storefrontApiQuery(ctx)({
+                product: [{ id: product.productId }, { customFields: { brand: true } }],
+            });
+            return {
+                id: product.productId,
+                brand: brandData?.customFields?.brand || null,
+            };
+        });
+
+        const brandData = await Promise.all(brandPromises);
+
+        // Map brands to products
+        const productsWithBrands = search.items.map(product => ({
+            ...product,
+            customFields: {
+                brand: brandData.find(b => b.id === product.productId)?.brand || null
+            },
+        }));
+
+        setProducts(productsWithBrands);
         setTotalProducts(search?.totalItems);
         const facets = reduceFacets(search?.facetValues || []);
         setFacetValues(facets);
