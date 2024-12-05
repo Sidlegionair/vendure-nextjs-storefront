@@ -32,6 +32,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
     });
     if (!collection) return { notFound: true };
 
+    // Fetch products
     const productsQuery = await api({
         search: [
             {
@@ -45,6 +46,52 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
             SearchSelector,
         ],
     });
+
+    // Fetch brands
+    const productIds = productsQuery.search.items
+        .map(product => product.productId)
+        .filter(id => !!id); // Ensure only valid IDs are used.
+
+    if (productIds.length === 0) {
+        console.error('No valid product IDs found for brand query.');
+    }
+
+    const brandData = await Promise.all(
+        productIds.map(async id => {
+            try {
+                const { product } = await api({
+                    product: [{ id }, { customFields: { brand: true } }],
+                });
+
+                if (!product) {
+                    console.warn(`No product found for ID: ${id}`);
+                }
+
+                return { id, brand: product?.customFields?.brand || null };
+            } catch (error) {
+                console.error(`Failed to fetch brand for product ID: ${id}`, error);
+                return { id, brand: null }; // Fallback to null on failure
+            }
+        })
+    );
+
+    // Map brands to products
+    const productsWithBrands = productsQuery.search.items.map(product => {
+        const matchingBrandData = brandData.find(brand => brand.id === product.productId);
+        if (!matchingBrandData) {
+            console.warn(`No brand data found for product ID: ${product.productId}`);
+        }
+
+        return {
+            ...product,
+            customFields: {
+                brand: matchingBrandData?.brand || null
+            }, // Map the brand or fallback to null
+        };
+    });
+
+    console.log(productsWithBrands);
+
     const facets = reduceFacets(productsQuery.search.facetValues);
 
     const returnedStuff = {
@@ -53,7 +100,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
         slug: context.params?.slug,
         collections: collections,
         name: collections.find(c => c.slug === lastIndexSlug)?.name,
-        products: productsQuery.search?.items,
+        products: productsWithBrands, // Use updated products
         facets,
         totalProducts: productsQuery.search?.totalItems,
         collection,

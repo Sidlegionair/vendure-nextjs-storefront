@@ -47,6 +47,7 @@ export const ProductTileSelector = Selector('Product')({
 
 export const ProductSearchSelector = Selector('SearchResult')({
     productName: true,
+    productId: true,
     slug: true,
     collectionIds: true,
     currencyCode: true,
@@ -77,6 +78,17 @@ export const FacetSelector = Selector('Facet')({
 });
 
 export type FacetType = FromSelector<typeof FacetSelector, 'Facet', typeof scalars>;
+
+
+export const ProductCustomFieldsSelector = Selector('Product')({
+    id: true,
+    name: true,
+    customFields: {
+        brand: true,
+    },
+});
+
+
 
 export const CollectionSelector = Selector('Collection')({
     id: true,

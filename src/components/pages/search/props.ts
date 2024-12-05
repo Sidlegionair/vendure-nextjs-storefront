@@ -39,7 +39,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         page = parseInt(context.query.page as string);
     }
 
-    //we simulate a collection with the search slug + we skip this collection everywhere else
     const { collection } = await api({
         collection: [{ slug: 'search' }, CollectionSelector],
     });
@@ -61,6 +60,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         else filter.or = value;
         facetValueFilters.push(filter);
     });
+
     const input = {
         term: q,
         collectionSlug: 'search',
@@ -70,9 +70,55 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         facetValueFilters,
         sort: sort.key === 'title' ? { name: sort.direction } : { price: sort.direction },
     };
-    const productsQuery = await SSRQuery(context)({
+
+    // Fetch products
+    const productsQuery = await api({
         search: [{ input }, { items: ProductSearchSelector, totalItems: true }],
     });
+
+    // Fetch brands
+    const productIds = productsQuery.search.items
+        .map(product => product.productId)
+        .filter(id => !!id); // Ensure only valid IDs are used.
+
+    if (productIds.length === 0) {
+        console.error('No valid product IDs found for brand query.');
+    }
+
+    const brandData = await Promise.all(
+        productIds.map(async id => {
+            try {
+                const { product } = await api({
+                    product: [{ id }, { customFields: { brand: true } }],
+                });
+
+                if (!product) {
+                    console.warn(`No product found for ID: ${id}`);
+                }
+
+                return { id, brand: product?.customFields?.brand || null };
+            } catch (error) {
+                console.error(`Failed to fetch brand for product ID: ${id}`, error);
+                return { id, brand: null }; // Fallback to null on failure
+            }
+        })
+    );
+
+    // Map brands to products
+    const productsWithBrands = productsQuery.search.items.map(product => {
+        const matchingBrandData = brandData.find(brand => brand.id === product.productId);
+        if (!matchingBrandData) {
+            console.warn(`No brand data found for product ID: ${product.productId}`);
+        }
+
+        return {
+            ...product,
+            customFields: {
+                brand: matchingBrandData?.brand || null,
+            }, // Map the brand or fallback to null
+        };
+    });
+
     const returnedStuff = {
         ...r.props,
         ...r.context,
@@ -81,7 +127,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         navigation,
         subnavigation,
         collection,
-        products: productsQuery.search.items,
+        products: productsWithBrands, // Use products with brands
         totalProducts: productsQuery.search.totalItems,
         filters,
         searchQuery: q,

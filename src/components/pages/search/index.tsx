@@ -91,7 +91,7 @@ export const SearchPage: React.FC<InferGetServerSidePropsType<typeof getServerSi
                         <SortBy sort={sort} handleSort={handleSort} />
                     </Stack>
                     <MainGrid>
-                        {products?.map(p => <ProductTile collections={props.collections} product={p} key={p.slug} />)}
+                        {products?.map(p => <ProductTile product={p} key={p.slug} />)}
                     </MainGrid>
                     <Pagination
                         page={paginationInfo.currentPage}

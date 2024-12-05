@@ -32,6 +32,8 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
         handleSort,
     } = useCollection();
 
+    // console.log(collection);
+
     const breadcrumbs = [
         {
             name: breadcrumb('breadcrumbs.home'),
@@ -120,7 +122,7 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
                             </Stack>
                         </Wrapper>
                         <MainGrid>
-                            {products?.map(p => <ProductTile collections={props.collections} product={p} key={p.slug} />)}
+                            {products?.map(p => <ProductTile product={p} key={p.slug} />)}
                         </MainGrid>
                         <Pagination
                             page={paginationInfo.currentPage}

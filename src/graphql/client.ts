@@ -9,17 +9,23 @@ export const scalars = ZeusScalars({
         decode: e => e as number,
     },
     JSON: {
-        encode: (e: unknown) => JSON.stringify(e),  // Encode as JSON string once
+        encode: (e: unknown) => JSON.stringify(e), // Always encode as a JSON string
         decode: (e: unknown) => {
             if (typeof e === 'string') {
                 try {
-                    return JSON.parse(e);  // Only decode if it's still a string
+                    // Check if the string is valid JSON by parsing and re-stringifying
+                    const parsed = JSON.parse(e);
+                    if (typeof parsed === 'object' || Array.isArray(parsed)) {
+                        return parsed; // Return parsed JSON for valid objects or arrays
+                    }
                 } catch (err) {
-                    console.error(e);
-                    console.error("Error decoding JSON:", err);
+                    // If parsing fails, assume it's a plain string
+                    // console.warn(`Warning: Input is not valid JSON, returning raw string: "${e}"`);
+                    return e;
                 }
             }
-            return e;  // Return as-is if it's already decoded
+            // Return as-is if the input is not a string (already parsed or another type)
+            return e;
         },
     },
     DateTime: {
@@ -27,6 +33,7 @@ export const scalars = ZeusScalars({
         encode: (e: unknown) => (e as Date).toISOString(),
     },
 });
+
 
 //use 'http://localhost:3000/shop-api/' in local .env file for localhost development and provide env to use on prod/dev envs
 

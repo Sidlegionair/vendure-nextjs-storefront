@@ -1,9 +1,16 @@
 import { Stack, Link, ProductImageGrid, TP } from '@/src/components/atoms/';
-import { CollectionTileType, ProductSearchType } from '@/src/graphql/selectors';
+import { CollectionTileType, ProductSearchType as OriginalProductSearchType } from '@/src/graphql/selectors';
 import { priceFormatter } from '@/src/util/priceFormatter';
 import { Ratings } from './Ratings'; // Assuming Ratings is imported from the same path
 import styled from '@emotion/styled';
 import React from 'react';
+
+
+type ProductSearchType = OriginalProductSearchType & {
+    customFields?: {
+        brand?: string; // Add the brand field
+    };
+};
 
 export const ProductTile: React.FC<{
     product: ProductSearchType;
@@ -21,6 +28,8 @@ export const ProductTile: React.FC<{
 
     const src = product.productAsset?.preview;
     const brand = typeof product.customFields?.brand === 'string' ? product.customFields.brand : undefined;
+
+    // console.log(brand);
 
     return (
         <Main column gap="1rem">
