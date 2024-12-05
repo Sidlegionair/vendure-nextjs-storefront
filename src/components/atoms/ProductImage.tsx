@@ -22,8 +22,8 @@ export const ProductImageGrid = forwardRef(
 
 const StyledProductImageGrid = styled.img`
     width: 100%;
-    object-fit: cover;
-    height: 48rem;
+    object-fit: contain;
+    height: 304px;
     flex: 0 0 auto;
 `;
 
@@ -50,7 +50,7 @@ export const StyledProductImage = styled.img<{
                                     : p.size === 'thumbnail-big'
                                             ? '125px'
                                             : '8rem'};
-    object-fit: cover;
+    object-fit: contain;
     flex: 0 0 auto;
     ${({ theme }) => `border-radius: ${theme.borderRadius}`}
 `;

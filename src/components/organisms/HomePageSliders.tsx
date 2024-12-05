@@ -54,6 +54,7 @@ const StyledSection = styled.section`
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    margin-top: 120px;
 `;
 
 const StyledLink = styled(Link)`
