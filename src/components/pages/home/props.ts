@@ -1,5 +1,3 @@
-// props.ts
-
 import { SSGQuery } from '@/src/graphql/client';
 import { SearchResponseSelector, FacetsSelector, CollectionSelector } from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
@@ -26,6 +24,46 @@ export const getStaticProps = async (ctx: ContextModel) => {
         ],
     });
 
+    // Fetch stock levels and brand details in a separate query
+    const stockAndBrandData = await Promise.all(
+        products.search.items.map(async (product) => {
+            const stockAndBrand = await api({
+                product: [
+                    { id: product.productId },
+                    {
+                        customFields: {
+                            brand: true
+                        },
+                        variants: {
+                            id: true,
+                            stockLevel: true,
+                        },
+                    },
+                ],
+            });
+
+            // Determine if any variant has stockLevel "IN_STOCK"
+            const inStock = stockAndBrand.product?.variants?.some(
+                (variant) => Number(variant.stockLevel) > 0
+            );
+
+            return {
+                productId: product.id,
+                brand: stockAndBrand.product?.customFields?.brand || null,
+                inStock,
+            };
+        })
+    );
+
+    // Merge the stock and brand details with the original product data
+    const productsWithStockAndBrand = products.search.items.map((product) => {
+        const stockAndBrand = stockAndBrandData.find((data) => data.productId === product.id);
+        return {
+            ...product,
+            brand: stockAndBrand?.brand || null,
+            inStock: stockAndBrand?.inStock || false,
+        };
+    });
 
     // Facet query without input argument to get all facets and their values
     const facetData = await api({
@@ -36,10 +74,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
     });
 
     // Extract unique collection IDs from product search
-    const uniqueCollectionIds = [...new Set(products.search.items.flatMap((item) => item.collectionIds))];
-
-    console.error('hi');
-    console.error(products.search.items);
+    const uniqueCollectionIds = [...new Set(productsWithStockAndBrand.flatMap((item) => item.collectionIds))];
 
     // Fetch collection details for each unique ID
     const collectionsData = await Promise.all(
@@ -53,41 +88,6 @@ export const getStaticProps = async (ctx: ContextModel) => {
             return collectionData.collection;
         })
     );
-
-    // Fetch stock levels for each product based on productId
-    const stockLevels = await Promise.all(
-        products.search.items.map(async (product) => {
-            const stockData = await api({
-                product: [
-                    { id: product.productId },
-                    {
-                        variants: {
-                            id: true,
-                            stockLevel: true,
-                        },
-                    },
-                ],
-            });
-
-            // Determine if any variant has stockLevel "IN_STOCK"
-            const inStock = stockData.product?.variants?.some(
-                (variant) => Number(variant.stockLevel) > 0
-            ) || false;
-
-            return {
-                productId: product.productId,
-                variants: stockData.product?.variants || [],
-                inStock,
-            };
-        })
-    );
-
-    // Combine stock data into products array
-    const productsWithStock = products.search.items.map((product) => ({
-        ...product,
-        inStock: stockLevels.find((stock) => stock.productId === product.productId)?.inStock || false,
-        variants: stockLevels.find((stock) => stock.productId === product.productId)?.variants || [],
-    }));
 
     // Additional data for sliders and collections
     const sliders = await Promise.all(
@@ -112,7 +112,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
         props: {
             ...r.props,
             ...r.context,
-            products: productsWithStock,
+            products: productsWithStockAndBrand,
             categories: collections,
             facetValues: facetData.facets.items,
             collections: collectionsData,

@@ -52,7 +52,7 @@ const ProductSlide = styled.div<{ angle: number; distance: number; isActive: boo
     z-index: ${({ zIndex }) => zIndex};
     transition: transform 0.5s ease, opacity 0.5s ease;
     opacity: ${({ opacity }) => opacity};
-    box-shadow: ${({ isActive }) => (isActive ? '0px 4px 12px rgba(0, 0, 0, 0.3)' : 'none')};
+    // box-shadow: ${({ isActive }) => (isActive ? '0px 4px 12px rgba(0, 0, 0, 0.3)' : 'none')};
     border-radius: 8px;
 
     @media (max-width: 768px) {
@@ -84,12 +84,16 @@ const ProductImageContainer = styled.div<{ height: number }>`
     height: 300px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    object-fit: cover;
-    object-position: center center;
+    //img {
+        align-items: center;
+        object-fit: contain;
+        object-position: center center;
+
+    //}
     overflow: hidden;
     transform-origin: center;
 
+    
     @media (max-width: 768px) {
         width: 120px;
         height: 240px;
@@ -121,11 +125,15 @@ const InfoBlock = styled.div`
 `;
 
 const ProductTitle = styled.h3`
+    display: flex;
+    align-items: center;
+    
     width: 100%;
     font-size: 16px;
     font-weight: 300;
     line-height: 16px;
     text-align: left;
+    gap: 20px;
 
     & > b {
         font-size: 18px;
@@ -171,7 +179,7 @@ const ProductDetails = styled.div`
 const StockButton = styled.button<{ inStock: boolean }>`
     display: flex;
     justify-content: space-between;
-    width: 108px;
+    //width: 108px;
     align-items: center;
     background-color: ${({ inStock, theme }) =>
     inStock ? theme.text.accentGreen : theme.text.accent};
@@ -335,7 +343,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                                 style={{
                                     width: '100%',
                                     height: '100%',
-                                    objectFit: 'cover',
+                                    objectFit: 'contain',
                                     borderRadius: '8px',
                                 }}
                             />
