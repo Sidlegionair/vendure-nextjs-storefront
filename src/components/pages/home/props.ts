@@ -24,15 +24,61 @@ export const getStaticProps = async (ctx: ContextModel) => {
         ],
     });
 
+    // Fetch all facets to resolve facetValueIds
+    const allFacets = await api({
+        facets: [
+            {}, // Fetch all facets
+            {
+                items: {
+                    id: true,
+                    name: true,
+                    values: {
+                        id: true,
+                        name: true,
+                    },
+                },
+            },
+        ],
+    });
+
+    // Create a map of facetValueIds to their names
+    const facetValueMap = allFacets.facets.items.reduce((map, facet) => {
+        facet.values.forEach((value) => {
+            map[value.id] = { name: facet.name, value: value.name };
+        });
+        return map;
+    }, {} as Record<string, { name: string; value: string }>);
+
+    // Map facets to each product
+    const productsWithFacets = products.search.items.map((product) => {
+        const levelFacet = product.facetValueIds
+            .map((id) => facetValueMap[id])
+            .filter((facet) => facet?.name.toLowerCase() === 'level')
+            .map((facet) => facet?.value)
+            .join(', ') || null;
+
+        const terrainFacet = product.facetValueIds
+            .map((id) => facetValueMap[id])
+            .filter((facet) => facet?.name.toLowerCase() === 'terrain')
+            .map((facet) => facet?.value)
+            .join(', ') || null;
+
+        return {
+            ...product,
+            level: levelFacet,
+            terrain: terrainFacet,
+        };
+    });
+
     // Fetch stock levels and brand details in a separate query
     const stockAndBrandData = await Promise.all(
-        products.search.items.map(async (product) => {
+        productsWithFacets.map(async (product) => {
             const stockAndBrand = await api({
                 product: [
                     { id: product.productId },
                     {
                         customFields: {
-                            brand: true
+                            brand: true,
                         },
                         variants: {
                             id: true,
@@ -55,31 +101,22 @@ export const getStaticProps = async (ctx: ContextModel) => {
         })
     );
 
-// Merge the stock and brand details with the original product data
-    const productsWithStockAndBrand = products.search.items.map((product) => {
-        const stockAndBrand = stockAndBrandData.find((data) => data.product === product.productId); // Corrected to productId
+    // Merge stock and brand details with original product data
+    const productsWithDetails = productsWithFacets.map((product) => {
+        const stockAndBrand = stockAndBrandData.find((data) => data.product === product.productId);
         return {
             ...product,
             customFields: {
-                brand: stockAndBrand?.brand || null
+                brand: stockAndBrand?.brand || null,
             },
             inStock: stockAndBrand?.inStock || false,
         };
     });
 
+    // Extract unique collection IDs
+    const uniqueCollectionIds = [...new Set(productsWithDetails.flatMap((item) => item.collectionIds))];
 
-    // Facet query without input argument to get all facets and their values
-    const facetData = await api({
-        facets: [
-            {}, // No input argument here
-            FacetsSelector,
-        ],
-    });
-
-    // Extract unique collection IDs from product search
-    const uniqueCollectionIds = [...new Set(productsWithStockAndBrand.flatMap((item) => item.collectionIds))];
-
-    // Fetch collection details for each unique ID
+    // Fetch collection details
     const collectionsData = await Promise.all(
         uniqueCollectionIds.map(async (id) => {
             const collectionData = await api({
@@ -92,7 +129,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
         })
     );
 
-    // Additional data for sliders and collections
+    // Fetch sliders
     const sliders = await Promise.all(
         slugsOfBestOf.map(async (slug) => {
             const section = await api({
@@ -105,7 +142,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
     const collections = await getCollections(r.context);
     const navigation = arrayToTree(collections);
 
-    // Append main and sub-navigation from menuConfig
+    // Append main and sub-navigation
     navigation.children.unshift(...mainNavigation);
     const subnavigation = {
         children: [...subNavigation],
@@ -115,9 +152,9 @@ export const getStaticProps = async (ctx: ContextModel) => {
         props: {
             ...r.props,
             ...r.context,
-            products: productsWithStockAndBrand,
+            products: productsWithDetails,
             categories: collections,
-            facetValues: facetData.facets.items,
+            facetValues: allFacets.facets.items, // Use allFacets here
             collections: collectionsData,
             navigation,
             subnavigation,
@@ -126,3 +163,4 @@ export const getStaticProps = async (ctx: ContextModel) => {
         revalidate: parseInt(process.env.NEXT_REVALIDATE || '10'),
     };
 };
+

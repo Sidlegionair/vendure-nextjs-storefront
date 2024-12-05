@@ -89,6 +89,8 @@ const ProductImageContainer = styled.div`
 
     img {
         width: 100%;
+        object-fit: contain;
+        object-position: center center;
     }
 `;
 

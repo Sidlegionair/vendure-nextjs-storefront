@@ -7,15 +7,16 @@ const RichTextEditor = ({ blok }) => {
     // Render and sanitize the rich text content
     const htmlContent = renderRichText(blok.content);
     const sanitizedContent = sanitizeHtml(htmlContent, {
-        allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'], // Add 'img' tag to allowed tags
+        allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img', 'span'],
         allowedAttributes: {
             ...sanitizeHtml.defaults.allowedAttributes,
-            img: ['src', 'alt', 'width', 'height'], // Allow src, alt, width, height attributes for images
+            img: ['src', 'alt', 'width', 'height'],
+            '*': ['style'], // Allow inline styles for all elements
         },
     });
 
     // Set text color from Storyblok field or default to a fallback color
-    const textColor = blok.textColor || 'rgba(77, 77, 77, 1)';
+    const textColor = blok.textColor || 'rgba(77, 77, 77, 1)';``
 
     return (
         <Stack w100 className="rich-text-editor">
@@ -28,10 +29,10 @@ const RichTextEditor = ({ blok }) => {
                         div {
                             flex-direction: column;
                             display: flex;
-                            gap: 50px;
+                            gap: 20px;
                         }
                         max-width: 100vw;
-                        color: ${textColor}; // Apply the text color dynamically
+                         color: ${textColor}; // Apply the text color dynamically
 
                         h1 {
                             font-size: 48px;

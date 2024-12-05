@@ -36,7 +36,15 @@ const CarouselContainer = styled.div`
     }
 `;
 
-const ProductSlide = styled.div<{ angle: number; distance: number; isActive: boolean; translateY: number; zIndex: number; height: number; opacity: number }>`
+const ProductSlide = styled.div<{
+    angle: number;
+    distance: number;
+    isActive: boolean;
+    translateY: number;
+    zIndex: number;
+    height: number;
+    opacity: number
+}>`
     position: absolute;
     top: 30%;
     left: 50%;
@@ -52,7 +60,7 @@ const ProductSlide = styled.div<{ angle: number; distance: number; isActive: boo
     z-index: ${({ zIndex }) => zIndex};
     transition: transform 0.5s ease, opacity 0.5s ease;
     opacity: ${({ opacity }) => opacity};
-    // box-shadow: ${({ isActive }) => (isActive ? '0px 4px 12px rgba(0, 0, 0, 0.3)' : 'none')};
+        // box-shadow: ${({ isActive }) => (isActive ? '0px 4px 12px rgba(0, 0, 0, 0.3)' : 'none')};
     border-radius: 8px;
 
     @media (max-width: 768px) {
@@ -85,15 +93,15 @@ const ProductImageContainer = styled.div<{ height: number }>`
     display: flex;
     justify-content: center;
     //img {
-        align-items: center;
-        object-fit: contain;
-        object-position: center center;
+    align-items: center;
+    object-fit: contain;
+    object-position: center center;
 
     //}
     overflow: hidden;
     transform-origin: center;
 
-    
+
     @media (max-width: 768px) {
         width: 120px;
         height: 240px;
@@ -127,7 +135,7 @@ const InfoBlock = styled.div`
 const ProductTitle = styled.h3`
     display: flex;
     align-items: center;
-    
+
     width: 100%;
     font-size: 16px;
     font-weight: 300;
@@ -182,7 +190,7 @@ const StockButton = styled.button<{ inStock: boolean }>`
     //width: 108px;
     align-items: center;
     background-color: ${({ inStock, theme }) =>
-    inStock ? theme.text.accentGreen : theme.text.accent};
+            inStock ? theme.text.accentGreen : theme.text.accent};
     font-size: 16px;
     font-weight: 600;
     line-height: 16px;
@@ -362,38 +370,41 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                 <InfoBlock>
                     <Stack justifyBetween itemsCenter>
                         <ProductTitle>
-                            <b>{products[activeIndex % products.length]?.customFields.brand}</b>
+                            <b>{products[activeIndex % products.length]?.customFields?.brand}</b>
                             {products[activeIndex % products.length]?.productName} ({products[activeIndex % products.length]?.productVariantName})
                         </ProductTitle>
                         <Link
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                display: 'flex',
-                                justifyContent: 'end', // Changed to camelCase
-                            }}
                             href={`/products/${products[activeIndex % products.length]?.slug}`}
                             passHref
-                            key={`${products[activeIndex % products.length]?.slug}-${products[activeIndex % products.length]?.index}`}
                         >
-
                             <StockButton inStock={products[activeIndex % products.length]?.inStock}>
                                 {products[activeIndex % products.length]?.inStock ? 'In Stock' : 'Out of Stock'}
-                                <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6.75083 9.88741C6.67911 9.81522 6.63882 9.71737 6.63882 9.61534C6.63882 9.51332 6.67911 9.41546 6.75083 9.34328L10.6924 5.38037L0.382989 5.38037C0.281414 5.38037 0.183999 5.3398 0.112174 5.2676C0.0403497 5.1954 -1.17649e-06 5.09748 -1.17203e-06 4.99537C-1.16757e-06 4.89326 0.0403498 4.79533 0.112174 4.72313C0.183999 4.65093 0.281414 4.61037 0.382989 4.61037L10.6924 4.61037L6.75083 0.647459C6.68318 0.574477 6.64635 0.477946 6.6481 0.378206C6.64985 0.278465 6.69004 0.183301 6.76021 0.112763C6.83038 0.0422247 6.92505 0.00181957 7.02427 5.97638e-05C7.12349 -0.00170004 7.21952 0.0353229 7.29212 0.103329L11.888 4.7233C11.9597 4.79549 12 4.89334 12 4.99537C12 5.09739 11.9597 5.19525 11.888 5.26743L7.29212 9.88741C7.22031 9.9595 7.12297 10 7.02147 10C6.91998 10 6.82264 9.9595 6.75083 9.88741Z" fill="white" />
-                                </svg>
                             </StockButton>
                         </Link>
-
                     </Stack>
-                    <Divider marginBlock="1.5rem"></Divider>
-                    <Stack>
+                    <Divider marginBlock="1.5rem" />
+                    <Stack gap={26}>
                         <ProductDetails>
-                            <span>
-                                Price: <span className="amount">&euro;{(products[activeIndex % products.length]?.priceWithTax?.min / 100).toFixed(2)}{' '}</span>
-                                {/*{products[activeIndex % products.length]?.currencyCode}*/}
+                        <span>
+                            Price: <span className="amount">
+                            &euro;{(products[activeIndex % products.length]?.priceWithTax?.min / 100).toFixed(2)}
                             </span>
+                        </span>
                         </ProductDetails>
+                        {products[activeIndex % products.length]?.terrain && (
+                            <ProductDetails>
+                                <span>
+                                Terrain: <span>{products[activeIndex % products.length]?.terrain}</span>
+                                </span>
+                            </ProductDetails>
+                        )}
+                        {products[activeIndex % products.length]?.level && (
+                            <ProductDetails>
+                                <span>
+                                    Rider Level: <span>{products[activeIndex % products.length]?.level}</span>
+                                </span>
+                            </ProductDetails>
+                        )}
                     </Stack>
                 </InfoBlock>
             </BottomStack>
