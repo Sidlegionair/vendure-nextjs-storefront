@@ -8,7 +8,7 @@ export const ContentContainer = styled.div`
     margin: auto;
     width: 1528px;
     padding: 0;
-    z-index: 99999;
+    //z-index: 99999;
 
 
     @media (max-width: ${({ theme }) => theme.breakpoints['3xl']}) {

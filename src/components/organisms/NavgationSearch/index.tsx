@@ -227,7 +227,7 @@ const Form = styled.form`
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: -1;
+    z-index: 0;
 `;
 
 const Input = styled.input`

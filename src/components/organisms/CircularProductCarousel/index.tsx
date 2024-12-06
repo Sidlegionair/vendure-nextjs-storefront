@@ -248,10 +248,26 @@ const Quote = styled(Stack)`
         }
     }
 `;
+const BottomStackWrapper = styled(Stack)`
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    bottom: 72px;
+    @media (max-width: 768px) {
+        width: 80%;
+        bottom: 50px;
+    }
+
+    @media (max-width: 480px) {
+        width: 90%;
+        bottom: 30px;
+    }
+
+`
+
 
 const BottomStack = styled(Stack)`
-    position: absolute;
-    bottom: 72px;
     width: 591px;
 
     @media (max-width: 768px) {
@@ -365,6 +381,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
             })}
 
 
+            <BottomStackWrapper>
             <BottomStack column>
                 <Quote justifyCenter column>
                     “By far the best freeride board that I have ever ridden.”
@@ -409,6 +426,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                     </Stack>
                 </InfoBlock>
             </BottomStack>
+            </BottomStackWrapper>
 
         </CarouselContainer>
 
