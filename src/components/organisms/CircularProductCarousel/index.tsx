@@ -114,9 +114,11 @@ const ProductImageContainer = styled.div<{ height: number }>`
 `;
 
 const InfoBlock = styled.div`
-    height: 120px;
+    display: flex;
+    flex-direction: column;
+    //height: 120px;
     background: rgba(255, 255, 255, 0.01);
-    padding: 15px 20px;
+    padding: 20px 20px;
     border: 1px solid #4D4D4D;
     text-align: center;
     border-radius: 8px;
@@ -172,6 +174,7 @@ const ProductDetails = styled.div`
     justify-content: space-between;
     font-size: 15px;
     font-weight: 600;
+    gap: 20px;
     line-height: 15px;
     text-align: left;
 
@@ -185,20 +188,20 @@ const ProductDetails = styled.div`
 `;
 
 const StockButton = styled.button<{ inStock: boolean }>`
-    display: flex;
-    justify-content: space-between;
-    //width: 108px;
-    align-items: center;
+    display: inline-flex; // Use inline-flex for natural size based on content
+    justify-content: center; // Center the text horizontally
+    align-items: center; // Center the text vertically
     background-color: ${({ inStock, theme }) =>
             inStock ? theme.text.accentGreen : theme.text.accent};
     font-size: 16px;
     font-weight: 600;
     line-height: 16px;
-    text-align: left;
     color: white;
-    padding: 9px 15px;
+    padding: 9px 15px; // Padding to control size
     border: none;
     border-radius: 6px;
+    cursor: pointer; // Add pointer cursor for better UX
+    white-space: nowrap; // Prevent text wrapping
 
     @media (max-width: 768px) {
         font-size: 14px;
@@ -210,6 +213,7 @@ const StockButton = styled.button<{ inStock: boolean }>`
         padding: 5px 10px;
     }
 `;
+
 
 // Responsive adjustments for the quote section
 const Quote = styled(Stack)`
@@ -266,8 +270,8 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
     const [startX, setStartX] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const rotationAngle = 360 / products.length;
-    const distance = 500;
-    const maxLiftAmount = 150;
+    const distance = 400;
+    const maxLiftAmount = 200;
 
     const minHeight = 159.35;
     const maxHeight = 356.2;
@@ -390,21 +394,18 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                             &euro;{(products[activeIndex % products.length]?.priceWithTax?.min / 100).toFixed(2)}
                             </span>
                         </span>
-                        </ProductDetails>
                         {products[activeIndex % products.length]?.terrain && (
-                            <ProductDetails>
                                 <span>
                                 Terrain: <span>{products[activeIndex % products.length]?.terrain}</span>
                                 </span>
-                            </ProductDetails>
                         )}
                         {products[activeIndex % products.length]?.level && (
-                            <ProductDetails>
                                 <span>
                                     Rider Level: <span>{products[activeIndex % products.length]?.level}</span>
                                 </span>
-                            </ProductDetails>
                         )}
+                        </ProductDetails>
+
                     </Stack>
                 </InfoBlock>
             </BottomStack>

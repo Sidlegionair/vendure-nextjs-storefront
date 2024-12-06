@@ -8,6 +8,11 @@ import { PER_PAGE, collectionsEmptyState, prepareFilters, reduceFacets } from '.
 import { CollectionContainerType, Sort } from './types';
 import { useChannels } from '../channels';
 
+type EnrichedProductType = ProductSearchType & {
+    customFields?: {
+        brand?: string | null;
+    };
+};
 
 
 
@@ -23,118 +28,161 @@ const useCollectionContainer = createContainer<
         sort?: Sort;
         page?: number;
     }
->(initialState => {
+>((initialState) => {
     if (!initialState?.collection) return collectionsEmptyState;
+
     const ctx = useChannels();
     const [collection, setCollection] = useState(initialState.collection);
     const [products, setProducts] = useState(initialState.products);
     const [totalProducts, setTotalProducts] = useState(initialState.totalProducts);
     const [facetValues, setFacetValues] = useState(initialState.facets);
     const [filters, setFilters] = useState<{ [key: string]: string[] }>(
-        initialState.filters ? initialState.filters : {},
+        initialState.filters ? initialState.filters : {}
     );
-    const initialSort = initialState.sort ? initialState.sort : { key: 'title', direction: SortOrder.ASC };
-    const [sort, setSort] = useState<{
-        key: string;
-        direction: SortOrder;
-    }>(initialSort);
-    const [currentPage, setCurrentPage] = useState(initialState.page ? initialState.page : 1);
-    const [q, setQ] = useState<string | undefined>(initialState.searchQuery ? initialState.searchQuery : undefined);
+    const initialSort = initialState.sort || { key: 'title', direction: SortOrder.ASC };
+    const [sort, setSort] = useState(initialSort);
+    const [currentPage, setCurrentPage] = useState(initialState.page || 1);
+    const [q, setQ] = useState<string | undefined>(initialState.searchQuery);
     const { query } = useRouter();
-
-    useEffect(() => {
-        setProducts(initialState.products);
-        setTotalProducts(initialState.totalProducts);
-        setFacetValues(initialState.facets);
-        setCollection(initialState.collection);
-        setFilters({});
-    }, [initialState]);
-
-    const [filtersOpen, setFiltersOpen] = useState(false);
+    const [filtersOpen, setFiltersOpen] = useState(false); // Add this state
+    const [brandData, setBrandData] = useState<{ id: string; brand: string | null }[]>([]);
 
     const totalPages = useMemo(() => Math.ceil(totalProducts / PER_PAGE), [totalProducts]);
 
+    // Fetch brand data
     useEffect(() => {
-        if (initialState.searchQuery) return;
-        if (query.page) setCurrentPage(parseInt(query.page as string));
-        if (query.sort) {
-            const [key, direction] = (query.sort as string).split('-');
-            setSort({ key, direction: direction.toUpperCase() as SortOrder });
-        }
-        if (query.q) setQ(query.q as string);
-        if (query && Object.keys(query).filter(k => k !== 'slug' && k !== 'locale' && k !== 'channel').length) {
-            const filters = prepareFilters(query, initialState.facets);
-            let q = undefined;
-            let sort = { key: 'title', direction: SortOrder.ASC };
-            if (query.q) q = query.q as string;
-            if (query.sort) {
-                const [key, direction] = (query.sort as string).split('-');
-                sort = { key, direction: direction.toUpperCase() as SortOrder };
+        const fetchBrandData = async () => {
+            const productIds = products.map((p) => p.productId).filter(Boolean);
+
+            if (productIds.length === 0) {
+                console.error('No valid product IDs found for brand query.');
+                return;
             }
-            setFilters(filters);
-            getFilteredProducts(filters, query.page ? parseInt(query.page as string) : 1, sort, q);
-        }
-    }, [query]);
 
-    const handleSort = async (sort: Sort) => {
-        const url = new URL(window.location.href);
-        url.searchParams.set('sort', `${sort.key}-${sort.direction}`.toLowerCase());
-        window.history.pushState({}, '', url.toString());
-        setSort(sort);
-        await getFilteredProducts(filters, 1, sort, q);
-    };
+            const brands = await Promise.all(
+                productIds.map(async (id) => {
+                    try {
+                        const { product } = await storefrontApiQuery(ctx)({
+                            product: [{ id }, { customFields: { brand: true } }],
+                        });
 
-    const changePage = (page: number) => {
-        const url = new URL(window.location.href);
-        url.searchParams.set('page', page.toString());
-        window.history.pushState({}, '', url.toString());
-        setCurrentPage(page);
-        getFilteredProducts(filters, page, sort, q);
-    };
+                        return {
+                            id,
+                            brand: typeof product?.customFields?.brand === 'string'
+                                ? product.customFields.brand
+                                : null, // Ensure brand is string or null
+                        };
+                    } catch (error) {
+                        console.error(`Failed to fetch brand for product ID: ${id}`, error);
+                        return { id, brand: null }; // Fallback to null
+                    }
+                })
+            );
+
+            setBrandData(brands); // No error here now
+        };
+
+        fetchBrandData();
+    }, [products, ctx]);
+
+    // Enrich products
+    const enrichedProducts: EnrichedProductType[] = useMemo(() => {
+        if (!facetValues.length && !brandData.length) return products;
+
+        const facetValueMap = facetValues.reduce((map, facet) => {
+            facet.values.forEach((value) => {
+                map[value.id] = { name: facet.name, code: facet.code, value: value.name };
+            });
+            return map;
+        }, {} as Record<string, { name: string; code: string; value: string }>);
+
+        const brandMap = brandData.reduce((map, brandEntry) => {
+            map[brandEntry.id] = brandEntry.brand;
+            return map;
+        }, {} as Record<string, string | null>);
+
+        return products.map((product) => {
+            const enrichedFacets = product.facetValueIds
+                .map((id) => facetValueMap[id])
+                .filter(Boolean);
+
+            const brand = brandMap[product.productId] || null;
+
+            return {
+                ...product,
+                facetValues: enrichedFacets,
+                customFields: {
+                    // ...(product.customFields || {}),
+                    brand,
+                },
+            };
+        });
+    }, [products, facetValues, brandData]);
 
     const applyFilter = async (group: { id: string; name: string }, value: { id: string; name: string }) => {
-        const newState = { ...filters, [group.id]: [...(filters[group.id] || []), value.id] };
+        // Avoid duplicates in filters
+        const updatedGroupFilters = [...(filters[group.id] || []), value.id].filter(
+            (id, index, self) => self.indexOf(id) === index
+        );
+        const newState = { ...filters, [group.id]: updatedGroupFilters };
 
+        // Update URL
         const url = new URL(window.location.href);
-        if (url.searchParams.get(group.name)) {
-            url.searchParams.set(group.name, `${url.searchParams.get(group.name)},${value.name}`);
-        } else url.searchParams.set(group.name, value.name);
+        const existingValues = url.searchParams.get(group.name)?.split(',') || [];
+        if (!existingValues.includes(value.name)) {
+            url.searchParams.set(group.name, [...existingValues, value.name].join(','));
+        }
+        url.searchParams.set('page', '1'); // Reset to page 1 on filter change
 
+        // Update state and fetch filtered products
         setFilters(newState);
-        url.searchParams.set('page', '1');
-        await getFilteredProducts(newState, 1, sort, q);
         window.history.pushState({}, '', url.toString());
+        await getFilteredProducts(newState, 1, sort, q);
     };
 
     const removeFilter = async (group: { id: string; name: string }, value: { id: string; name: string }) => {
-        const newState = { ...filters, [group.id]: filters[group.id].filter(f => f !== value.id) };
+        // Handle cases where filters may not exist for the group
+        const updatedGroupFilters = filters[group.id]?.filter((id) => id !== value.id) || [];
+        const newState = updatedGroupFilters.length
+            ? { ...filters, [group.id]: updatedGroupFilters }
+            : Object.fromEntries(Object.entries(filters).filter(([key]) => key !== group.id));
 
+        // Update URL
         const url = new URL(window.location.href);
-        if (url.searchParams.get(group.name)) {
-            const values = url.searchParams.get(group.name)?.split(',');
-            const filtered = values?.filter(v => v !== value.name);
-            if (filtered?.length) url.searchParams.set(group.name, filtered.join(','));
-            else url.searchParams.delete(group.name);
+        const existingValues = url.searchParams.get(group.name)?.split(',') || [];
+        const filteredValues = existingValues.filter((v) => v !== value.name);
+        if (filteredValues.length) {
+            url.searchParams.set(group.name, filteredValues.join(','));
+        } else {
+            url.searchParams.delete(group.name);
         }
+        url.searchParams.set('page', '1'); // Reset to page 1 on filter change
 
+        // Update state and fetch filtered products
         setFilters(newState);
-        url.searchParams.set('page', '1');
-        await getFilteredProducts(newState, 1, sort, q);
         window.history.pushState({}, '', url.toString());
+        await getFilteredProducts(newState, 1, sort, q);
     };
 
-    const getFilteredProducts = async (state: { [key: string]: string[] }, page: number, sort: Sort, q?: string) => {
-        if (page < 1) page = 1;
-        const facetValueFilters: GraphQLTypes['FacetValueFilterInput'][] = [];
 
-        Object.entries(state).forEach(([key, value]) => {
-            const facet = initialState.facets.find(f => f.id === key);
-            if (!facet) return;
-            const filter: GraphQLTypes['FacetValueFilterInput'] = {};
-            if (value.length === 1) filter.and = value[0];
-            else filter.or = value;
-            facetValueFilters.push(filter);
-        });
+    // Fetch filtered products
+    const getFilteredProducts = async (
+        state: { [key: string]: string[] },
+        page: number,
+        sort: Sort,
+        q?: string
+    ) => {
+        if (page < 1) page = 1;
+        const facetValueFilters: GraphQLTypes['FacetValueFilterInput'][] = Object.entries(state)
+            .reduce((filters, [key, value]) => {
+                const facet = initialState.facets.find((f) => f.id === key);
+                if (!facet) return filters; // Skip if facet not found
+
+                filters.push(
+                    value.length === 1 ? { and: value[0] } : { or: value }
+                );
+                return filters;
+            }, [] as GraphQLTypes['FacetValueFilterInput'][]);
 
         const input: GraphQLTypes['SearchInput'] = {
             collectionSlug: collection.slug,
@@ -146,57 +194,45 @@ const useCollectionContainer = createContainer<
             term: q,
         };
 
-        // Fetch initial product data
         const { search } = await storefrontApiQuery(ctx)({
             search: [{ input }, SearchSelector],
         });
 
-        // Fetch brands for the products
-        const brandPromises = search.items.map(async product => {
-            const { product: brandData } = await storefrontApiQuery(ctx)({
-                product: [{ id: product.productId }, { customFields: { brand: true } }],
-            });
-            return {
-                id: product.productId,
-                brand: brandData?.customFields?.brand || null,
-            };
-        });
-
-        const brandData = await Promise.all(brandPromises);
-
-        // Map brands to products
-        const productsWithBrands = search.items.map(product => ({
-            ...product,
-            customFields: {
-                brand: brandData.find(b => b.id === product.productId)?.brand || null
-            },
-        }));
-
-        setProducts(productsWithBrands);
+        setProducts(search.items);
         setTotalProducts(search?.totalItems);
-        const facets = reduceFacets(search?.facetValues || []);
-        setFacetValues(facets);
+        setFacetValues(reduceFacets(search?.facetValues || []));
+    };
+
+    const handleSort = async (newSort: Sort) => {
+        setSort(newSort);
+        await getFilteredProducts(filters, currentPage, newSort, q);
     };
 
     return {
         searchPhrase: q || '',
         collection,
-        products,
+        products: enrichedProducts,
         facetValues,
         sort,
-        handleSort,
         paginationInfo: {
             currentPage,
             totalPages,
             totalProducts,
             itemsPerPage: PER_PAGE,
         },
-        changePage,
+        changePage: async (page) => {
+            const url = new URL(window.location.href);
+            url.searchParams.set('page', page.toString());
+            window.history.pushState({}, '', url.toString());
+            setCurrentPage(page);
+            await getFilteredProducts(filters, page, sort, q);
+        },
         filtersOpen,
-        setFiltersOpen,
+        setFiltersOpen, // Expose setter
         filters,
         applyFilter,
         removeFilter,
+        handleSort, // Expose handleSort
     };
 });
 

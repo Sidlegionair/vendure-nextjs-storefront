@@ -90,7 +90,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
         };
     });
 
-    console.log(productsWithBrands);
+    // console.log(productsWithBrands);
 
     const facets = reduceFacets(productsQuery.search.facetValues);
 
