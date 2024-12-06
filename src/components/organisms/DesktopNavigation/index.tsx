@@ -80,19 +80,100 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
     );
 };
 
-// Main Desktop Stack with default styling for large screens
 const DesktopStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | number }>`
     @media (max-width: ${p => p.theme.breakpoints.lg}) {
-        display: none;
+        display: none; // Hide on smaller screens
+    }
+    z-index: 9999;
+`;
+
+const Background = styled(Stack)`
+    //left: 40vw;
+    height: 100%;
+    background: ${p => p.theme.background.main};
+    box-shadow: 0px 0px 12px ${p => p.theme.shadow};
+    border: 1px solid ${p => p.theme.gray(100)};
+    margin-top: 4rem;
+    padding: 40px;
+
+    @media (max-width: ${p => p.theme.breakpoints.md}) {
+        margin-top: 2rem;
+        padding: 20px;
+    }
+
+    @media (max-width: ${p => p.theme.breakpoints.sm}) {
+        margin-top: 1rem;
+        padding: 10px;
     }
 `;
 
-// Submenu styling with dynamic gap based on prop
-const SubMenuStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | number }>`
-    width: 100%; // Make submenu span full width
-    display: flex; // Ensure it behaves as a flex container
-    justify-content: space-between; // Distribute links evenly across the width
+const RelativeStack = styled(Stack)`
+    position: relative; // Ensure stacking context
+    z-index: 10;
 
+    & > div {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        position: absolute;
+        top: 100%;
+        left: 17vw;
+        transform: translateX(-50%) translateY(-1rem); // Initial state off-screen
+        transition: all 0.35s ease-in-out;
+    }
+
+    &:hover {
+        & > a {
+            color: ${p => p.theme.text.main};
+            text-decoration: underline;
+            text-decoration-thickness: 0.1rem;
+            text-underline-offset: 0.5rem;
+        }
+        & > div {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0); // Dropdown is visible
+            pointer-events: all;
+        }
+    }
+`;
+
+const AbsoluteStack = styled(Stack)`
+    position: absolute;
+    z-index: 20;
+    top: 100%;
+    left: 100vw;
+    transform: translateX(-50%);
+    margin-top: 0;
+    transition: all 0.35s ease-in-out;
+    width: auto; // Dynamically adjust to content
+    min-width: 200px;
+    max-width: 80vw; // Responsive constraint for smaller screens
+    overflow: visible;
+
+    @media (max-width: ${p => p.theme.breakpoints.sm}) {
+        left: 0;
+        transform: translateX(0); // Align left for smaller screens
+        max-width: 100%; // Ensure full width on small screens
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: 0;
+        width: 100%;
+        height: 10px;
+        z-index: 15;
+    }
+`;
+
+const SubMenuStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | number }>`
+    position: relative;
+    z-index: 5;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
     gap: ${({ gap }) => (typeof gap === 'number' ? `${gap}px` : gap)};
     font-size: 16px;
     font-weight: 400;
@@ -105,60 +186,12 @@ const SubMenuStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '
     @media (max-width: ${p => p.theme.breakpoints.sm}) {
         gap: 5px;
         font-size: 12px;
+        flex-wrap: wrap; // Allow wrapping for smaller screens
     }
-`;
-
-const Background = styled(Stack)`
-    height: 100%;
-    background: ${p => p.theme.background.main};
-    box-shadow: 0px 0px 12px ${p => p.theme.shadow};
-    border: 1px solid ${p => p.theme.gray(100)};
-    margin-top: 4rem;
-    //padding: 2rem 2rem 10rem 2rem;
-    padding: 40px;
-`;
-
-const RelativeStack = styled(Stack)`
-    //z-index: 9999;
-
-    & > div {
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-1rem) translateX(50%);
-        pointer-events: none;
-    }
-
-    &:hover {
-        & > a {
-            color: ${p => p.theme.text.main};
-
-            text-decoration: underline;
-            text-decoration-thickness: 0.1rem;
-            text-underline-offset: 0.5rem;
-        }
-        & > div {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) translateX(50%);
-            pointer-events: all;
-        }
-    }
-`;
-
-const AbsoluteStack = styled(Stack)`
-    position: absolute;
-    //z-index: 9999;
-
-    top: 0;
-    right: 50%;
-    transform: translateY(0) translateX(50%);
-    margin-top: 5rem;
-    transition: all 0.35s ease-in-out;
-    max-width: 1440px;
 `;
 
 const StyledLink = styled(Link)<{ isSubMenu?: boolean }>`
-    color: ${p => p.theme.text.main} !important; // Apply color directly with !important to increase specificity
+    color: ${p => p.theme.text.main} !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -171,6 +204,6 @@ const StyledLink = styled(Link)<{ isSubMenu?: boolean }>`
     }
 
     @media (max-width: ${p => p.theme.breakpoints.sm}) {
-        font-size: ${p => (p.isSubMenu ? '12px' : '16px')};
+        font-size: ${p => (p.isSubMenu ? '14px' : '16px')};
     }
 `;
