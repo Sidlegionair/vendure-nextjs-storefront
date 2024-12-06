@@ -110,7 +110,6 @@ const SubMenuStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '
 
 const Background = styled(Stack)`
     height: 100%;
-    z-index: 1;
     background: ${p => p.theme.background.main};
     box-shadow: 0px 0px 12px ${p => p.theme.shadow};
     border: 1px solid ${p => p.theme.gray(100)};
@@ -120,7 +119,7 @@ const Background = styled(Stack)`
 `;
 
 const RelativeStack = styled(Stack)`
-    z-index: 9999;
+    //z-index: 9999;
 
     & > div {
         opacity: 0;
@@ -148,6 +147,8 @@ const RelativeStack = styled(Stack)`
 
 const AbsoluteStack = styled(Stack)`
     position: absolute;
+    //z-index: 9999;
+
     top: 0;
     right: 50%;
     transform: translateY(0) translateX(50%);

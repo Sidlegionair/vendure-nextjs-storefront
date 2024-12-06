@@ -32,7 +32,7 @@ export const ProductTile: React.FC<{
         ?.filter(facet => !excludedFacetCodes.includes(facet.code))
         .slice(0, 3) || []; // Ensure facets is always an array
 
-    console.log(product.facetValues, facets);
+    // console.log(product.facetValues, facets);
 
 
     // Determine price formatting

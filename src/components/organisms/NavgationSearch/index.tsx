@@ -190,7 +190,7 @@ const SearchPosition = styled(Stack)`
     width: 100%;
     top: calc(100% + 1rem);
     position: absolute;
-    z-index: 2136;
+    //z-index: 2136;
 
     @media (min-width: ${p => p.theme.breakpoints.md}) {
         width: calc(100% + 20rem);
@@ -227,6 +227,7 @@ const Form = styled.form`
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: -1;
 `;
 
 const Input = styled.input`
