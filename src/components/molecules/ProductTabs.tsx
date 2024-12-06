@@ -101,10 +101,49 @@ const TabHeader = styled.button<{ active: boolean }>`
 `;
 
 const Content = styled.div`
+    display: flex;
     margin-top: 30px;
+    font-family: 'Calibri', sans-serif;
     font-size: 18px;
     line-height: 26px;
     color: ${({ theme }) => theme.text.subtitle};
+
+    div {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        h2 {
+            font-size: 24px;
+            line-height: 32px;
+            font-weight: bold;
+            color: ${({ theme }) => theme.text.main}; /* Assuming a primary color */
+            margin: 0;
+        }
+
+        h3 {
+            font-size: 20px;
+            line-height: 28px;
+            font-weight: 600;
+            color: ${({ theme }) => theme.text.main}; /* Assuming a secondary color */
+            margin: 0;
+        }
+
+        h4 {
+            font-size: 18px;
+            line-height: 24px;
+            font-weight: 500;
+            color: ${({ theme }) => theme.text.subtitle}; /* Matches the default text color */
+            margin: 0;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 24px;
+            color: ${({ theme }) => theme.text.subtitle};
+            margin: 0;
+        }
+    }
 `;
 
 const EmptyMessage = styled.div`

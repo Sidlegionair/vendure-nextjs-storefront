@@ -41,9 +41,9 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string }>) =
     const { optionGroups: _optionGroups, ...product } = response.product;
 
     // mapping option groups to match the color names <-> hex codes
-    // const getFacetsValues = await SSGQuery(r.context)({
-    //     facets: [{ options: { filter: { name: { eq: 'color' } } } }, { items: { values: { name: true, code: true } } }],
-    // });
+    const getFacetsValues = await SSGQuery(r.context)({
+        facets: [{ options: { filter: { name: { eq: 'color' } } } }, { items: { values: { name: true, code: true } } }],
+    });
 
     const optionGroups = _optionGroups.map(og => {
         return {
@@ -63,7 +63,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string }>) =
         };
     });
 
-    console.log(clientsAlsoBought);
+    // console.log(clientsAlsoBought);
 
     const returnedStuff = {
         ...r.props,
