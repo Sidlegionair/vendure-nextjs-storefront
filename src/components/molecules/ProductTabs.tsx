@@ -131,15 +131,15 @@ const Content = styled.div`
 
         h4 {
             font-size: 18px;
-            line-height: 24px;
+            line-height: 26px;
             font-weight: 500;
             color: ${({ theme }) => theme.text.subtitle}; /* Matches the default text color */
             margin: 0;
         }
 
         p {
-            font-size: 16px;
-            line-height: 24px;
+            font-size: 18px;
+            line-height: 26px;
             color: ${({ theme }) => theme.text.subtitle};
             margin: 0;
         }
