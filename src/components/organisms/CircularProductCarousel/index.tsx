@@ -6,13 +6,13 @@ import { Divider, Stack } from '@/src/components';
 const CarouselContainer = styled.div`
     position: relative;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
     width: 100%;
-    height: 100%;
     overflow: hidden;
     background: #f0f0f0;
-    padding-top: 100px; /* More distance from top on desktop */
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
 
     &::before {
         content: '';
@@ -28,23 +28,48 @@ const CarouselContainer = styled.div`
     }
 
     @media (min-width: 1024px) {
-        perspective: 2000px; /* Strong perspective on larger screens */
-        height: 950px;
+        perspective: 2000px;
+        min-height: 700px;
     }
 
     @media (max-width: 1023px) and (min-width: 769px) {
-        height: 700px; /* Tablet: a bit more compact height */
         perspective: 1200px;
+        min-height: 700px;
     }
 
     @media (max-width: 768px) {
-        height: 600px;
         perspective: 1000px;
+        min-height: 600px;
     }
 
     @media (max-width: 480px) {
-        height: 500px;
-        perspective: 300px; /* On mobile, perspective low (though rotation is off) */
+        perspective: 300px;
+        min-height: 500px;
+    }
+`;
+
+const SlidesWrapper = styled.div`
+    position: relative;
+    width: 100%;
+    flex: 0 0 auto; /* Ensure it takes needed space */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media (min-width: 1024px) {
+        min-height: 950px;
+    }
+
+    @media (max-width: 1023px) and (min-width: 769px) {
+        min-height: 700px;
+    }
+
+    @media (max-width: 768px) {
+        min-height: 600px;
+    }
+
+    @media (max-width: 480px) {
+        min-height: 500px;
     }
 `;
 
@@ -61,8 +86,6 @@ const ProductSlide = styled.div<{
     activeIndex: number;
 }>`
     position: absolute;
-    left: 50%;
-    top: ${({ flattened }) => (flattened ? '45%' : '30%')};
     transform-style: preserve-3d;
     transform-origin: center;
     transition: transform 0.5s ease, opacity 0.5s ease;
@@ -72,23 +95,20 @@ const ProductSlide = styled.div<{
     ${({ flattened, angle, distance, translateY, index, activeIndex }) =>
             flattened
                     ? `
-                /* Mobile flat slider: no rotation, just horizontal translate.
-                   Also, add a subtle vertical lift depending on how far from center they are */
-                transform: translateX(${(index - activeIndex) * 120}px) translate(-50%, -50%) translateY(${-(Math.abs(index - activeIndex) * 30)}px);
+                transform: translateX(${(index - activeIndex) * 120}px);
             `
                     : `
-                /* Desktop/Tablet 3D effect */
-                transform: 
+                transform:
                   rotateY(${angle}deg)
                   translateZ(${distance}px)
                   translateY(${translateY}px)
-                  translate(-50%, -50%)
                   rotateY(${-angle}deg);
             `
     }
 
     z-index: ${({ zIndex }) => zIndex};
 `;
+
 
 const ProductImageContainer = styled.div<{ height: number }>`
     width: 150px;
@@ -102,7 +122,6 @@ const ProductImageContainer = styled.div<{ height: number }>`
     transform-origin: center;
 
     @media (max-width: 1023px) and (min-width: 769px) {
-        /* Tablet: a bit smaller */
         width: 130px;
         height: 260px;
     }
@@ -118,20 +137,15 @@ const ProductImageContainer = styled.div<{ height: number }>`
     }
 `;
 
-const BottomStackWrapper = styled(Stack)`
+const BottomStackWrapper = styled.div`
     display: flex;
-    position: absolute;
     justify-content: center;
     align-items: center;
-    bottom: 72px;
+    margin: 2rem auto;
     width: 100%;
-    @media (max-width: 768px) {
-        bottom: 50px;
-    }
-
-    @media (max-width: 480px) {
-        bottom: 30px;
-    }
+    max-width: 700px;
+    padding: 0 1rem;
+    box-sizing: border-box;
 `;
 
 const BottomStack = styled(Stack)`
@@ -139,16 +153,8 @@ const BottomStack = styled(Stack)`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0 auto;
     text-align: left;
-
-    @media (max-width: 768px) {
-        width: 90%;
-    }
-
-    @media (max-width: 480px) {
-        width: 95%;
-    }
+    width: 100%;
 `;
 
 const InfoBlock = styled.div`
@@ -159,7 +165,9 @@ const InfoBlock = styled.div`
     border: 1px solid #4D4D4D;
     text-align: left;
     border-radius: 8px;
-    min-width: 591px;
+    width: 100%;
+    max-width: 591px;
+    box-sizing: border-box;
 
     @media (max-width: 768px) {
         padding: 15px;
@@ -287,11 +295,13 @@ const Quote = styled(Stack)`
 `;
 
 export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ products }) => {
-    const [activeIndex, setActiveIndex] = useState(products.length);
+    const productCount = products.length;
+    const [displayCount, setDisplayCount] = useState<number>(Math.min(productCount, 11));
+    const [activeIndex, setActiveIndex] = useState(productCount);
     const [startX, setStartX] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
 
-    const [rotationAngle, setRotationAngle] = useState<number>(360 / products.length);
+    const [rotationAngle, setRotationAngle] = useState<number>(360 / displayCount);
     const [carouselDistance, setCarouselDistance] = useState<number>(400);
     const maxLiftAmount = 200;
     const minHeight = 159.35;
@@ -302,28 +312,33 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
     useEffect(() => {
         const handleResize = () => {
             const width = window.innerWidth;
+            let newDisplayCount;
             if (width < 480) {
-                // Mobile: flat slider, no rotation
+                // Mobile
+                newDisplayCount = Math.min(productCount, 5);
                 setRotationAngle(0);
                 setCarouselDistance(0);
                 setFlattened(true);
             } else if (width < 768) {
-                // Tablet: slightly less distance for a more compact feel
-                setRotationAngle(360 / products.length);
-                setCarouselDistance(250);
+                // Tablet
+                newDisplayCount = Math.min(productCount, 10);
+                setRotationAngle(360 / newDisplayCount);
+                setCarouselDistance(200);
                 setFlattened(false);
             } else {
                 // Desktop
-                setRotationAngle(360 / products.length);
+                newDisplayCount = Math.min(productCount, 15);
+                setRotationAngle(360 / newDisplayCount);
                 setCarouselDistance(400);
                 setFlattened(false);
             }
+            setDisplayCount(newDisplayCount);
         };
 
         handleResize();
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
-    }, [products.length]);
+    }, [productCount]);
 
     const duplicatedProducts = [...products, ...products];
 
@@ -363,12 +378,14 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
     const handleMouseUp = () => setIsDragging(false);
 
     const wrappedIndex = (index: number) => {
-        if (index >= duplicatedProducts.length) return products.length;
-        else if (index < 0) return duplicatedProducts.length - products.length;
+        if (index >= duplicatedProducts.length) return productCount;
+        else if (index < 0) return duplicatedProducts.length - productCount;
         return index;
     };
 
-    useEffect(() => setActiveIndex((current) => wrappedIndex(current)), [activeIndex]);
+    useEffect(() => setActiveIndex((current) => wrappedIndex(current)), [activeIndex, productCount, duplicatedProducts]);
+
+    const currentProduct = products[activeIndex % productCount];
 
     return (
         <CarouselContainer
@@ -379,50 +396,52 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
         >
-            {duplicatedProducts.map((product, index) => {
-                const angle = rotationAngle * (index - activeIndex);
-                const isActive = index === activeIndex;
-                const translateY = flattened ? 0 : Math.cos((angle * Math.PI) / 180) * maxLiftAmount;
-                const zIndex = flattened ? 1 : Math.cos((angle * Math.PI) / 180) * 1000;
-                const height = flattened
-                    ? 200
-                    : minHeight + (maxHeight - minHeight) * ((Math.cos((angle * Math.PI) / 180) + 1) / 2);
-                const opacity = flattened
-                    ? 1 // All visible and opaque on mobile for simplicity
-                    : isActive
+            <SlidesWrapper>
+                {duplicatedProducts.map((product, index) => {
+                    const angle = rotationAngle * (index - activeIndex);
+                    const isActive = index === activeIndex;
+                    const translateY = flattened ? 0 : Math.cos((angle * Math.PI) / 180) * maxLiftAmount;
+                    const zIndex = flattened ? 1 : Math.cos((angle * Math.PI) / 180) * 1000;
+                    const height = flattened
+                        ? 200
+                        : minHeight + (maxHeight - minHeight) * ((Math.cos((angle * Math.PI) / 180) + 1) / 2);
+                    const opacity = flattened
                         ? 1
-                        : 0.4 + (0.5 * (1 - Math.abs(Math.cos((angle * Math.PI) / 180))));
+                        : isActive
+                            ? 1
+                            : 0.4 + (0.5 * (1 - Math.abs(Math.cos((angle * Math.PI) / 180))));
 
-                return (
-                    <ProductSlide
-                        key={index}
-                        angle={angle}
-                        distance={carouselDistance}
-                        isActive={isActive}
-                        translateY={translateY}
-                        zIndex={Math.round(zIndex)}
-                        height={height}
-                        opacity={opacity}
-                        flattened={flattened}
-                        index={index}
-                        activeIndex={activeIndex}
-                    >
-                        <ProductImageContainer height={height}>
-                            <img
-                                src={product.productAsset?.preview}
-                                alt={product.productName}
-                                draggable={false}
-                                style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    objectFit: 'contain',
-                                    borderRadius: '8px',
-                                }}
-                            />
-                        </ProductImageContainer>
-                    </ProductSlide>
-                );
-            })}
+                    return (
+                        <ProductSlide
+                            key={index}
+                            angle={angle}
+                            distance={carouselDistance}
+                            isActive={isActive}
+                            translateY={translateY}
+                            zIndex={Math.round(zIndex)}
+                            height={height}
+                            opacity={opacity}
+                            flattened={flattened}
+                            index={index}
+                            activeIndex={activeIndex}
+                        >
+                            <ProductImageContainer height={height}>
+                                <img
+                                    src={product.productAsset?.preview}
+                                    alt={product.productName}
+                                    draggable={false}
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        objectFit: 'contain',
+                                        borderRadius: '8px',
+                                    }}
+                                />
+                            </ProductImageContainer>
+                        </ProductSlide>
+                    );
+                })}
+            </SlidesWrapper>
 
             <BottomStackWrapper>
                 <BottomStack column>
@@ -434,15 +453,15 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                     <InfoBlock>
                         <Stack justifyBetween itemsCenter>
                             <ProductTitle>
-                                <b>{products[activeIndex % products.length]?.customFields?.brand}</b>
-                                {products[activeIndex % products.length]?.productName} ({products[activeIndex % products.length]?.productVariantName})
+                                <b>{currentProduct?.customFields?.brand}</b>
+                                {currentProduct?.productName} ({currentProduct?.productVariantName})
                             </ProductTitle>
                             <Link
-                                href={`/products/${products[activeIndex % products.length]?.slug}`}
+                                href={`/products/${currentProduct?.slug}`}
                                 passHref
                             >
-                                <StockButton inStock={products[activeIndex % products.length]?.inStock}>
-                                    {products[activeIndex % products.length]?.inStock ? 'In Stock' : 'Out of Stock'}
+                                <StockButton inStock={currentProduct?.inStock}>
+                                    {currentProduct?.inStock ? 'In Stock' : 'Out of Stock'}
                                 </StockButton>
                             </Link>
                         </Stack>
@@ -451,17 +470,17 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                             <ProductDetails>
                                 <span>
                                     Price: <span className="amount">
-                                    &euro;{(products[activeIndex % products.length]?.priceWithTax?.min / 100).toFixed(2)}
+                                    &euro;{(currentProduct?.priceWithTax?.min / 100).toFixed(2)}
                                     </span>
                                 </span>
-                                {products[activeIndex % products.length]?.terrain && (
+                                {currentProduct?.terrain && (
                                     <span>
-                                        Terrain: <span>{products[activeIndex % products.length]?.terrain}</span>
+                                        Terrain: <span>{currentProduct?.terrain}</span>
                                     </span>
                                 )}
-                                {products[activeIndex % products.length]?.level && (
+                                {currentProduct?.level && (
                                     <span>
-                                        Rider Level: <span>{products[activeIndex % products.length]?.level}</span>
+                                        Rider Level: <span>{currentProduct?.level}</span>
                                     </span>
                                 )}
                             </ProductDetails>
