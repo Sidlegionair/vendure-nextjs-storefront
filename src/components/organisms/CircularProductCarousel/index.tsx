@@ -159,6 +159,7 @@ const InfoBlock = styled.div`
     border: 1px solid #4D4D4D;
     text-align: left;
     border-radius: 8px;
+    min-width: 591px;
 
     @media (max-width: 768px) {
         padding: 15px;
