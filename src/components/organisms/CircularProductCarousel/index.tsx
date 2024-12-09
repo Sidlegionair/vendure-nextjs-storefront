@@ -29,7 +29,7 @@ const CarouselContainer = styled.div`
 
     @media (min-width: 1024px) {
         perspective: 2000px;
-        min-height: 700px;
+        min-height: 950px;
     }
 
     @media (max-width: 1023px) and (min-width: 769px) {
@@ -51,26 +51,30 @@ const CarouselContainer = styled.div`
 const SlidesWrapper = styled.div`
     position: relative;
     width: 100%;
-    flex: 0 0 auto; /* Ensure it takes needed space */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
+    flex: 0 0 auto;
     @media (min-width: 1024px) {
         min-height: 950px;
     }
-
     @media (max-width: 1023px) and (min-width: 769px) {
         min-height: 700px;
     }
-
     @media (max-width: 768px) {
         min-height: 600px;
     }
-
     @media (max-width: 480px) {
         min-height: 500px;
     }
+`;
+
+// Center anchor to ensure the carousel rotates around a known center
+const CenterAnchor = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transform-style: preserve-3d;
+    width: 0;
+    height: 0;
 `;
 
 const ProductSlide = styled.div<{
@@ -84,6 +88,7 @@ const ProductSlide = styled.div<{
     flattened: boolean;
     index: number;
     activeIndex: number;
+    extraLift: number;
 }>`
     position: absolute;
     transform-style: preserve-3d;
@@ -92,23 +97,26 @@ const ProductSlide = styled.div<{
     opacity: ${({ opacity }) => opacity};
     border-radius: 8px;
 
-    ${({ flattened, angle, distance, translateY, index, activeIndex }) =>
+    ${({ flattened, angle, distance, translateY, index, activeIndex, extraLift }) =>
             flattened
                     ? `
-                transform: translateX(${(index - activeIndex) * 120}px);
+                transform:
+                  translateX(${(index - activeIndex) * 120}px)
+                  translateY(${-Math.abs(index - activeIndex) * extraLift}px)
+                  translate(-50%, -50%);
             `
                     : `
                 transform:
                   rotateY(${angle}deg)
                   translateZ(${distance}px)
                   translateY(${translateY}px)
-                  rotateY(${-angle}deg);
+                  rotateY(${-angle}deg)
+                  translate(-50%, -50%);
             `
     }
 
     z-index: ${({ zIndex }) => zIndex};
 `;
-
 
 const ProductImageContainer = styled.div<{ height: number }>`
     width: 150px;
@@ -303,9 +311,9 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
 
     const [rotationAngle, setRotationAngle] = useState<number>(360 / displayCount);
     const [carouselDistance, setCarouselDistance] = useState<number>(400);
-    const maxLiftAmount = 200;
-    const minHeight = 159.35;
-    const maxHeight = 356.2;
+
+    const [maxLiftAmount, setMaxLiftAmount] = useState<number>(200);
+    const [extraLiftFlattened, setExtraLiftFlattened] = useState<number>(0);
 
     const [flattened, setFlattened] = useState(false);
 
@@ -314,23 +322,26 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
             const width = window.innerWidth;
             let newDisplayCount;
             if (width < 480) {
-                // Mobile
                 newDisplayCount = Math.min(productCount, 5);
                 setRotationAngle(0);
                 setCarouselDistance(0);
                 setFlattened(true);
+                setMaxLiftAmount(50);
+                setExtraLiftFlattened(10);
             } else if (width < 768) {
-                // Tablet
-                newDisplayCount = Math.min(productCount, 10);
+                newDisplayCount = Math.min(productCount, 8);
                 setRotationAngle(360 / newDisplayCount);
-                setCarouselDistance(200);
+                setCarouselDistance(250);
                 setFlattened(false);
+                setMaxLiftAmount(150);
+                setExtraLiftFlattened(0);
             } else {
-                // Desktop
-                newDisplayCount = Math.min(productCount, 15);
+                newDisplayCount = Math.min(productCount, 16);
                 setRotationAngle(360 / newDisplayCount);
                 setCarouselDistance(400);
                 setFlattened(false);
+                setMaxLiftAmount(200);
+                setExtraLiftFlattened(0);
             }
             setDisplayCount(newDisplayCount);
         };
@@ -354,8 +365,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
 
     const handleTouchMove = (e: React.TouchEvent) => {
         if (!isDragging) return;
-        const touchX = e.touches[0].clientX;
-        handleSwipeMove(touchX);
+        handleSwipeMove(e.touches[0].clientX);
     };
 
     const handleMouseMove = (e: React.MouseEvent) => {
@@ -397,50 +407,58 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
             onTouchEnd={handleTouchEnd}
         >
             <SlidesWrapper>
-                {duplicatedProducts.map((product, index) => {
-                    const angle = rotationAngle * (index - activeIndex);
-                    const isActive = index === activeIndex;
-                    const translateY = flattened ? 0 : Math.cos((angle * Math.PI) / 180) * maxLiftAmount;
-                    const zIndex = flattened ? 1 : Math.cos((angle * Math.PI) / 180) * 1000;
-                    const height = flattened
-                        ? 200
-                        : minHeight + (maxHeight - minHeight) * ((Math.cos((angle * Math.PI) / 180) + 1) / 2);
-                    const opacity = flattened
-                        ? 1
-                        : isActive
-                            ? 1
-                            : 0.4 + (0.5 * (1 - Math.abs(Math.cos((angle * Math.PI) / 180))));
+                <CenterAnchor>
+                    {duplicatedProducts.map((product, index) => {
+                        const angle = rotationAngle * (index - activeIndex);
+                        const isActive = index === activeIndex;
+                        const cosAngle = Math.cos((angle * Math.PI) / 180);
+                        const translateY = flattened ? 0 : cosAngle * maxLiftAmount;
+                        const zIndex = flattened ? 1 : cosAngle * 1000;
 
-                    return (
-                        <ProductSlide
-                            key={index}
-                            angle={angle}
-                            distance={carouselDistance}
-                            isActive={isActive}
-                            translateY={translateY}
-                            zIndex={Math.round(zIndex)}
-                            height={height}
-                            opacity={opacity}
-                            flattened={flattened}
-                            index={index}
-                            activeIndex={activeIndex}
-                        >
-                            <ProductImageContainer height={height}>
-                                <img
-                                    src={product.productAsset?.preview}
-                                    alt={product.productName}
-                                    draggable={false}
-                                    style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'contain',
-                                        borderRadius: '8px',
-                                    }}
-                                />
-                            </ProductImageContainer>
-                        </ProductSlide>
-                    );
-                })}
+                        const minHeight = 159.35;
+                        const maxHeight = 356.2;
+                        const height = flattened
+                            ? 200
+                            : minHeight + (maxHeight - minHeight) * ((cosAngle + 1) / 2);
+
+                        const opacity = flattened
+                            ? 1
+                            : isActive
+                                ? 1
+                                : 0.4 + (0.5 * (1 - Math.abs(cosAngle)));
+
+                        return (
+                            <ProductSlide
+                                key={index}
+                                angle={angle}
+                                distance={carouselDistance}
+                                isActive={isActive}
+                                translateY={translateY}
+                                zIndex={Math.round(zIndex)}
+                                height={height}
+                                opacity={opacity}
+                                flattened={flattened}
+                                index={index}
+                                activeIndex={activeIndex}
+                                extraLift={extraLiftFlattened}
+                            >
+                                <ProductImageContainer height={height}>
+                                    <img
+                                        src={product.productAsset?.preview}
+                                        alt={product.productName}
+                                        draggable={false}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'contain',
+                                            borderRadius: '8px',
+                                        }}
+                                    />
+                                </ProductImageContainer>
+                            </ProductSlide>
+                        );
+                    })}
+                </CenterAnchor>
             </SlidesWrapper>
 
             <BottomStackWrapper>
@@ -456,10 +474,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                                 <b>{currentProduct?.customFields?.brand}</b>
                                 {currentProduct?.productName} ({currentProduct?.productVariantName})
                             </ProductTitle>
-                            <Link
-                                href={`/products/${currentProduct?.slug}`}
-                                passHref
-                            >
+                            <Link href={`/products/${currentProduct?.slug}`} passHref>
                                 <StockButton inStock={currentProduct?.inStock}>
                                     {currentProduct?.inStock ? 'In Stock' : 'Out of Stock'}
                                 </StockButton>
