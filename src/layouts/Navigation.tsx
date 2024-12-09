@@ -9,14 +9,13 @@ import { CartDrawer } from '@/src/layouts/CartDrawer';
 import { CollectionTileType, NavigationType } from '@/src/graphql/selectors';
 import { RootNode } from '@/src/util/arrayToTree';
 import { DesktopNavigation } from '@/src/components/organisms/DesktopNavigation';
-import { SearchIcon } from 'lucide-react';
-import { IconButton } from '@/src/components/molecules/Button';
-import { AnnouncementBar } from '@/src/components/organisms/AnnouncementBar';
+import { SearchIcon, Menu } from 'lucide-react';
+import { Button, IconButton } from '@/src/components/molecules/Button';
 import { CategoryBar } from './CategoryBar';
 import { NavigationSearch } from '@/src/components/organisms/NavgationSearch';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigationSearch } from '@/src/components/organisms/NavgationSearch/hooks';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Picker } from '@/src/components/organisms/Picker';
 import { useTranslation } from 'next-i18next';
 
@@ -39,6 +38,8 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
     const searchRef = useRef<HTMLDivElement>(null);
     const searchMobileRef = useRef<HTMLDivElement>(null);
     const iconRef = useRef<HTMLButtonElement>(null);
+
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const handleOutsideClick = (event: MouseEvent) => {
         if (
@@ -77,35 +78,71 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                 <ContentContainer style={{ gap: '25px' }}>
                     <Stack itemsCenter justifyBetween gap={50} w100>
                         <Stack style={{ width: '100%', maxWidth: '33%' }} gap="1rem" itemsCenter>
-                            <DesktopNavigation navigation={navigation} />
+                            {/* Desktop: show navigation */}
+                            <DesktopWrapper>
+                                <DesktopNavigation navigation={navigation} />
+                            </DesktopWrapper>
 
+                            {/* Mobile: show logo on left */}
+                            <MobileWrapper>
+                                <Link ariaLabel="Home" href="/">
+                                    <LogoAexol width={165} />
+                                </Link>
+                            </MobileWrapper>
                         </Stack>
                         <Stack style={{ width: '100%', maxWidth: '33%' }} justifyCenter itemsCenter>
-                            <Link ariaLabel="Home" href="/">
-                                <LogoAexol width={256} />
-                            </Link>
+                            {/* Desktop: show bigger logo in center */}
+                            <DesktopWrapper>
+                                <Link ariaLabel="Home" href="/">
+                                    <LogoAexol width={256} />
+                                </Link>
+                            </DesktopWrapper>
                         </Stack>
                         <Stack style={{ width: '100%', maxWidth: '33%' }} gap="1rem" itemsCenter flexWrap justifyEnd>
-                            {/*<IconButton*/}
-                            {/*    aria-label="Search products"*/}
-                            {/*    onClick={navigationSearch.toggleSearch}*/}
-                            {/*    ref={iconRef}*/}
-                            {/*>*/}
-                            {/*    <SearchIcon />*/}
-                            {/*</IconButton>*/}
+                            {/* Right side icons: UserMenu, CartDrawer, Picker */}
                             <UserMenu isLogged={isLogged} />
                             <CartDrawer activeOrder={cart} />
                             <Picker changeModal={changeModal} />
+
+                            {/* Desktop: Search icon */}
+                            <DesktopWrapper>
+                                <IconButton
+                                    aria-label="Search products"
+                                    onClick={navigationSearch.toggleSearch}
+                                    ref={iconRef}
+                                >
+                                    <SearchIcon />
+                                </IconButton>
+                            </DesktopWrapper>
+
+                            {/* Mobile: hamburger menu */}
+                            <MobileWrapper>
+                                <Button
+                                    aria-label="Open menu"
+                                    onClick={() => setMobileMenuOpen(true)}
+                                    style={{ padding: '0.5rem' }}
+                                >
+                                    <svg width="26" height="18" viewBox="0 0 26 18" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M1 1H25M1 9H25M1 17H25" stroke="black" stroke-width="2"
+                                              stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+
+                                </Button>
+                            </MobileWrapper>
                         </Stack>
                     </Stack>
                     <Divider />
-                    <Stack>
-                        {subnavigation ? (
-                            <DesktopNavigation gap={135} navigation={subnavigation} isSubMenu={true} />
-                        ) : (
-                            <Stack />
-                        )}
-                    </Stack>
+                    {/* Desktop: subnavigation */}
+                    <DesktopWrapper>
+                        <Stack>
+                            {subnavigation ? (
+                                <DesktopNavigation gap={135} navigation={subnavigation} isSubMenu={true} />
+                            ) : (
+                                <Stack />
+                            )}
+                        </Stack>
+                    </DesktopWrapper>
                     <SearchStack>
                         <AnimatePresence>
                             <DesktopNavigationContainer
@@ -118,14 +155,11 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                             >
                                 <NavigationSearch {...navigationSearch} />
                             </DesktopNavigationContainer>
-
-                            {/*{navigationSearch.searchOpen ? (*/}
-                            {/*) : (*/}
-                            {/*    <DesktopNavigation navigation={navigation} />*/}
-                            {/*)}*/}
                         </AnimatePresence>
                     </SearchStack>
                 </ContentContainer>
+
+                {/* Mobile: search underneath menubar if open */}
                 {navigationSearch.searchOpen && (
                     <MobileNavigationContainer ref={searchMobileRef}>
                         <NavigationSearch {...navigationSearch} />
@@ -134,6 +168,45 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
             </StickyContainer>
 
             {categories?.length > 0 ? <CategoryBar collections={categories} /> : null}
+
+            {/* Mobile Slide-Out Menu */}
+            <AnimatePresence>
+                {mobileMenuOpen && (
+                    <MobileMenuOverlay
+                        initial={{ x: '100%' }}
+                        animate={{ x: 0 }}
+                        exit={{ x: '100%' }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <MobileMenuContent>
+                            <MobileMenuHeader>
+                                <Link ariaLabel="Home" href="/" onClick={() => setMobileMenuOpen(false)}>
+                                    <LogoAexol width={165} />
+                                </Link>
+                                <Button aria-label="Close menu" onClick={() => setMobileMenuOpen(false)}>
+                                    <svg width="17" height="17" viewBox="0 0 17 17" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M0.954027 17L0 16.046L7.54597 8.5L0 0.954027L0.954027 0L8.5 7.54597L16.046 0L17 0.954027L9.45403 8.5L17 16.046L16.046 17L8.5 9.45403L0.954027 17Z"
+                                            fill="#9E2E3A" />
+                                    </svg>
+
+                                </Button>
+                            </MobileMenuHeader>
+
+                            {/* Mobile: put all navigation links here */}
+                            {navigation && (
+                                <MobileMenuNav>
+                                    <DesktopNavigation navigation={navigation} />
+                                    {subnavigation && (
+                                        <DesktopNavigation navigation={subnavigation} isSubMenu={true} />
+                                    )}
+                                </MobileMenuNav>
+                            )}
+                        </MobileMenuContent>
+                    </MobileMenuOverlay>
+                )}
+            </AnimatePresence>
         </>
     );
 };
@@ -154,23 +227,10 @@ const StickyContainer = styled.nav`
     top: 0;
     background: #FFFFFF;
     z-index: 2137;
-        // border-bottom: 1px solid ${p => p.theme.gray(100)};
+    box-shadow: 0px 6px 4px rgba(0, 0, 0, 0.06);
+
     svg {
         max-height: 4rem;
-    }
-
-    box-shadow: 0px 6px 4px rgba(0, 0, 0, 0.06);
-`;
-
-const MobileNavigationContainer = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 2.5rem 2rem 0 2rem;
-    width: 100%;
-    @media (min-width: ${p => p.theme.breakpoints.md}) {
-        display: none;
     }
 `;
 
@@ -180,5 +240,101 @@ const DesktopNavigationContainer = styled(motion.div)`
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+`;
+
+const MobileNavigationContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 2rem 0 2rem;
+    width: 100%;
+    @media (min-width: ${p => p.theme.breakpoints.md}) {
+        display: none;
+    }
+`;
+
+const DesktopWrapper = styled.div`
+    display: none;
+    @media (min-width: ${p => p.theme.breakpoints.md}) {
+        display: block;
+    }
+`;
+
+const MobileWrapper = styled.div`
+    display: block;
+    @media (min-width: ${p => p.theme.breakpoints.md}) {
+        display: none;
+    }
+`;
+
+const MobileMenuOverlay = styled(motion.div)`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: stretch;
+    box-shadow: -3px 0px 6px rgba(0, 0, 0, 0.08);
+
+    @media (min-width: ${p => p.theme.breakpoints.md}) {
+        display: none;
+    }
+`;
+
+const MobileMenuContent = styled.div`
+    background: #ffffff;
+    width: 90vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+`;
+
+const MobileMenuHeader = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 20px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.06);
+    
+    a {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    button {
+        font-size: 17px;
+        
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+`;
+
+const MobileMenuNav = styled.div`
+    padding: 30px 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    //padding-top: 1rem;
+    border-top: 1px solid ${p => p.theme.gray(100)};
+
+    nav {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
     }
 `;
