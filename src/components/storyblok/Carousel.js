@@ -76,6 +76,11 @@ const Carousel = ({ blok }) => {
                     background-position: center;
                     height: 60vh;
                     position: relative;
+                    @media(max-width: 767px) {
+                        min-width: 50vw;
+                        height: 35vh;
+                        margin-left: 15px;
+                    }
                 }
 
                 .slideOverlay {
@@ -92,6 +97,10 @@ const Carousel = ({ blok }) => {
                     justify-content: flex-end;
                     color: #fff;
                     text-align: center;
+
+                    @media(max-width: 767px) {
+                        padding: 25px;
+                    }
                 }
 
                 .slideOverlay h2 {

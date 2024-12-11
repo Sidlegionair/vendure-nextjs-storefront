@@ -16,10 +16,17 @@ const RichTextEditor = ({ blok }) => {
     });
 
     // Set text color from Storyblok field or default to a fallback color
-    const textColor = blok.textColor || 'rgba(77, 77, 77, 1)';``
+    const textColor = blok.textColor || 'rgba(77, 77, 77, 1)';
+
+    // Set top margin from Storyblok field or default to 0
+    const topMargin = blok.topMargin || 0;
 
     return (
-        <Stack w100 className="rich-text-editor">
+        <Stack
+            w100
+            className="rich-text-editor"
+            style={{ marginTop: `${topMargin}px` }} // Apply the top margin dynamically
+        >
             <div className="rich-text-editor" {...storyblokEditable(blok)}>
                 <div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
 
@@ -32,7 +39,7 @@ const RichTextEditor = ({ blok }) => {
                             gap: 20px;
                         }
                         max-width: 100vw;
-                         color: ${textColor}; // Apply the text color dynamically
+                        color: ${textColor}; // Apply the text color dynamically
 
                         h1 {
                             font-size: 48px;
@@ -46,6 +53,11 @@ const RichTextEditor = ({ blok }) => {
                             font-weight: 600;
                             line-height: 42px;
                             text-align: left;
+                            
+                            @media(max-width: 768px) {
+                                font-size: 30px;
+                                line-height: 30px;
+                            }
                         }
 
                         h3 {
@@ -85,12 +97,12 @@ const RichTextEditor = ({ blok }) => {
                             line-height: 26px;
                             margin-bottom: 1.5rem;
                             text-align: left;
-                            
-                            @media(max-width: 767px) {
+
+                            @media(max-width: 768px) {
                                 font-size: 18px;
                                 line-height: 26px;
-
                             }
+
                         }
 
                         /* Lists */

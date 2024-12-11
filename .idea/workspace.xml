@@ -5,18 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/Button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/Button.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/NavigationLinks/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/NavigationLinks/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/ProductsSellout/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/ProductsSellout/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/NavgationSearch/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/NavgationSearch/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/Picker/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/Picker/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/atoms/ContentContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/atoms/ContentContainer.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/Carousel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/Carousel.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/CartDrawer/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/CartDrawer/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/Navigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Navigation.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +41,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/prettier&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
@@ -76,7 +71,9 @@
       <workItem from="1733921660634" duration="545000" />
       <workItem from="1733922222789" duration="197000" />
       <workItem from="1733922445604" duration="1037000" />
-      <workItem from="1733923663253" duration="146000" />
+      <workItem from="1733923663253" duration="837000" />
+      <workItem from="1733924519503" duration="539000" />
+      <workItem from="1733925073417" duration="496000" />
     </task>
     <servers />
   </component>

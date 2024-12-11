@@ -145,6 +145,7 @@ const AboutUsBlock = ({ blok }) => {
                         //overflow: hidden;
                         //position: absolute;
                         margin-top: -50%;
+                        //padding-bottom: 50%;
                         //top: -50%; /* Overlapping the red square */
 
                     }
@@ -158,9 +159,11 @@ const AboutUsBlock = ({ blok }) => {
 
                     .about-us-text {
                         margin-top: 100px;
+                        //padding-bottom: 100px;
                         width: 100%;
                         //margin: 0 0;
                         padding: 30px;
+                        padding-bottom: 500px;
                         gap: 20px;
                         text-align: left;
                     }
@@ -170,9 +173,13 @@ const AboutUsBlock = ({ blok }) => {
                         line-height: 50px;
                     }
 
-                    .rich-text-content p {
-                        font-size: 18px;
-                        line-height: 26px;
+                    .rich-text-content {
+                        p {
+                            font-family: 'Calibri', sans-serif;
+                            font-weight: 400;
+                            font-size: 18px;
+                            line-height: 26px;
+                        }
                     }
 
                     .learn-more-button {

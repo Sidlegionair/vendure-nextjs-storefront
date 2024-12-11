@@ -31,18 +31,18 @@ export const ContentContainer = styled.div`
         padding: 0 1.5rem;
     }
 
+    // @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    //     width: 640px;
+    //     padding: 0 30px;
+    // }
+    //
+    // @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    //     //width:/ 100%;
+    //     padding: 0 30px;
+    // }
+
     @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-        width: 640px;
-        padding: 0 1rem;
-    }
-
-    @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
         width: 100%;
-        padding: 0 0.5rem;
-    }
-
-    @media (max-width: ${({ theme }) => theme.breakpoints.ssm}) {
-        width: 100%;
-        padding: 0 0.25rem;
+        padding: 0 30px;
     }
 `;
