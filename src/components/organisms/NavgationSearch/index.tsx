@@ -61,7 +61,7 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
     }, []);
 
     return (
-        <Stack itemsCenter style={{ position: 'relative', 'width': '50%' }} ref={containerRef}>
+        <ResponsiveStack itemsCenter ref={containerRef}>
             <Stack w100 itemsCenter gap="1rem">
                 <Form onSubmit={onSubmit}>
                     <Input
@@ -156,9 +156,24 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                     </SearchContent>
                 </SearchPosition>
             )}
-        </Stack>
+        </ResponsiveStack>
     );
 };
+
+const ResponsiveStack = styled(Stack)`
+    position: relative;
+
+    // Default width
+    width: 100%;
+
+    @media (max-width: ${p => p.theme.breakpoints.md}) {
+        padding: 0 50px; // Add 75px spacing on both sides
+    }
+
+    @media (min-width: ${p => p.theme.breakpoints.md}) {
+        width: 50%; // Revert to 50% width for larger screens
+    }
+`;
 
 
 const StyledLink = styled(Link)`
@@ -232,7 +247,6 @@ const Form = styled.form`
 
 const Input = styled.input`
     width: 100%;
-    height: 55px;
     padding: 1rem 2rem;
     box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.15);
     border-radius: 37.5px;
@@ -241,6 +255,12 @@ const Input = styled.input`
     color: ${p => p.theme.text.main};
     background: ${p => p.theme.background.main};
     transition: all 0.2s ease-in-out;
+    height: 40px;
+    
+    @media (min-width: ${p => p.theme.breakpoints.md}) {
+        height: 55px;
+
+    }
 `;
 
 const CrossButton = styled.button`

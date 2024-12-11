@@ -4,9 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="46c46c96-dbae-454b-a0c0-91173b5d1f10" name="Changes" comment="">
+    <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/Button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/Button.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/NavigationLinks/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/NavigationLinks/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/ProductsSellout/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/ProductsSellout/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/NavgationSearch/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/NavgationSearch/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/Picker/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/Picker/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/CartDrawer/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/CartDrawer/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/layouts/Navigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Navigation.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -20,30 +29,11 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;Sidlegionair&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;git@github.com:Sidlegionair/vendure-nextjs-storefront.git&quot;,
-    &quot;accountId&quot;: &quot;b19ed66f-4a64-4d12-b9a3-fd73a6223f68&quot;
-  }
-}</component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/node_modules/typescript/lib/lib.es5.d.ts" root0="SKIP_INSPECTION" />
-  </component>
-  <component name="PhpDebugGeneral" listening_started="true" />
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php" />
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
-  </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 6
+  &quot;associatedIndex&quot;: 3
 }</component>
-  <component name="ProjectId" id="2nZ98ult8liGLXPo8txlFxNJx6z" />
+  <component name="ProjectId" id="2q49LzBQyWCsdejCD9awRvkpgYS" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -53,29 +43,19 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/prettier&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;PHP&quot;
+    ]
   }
-}]]></component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/components/molecules" />
-      <recent name="$PROJECT_DIR$/public/images/bg" />
-      <recent name="$PROJECT_DIR$/src/components/storyblok" />
-      <recent name="$PROJECT_DIR$/src/assets/fonts" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/public" />
-      <recent name="$PROJECT_DIR$/src/assets" />
-    </key>
-  </component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -87,47 +67,16 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="46c46c96-dbae-454b-a0c0-91173b5d1f10" name="Changes" comment="" />
-      <created>1729169575425</created>
+      <changelist id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="" />
+      <created>1733910928403</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1729169575425</updated>
-      <workItem from="1729169576753" duration="4062000" />
-      <workItem from="1729240737148" duration="1167000" />
-      <workItem from="1729242726662" duration="3980000" />
-      <workItem from="1729253023427" duration="26524000" />
-      <workItem from="1729518353604" duration="1369000" />
-      <workItem from="1729522743495" duration="43204000" />
-      <workItem from="1730116089193" duration="53645000" />
-      <workItem from="1730363384910" duration="20582000" />
-      <workItem from="1730462828361" duration="5887000" />
-      <workItem from="1730717386409" duration="34472000" />
-      <workItem from="1730878578331" duration="20905000" />
-      <workItem from="1730993073374" duration="9600000" />
-      <workItem from="1731412277895" duration="18840000" />
-      <workItem from="1731504979279" duration="7409000" />
-      <workItem from="1731588755374" duration="15102000" />
-      <workItem from="1731672176725" duration="2007000" />
-      <workItem from="1731938684123" duration="3565000" />
-      <workItem from="1732007756169" duration="1292000" />
-      <workItem from="1732009465043" duration="63103000" />
-      <workItem from="1732631375721" duration="20336000" />
-      <workItem from="1732720366536" duration="203000" />
-      <workItem from="1732720582635" duration="571000" />
-      <workItem from="1732721209103" duration="2239000" />
-      <workItem from="1732779338245" duration="1118000" />
-      <workItem from="1732780594042" duration="14366000" />
-      <workItem from="1732888552108" duration="650000" />
-      <workItem from="1733131021122" duration="3778000" />
-      <workItem from="1733141747666" duration="606000" />
-      <workItem from="1733209570929" duration="2940000" />
-      <workItem from="1733218496142" duration="1888000" />
-      <workItem from="1733220959815" duration="1511000" />
-      <workItem from="1733231174949" duration="7828000" />
-      <workItem from="1733319428559" duration="26325000" />
-      <workItem from="1733475109325" duration="11848000" />
-      <workItem from="1733747515816" duration="3618000" />
-      <workItem from="1733751157687" duration="2108000" />
+      <updated>1733910928403</updated>
+      <workItem from="1733910929438" duration="6223000" />
+      <workItem from="1733921660634" duration="545000" />
+      <workItem from="1733922222789" duration="197000" />
+      <workItem from="1733922445604" duration="1037000" />
+      <workItem from="1733923663253" duration="146000" />
     </task>
     <servers />
   </component>
@@ -138,32 +87,5 @@
         <option value="$PROJECT_DIR$/src/@types/resources.d.ts" />
       </list>
     </option>
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/components/pages/checkout/components/OrderForm/index.tsx</url>
-          <line>813</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$APPLICATION_CONFIG_DIR$/scratches/scratch_2.tsx</url>
-          <line>18</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

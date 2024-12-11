@@ -27,7 +27,7 @@ export const CartDrawer = ({ activeOrder }: { activeOrder?: ActiveOrderType }) =
     return (
         <>
             <IconButton onClick={open}>
-                <ShoppingCartIcon size={'2.4rem'} />
+                <ShoppingCartIcon size={'16px'} />
                 <QuantityBadge id="header-cart-quantity">
                     <Quantity size="1rem" weight={500}>
                         {activeOrder ? activeOrder.lines.length : 0}

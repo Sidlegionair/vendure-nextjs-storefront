@@ -77,7 +77,7 @@ export const Button = styled(_Button)`
     padding: 1rem 3rem;
     font-weight: 600;
     outline: 0;
-    min-width: 12rem;
+    //min-width: 12rem;
     border: 1px solid ${thv.button.back};
     :hover {
         color: ${p => p.theme.button.hover?.front || p.theme.button.front};
@@ -129,6 +129,29 @@ export const IconButton = styled.button<{ isActive?: boolean }>`
     svg {
         width: 2rem;
         height: 2rem;
+    }
+    :hover {
+        box-shadow: none;
+    }
+`;
+
+
+export const MenuOpenButton = styled.button<{ isActive?: boolean }>`
+    position: relative;
+    color: ${thv.button.icon.front};
+    border: 0;
+    border-radius: 100%;
+    font-weight: 600;
+    outline: 0;
+    width: 24px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: ${p => p.theme.button.icon.back || 'transparent'};
+    svg {
+        width: 24px;
+        height: 16px;
     }
     :hover {
         box-shadow: none;

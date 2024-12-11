@@ -68,7 +68,7 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
                                             addToCartLabel={t('add-to-cart')}
                                             collection={collection}
                                         />
-                                        <RelatedCollections title={t('best-collections')} collection={collection} />
+                                        {/*<RelatedCollections title={t('best-collections')} collection={collection} />*/}
                                     </Stack>
                                 </Background>
                             </ContentContainer>
@@ -81,8 +81,19 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
 };
 
 const DesktopStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | number }>`
-    @media (max-width: ${p => p.theme.breakpoints.lg}) {
-        display: none; // Hide on smaller screens
+    @media (max-width: ${p => p.theme.breakpoints.md}) {
+        //display: none; // Hide on smaller screens
+        display: flex;
+        flex-direction: column;
+        font-size: 20px;
+        font-weight: 600;
+        padding: 30px;
+        gap: 28px;
+        div {
+            display: flex;
+            flex-direction: row;
+            justify-self: start;
+        }
     }
     z-index: 9999;
 `;
@@ -110,8 +121,9 @@ const Background = styled(Stack)`
 const RelativeStack = styled(Stack)`
     position: relative; // Ensure stacking context
     z-index: 10;
-
+    
     & > div {
+        
         opacity: 0;
         visibility: hidden;
         pointer-events: none;
@@ -181,10 +193,14 @@ const SubMenuStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '
     @media (max-width: ${p => p.theme.breakpoints.md}) {
         gap: 10px;
         font-size: 14px;
+        padding: 30px;
+        gap: 28px;
+        font-weight: 400;
+        font-size: 18px;
+
     }
 
     @media (max-width: ${p => p.theme.breakpoints.sm}) {
-        gap: 5px;
         font-size: 12px;
         flex-wrap: wrap; // Allow wrapping for smaller screens
     }
@@ -195,15 +211,26 @@ const StyledLink = styled(Link)<{ isSubMenu?: boolean }>`
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: ${p => (p.isSubMenu ? 400 : 600)};
-    font-size: ${p => (p.isSubMenu ? '18px' : '20px')};
     white-space: nowrap;
+    font-style: normal;
+
+    // Desktop defaults
+    font-weight: ${p => (p.isSubMenu ? 400 : 600)};
+    color: ${p => (p.isSubMenu ? p.theme.text.main : p.theme.text.accent)};
+    font-size: ${p => (p.isSubMenu ? '18px' : '20px')};
+    line-height: ${p => (p.isSubMenu ? '18px' : '20px')};
 
     @media (max-width: ${p => p.theme.breakpoints.md}) {
-        font-size: ${p => (p.isSubMenu ? '16px' : '18px')};
+        // At md breakpoint, use the same sizing
+        font-weight: ${p => (p.isSubMenu ? 400 : 600)};
+        font-size: ${p => (p.isSubMenu ? '18px' : '20px')};
+        line-height: ${p => (p.isSubMenu ? '18px' : '20px')};
     }
 
     @media (max-width: ${p => p.theme.breakpoints.sm}) {
-        font-size: ${p => (p.isSubMenu ? '14px' : '16px')};
+        // On mobile (sm and below), apply the requested mobile styling directly
+        font-weight: ${p => (p.isSubMenu ? 400 : 600)};
+        font-size: ${p => (p.isSubMenu ? '18px' : '20px')};
+        line-height: ${p => (p.isSubMenu ? '18px' : '20px')};
     }
 `;

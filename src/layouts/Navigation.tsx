@@ -10,7 +10,7 @@ import { CollectionTileType, NavigationType } from '@/src/graphql/selectors';
 import { RootNode } from '@/src/util/arrayToTree';
 import { DesktopNavigation } from '@/src/components/organisms/DesktopNavigation';
 import { SearchIcon, Menu } from 'lucide-react';
-import { Button, IconButton } from '@/src/components/molecules/Button';
+import { Button, IconButton, MenuOpenButton } from '@/src/components/molecules/Button';
 import { CategoryBar } from './CategoryBar';
 import { NavigationSearch } from '@/src/components/organisms/NavgationSearch';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -75,9 +75,9 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
     return (
         <>
             <StickyContainer>
-                <ContentContainer style={{ gap: '25px' }}>
-                    <Stack itemsCenter justifyBetween gap={50} w100>
-                        <Stack style={{ width: '100%', maxWidth: '33%' }} gap="1rem" itemsCenter>
+                <ContentContainer>
+                    <MainStack>
+                        <LeftStack gap="1rem" itemsCenter>
                             {/* Desktop: show navigation */}
                             <DesktopWrapper>
                                 <DesktopNavigation navigation={navigation} />
@@ -89,16 +89,18 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                                     <LogoAexol width={165} />
                                 </Link>
                             </MobileWrapper>
-                        </Stack>
-                        <Stack style={{ width: '100%', maxWidth: '33%' }} justifyCenter itemsCenter>
-                            {/* Desktop: show bigger logo in center */}
+                        </LeftStack>
+
+                        {/* Desktop: show bigger logo in center */}
+                        <CenterStack justifyCenter itemsCenter>
                             <DesktopWrapper>
                                 <Link ariaLabel="Home" href="/">
                                     <LogoAexol width={256} />
                                 </Link>
                             </DesktopWrapper>
-                        </Stack>
-                        <Stack style={{ width: '100%', maxWidth: '33%' }} gap="1rem" itemsCenter flexWrap justifyEnd>
+                        </CenterStack>
+
+                        <RightStack itemsCenter>
                             {/* Right side icons: UserMenu, CartDrawer, Picker */}
                             <UserMenu isLogged={isLogged} />
                             <CartDrawer activeOrder={cart} />
@@ -117,7 +119,7 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
 
                             {/* Mobile: hamburger menu */}
                             <MobileWrapper>
-                                <Button
+                                <MenuOpenButton
                                     aria-label="Open menu"
                                     onClick={() => setMobileMenuOpen(true)}
                                     style={{ padding: '0.5rem' }}
@@ -127,12 +129,15 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                                         <path d="M1 1H25M1 9H25M1 17H25" stroke="black" stroke-width="2"
                                               stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
-
-                                </Button>
+                                </MenuOpenButton>
                             </MobileWrapper>
-                        </Stack>
-                    </Stack>
+                        </RightStack>
+                    </MainStack>
+
+                    <DesktopWrapper>
                     <Divider />
+                    </DesktopWrapper>
+
                     {/* Desktop: subnavigation */}
                     <DesktopWrapper>
                         <Stack>
@@ -143,10 +148,10 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                             )}
                         </Stack>
                     </DesktopWrapper>
+
                     <SearchStack>
                         <AnimatePresence>
                             <DesktopNavigationContainer
-                                style={{ width: '100%' }}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
@@ -167,8 +172,9 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                 )}
             </StickyContainer>
 
-            {categories?.length > 0 ? <CategoryBar collections={categories} /> : null}
-
+            <DesktopWrapper>
+                {categories?.length > 0 ? <CategoryBar collections={categories} /> : null}
+            </DesktopWrapper>
             {/* Mobile Slide-Out Menu */}
             <AnimatePresence>
                 {mobileMenuOpen && (
@@ -190,14 +196,14 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                                             d="M0.954027 17L0 16.046L7.54597 8.5L0 0.954027L0.954027 0L8.5 7.54597L16.046 0L17 0.954027L9.45403 8.5L17 16.046L16.046 17L8.5 9.45403L0.954027 17Z"
                                             fill="#9E2E3A" />
                                     </svg>
-
                                 </Button>
                             </MobileMenuHeader>
 
                             {/* Mobile: put all navigation links here */}
                             {navigation && (
                                 <MobileMenuNav>
-                                    <DesktopNavigation navigation={navigation} />
+                                    <DesktopNavigation gap={21} navigation={navigation} />
+                                    <Divider />
                                     {subnavigation && (
                                         <DesktopNavigation navigation={subnavigation} isSubMenu={true} />
                                     )}
@@ -211,8 +217,11 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
     );
 };
 
+// Styled Components
+
 const SearchStack = styled(Stack)`
     margin-bottom: -50px;
+    width: 100%;
 `;
 
 const StickyContainer = styled.nav`
@@ -222,7 +231,13 @@ const StickyContainer = styled.nav`
     align-items: center;
 
     width: 100%;
-    padding: 25px;
+
+    padding: 20px 30px 40px 30px;
+
+    @media (min-width: ${p => p.theme.breakpoints.md}) {
+        padding: 25px;
+    }
+
     position: sticky;
     top: 0;
     background: #FFFFFF;
@@ -235,12 +250,10 @@ const StickyContainer = styled.nav`
 `;
 
 const DesktopNavigationContainer = styled(motion.div)`
-    display: none;
-    @media (min-width: ${p => p.theme.breakpoints.md}) {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 `;
 
 const MobileNavigationContainer = styled.div`
@@ -303,7 +316,7 @@ const MobileMenuHeader = styled.div`
     justify-content: space-between;
     padding: 30px 20px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.06);
-    
+
     a {
         display: inline-flex;
         align-items: center;
@@ -311,7 +324,7 @@ const MobileMenuHeader = styled.div`
 
     button {
         font-size: 17px;
-        
+
         background: none;
         border: none;
         cursor: pointer;
@@ -319,12 +332,9 @@ const MobileMenuHeader = styled.div`
 `;
 
 const MobileMenuNav = styled.div`
-    padding: 30px 20px;
-
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    //padding-top: 1rem;
     border-top: 1px solid ${p => p.theme.gray(100)};
 
     nav {
@@ -336,5 +346,46 @@ const MobileMenuNav = styled.div`
             text-decoration: none;
             color: inherit;
         }
+    }
+`;
+
+// New Styled Components for Responsive Layout
+
+const MainStack = styled(Stack)`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px; /* Default gap for mobile */
+
+    @media (min-width: ${p => p.theme.breakpoints.md}) {
+        gap: 50px; /* Increased gap for desktop */
+    }
+`;
+
+const LeftStack = styled(Stack)`
+    width: auto;
+    max-width: 33%;
+
+    @media (min-width: ${p => p.theme.breakpoints.md}) {
+        width: 100%;
+    }
+`;
+
+const CenterStack = styled(Stack)`
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+const RightStack = styled(Stack)`
+    width: auto;
+    gap: 20px;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+
+    @media (min-width: ${p => p.theme.breakpoints.md}) {
+        width: 100%;
     }
 `;

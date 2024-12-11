@@ -258,23 +258,48 @@ const LocaleInList = styled(Stack)`
 `;
 
 const CurrentLocale = styled.button`
+    position: relative;
     width: 21px;
     height: 21px;
 
-    border: none;
+    border: none; /* Remove the existing border */
+    border-radius: 50%;
+    overflow: hidden;
     background-color: transparent;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+
     &:focus {
         outline: none;
     }
+
+    /* Pseudo-element for the border */
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 1px solid black; /* Define your border style here */
+        border-radius: 50%;
+        pointer-events: none; /* Allows clicks to pass through to the button */
+    }
+
+    /* Ensure the SVG fills the button */
     svg {
-        width: 21px;
-        height: 21px;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Scales the SVG to cover the entire button */
     }
 `;
+
+
 
 const Overlay = styled.div`
     position: fixed;

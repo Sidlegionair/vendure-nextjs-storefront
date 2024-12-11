@@ -85,6 +85,12 @@ const RichTextEditor = ({ blok }) => {
                             line-height: 26px;
                             margin-bottom: 1.5rem;
                             text-align: left;
+                            
+                            @media(max-width: 767px) {
+                                font-size: 18px;
+                                line-height: 26px;
+
+                            }
                         }
 
                         /* Lists */

@@ -3,6 +3,8 @@ import styled from '@emotion/styled';
 import Link from 'next/link';
 import { Divider, Stack } from '@/src/components';
 
+// Styled Components
+
 const CarouselContainer = styled.div`
     position: relative;
     display: flex;
@@ -13,6 +15,10 @@ const CarouselContainer = styled.div`
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
+
+    /* Responsive Top and Bottom Margins */
+    //margin: 1rem auto; /* Default for large desktops */
+
 
     &::before {
         content: '';
@@ -52,17 +58,18 @@ const SlidesWrapper = styled.div`
     position: relative;
     width: 100%;
     flex: 0 0 auto;
+
     @media (min-width: 1024px) {
-        min-height: 950px;
+        min-height: 750px;
     }
     @media (max-width: 1023px) and (min-width: 769px) {
-        min-height: 700px;
+        min-height: 600px;
     }
     @media (max-width: 768px) {
         min-height: 600px;
     }
     @media (max-width: 480px) {
-        min-height: 500px;
+        min-height: 300px;
     }
 `;
 
@@ -100,20 +107,19 @@ const ProductSlide = styled.div<{
     ${({ flattened, angle, distance, translateY, index, activeIndex, extraLift }) =>
             flattened
                     ? `
-                transform:
-                  translateX(${(index - activeIndex) * 120}px)
-                  translateY(${-Math.abs(index - activeIndex) * extraLift}px)
-                  translate(-50%, -50%);
-            `
+        transform:
+          translateX(${(index - activeIndex) * 120}px)
+          translateY(${-Math.abs(index - activeIndex) * extraLift}px)
+          translate(-50%, -50%);
+      `
                     : `
-                transform:
-                  rotateY(${angle}deg)
-                  translateZ(${distance}px)
-                  translateY(${translateY}px)
-                  rotateY(${-angle}deg)
-                  translate(-50%, -50%);
-            `
-    }
+        transform:
+          rotateY(${angle}deg)
+          translateZ(${distance}px)
+          translateY(${translateY}px)
+          rotateY(${-angle}deg)
+          translate(-50%, -50%);
+      `}
 
     z-index: ${({ zIndex }) => zIndex};
 `;
@@ -149,11 +155,23 @@ const BottomStackWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 2rem auto;
+    margin: 2rem auto; /* Default for large desktops */
     width: 100%;
     max-width: 700px;
     padding: 0 1rem;
     box-sizing: border-box;
+
+    @media (max-width: 1023px) and (min-width: 769px) {
+        margin: 2rem auto; /* Small desktops/tablets */
+    }
+
+    @media (max-width: 768px) {
+        margin: 2rem auto; /* Tablets */
+    }
+
+    @media (max-width: 480px) {
+        margin: 1rem auto; /* Mobile devices */
+    }
 `;
 
 const BottomStack = styled(Stack)`
@@ -302,6 +320,8 @@ const Quote = styled(Stack)`
     }
 `;
 
+// CircularProductCarousel Component
+
 export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ products }) => {
     const productCount = products.length;
     const [displayCount, setDisplayCount] = useState<number>(Math.min(productCount, 11));
@@ -320,30 +340,54 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
     useEffect(() => {
         const handleResize = () => {
             const width = window.innerWidth;
-            let newDisplayCount;
+            let newDisplayCount: number;
+            let newRotationAngle: number;
+            let newCarouselDistance: number;
+            let newFlattened: boolean;
+            let newMaxLiftAmount: number;
+            let newExtraLiftFlattened: number;
+
+            // Configure carousel settings based on viewport
             if (width < 480) {
+                // Mobile
                 newDisplayCount = Math.min(productCount, 5);
-                setRotationAngle(0);
-                setCarouselDistance(0);
-                setFlattened(true);
-                setMaxLiftAmount(50);
-                setExtraLiftFlattened(10);
+                newRotationAngle = 0;
+                newCarouselDistance = -100;
+                newFlattened = true;
+                newMaxLiftAmount = 50;
+                newExtraLiftFlattened = 20;
             } else if (width < 768) {
+                // Tablet
                 newDisplayCount = Math.min(productCount, 8);
-                setRotationAngle(360 / newDisplayCount);
-                setCarouselDistance(250);
-                setFlattened(false);
-                setMaxLiftAmount(150);
-                setExtraLiftFlattened(0);
+                newRotationAngle = 360 / newDisplayCount;
+                newCarouselDistance = 250;
+                newFlattened = false;
+                newMaxLiftAmount = 150;
+                newExtraLiftFlattened = 0;
+            } else if (width < 1024) {
+                // Small Desktop/Tablets
+                newDisplayCount = Math.min(productCount, 12);
+                newRotationAngle = 360 / newDisplayCount;
+                newCarouselDistance = 300;
+                newFlattened = false;
+                newMaxLiftAmount = 180;
+                newExtraLiftFlattened = 0;
             } else {
+                // Large Desktop
                 newDisplayCount = Math.min(productCount, 16);
-                setRotationAngle(360 / newDisplayCount);
-                setCarouselDistance(400);
-                setFlattened(false);
-                setMaxLiftAmount(200);
-                setExtraLiftFlattened(0);
+                newRotationAngle = 360 / newDisplayCount;
+                newCarouselDistance = 400;
+                newFlattened = false;
+                newMaxLiftAmount = 200;
+                newExtraLiftFlattened = 0;
             }
+
             setDisplayCount(newDisplayCount);
+            setRotationAngle(newRotationAngle);
+            setCarouselDistance(newCarouselDistance);
+            setFlattened(newFlattened);
+            setMaxLiftAmount(newMaxLiftAmount);
+            setExtraLiftFlattened(newExtraLiftFlattened);
         };
 
         handleResize();
@@ -393,7 +437,9 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
         return index;
     };
 
-    useEffect(() => setActiveIndex((current) => wrappedIndex(current)), [activeIndex, productCount, duplicatedProducts]);
+    useEffect(() => {
+        setActiveIndex((current) => wrappedIndex(current));
+    }, [activeIndex, productCount, duplicatedProducts]);
 
     const currentProduct = products[activeIndex % productCount];
 
@@ -425,7 +471,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                             ? 1
                             : isActive
                                 ? 1
-                                : 0.4 + (0.5 * (1 - Math.abs(cosAngle)));
+                                : 0.4 + 0.5 * (1 - Math.abs(cosAngle));
 
                         return (
                             <ProductSlide
@@ -483,20 +529,21 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                         <Divider marginBlock="1.5rem" />
                         <Stack gap={26}>
                             <ProductDetails>
-                                <span>
-                                    Price: <span className="amount">
-                                    &euro;{(currentProduct?.priceWithTax?.min / 100).toFixed(2)}
-                                    </span>
-                                </span>
+                <span>
+                  Price:{' '}
+                    <span className="amount">
+                    &euro;{(currentProduct?.priceWithTax?.min / 100).toFixed(2)}
+                  </span>
+                </span>
                                 {currentProduct?.terrain && (
                                     <span>
-                                        Terrain: <span>{currentProduct?.terrain}</span>
-                                    </span>
+                    Terrain: <span>{currentProduct?.terrain}</span>
+                  </span>
                                 )}
                                 {currentProduct?.level && (
                                     <span>
-                                        Rider Level: <span>{currentProduct?.level}</span>
-                                    </span>
+                    Rider Level: <span>{currentProduct?.level}</span>
+                  </span>
                                 )}
                             </ProductDetails>
                         </Stack>

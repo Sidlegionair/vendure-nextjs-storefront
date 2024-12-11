@@ -92,7 +92,7 @@ export const ProductsSellout: React.FC<{
 };
 
 const Slide = styled(Stack)`
-    width: 16rem;
+    width: 100%;
     height: 100%;
 
     button {
@@ -106,7 +106,7 @@ const Relative = styled.div`
 `;
 
 const MaxWidth = styled.div`
-    max-width: 42rem;
+    max-width: 100%;
 `;
 
 const Absolute = styled(Stack)`

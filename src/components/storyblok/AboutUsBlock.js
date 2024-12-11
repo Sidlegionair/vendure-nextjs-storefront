@@ -57,9 +57,7 @@ const AboutUsBlock = ({ blok }) => {
                     align-items: center;
                     margin-left: 103px;
                     gap: 100px;
-
                 }
-
 
                 .about-us-image {
                     margin-left: -103px;
@@ -85,11 +83,9 @@ const AboutUsBlock = ({ blok }) => {
 
                     position: relative;
                     width: 50vw;
-                    //max-width: 593.54px;
                     padding: 82px 192px 82px 82px;
                     margin-left: auto;
                     color: #FFFFFF;
-                    //z-index: 2;
                 }
 
                 .about-us-text h2 {
@@ -121,7 +117,68 @@ const AboutUsBlock = ({ blok }) => {
                     font-weight: 600;
                     line-height: 20px;
                     text-align: right;
+                }
 
+                @media (max-width: 768px) {
+                    
+                    .about-us-section {
+                        //position: unset;
+                        overflow: unset;
+                        margin-top: 200px;
+                    }
+                    
+                    
+                    .about-us-container {
+                        display: flex;
+                        //position: unset;
+                        flex-direction: column;
+                        gap: 0;
+                        margin-left: 0;
+                    }
+
+                    .about-us-image {
+                        width: 95%;
+                        left: 0;
+                        //margin: 0 auto;
+                        //position: relative;
+                        height: 400px;
+                        //overflow: hidden;
+                        //position: absolute;
+                        margin-top: -50%;
+                        //top: -50%; /* Overlapping the red square */
+
+                    }
+
+                    .about-us-image img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        object-position: center top;
+                    }
+
+                    .about-us-text {
+                        margin-top: 100px;
+                        width: 100%;
+                        //margin: 0 0;
+                        padding: 30px;
+                        gap: 20px;
+                        text-align: left;
+                    }
+
+                    .about-us-text h2 {
+                        font-size: 50px;
+                        line-height: 50px;
+                    }
+
+                    .rich-text-content p {
+                        font-size: 18px;
+                        line-height: 26px;
+                    }
+
+                    .learn-more-button {
+                        font-size: 16px;
+                        line-height: 16px;
+                    }
                 }
             `}</style>
         </section>
