@@ -5,12 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/atoms/ContentContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/atoms/ContentContainer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/storyblok/Carousel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/Carousel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/Navigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Navigation.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +70,7 @@
       <workItem from="1733922445604" duration="1037000" />
       <workItem from="1733923663253" duration="837000" />
       <workItem from="1733924519503" duration="539000" />
-      <workItem from="1733925073417" duration="496000" />
+      <workItem from="1733925073417" duration="741000" />
     </task>
     <servers />
   </component>

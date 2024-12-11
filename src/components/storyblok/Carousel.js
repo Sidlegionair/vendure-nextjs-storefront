@@ -110,6 +110,11 @@ const Carousel = ({ blok }) => {
                     line-height: 35px;
                     text-align: left;
                     margin: 0;
+
+                    @media(max-width: 767px) {
+                        font-size: 24px;
+                        line-height: 24px;
+                    }
                 }
 
                 .slideOverlay a {
@@ -122,6 +127,11 @@ const Carousel = ({ blok }) => {
                     margin-top: 8px;
                     color: #fff;
                     transition: color 0.2s;
+                    @media(max-width: 767px) {
+                        font-size: 14px;
+                        line-height: 14px;
+                    }
+
                 }
 
                 .slideOverlay a:hover {

@@ -232,7 +232,7 @@ const StickyContainer = styled.nav`
 
     width: 100%;
 
-    padding: 20px 30px 40px 30px;
+    padding: 20px 0px 40px 0px;
 
     @media (min-width: ${p => p.theme.breakpoints.md}) {
         padding: 25px;
