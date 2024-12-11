@@ -33,14 +33,14 @@ export const HomePageSliders: React.FC<BestOfI> = ({ sliders, seeAllText }) => {
 
                 return (
                     <StyledSection key={slider.slug}>
-                        <Stack w100 justifyBetween>
-                            <TH2>{`${slider.name} (${slider.productVariants.totalItems})`}</TH2>
-                            <StyledLink href={href}>
-                                <TP upperCase color="contrast" weight={500} style={{ letterSpacing: '0.5px' }}>
-                                    {seeAllText}
-                                </TP>
-                            </StyledLink>
-                        </Stack>
+                        {/*<Stack w100 justifyBetween>*/}
+                        {/*    <TH2>{`${slider.name} (${slider.productVariants.totalItems})`}</TH2>*/}
+                        {/*    <StyledLink href={href}>*/}
+                        {/*        <TP upperCase color="contrast" weight={500} style={{ letterSpacing: '0.5px' }}>*/}
+                        {/*            {seeAllText}*/}
+                        {/*        </TP>*/}
+                        {/*    </StyledLink>*/}
+                        {/*</Stack>*/}
                         <Slider spacing={16} withArrows={4} slides={slides} />
                     </StyledSection>
                 );
@@ -54,7 +54,7 @@ const StyledSection = styled.section`
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    margin-top: 120px;
+    //margin-top: 120px;
 `;
 
 const StyledLink = styled(Link)`
