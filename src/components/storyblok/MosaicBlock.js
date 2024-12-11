@@ -14,7 +14,7 @@ const MosaicBlock = ({ blok }) => {
     });
 
     return (
-        <section className="mosaic">
+        <section className="mosaic" {...storyblokEditable(blok)}>
             <div className="mosaic__container">
                 <div className="mosaic__text" style={{ backgroundColor: blok.backgroundColor || '#355047' }}>
                     <h2 className="mosaic__title">{blok.title || 'Our Story'}</h2>
@@ -72,11 +72,9 @@ const MosaicBlock = ({ blok }) => {
 
                 .mosaic__text {
                     opacity: 0.95;
-
                     position: absolute; /* Overlay text over gallery */
                     z-index: 10; /* Bring text above gallery */
                     top: 50%; /* Center vertically */
-                    //left: 5%;
                     transform: translateY(-50%);
                     width: 50vw;
                     min-width: 280px;
@@ -119,10 +117,9 @@ const MosaicBlock = ({ blok }) => {
                     grid-template-columns: repeat(3, 1fr);
                     grid-template-rows: repeat(3, auto);
                     grid-template-areas:
-                        "item1 item2 item3"
-                        "item5 item5 item4"
-                        "item6 item6 item4";
-                    //margin: 0 auto;
+            "item1 item2 item3"
+            "item5 item5 item4"
+            "item6 item6 item4";
                     z-index: 1; /* Ensure gallery is behind text */
                 }
 
@@ -157,47 +154,63 @@ const MosaicBlock = ({ blok }) => {
                     grid-area: item6;
                 }
 
-                @media (max-width: 1200px) {
-                    .mosaic__gallery {
-                        grid-template-columns: 1fr 1fr;
-                        grid-template-areas:
-                            "item1 item2"
-                            "item3 item4"
-                            "item5 item6";
-                    }
-
-                    .mosaic__text {
-                        width: 70vw;
-                        left: 10%;
-                    }
-                }
+                /* Removed the 1200px media query to maintain three columns */
 
                 @media (max-width: 768px) {
+                    .mosaic {
+                        height: auto; /* Remove fixed height on mobile */
+                        overflow: visible; /* Allow content to expand */
+                    }
+
+                    .mosaic__container {
+                        flex-direction: column; /* Stack elements vertically */
+                        height: auto; /* Adjust container height */
+                    }
+
                     .mosaic__text {
-                        position: relative;
-                        width: 100%;
-                        padding: 2rem;
-                        top: auto;
-                        left: auto;
-                        transform: none;
+                        position: relative; /* Position text relative to the gallery */
+                        z-index: 10; /* Bring text above gallery */
+                        top: 0; /* Reset top positioning */
+                        transform: none; /* Remove transform */
+                        width: 95vw;
+                        max-width: 100%; /* Remove min-width to prevent overflow */
+                        padding: 30px 35px;
+                        margin: 20px auto; /* Center the text block with some margin */
+                        color: #FFFFFF;
+                        background-color: rgba(53, 80, 71, 0.85); /* Semi-transparent background for readability */
                     }
 
-                    .mosaic__gallery {
-                        width: 100%;
-                        left: 0;
-                        grid-template-columns: 1fr;
-                        grid-template-areas:
-                            "item1"
-                            "item2"
-                            "item3"
-                            "item4"
-                            "item5"
-                            "item6";
+                    .mosaic__description p {
+                        font-size: 18px;
+                        line-height: 26px;
                     }
 
-                    .mosaic__gallery-item {
-                        height: 250px;
-                    }
+                //    .mosaic__gallery {
+                //        position: static; /* Remove relative positioning */
+                //        left: 0; /* Reset left positioning */
+                //        margin-right: 0; /* Remove margin */
+                //        width: 95vw; /* Adjust width to fit mobile */
+                //        grid-template-columns: repeat(2, 1fr); /* Adjust to 2 columns for better fit */
+                //        grid-template-areas:
+                //"item1 item2"
+                //"item3 item4"
+                //"item5 item4"
+                //"item6 item6"; /* Adjust grid areas to fit new column count */
+                //        gap: 5px; /* Reduce gap for smaller screens */
+                //    }
+                //
+                //    .mosaic__gallery-item {
+                //        height: 150px; /* Set a fixed height or use auto for better responsiveness */
+                //    }
+                //
+                //    /* Adjust specific grid items if necessary */
+                //    .item-4 {
+                //        grid-row: span 2; /* Span two rows */
+                //    }
+                //
+                //    .item-5, .item-6 {
+                //        grid-column: span 2; /* Span two columns if needed */
+                //    }
                 }
             `}</style>
         </section>
