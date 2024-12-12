@@ -8,6 +8,8 @@ import { Divider, Stack } from '@/src/components';
 const CarouselContainer = styled.div`
     position: relative;
     display: flex;
+    //align-items: center;
+    justify-content: center;
     flex-direction: column;
     width: 100%;
     overflow: hidden;
@@ -45,12 +47,7 @@ const CarouselContainer = styled.div`
 
     @media (max-width: 768px) {
         perspective: 1000px;
-        min-height: 600px;
-    }
-
-    @media (max-width: 480px) {
-        perspective: 300px;
-        min-height: 500px;
+        min-height: 613px;
     }
 `;
 
@@ -101,28 +98,53 @@ const ProductSlide = styled.div<{
     transform-style: preserve-3d;
     transform-origin: center;
     transition: transform 0.5s ease, opacity 0.5s ease;
-    opacity: ${({ opacity }) => opacity};
     border-radius: 8px;
 
-    ${({ flattened, angle, distance, translateY, index, activeIndex, extraLift }) =>
-            flattened
-                    ? `
-        transform:
-          translateX(${(index - activeIndex) * 120}px)
-          translateY(${-Math.abs(index - activeIndex) * extraLift}px)
-          translate(-50%, -50%);
-      `
-                    : `
-        transform:
-          rotateY(${angle}deg)
-          translateZ(${distance}px)
-          translateY(${translateY}px)
-          rotateY(${-angle}deg)
-          translate(-50%, -50%);
-      `}
+    ${({ flattened, angle, distance, translateY, index, activeIndex, extraLift }) => {
+        const distanceFromActive = Math.abs(index - activeIndex);
+
+        // Calculate opacity for both mobile and desktop
+        // Active item (distanceFromActive=0): full opacity.
+        // Others fade out as they move away: no lower than 0.4.
+        const computedOpacity = distanceFromActive === 0 ? 1 : Math.max(0.4, 1 - distanceFromActive * 0.2);
+
+        if (flattened) {
+            // Mobile (flattened) view:
+            // Center item is largest and fully opaque, others get progressively smaller and more transparent.
+            const scale = distanceFromActive === 0 ? 1.3 : Math.max(0.7, 1 - distanceFromActive * 0.1);
+
+            // Horizontal spacing
+            const xShift = (index - activeIndex) * 120;
+            // Slight vertical lift for layering
+            const yShift = -Math.abs(index - activeIndex) * extraLift;
+
+            return `
+                opacity: ${computedOpacity};
+                transform:
+                    translate(-50%, -50%)    /* Center each item on the anchor point */
+                    translateX(${xShift}px)  /* Spread items horizontally around the active item */
+                    translateY(${yShift}px)
+                    scale(${scale});
+            `;
+        } else {
+            // Desktop (3D) view:
+            // Keep original rotation and spacing, but apply new opacity logic.
+            return `
+                opacity: ${computedOpacity};
+                transform:
+                    rotateY(${angle}deg)
+                    translateZ(${distance}px)
+                    translateY(${translateY}px)
+                    rotateY(${-angle}deg)
+                    translate(-50%, -50%);
+            `;
+        }
+    }}
 
     z-index: ${({ zIndex }) => zIndex};
 `;
+
+
 
 const ProductImageContainer = styled.div<{ height: number }>`
     width: 150px;
@@ -145,10 +167,6 @@ const ProductImageContainer = styled.div<{ height: number }>`
         height: 240px;
     }
 
-    @media (max-width: 480px) {
-        width: 90px;
-        height: 180px;
-    }
 `;
 
 const BottomStackWrapper = styled.div`
@@ -181,6 +199,9 @@ const BottomStack = styled(Stack)`
     align-items: center;
     text-align: left;
     width: 100%;
+    @media(max-width: 767px) {
+        padding: 0px 30px;
+    }
 `;
 
 const InfoBlock = styled.div`
@@ -196,12 +217,13 @@ const InfoBlock = styled.div`
     box-sizing: border-box;
 
     @media (max-width: 768px) {
-        padding: 15px;
+        padding: 15px 20px;
+        margin: 0px 60px;
     }
 
-    @media (max-width: 480px) {
-        padding: 10px;
-    }
+    //@media (max-width: 480px) {
+    //    padding: 10px;
+    //}
 `;
 
 const ProductTitle = styled.h3`
@@ -306,18 +328,15 @@ const Quote = styled(Stack)`
     }
 
     @media (max-width: 768px) {
-        font-size: 20px;
-        & > small {
-            font-size: 18px !important;
-        }
+        display: none;
     }
 
-    @media (max-width: 480px) {
-        font-size: 18px;
-        & > small {
-            font-size: 16px !important;
-        }
-    }
+    //@media (max-width: 480px) {
+    //    font-size: 18px;
+    //    & > small {
+    //        font-size: 16px !important;
+    //    }
+    //}
 `;
 
 // CircularProductCarousel Component
@@ -355,7 +374,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                 newCarouselDistance = -100;
                 newFlattened = true;
                 newMaxLiftAmount = 50;
-                newExtraLiftFlattened = 20;
+                newExtraLiftFlattened = 0;
             } else if (width < 768) {
                 // Tablet
                 newDisplayCount = Math.min(productCount, 8);

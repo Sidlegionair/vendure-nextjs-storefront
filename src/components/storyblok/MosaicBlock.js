@@ -15,36 +15,35 @@ const MosaicBlock = ({ blok }) => {
 
     return (
         <section className="mosaic" {...storyblokEditable(blok)}>
+            <div className="mosaic__text" style={{ backgroundColor: blok.backgroundColor || '#355047' }}>
+                <h2 className="mosaic__title">{blok.title || 'Our Story'}</h2>
+                <div className="mosaic__description" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
+                {blok.buttonLink && (
+                    <a
+                        className="mosaic__button"
+                        href={blok.buttonLink.url.cached_url}
+                        style={{
+                            color: blok.backgroundColor || '#355047',
+                            backgroundColor: '#FFFFFF',
+                        }}
+                    >
+                        {blok.buttonText || 'Read More'} →
+                    </a>
+                )}
+            </div>
+
             <div className="mosaic__container">
-                <div className="mosaic__text" style={{ backgroundColor: blok.backgroundColor || '#355047' }}>
-                    <h2 className="mosaic__title">{blok.title || 'Our Story'}</h2>
-                    <div className="mosaic__description" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
-                    {blok.buttonLink && (
-                        <a
-                            className="mosaic__button"
-                            href={blok.buttonLink.url.cached_url}
-                            style={{
-                                color: blok.backgroundColor || '#355047', // Matches text color to background color
-                                backgroundColor: '#FFFFFF', // Keeps the background white
-                            }}
-                        >
-                            {blok.buttonText || 'Read More'} →
-                        </a>
-                    )}
-                </div>
 
                 <div className="mosaic__gallery">
-                    {blok.image && Array.isArray(blok.image) && blok.image.map((img, index) => (
+                    {blok.image && Array.isArray(blok.image) && blok.image.map((img, index) =>
                         img && img.filename ? (
                             <div
                                 key={index}
                                 className={`mosaic__gallery-item item-${index + 1}`}
-                                style={{
-                                    backgroundImage: `url(${img.filename})`,
-                                }}
+                                style={{ backgroundImage: `url(${img.filename})` }}
                             ></div>
                         ) : null
-                    ))}
+                    )}
                 </div>
             </div>
 
@@ -52,14 +51,19 @@ const MosaicBlock = ({ blok }) => {
                 .mosaic {
                     position: relative;
                     width: 100%;
-                    max-width: 100vw;
-                    height: 785.12px;
+                    //max-width: 100vw;
                     color: #fff;
-                    overflow-x: hidden;
+                    //overflow: hidden;
                     text-align: left;
+                    
+                    @media(min-width: 767px) {
+                        height: 785.12px;
+                    }
                 }
 
                 .mosaic__container {
+                    //overflow: hidden;
+
                     height: 100%;
                     display: flex;
                     position: relative;
@@ -112,14 +116,14 @@ const MosaicBlock = ({ blok }) => {
                     left: calc(50vw - 196px);
                     display: grid;
                     gap: 10px;
-                    margin-right: 196px;
+                    //margin-right: 196px;
                     width: 50vw;
                     grid-template-columns: repeat(3, 1fr);
                     grid-template-rows: repeat(3, auto);
                     grid-template-areas:
-            "item1 item2 item3"
-            "item5 item5 item4"
-            "item6 item6 item4";
+                        "item1 item2 item3"
+                        "item5 item5 item4"
+                        "item6 item6 item4";
                     z-index: 1; /* Ensure gallery is behind text */
                 }
 
@@ -154,63 +158,87 @@ const MosaicBlock = ({ blok }) => {
                     grid-area: item6;
                 }
 
-                /* Removed the 1200px media query to maintain three columns */
+                /* Removed all media queries to keep the same layout at all screen sizes */
 
-                @media (max-width: 768px) {
-                    .mosaic {
-                        height: auto; /* Remove fixed height on mobile */
-                        overflow: visible; /* Allow content to expand */
-                    }
-
-                    .mosaic__container {
-                        flex-direction: column; /* Stack elements vertically */
-                        height: auto; /* Adjust container height */
+                @media (max-width: 767px) {
+                    .mosiac {
+                        overflow-y: visible !important;
+                        height: 100% !important;
+                        //max-height: 761pxpx;
+                        //height: 1px !important;
+                        padding-bottom: 200px;
                     }
 
                     .mosaic__text {
-                        position: relative; /* Position text relative to the gallery */
-                        z-index: 10; /* Bring text above gallery */
-                        top: 0; /* Reset top positioning */
-                        transform: none; /* Remove transform */
-                        width: 95vw;
-                        max-width: 100%; /* Remove min-width to prevent overflow */
-                        padding: 30px 35px;
-                        margin: 20px auto; /* Center the text block with some margin */
-                        color: #FFFFFF;
-                        background-color: rgba(53, 80, 71, 0.85); /* Semi-transparent background for readability */
+                        top: unset;
+                        transform: unset;
+                        width: calc(100vw - 30px);
+                        padding: 30px;
+                        //margin-right: 30px;
+                        position: relative;
+                        p {
+                            /* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque pharetra convallis odio, non pretium nunc. Duis lobortis tellus sed imperdiet cursus. Phasellus tincidunt urna eu ante suscipit, sed tincidunt lacus dapibus. Nulla ultricies elit mi, ut euismod ante suscipit et. Duis in fringilla orci. Nam dapibus odio mi. Donec tellus eros, facilisis a gravida eu, mollis a urna. */
+                            
+                            font-family: 'Calibri';
+                            font-style: normal;
+                            font-weight: 400;
+                            font-size: 18px;
+                            line-height: 26px;
+                            /* or 144% */
+
+                            color: #FFFFFF;
+
+
+                        }
+                    }
+                    
+                    .mosaic__gallery {
+                        left: unset;
+                        //overflow: visible !important;
+
+                        width: 100%;
+                        padding: 30px;
+                        height: 317px;
+                        margin-right: unset;
+
+                    }
+                    
+                    .mosaic__container {
+                        margin-top: -80px;
                     }
 
-                    .mosaic__description p {
-                        font-size: 18px;
-                        line-height: 26px;
+                    .item-1 {
+                        grid-area: item1;
+                        max-height: 120px;
                     }
 
-                //    .mosaic__gallery {
-                //        position: static; /* Remove relative positioning */
-                //        left: 0; /* Reset left positioning */
-                //        margin-right: 0; /* Remove margin */
-                //        width: 95vw; /* Adjust width to fit mobile */
-                //        grid-template-columns: repeat(2, 1fr); /* Adjust to 2 columns for better fit */
-                //        grid-template-areas:
-                //"item1 item2"
-                //"item3 item4"
-                //"item5 item4"
-                //"item6 item6"; /* Adjust grid areas to fit new column count */
-                //        gap: 5px; /* Reduce gap for smaller screens */
-                //    }
-                //
-                //    .mosaic__gallery-item {
-                //        height: 150px; /* Set a fixed height or use auto for better responsiveness */
-                //    }
-                //
-                //    /* Adjust specific grid items if necessary */
-                //    .item-4 {
-                //        grid-row: span 2; /* Span two rows */
-                //    }
-                //
-                //    .item-5, .item-6 {
-                //        grid-column: span 2; /* Span two columns if needed */
-                //    }
+                    .item-2 {
+                        grid-area: item2;
+                        max-height: 120px;
+                    }
+
+                    .item-3 {
+                        grid-area: item3;
+                        max-height: 120px;
+                    }
+
+                    .item-4 {
+                        grid-area: item4;
+                        max-height: 240px;
+
+                    }
+
+                    .item-5 {
+                        grid-area: item5;
+                        max-height: 120px;
+                    }
+
+                    .item-6 {
+                        grid-area: item6;
+                        max-height: 120px;
+                    }
+                    
+
                 }
             `}</style>
         </section>

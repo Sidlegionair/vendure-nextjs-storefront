@@ -43,10 +43,12 @@ const Carousel = ({ blok }) => {
                         }}
                     >
                         <div className="slideOverlay">
-                            <h2>{slide.title}</h2>
-                            <a href={slide.link.url.cached_url} target="_blank" rel="noopener noreferrer">
-                                {slide.ctaText}
-                            </a>
+                            <div className="slideContent">
+                                <h2>{slide.title}</h2>
+                                <a href={slide.link.url.cached_url} target="_blank" rel="noopener noreferrer">
+                                    {slide.ctaText}
+                                </a>
+                            </div>
                         </div>
                     </div>
                 ))}
@@ -54,7 +56,7 @@ const Carousel = ({ blok }) => {
 
             <style jsx>{`
                 .carouselWrapper {
-                    
+
                     overflow: hidden;
                     position: relative;
                     width: 100%;
@@ -68,6 +70,7 @@ const Carousel = ({ blok }) => {
                 }
 
                 .carouselSlide {
+                    overflow: hidden;
                     transform: translate3d(0, 0, 0);
                     flex: 0 0 var(--slide-size);
                     min-width: 0;
@@ -77,7 +80,7 @@ const Carousel = ({ blok }) => {
                     height: 60vh;
                     position: relative;
                     @media(max-width: 767px) {
-                        min-width: 50vw;
+                        min-width: 70vw;
                         height: 35vh;
                         margin-left: 15px;
                     }
@@ -87,7 +90,8 @@ const Carousel = ({ blok }) => {
                     position: absolute;
                     top: 0;
                     left: 0;
-                    padding: 40px;
+                    //padding: 40px;
+                    
                     width: 100%;
                     height: 100%;
                     background-color: rgba(0, 0, 0, 0.3);
@@ -97,9 +101,16 @@ const Carousel = ({ blok }) => {
                     justify-content: flex-end;
                     color: #fff;
                     text-align: center;
-
+                }
+                
+                .slideContent {
+                    padding: 40px;
+                    display: flex;
+                    flex-direction: column;
+                    
                     @media(max-width: 767px) {
-                        padding: 25px;
+                        padding: 15px;
+                        gap: 15px;
                     }
                 }
 

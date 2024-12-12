@@ -41,7 +41,7 @@ export const HomePageSliders: React.FC<BestOfI> = ({ sliders, seeAllText }) => {
                         {/*        </TP>*/}
                         {/*    </StyledLink>*/}
                         {/*</Stack>*/}
-                        <Slider spacing={16} withArrows={4} slides={slides} />
+                        <Slider  withArrows={true} slides={slides} />
                     </StyledSection>
                 );
             })}

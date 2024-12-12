@@ -85,7 +85,7 @@ export const ProductsSellout: React.FC<{
                 {title}
             </TP>
             <MaxWidth>
-                <Slider spacing={16} withDots slides={slides} />
+                <Slider withDots slides={slides} />
             </MaxWidth>
         </Stack>
     );

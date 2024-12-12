@@ -163,7 +163,7 @@ const AboutUsBlock = ({ blok }) => {
                         width: 100%;
                         //margin: 0 0;
                         padding: 30px;
-                        padding-bottom: 500px;
+                        //padding-bottom: 500px;
                         gap: 20px;
                         text-align: left;
                     }

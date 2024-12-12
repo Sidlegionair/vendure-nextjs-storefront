@@ -36,7 +36,7 @@ export const CheckoutCarousel: React.FC<CheckoutCarouselProps> = ({ alsoBoughtPr
             <TH2 size="2rem" weight={600}>
                 {t('orderSummary.customerAlsoBought.title')}
             </TH2>
-            <Slider slides={slides} spacing={16} />
+            <Slider slides={slides} />
         </CheckoutCarouselWrapper>
     );
 };

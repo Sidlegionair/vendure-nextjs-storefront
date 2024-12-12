@@ -6,7 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/ProductsSellout/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/ProductsSellout/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/HomePageSliders.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/HomePageSliders.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/ProductPageProductsSlider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/ProductPageProductsSlider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/Slider/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/Slider/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderSummary/CheckoutCarousel/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderSummary/CheckoutCarousel/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/Carousel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/Carousel.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/storyblok/MosaicBlock.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/MosaicBlock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/global.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/global.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +80,11 @@
       <workItem from="1733924519503" duration="539000" />
       <workItem from="1733925073417" duration="1294000" />
       <workItem from="1733926390251" duration="76000" />
-      <workItem from="1733926482405" duration="2540000" />
+      <workItem from="1733926482405" duration="8896000" />
+      <workItem from="1734008165897" duration="1405000" />
+      <workItem from="1734009826916" duration="2205000" />
+      <workItem from="1734012054516" duration="327000" />
+      <workItem from="1734012420393" duration="512000" />
     </task>
     <servers />
   </component>
