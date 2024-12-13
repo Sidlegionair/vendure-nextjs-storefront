@@ -232,7 +232,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                 </Wrapper>
                 <Stack w100 column gap={20}>
                     <StyledBoughtHeading>{t('clients-also-bought')}</StyledBoughtHeading>
-                    <TP>Aenean faucibus egestas ipsum, nec consequat urna fermentum sit amet. Ut scelerisque elit in leo hendrerit, pretium ultricies nisi euismod.</TP>
+                    <StyledBoughtContent>Aenean faucibus egestas ipsum, nec consequat urna fermentum sit amet. Ut scelerisque elit in leo hendrerit, pretium ultricies nisi euismod.</StyledBoughtContent>
                 </Stack>
             </ContentContainer>
             <ProductPageProductsSlider
@@ -266,7 +266,8 @@ const StyledBoughtContent = styled('p')`
     color: ${p => p.theme.text.subtitle};
 
     @media(max-width: 767px) {
-
+        font-size: 18px;
+        line-height: 26px;
     }
 `
 
@@ -274,6 +275,7 @@ const StyledDescription = styled(TP)`
     font-family: 'Calibri', sans-serif;
     font-size: 16px;
     line-height: 24px;
+    font-weight: 400;
 `
 
 const Wrapper = styled(Stack)`

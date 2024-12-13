@@ -32,8 +32,6 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
         handleSort,
     } = useCollection();
 
-    // console.log(collection);
-
     const breadcrumbs = [
         {
             name: breadcrumb('breadcrumbs.home'),
@@ -54,57 +52,73 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
             <HeadingStack>
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
                 <TH1>{collection?.name}</TH1>
-
             </HeadingStack>
 
             <ContentContainer>
-                {/*<AnimatePresence>*/}
-                {/*    {filtersOpen && (*/}
-                {/*        */}
-                {/*    )}*/}
-                {/*</AnimatePresence>*/}
                 <RelativeStack gap="2rem">
                     <ScrollPoint id="collection-scroll" />
                     <Wrapper flexWrap>
-                        <Facets
-                            onClick={() => setFiltersOpen(false)}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.2, ease: 'easeInOut' }}>
-                            <FacetsFilters
-                                onClick={e => e.stopPropagation()}
-                                initial={{ translateX: '-100%' }}
-                                animate={{ translateX: '0%' }}
-                                exit={{ translateX: '-100%' }}
-                                transition={{ duration: 0.3, ease: 'easeInOut' }}>
-                                <Stack column flexWrap>
-                                    {/*<Stack justifyBetween itemsCenter>*/}
-                                    {/*    <TP weight={400} upperCase>*/}
-                                    {/*        {t('filters')}*/}
-                                    {/*    </TP>*/}
-                                    {/*    <IconButton onClick={() => setFiltersOpen(false)}>*/}
-                                    {/*        <X />*/}
-                                    {/*    </IconButton>*/}
-                                    {/*</Stack>*/}
-                                    <Stack column flexWrap>
-                                        {facetValues?.map(f => (
-                                            <FacetFilterCheckbox
-                                                facet={f}
-                                                key={f.code}
-                                                selected={filters[f.id]}
-                                                onClick={(group, value) => {
-                                                    if (filters[group.id]?.includes(value.id))
-                                                        removeFilter(group, value);
-                                                    else applyFilter(group, value);
-                                                }}
-                                            />
-                                        ))}
-                                    </Stack>
-                                </Stack>
-                            </FacetsFilters>
-                        </Facets>
+                        {/* Desktop Filters: Always Visible */}
+                        <DesktopFacets>
+                            <Stack column flexWrap>
+                                {facetValues?.map(f => (
+                                    <FacetFilterCheckbox
+                                        facet={f}
+                                        key={f.code}
+                                        selected={filters[f.id]}
+                                        onClick={(group, value) => {
+                                            if (filters[group.id]?.includes(value.id))
+                                                removeFilter(group, value);
+                                            else applyFilter(group, value);
+                                        }}
+                                    />
+                                ))}
+                            </Stack>
+                        </DesktopFacets>
 
+                        {/* Mobile Overlay Filters */}
+                        <AnimatePresence>
+                            {filtersOpen && (
+                                <FacetsOverlay
+                                    onClick={() => setFiltersOpen(false)}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.2, ease: 'easeInOut' }}
+                                >
+                                    <FacetsFilters
+                                        onClick={e => e.stopPropagation()}
+                                        initial={{ x: '-100%' }}
+                                        animate={{ x: 0 }}
+                                        exit={{ x: '-100%' }}
+                                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                    >
+                                        <Stack justifyBetween itemsCenter>
+                                            <TP weight={400} upperCase>
+                                                {t('filters')}
+                                            </TP>
+                                            <IconButton onClick={() => setFiltersOpen(false)}>
+                                                <X />
+                                            </IconButton>
+                                        </Stack>
+                                        <Stack column flexWrap>
+                                            {facetValues?.map(f => (
+                                                <FacetFilterCheckbox
+                                                    facet={f}
+                                                    key={f.code}
+                                                    selected={filters[f.id]}
+                                                    onClick={(group, value) => {
+                                                        if (filters[group.id]?.includes(value.id))
+                                                            removeFilter(group, value);
+                                                        else applyFilter(group, value);
+                                                    }}
+                                                />
+                                            ))}
+                                        </Stack>
+                                    </FacetsFilters>
+                                </FacetsOverlay>
+                            )}
+                        </AnimatePresence>
                     </Wrapper>
                     <Stack w100 column>
                         <Wrapper column justifyBetween>
@@ -112,13 +126,15 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
                                 <TH2 size="30px">{collection?.name}</TH2>
                             </Stack>
                             <Stack justifyEnd itemsCenter gap="2.5rem">
-                                {/*<Filters onClick={() => setFiltersOpen(true)}>*/}
-                                {/*    <TP>{t('filters')}</TP>*/}
-                                {/*    <IconButton title={t('filters')}>*/}
-                                {/*        <Filter />*/}
-                                {/*    </IconButton>*/}
-                                {/*</Filters>*/}
-                                <SortBy sort={sort} handleSort={handleSort} />{' '}
+                                {/* Show mobile filters button only on mobile */}
+                                <MobileFilters onClick={() => setFiltersOpen(true)}>
+                                    <TP>{t('filters')}</TP>
+                                    <IconButton title={t('filters')}>
+                                        <Filter />
+                                    </IconButton>
+                                </MobileFilters>
+
+                                <SortBy sort={sort} handleSort={handleSort} />
                             </Stack>
                         </Wrapper>
                         <MainGrid>
@@ -144,7 +160,6 @@ const HeadingStack = styled(Stack)`
     height: 421px;
     gap: 60px;
     display: flex;
-
     position: relative;
     z-index: 1;
 
@@ -158,16 +173,15 @@ const HeadingStack = styled(Stack)`
         background: url('/images/bg/collectionheaderbg.jpeg') no-repeat center center;
         background-size: cover;
         opacity: 0.3;
-        //z-index: 0;
-        z-index: -1; /* Set the background behind the content */
+        z-index: -1;
     }
 `;
-
 
 const Wrapper = styled(Stack)`
     margin-top: 70px;
     flex-direction: column;
     gap: 2rem;
+
     @media (min-width: ${p => p.theme.breakpoints.xl}) {
         flex-direction: row;
     }
@@ -175,10 +189,6 @@ const Wrapper = styled(Stack)`
 
 const RelativeStack = styled(Stack)`
     position: relative;
-    //padding-top: 2rem;
-    @media (min-width: ${p => p.theme.breakpoints.xl}) {
-        //padding: 3.5rem 0;
-    }
 `;
 
 const ScrollPoint = styled.div`
@@ -187,35 +197,54 @@ const ScrollPoint = styled.div`
     left: 0;
 `;
 
-const Filters = styled(Stack)`
+/* Desktop Facets */
+const DesktopFacets = styled.div`
+    display: none;
+
+    @media (min-width: ${p => p.theme.breakpoints.xl}) {
+        display: block;
+        max-width: 287px;
+        width: 100%;
+        padding-right: 2rem;
+    }
+`;
+
+/* Mobile Filters Button */
+const MobileFilters = styled(Stack)`
     width: auto;
     cursor: pointer;
-`;
-
-const Facets = styled(motion.div)`
-    width: 100%;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
 
-        // background: ${p => p.theme.grayAlpha(900, 0.5)};
-    //position: fixed;
-    //inset: 0;
-    //z-index: 2138;
+    @media (min-width: ${p => p.theme.breakpoints.xl}) {
+        display: none;
+    }
 `;
+
+const FacetsOverlay = styled(motion.div)`
+    position: fixed;
+    inset: 0;
+    z-index: 2138;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+
+    @media (min-width: ${p => p.theme.breakpoints.xl}) {
+        display: none; /* Hide overlay on desktop */
+    }
+`;
+
 const FacetsFilters = styled(motion.div)`
-    display: flex;
+    background: ${p => p.theme.background.main};
+    //color: white;
+    width: 80%;
     max-width: 287px;
+    padding: 2rem;
+    overflow-y: auto;
+    display: flex;
     flex-direction: column;
-
-    width: 100%;
-    //background: ${p => p.theme.gray(0)};
-    //position: absolute;
-    //top: 0;
-    //bottom: 0;
-    //padding: 2rem;
-    //left: 0;
-    //z-index: 1;
-    //overflow-y: auto;
 `;
 
 export default CollectionPage;
