@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-
 import { TH1, TP, ContentContainer, Stack, Price, Link, Divider, TH2 } from '@/src/components/atoms';
-import { FullWidthButton, FullWidthSecondaryButton } from '@/src/components/molecules/Button';
+import { FullWidthButton } from '@/src/components/molecules/Button';
 import { NotifyMeForm } from '@/src/components/molecules/NotifyMeForm';
 import { ProductPageProductsSlider } from '@/src/components/organisms/ProductPageProductsSlider';
 import { Layout } from '@/src/layouts';
 import styled from '@emotion/styled';
 import { ArrowRightIcon, ShoppingBasket } from 'lucide-react';
 import { InferGetStaticPropsType } from 'next';
-
 import { Trans, useTranslation } from 'next-i18next';
 import { ProductOptions } from '@/src/components/organisms/ProductOptions';
 import { Breadcrumbs } from '@/src/components/molecules';
@@ -78,33 +76,33 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
         <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation}>
             <ContentContainer>
                 <Wrapper column>
+                    <MobileHideWrapper>
                     <Breadcrumbs breadcrumbs={breadcrumbs} />
-                    <Main gap="5rem">
-                        <StickyLeft w100 itemsCenter justifyCenter gap="2.5rem">
+                    </MobileHideWrapper>
+                    <Main gap="2rem">
+                        <StickyLeft w100 itemsCenter justifyCenter gap="2rem">
                             <ProductPhotosPreview
                                 featuredAsset={product?.featuredAsset}
                                 images={product?.assets}
                                 name={product?.name}
                             />
                         </StickyLeft>
-                        <StyledStack w100 column>
-                            <ProductInfoStack w100 column gap={30}>
-                                <Stack gap={15}>
+                        <ResponsiveRightColumn w100 column>
+                            <ProductInfoStack w100 column gap={25}>
+                                <Stack gap={15} wrap="wrap">
                                     {typeof product?.customFields?.brand === 'string' && (
-                                        <TH1 size="35px" weight={700} noWrap>
+                                        <StyledBrand noWrap>
                                             {product.customFields.brand}
-                                        </TH1>
+                                        </StyledBrand>
                                     )}
-
-                                    <TH1 weight={300} size="35px">{product?.name}</TH1>
+                                    <StyledProductTitle>{product?.name}</StyledProductTitle>
                                 </Stack>
                                 <Ratings rating={Math.random() * 5} />
-
                                 {variant && <Price size="40px" price={variant.priceWithTax} currencyCode={variant.currencyCode} />}
                             </ProductInfoStack>
                             <Stack w100 gap="1rem" column>
                                 {variant && Number(variant.stockLevel) > 0 && Number(variant.stockLevel) <= 10 && (
-                                    <MakeItQuick size="1.5rem" weight={500}>
+                                    <MakeItQuick size="1rem" weight={500}>
                                         <Trans
                                             i18nKey="stock-levels.low-stock"
                                             t={t}
@@ -134,22 +132,20 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                     </StockDisplay>
                                 </StockInfo>
                                 {product?.description && (
-                                    <TP
+                                    <StyledDescription
                                         dangerouslySetInnerHTML={{ __html: product.description }}
                                         color="main"
-                                        size="16px"
-                                        lineHeight="24px"
-                                        style={{ marginTop: '1.5rem' }}
+                                        size="1rem"
+                                        lineHeight="1.5rem"
+                                        style={{ marginTop: '1rem' }}
                                     />
                                 )}
                             </Stack>
 
-                            <Stack w100>
-                                {/* Product Options Section with Tabs */}
+                            <Stack w100 column>
                                 <ProductOptionTabs
-                                    defaultOpenIndex={0} // Default to the first tab
+                                    defaultOpenIndex={0}
                                     data={[
-                                        // Tab for Product Options
                                         {
                                             title: 'Product Options',
                                             children: (
@@ -160,9 +156,8 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                                 />
                                             ),
                                         },
-                                        // Additional Option Tabs
                                         ...(variant?.customFields
-                                            ? Array.from({ length: 3 }, (_, i) => i + 1) // MAX_OPTION_TABS = 3
+                                            ? Array.from({ length: 3 }, (_, i) => i + 1)
                                                 .filter(tabIndex => (variant.customFields as Record<string, any>)[`optionTab${tabIndex}Visible`])
                                                 .map(tabIndex => ({
                                                     title: (variant.customFields as Record<string, any>)[`optionTab${tabIndex}Label`] || `Option Tab ${tabIndex}`,
@@ -177,15 +172,15 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                     ]}
                                 />
                             </Stack>
-                            <StyledDividerTop></StyledDividerTop>
+                            <StyledDividerTop />
                             <Stack justifyBetween>
                                 <TP weight={700} size={18}>FREE SHIPPING</TP>
                             </Stack>
-                            <StyledDividerTop></StyledDividerTop>
+                            <StyledDividerTop />
                             {!variant ? null : Number(variant.stockLevel) <= 0 ? (
                                 <NotifyMeForm />
                             ) : (
-                                <Stack gap={20} justifyBetween>
+                                <ResponsiveActionRow gap={20}>
                                     <QuantityCounter
                                         size="14px"
                                         height="56px"
@@ -193,23 +188,23 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                         onChange={v => handleSetItemQuantityInCart(v)}
                                     />
                                     <StyledFullWidthButton
-                                        style={{ display: 'flex', alignItems: 'center', gap: '15px', textTransform: 'uppercase', padding: '1.5rem' }}
-                                        onClick={handleAddToCart}>
-                                        <ShoppingBasket />{t('add-to-cart')}<ArrowRightIcon />
+                                        onClick={handleAddToCart}
+                                    >
+                                        <ShoppingBasket />
+                                        {t('add-to-cart')}
+                                        <ArrowRightIcon />
                                     </StyledFullWidthButton>
-                                </Stack>
+                                </ResponsiveActionRow>
                             )}
-                        </StyledStack>
+                        </ResponsiveRightColumn>
                     </Main>
 
-                    {/* Description Tabs Section */}
                     <Stack w100>
                         <ProductTabs
-                            defaultOpenIndex={0} // Default to the first tab
+                            defaultOpenIndex={0}
                             data={[
-                                // Description Tabs
                                 ...(variant?.customFields
-                                    ? Array.from({ length: 3 }, (_, i) => i + 1) // MAX_DESCRIPTION_TABS = 3
+                                    ? Array.from({ length: 3 }, (_, i) => i + 1)
                                         .filter(tabIndex => (variant.customFields as Record<string, any>)[`descriptionTab${tabIndex}Visible`])
                                         .map(tabIndex => ({
                                             title: (variant.customFields as Record<string, any>)[`descriptionTab${tabIndex}Label`] || `Description Tab ${tabIndex}`,
@@ -222,7 +217,6 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                             ),
                                         }))
                                     : []),
-                                // Default Reviews Tab
                                 {
                                     title: 'Reviews',
                                     children: (
@@ -235,83 +229,139 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                         />
                     </Stack>
 
-
                 </Wrapper>
                 <Stack w100 column gap={20}>
                     <TH2>{t('clients-also-bought')}</TH2>
                     <TP>Aenean faucibus egestas ipsum, nec consequat urna fermentum sit amet. Ut scelerisque elit in leo hendrerit, pretium ultricies nisi euismod.</TP>
                 </Stack>
             </ContentContainer>
-            <ProductPageProductsSlider title={t('recently-viewed')}
+            <ProductPageProductsSlider
+                title={t('recently-viewed')}
                 products={props.clientsAlsoBought?.collection?.productVariants?.items ?? []}
             />
             <ProductPageProductsSlider title={t('recently-viewed')} products={recentlyProducts ?? []} />
             <ProductStory slug={props.product.slug} />
-
         </Layout>
     );
 };
 
+// Styled Components
 
-// Styled Components (Unchanged)
-const CategoryBlock = styled(Link)`
-    width: fit-content;
+const StyledDescription = styled(TP)`
+    font-family: 'Calibri', sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+`
+
+const Wrapper = styled(Stack)`
+    padding-top: 2rem;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+
+    @media (min-width: ${({ theme }) => theme.breakpoints.xl}) {
+        padding: 3.5rem 0;
+    }
+`;
+
+    const MobileHideWrapper = styled.div`
+        @media (max-width: 767px) {
+            display: none;
+        }
+    `;
+
+
+const StyledBrand = styled(TH1)`
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+
+    @media (min-width: 768px) {
+        font-size: 35px; // fallback for larger screens
+        line-height: normal;
+    }
+`;
+
+const StyledProductTitle = styled(TH1)`
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 24px;
+
+    @media (min-width: 768px) {
+        font-size: 35px; // fallback for larger screens
+        line-height: normal;
+    }
+`;
+
+
+const Main = styled(Stack)`
+    padding: 1.5rem 0;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    border-bottom: 1px solid ${({ theme }) => theme.gray(100)};
+    margin-bottom: 2rem;
+
+    @media (min-width: 768px) {
+        flex-direction: row;
+        padding: 2rem 0;
+    }
+
+    @media (min-width: ${({ theme }) => theme.breakpoints.xl}) {
+        padding: 4rem 0;
+    }
+`;
+
+const StickyLeft = styled(Stack)`
+    width: 100%;
+
+    @media (min-width: 1024px) {
+        position: sticky;
+        top: 12rem;
+        width: 40%;
+    }
+`;
+
+const ResponsiveRightColumn = styled(Stack)`
+    width: 100%;
+    gap: 2rem;
+
+    @media (min-width: 1024px) {
+        width: 60%;
+        align-items: flex-start;
+    }
 `;
 
 const ProductInfoStack = styled(Stack)`
     border-bottom: 2px solid ${({ theme }) => theme.gray(100)};
-`;
-
-const Wrapper = styled(Stack)`
-    padding-top: 2rem;
-    @media (min-width: ${({ theme }) => theme.breakpoints.xl}) {
-        padding: 3.5rem 0;
-    }
+    width: 100%;
+    padding-bottom: 1rem;
 `;
 
 const MakeItQuick = styled(TP)`
     color: ${({ theme }) => theme.error};
 `;
 
-const StickyLeft = styled(Stack)`
-    @media (min-width: 1024px) {
-        position: sticky;
-        top: 12rem;
-    }
-`;
-
 const StockInfo = styled(Stack)<{ outOfStock?: boolean; comingSoon?: boolean }>`
     white-space: nowrap;
     color: ${p => (p.outOfStock ? p.theme.error : p.comingSoon ? p.theme.gray(800) : 'inherit')};
-    width: max-content;
-    @media (min-width: 1024px) {
-        width: 100%;
-    }
-`;
-
-const StyledTabDivider = styled(Divider)`
-    background-color: ${p => p.theme.border.thin};
-    height: 1px;
-    mix-blend-mode: normal;
-    margin-top: 25px;
-    margin-bottom: 25px;
+    width: 100%;
+    flex-wrap: wrap;
 `;
 
 const StyledDividerTop = styled(Divider)`
     background-color: ${p => p.theme.border.thin};
     height: 1px;
-    mix-blend-mode: normal;
-    margin-top: 25px;
-    margin-bottom: 25px;
+    margin: 1.5rem 0;
+    width: 100%;
 `;
 
-const StyledStack = styled(Stack)`
-    border-radius: 15px;
-    justify-content: center;
-    align-items: center;
-    @media (min-width: 1024px) {
-        justify-content: flex-start;
-        align-items: flex-start;
+const ResponsiveActionRow = styled(Stack)`
+    width: 100%;
+    flex-direction: column;
+
+    @media (min-width: 480px) {
+        flex-direction: row;
     }
 `;
 
@@ -319,25 +369,23 @@ const StyledFullWidthButton = styled(FullWidthButton)`
     background: ${({ theme }) => theme.background.accentGreen};
     color: white;
     border-radius: 12px;
-`;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-transform: uppercase;
+    padding: 1.5rem;
+    justify-content: center;
 
-const Main = styled(Stack)`
-    padding: 1.5rem 0;
-    flex-direction: column;
-    align-items: start;
-    @media (min-width: 1024px) {
-        flex-direction: row;
-        padding: 4rem 0;
+    svg {
+        flex-shrink: 0;
     }
-    margin-bottom: 2rem;
-    border-bottom: 1px solid ${({ theme }) => theme.gray(100)};
 `;
 
 const StockDisplay = styled(Stack)`
-    font-size: 18px;
+    font-size: 1.125rem; // 18px
     font-weight: 400;
     gap: 3px;
-    margin-top: 20px;
+    //margin-top: 20px;
 
     b {
         color: ${({ theme }) => theme.text.accentGreen};

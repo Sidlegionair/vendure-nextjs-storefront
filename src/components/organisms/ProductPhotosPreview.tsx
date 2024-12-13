@@ -73,6 +73,11 @@ const StyledProductImage = styled(ProductImage)<{ isSelected: boolean }>`
     height: 140px;
     border: 1px solid ${({ isSelected }) => (isSelected ? '#0E4632' : 'rgba(77, 77, 77, 0.1)')};
     border-radius: 12px;
+    
+    @media(max-width: 767px) {
+        max-width: 65px;
+        max-height: 65px;
+    }
 `;
 
 

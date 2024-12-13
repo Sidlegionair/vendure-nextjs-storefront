@@ -98,6 +98,10 @@ const TabHeader = styled.button<{ active: boolean }>`
                 active ? theme.button.front : 'transparent'};
         transition: background-color 0.3s ease-in-out;
     }
+    
+    @media(max-width: 767px) {
+        font-size: 20px;
+    }
 `;
 
 const Content = styled.div`
@@ -142,6 +146,11 @@ const Content = styled.div`
             line-height: 26px;
             color: ${({ theme }) => theme.text.subtitle};
             margin: 0;
+            
+            @media(max-width: 767px) {
+                font-size: 16px;
+                line-height: 24px;
+            }
         }
     }
 `;
