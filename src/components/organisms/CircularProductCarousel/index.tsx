@@ -184,11 +184,7 @@ const BottomStackWrapper = styled.div`
     }
 
     @media (max-width: 768px) {
-        margin: 2rem auto; /* Tablets */
-    }
-
-    @media (max-width: 480px) {
-        margin: 1rem auto; /* Mobile devices */
+        margin-top: 60px; /* Tablets */
     }
 `;
 

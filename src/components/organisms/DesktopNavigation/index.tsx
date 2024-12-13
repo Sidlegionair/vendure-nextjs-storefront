@@ -61,7 +61,7 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
                             <ContentContainer>
                                 <Background w100 justifyBetween>
                                     <NavigationLinks collection={collection} />
-                                    <Stack gap="1.5rem">
+                                    <ProductSelloutWrapper gap="1.5rem">
                                         <ProductsSellout
                                             title={t('featured-products')}
                                             addToCart={addToCart}
@@ -69,7 +69,7 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
                                             collection={collection}
                                         />
                                         {/*<RelatedCollections title={t('best-collections')} collection={collection} />*/}
-                                    </Stack>
+                                    </ProductSelloutWrapper>
                                 </Background>
                             </ContentContainer>
                         </AbsoluteStack>
@@ -97,6 +97,11 @@ const DesktopStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '
     }
     z-index: 9999;
 `;
+
+const ProductSelloutWrapper = styled(Stack)`
+    max-width: 50%;
+    overflow: hidden;
+`
 
 const Background = styled(Stack)`
     //left: 40vw;
@@ -130,6 +135,9 @@ const RelativeStack = styled(Stack)`
         position: absolute;
         top: 100%;
         left: 17vw;
+        @media(max-width: 1300px) {
+            left: 20vw;
+        }
         transform: translateX(-50%) translateY(-1rem); // Initial state off-screen
         transition: all 0.35s ease-in-out;
     }
@@ -160,7 +168,7 @@ const AbsoluteStack = styled(Stack)`
     transition: all 0.35s ease-in-out;
     width: auto; // Dynamically adjust to content
     min-width: 200px;
-    max-width: 80vw; // Responsive constraint for smaller screens
+    max-width: 70vw; // Responsive constraint for smaller screens
     overflow: visible;
 
     @media (max-width: ${p => p.theme.breakpoints.sm}) {

@@ -46,7 +46,7 @@ const AboutUsBlock = ({ blok }) => {
                     position: relative;
                     width: 100%;
                     max-width: 100vw;
-                    height: auto;
+                    //height: auto;
                     color: #fff;
                     overflow: hidden;
                 }
@@ -63,7 +63,7 @@ const AboutUsBlock = ({ blok }) => {
                     margin-left: -103px;
                     width: 50vw;
                     display: flex;
-                    height: 100%;
+                    //height: 100%;
                 }
 
                 .about-us-image img {
@@ -79,7 +79,7 @@ const AboutUsBlock = ({ blok }) => {
                     flex-direction: column;
                     align-items: flex-start;
                     justify-content: space-between;
-                    height: 409px;
+                    //height: 409px;
 
                     position: relative;
                     width: 50vw;

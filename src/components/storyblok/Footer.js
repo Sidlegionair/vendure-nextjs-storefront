@@ -21,13 +21,17 @@ const Footer = ({ blok }) => {
                 {/* Brand Section */}
                 <div className="brand-section">
                     <div className="logo">
-                        <img
-                            src={logo?.filename}
-                            alt={name || 'Logo'}
-                            className="logo-image"
-                        />
+                        {logo?.filename && (
+                            <img
+                                src={logo.filename}
+                                alt={name || 'Logo'}
+                                className="logo-image"
+                            />
+                        )}
                     </div>
-                    {description && <RichTextEditor blok={{ content: description, textColor: '#ffff' }} />}
+                    {description && (
+                        <RichTextEditor blok={{ content: description, textColor: '#fff' }} />
+                    )}
                 </div>
 
                 {/* Links Section */}
@@ -37,7 +41,6 @@ const Footer = ({ blok }) => {
                             <h4 className="column-title">{column.title}</h4>
                             <ul className="link-list">
                                 {column.links.map((link, i) => (
-                                    console.log(link),
                                     <li key={i} className="link-item">
                                         <a href={link.url?.cached_url} className="link">
                                             {link.text}
@@ -66,26 +69,28 @@ const Footer = ({ blok }) => {
                                 rel="noopener noreferrer"
                                 className="social-icon"
                             >
-                                <img
-                                    src={social.icon?.filename}
-                                    alt={social.name || 'Social Icon'}
-                                    className="icon-image"
-                                />
+                                {social.icon?.filename && (
+                                    <img
+                                        src={social.icon.filename}
+                                        alt={social.name || 'Social Icon'}
+                                        className="icon-image"
+                                    />
+                                )}
                             </a>
                         ))}
                     </div>
                 </div>
             </div>
-            {/* Scoped styles */}
+
             <style jsx>{`
                 .footer {
-                    margin-top: 100px;
-                    display: flex;
                     position: relative;
                     color: #fff;
-                    padding: 90px 196px;
+                    padding: 60px 20px;
                     width: 100%;
-                    overflow: hidden;
+                    box-sizing: border-box;
+                    overflow: hidden; /* Ensures no overflow */
+                    margin-top: 100px;
                 }
 
                 .footer::before {
@@ -114,21 +119,24 @@ const Footer = ({ blok }) => {
                 }
 
                 .content-layer {
+                    position: relative;
+                    z-index: 2;
+                    max-width: 1200px;
+                    margin: 0 auto;
                     display: flex;
                     justify-content: space-between;
-                    width: 100%;
-                    gap: 111px; /* Ensure spacing between sections */
-                    position: relative;
-                    z-index: 2; /* Above the pseudo-elements */
+                    gap: 40px;
+                    flex-wrap: wrap;
+                    box-sizing: border-box;
                 }
 
                 .brand-section {
-                    flex: 1 1 25%; /* Restrict branding section to a quarter of the width */
+                    flex: 1 1 250px;
                     display: flex;
                     flex-direction: column;
+                    gap: 20px;
                     text-align: left;
-                    gap: 20px; /* Ensure spacing within branding section */
-                    text-align: left;
+                    min-width: 250px;
                 }
 
                 .logo {
@@ -138,41 +146,31 @@ const Footer = ({ blok }) => {
                 }
 
                 .logo-image {
-                    width: 288px;
-                    height: 100%;
-                    //border-radius: 50%;
+                    width: 100%;
+                    max-width: 288px;
+                    height: auto;
+                    display: block;
                 }
 
                 .links-section {
                     display: flex;
-                    flex: 1 1 50%; /* Allow links section to take half the width */
+                    flex: 1 1 400px;
                     flex-wrap: wrap;
                     gap: 20px;
-                    justify-content: space-between;
+                    justify-content: flex-start;
+                    min-width: 300px;
                 }
 
-                .links-section.columns-3 {
-                    justify-content: space-around;
-                }
-
-                .links-section.columns-4 {
-                    justify-content: space-between;
-                }
-
+                .links-section.columns-3,
+                .links-section.columns-4,
                 .links-section.columns-5 {
                     justify-content: space-between;
                 }
 
                 .column {
-                    text-align: left;
-                    flex: 1 1 calc(20% - 10px); /* Distribute evenly */
-                }
-
-                @media (max-width: 768px) {
-                    .column {
-                        flex: 1 1 100%; /* Stack columns on small screens */
-                        margin-bottom: 20px;
-                    }
+                    flex: 1 1 calc(33.333% - 20px);
+                    min-width: 150px;
+                    box-sizing: border-box;
                 }
 
                 .column-title {
@@ -194,27 +192,31 @@ const Footer = ({ blok }) => {
 
                 .link {
                     color: #fff;
-                    //text-decoration: none;
                     font-weight: 400;
                     font-size: 16px;
-                    line-height: 40px;
+                    line-height: 24px;
+                    text-decoration: none;
                 }
 
                 .newsletter-section {
-                    text-align: right;
+                    //flex: 1 1 250px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                    min-width: 250px;
                 }
 
                 .email-input {
-
-                    background: #FFFFFF;
-
+                    background: #ffffff;
                     padding: 15px 20px;
                     font-size: 16px;
                     font-family: 'Calibri', sans-serif;
-                    color: ${p => p.theme.text.subtitle};
-
+                    color: #333;
                     border: 1px solid #fff;
-                    margin-right: 10px;
+                    margin-bottom: 10px;
+                    width: 100%;
+                    box-sizing: border-box;
+                    max-width: 300px;
                 }
 
                 .send-button {
@@ -225,17 +227,16 @@ const Footer = ({ blok }) => {
                     background-color: #c00;
                     color: #fff;
                     cursor: pointer;
+                    margin-bottom: 20px;
                 }
 
                 .social-icons {
-                    margin-top: 20px;
                     display: flex;
-                    justify-content: flex-start;
                     gap: 15px;
                 }
 
                 .social-icon {
-                    display: inline-block;
+                    display: inline-flex;
                     width: 42px;
                     height: 42px;
                 }
@@ -243,6 +244,78 @@ const Footer = ({ blok }) => {
                 .icon-image {
                     width: 100%;
                     height: 100%;
+                    object-fit: contain;
+                }
+
+                @media (max-width: 1024px) {
+                    .content-layer {
+                        gap: 30px;
+                    }
+                }
+
+                @media (max-width: 768px) {
+                    .content-layer {
+                        padding: 30px;
+                        flex-direction: column-reverse;
+                        align-items: start;
+                    }
+
+                    .logo {
+                        align-items: start;
+                    }
+
+                    .brand-section,
+                    .links-section,
+                    .newsletter-section {
+                        text-align: start;
+                        align-items: start;
+                    }
+
+                    .newsletter-section {
+                        flex-direction: column-reverse;
+                    }
+
+                    .links-section {
+                        justify-content: start;
+                    }
+
+                    .column {
+                        flex: 1 1 100%;
+                        max-width: 300px;
+                        text-align: left;
+                    }
+
+                    .email-input {
+                        max-width: 100%;
+                    }
+
+                    .send-button {
+                        margin: 10px 0;
+                    }
+
+                    .social-icons {
+                        justify-content: center;
+                    }
+
+                    .logo-image {
+                        //max-width: 150px;
+                        max-height: 28px;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .column-title {
+                        font-size: 18px;
+                    }
+
+                    .link {
+                        font-size: 14px;
+                    }
+
+                    .email-input,
+                    .send-button {
+                        font-size: 14px;
+                    }
                 }
             `}</style>
         </footer>

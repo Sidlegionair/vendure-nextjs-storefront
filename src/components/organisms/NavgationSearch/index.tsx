@@ -54,6 +54,7 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
         };
     }, [closeSearch]);
 
+    // Focus the input on mount
     useEffect(() => {
         setTimeout(() => {
             inputRef.current?.focus();
@@ -85,13 +86,13 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                         <SearchButton onClick={() => {
                             setSearchQuery('');
                             closeSearch();
-                            setIsPanelVisible(false)
+                            setIsPanelVisible(false);
                         }}>
                             <X size="1.5rem" />
                         </SearchButton>
                     ) : (
                         <SearchButton type="submit">
-                            <SearchIcon size="1.5rem" />
+                            <SearchIcon size="15px" />
                         </SearchButton>
                     )}
                 </Form>
@@ -100,29 +101,29 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                 <SearchPosition w100>
                     <SearchContent w100>
                         <PopularSearches popularSearches={popularSearches} onClick={item => setSearchQuery(item)}>
-                            <TypoGraphy size="2rem" weight={400} noWrap>
+                            <MobileHeading size="2rem" weight={400} noWrap>
                                 {t('popular-searches-heading')}
-                            </TypoGraphy>
+                            </MobileHeading>
                         </PopularSearches>
                         {searchQuery.length < 3 ? (
-                            <TP>{t('search-query-to-short')}</TP>
+                            <MobileText>{t('search-query-to-short')}</MobileText>
                         ) : loading ? (
-                            <TP>{t('search-results-loading')}</TP>
+                            <MobileText>{t('search-results-loading')}</MobileText>
                         ) : searchResults.length === 0 ? (
-                            <TP>
+                            <MobileText>
                                 <Trans
                                     i18nKey="search-results-no-results"
                                     values={{ searchQuery }}
                                     components={{ 1: <strong></strong> }}
                                 />
-                            </TP>
+                            </MobileText>
                         ) : (
                             <Wrapper column w100 gap={'2rem'}>
                                 <Container>
                                     <Stack column w100 gap={'2rem'}>
-                                        <TypoGraphy size={'2rem'} weight={400}>
+                                        <MobileHeading size={'2rem'} weight={400}>
                                             {t('search-results-header')}
-                                        </TypoGraphy>
+                                        </MobileHeading>
                                         <Results w100 flexWrap>
                                             {searchResults.slice(0, 6).map(result => (
                                                 <ResultCard gap="0.5rem" itemsCenter column key={result.slug}>
@@ -132,9 +133,9 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                                                         href={`/products/${result.slug}`}
                                                     />
                                                     <Stack itemsCenter column gap="0.5rem">
-                                                        <TP size="1.5rem" weight={500}>
+                                                        <MobileText size="1.8rem" weight={500}>
                                                             {result.productName}
-                                                        </TP>
+                                                        </MobileText>
                                                     </Stack>
                                                 </ResultCard>
                                             ))}
@@ -162,29 +163,31 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
 
 const ResponsiveStack = styled(Stack)`
     position: relative;
-
-    // Default width
     width: 100%;
 
     @media (max-width: ${p => p.theme.breakpoints.md}) {
-        padding: 0 50px; // Add 75px spacing on both sides
+        padding: 0 1rem;
     }
 
     @media (min-width: ${p => p.theme.breakpoints.md}) {
-        width: 50%; // Revert to 50% width for larger screens
+        width: 50%;
     }
 `;
-
 
 const StyledLink = styled(Link)`
     display: flex;
     align-items: center;
     align-self: flex-end;
     gap: 0.5rem;
-
     width: fit-content;
     color: ${p => p.theme.gray(1000)};
     font-size: 1.5rem;
+
+    @media (max-width: ${p => p.theme.breakpoints.md}) {
+        font-family: 'Suisse BP Int\'l', sans-serif;
+        font-size: 1.8rem; /* ~18px */
+        line-height: 1.8rem;
+    }
 `;
 
 const Results = styled(Stack)`
@@ -202,14 +205,17 @@ const ResultCard = styled(Stack)`
 `;
 
 const SearchPosition = styled(Stack)`
-    width: 100%;
-    top: calc(100% + 1rem);
     position: absolute;
-    //z-index: 2136;
+    top: calc(100% + 1rem);
+    left: 0;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+    padding: 0 1rem;
 
     @media (min-width: ${p => p.theme.breakpoints.md}) {
-        width: calc(100% + 20rem);
-        right: -10rem;
+        max-width: 60rem;
+        padding: 0;
     }
 `;
 
@@ -238,7 +244,6 @@ const SearchContent = styled(Stack)`
 const Form = styled.form`
     width: 100%;
     position: relative;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -256,27 +261,21 @@ const Input = styled.input`
     background: ${p => p.theme.background.main};
     transition: all 0.2s ease-in-out;
     height: 40px;
-    
+
+    @media (max-width: ${p => p.theme.breakpoints.md}) {
+        font-size: 14px; /* ~18px */
+        line-height: 14px;
+    }
+
     @media (min-width: ${p => p.theme.breakpoints.md}) {
         height: 55px;
-
     }
-`;
-
-const CrossButton = styled.button`
-    appearance: none;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    padding: 0;
-    margin: 0;
 `;
 
 const SearchButton = styled.button`
     position: absolute;
     right: 1.5rem;
     height: 100%;
-
     appearance: none;
     border: none;
     background: transparent;
@@ -290,6 +289,7 @@ const Container = styled(Stack)`
     width: 100%;
     flex-direction: column-reverse;
     gap: 2rem;
+
     @media (min-width: ${p => p.theme.breakpoints.lg}) {
         flex-direction: row;
         gap: unset;
@@ -301,8 +301,24 @@ const IconWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-
     margin-top: 0.25rem;
 `;
 
 const Wrapper = styled(Stack)``;
+
+// Mobile-specific typography adjustments
+const MobileHeading = styled(TypoGraphy)`
+    @media (max-width: ${p => p.theme.breakpoints.md}) {
+        font-size: 2rem; /* ~20px */
+        line-height: 2rem;
+        font-weight: 600;
+    }
+`;
+
+const MobileText = styled(TP)`
+    @media (max-width: ${p => p.theme.breakpoints.md}) {
+        font-size: 1.8rem; /* ~18px */
+        line-height: 1.9rem8
+        font-weight: 400;
+    }
+`;
