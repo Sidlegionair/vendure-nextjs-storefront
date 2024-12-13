@@ -5,7 +5,7 @@ import { NotifyMeForm } from '@/src/components/molecules/NotifyMeForm';
 import { ProductPageProductsSlider } from '@/src/components/organisms/ProductPageProductsSlider';
 import { Layout } from '@/src/layouts';
 import styled from '@emotion/styled';
-import { ArrowRightIcon, ShoppingBasket } from 'lucide-react';
+import { ArrowRightIcon, Heading, ShoppingBasket } from 'lucide-react';
 import { InferGetStaticPropsType } from 'next';
 import { Trans, useTranslation } from 'next-i18next';
 import { ProductOptions } from '@/src/components/organisms/ProductOptions';
@@ -89,7 +89,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                         </StickyLeft>
                         <ResponsiveRightColumn w100 column>
                             <ProductInfoStack w100 column gap={25}>
-                                <Stack gap={15} wrap="wrap">
+                                <Stack gap={15}>
                                     {typeof product?.customFields?.brand === 'string' && (
                                         <StyledBrand noWrap>
                                             {product.customFields.brand}
@@ -231,7 +231,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
 
                 </Wrapper>
                 <Stack w100 column gap={20}>
-                    <TH2>{t('clients-also-bought')}</TH2>
+                    <StyledBoughtHeading>{t('clients-also-bought')}</StyledBoughtHeading>
                     <TP>Aenean faucibus egestas ipsum, nec consequat urna fermentum sit amet. Ut scelerisque elit in leo hendrerit, pretium ultricies nisi euismod.</TP>
                 </Stack>
             </ContentContainer>
@@ -246,6 +246,29 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
 };
 
 // Styled Components
+
+const StyledBoughtHeading = styled(TH2)`
+    margin-top: 60px;
+    font-size: 38px;
+    line-height: 38px;
+    font-weight: 600;
+    
+    @media(max-width: ${p => p.theme.breakpoints.md}) {
+        font-size: 30px;
+        line-height: 30px;
+        
+    }
+`
+
+const StyledBoughtContent = styled('p')`
+    font-size: 20px;
+    line-height: 26px;
+    color: ${p => p.theme.text.subtitle};
+
+    @media(max-width: 767px) {
+
+    }
+`
 
 const StyledDescription = styled(TP)`
     font-family: 'Calibri', sans-serif;

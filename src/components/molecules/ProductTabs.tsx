@@ -67,6 +67,10 @@ const TabWrapper = styled(Stack)`
     border: 1px solid ${({ theme }) => theme.border.main};
     padding: 30px;
     border-radius: 15px;
+    
+    @media(max-width: 767px) {
+        padding: 15px;
+    }
 `;
 
 const TabHeaders = styled.div`
