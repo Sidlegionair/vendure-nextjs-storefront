@@ -23,10 +23,8 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
     const containerRef = useRef<HTMLDivElement>(null);
     const [isPanelVisible, setIsPanelVisible] = useState(false);
 
-    // Show panel on input focus
     const handleFocus = () => setIsPanelVisible(true);
 
-    // Hide panel when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -40,7 +38,6 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
         };
     }, []);
 
-    // Close panel when Escape key is pressed
     useEffect(() => {
         const handleEscape = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
@@ -54,12 +51,7 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
         };
     }, [closeSearch]);
 
-    // Focus the input on mount
-    useEffect(() => {
-        setTimeout(() => {
-            inputRef.current?.focus();
-        }, 200);
-    }, []);
+    // Removed the automatic focus on component mount
 
     return (
         <ResponsiveStack itemsCenter ref={containerRef}>
@@ -185,7 +177,7 @@ const StyledLink = styled(Link)`
 
     @media (max-width: ${p => p.theme.breakpoints.md}) {
         font-family: 'Suisse BP Int\'l', sans-serif;
-        font-size: 1.8rem; /* ~18px */
+        font-size: 1.8rem;
         line-height: 1.8rem;
     }
 `;
@@ -263,7 +255,7 @@ const Input = styled.input`
     height: 40px;
 
     @media (max-width: ${p => p.theme.breakpoints.md}) {
-        font-size: 14px; /* ~18px */
+        font-size: 14px;
         line-height: 14px;
     }
 
@@ -306,10 +298,9 @@ const IconWrapper = styled.div`
 
 const Wrapper = styled(Stack)``;
 
-// Mobile-specific typography adjustments
 const MobileHeading = styled(TypoGraphy)`
     @media (max-width: ${p => p.theme.breakpoints.md}) {
-        font-size: 2rem; /* ~20px */
+        font-size: 2rem;
         line-height: 2rem;
         font-weight: 600;
     }
@@ -317,8 +308,8 @@ const MobileHeading = styled(TypoGraphy)`
 
 const MobileText = styled(TP)`
     @media (max-width: ${p => p.theme.breakpoints.md}) {
-        font-size: 1.8rem; /* ~18px */
-        line-height: 1.9rem8
+        font-size: 1.8rem;
+        line-height: 1.9rem;
         font-weight: 400;
     }
 `;
