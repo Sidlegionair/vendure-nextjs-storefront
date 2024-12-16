@@ -32,12 +32,15 @@ export const Pagination: React.FC<{
 };
 
 const PaginationWrapper = styled(Stack)`
-    margin: 3.5rem 0;
+    margin: 70px 0;
+    display: flex;
+    gap: 15px;
 `;
 
 const PaginationText = styled.a<{ isCurrent?: boolean }>`
-    font-size: 1.5rem;
+    font-size: 18px;
+    
     font-weight: 500;
-    color: ${p => (p.isCurrent ? p.theme.gray(700) : p.theme.gray(500))};
+    color: ${p => (p.isCurrent ? p.theme.text.accent : p.theme.text.subtitle)};
     cursor: pointer;
 `;

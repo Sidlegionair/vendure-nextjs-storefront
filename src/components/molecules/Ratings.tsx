@@ -59,6 +59,9 @@ const RatingsWrapper = styled(Stack)`
     height: 1.5rem;
     color: rgba(251, 200, 43, 1);
 
+    display: flex;
+    gap: 1.17px;
+    
     svg {
         position: absolute;
         top: 0;

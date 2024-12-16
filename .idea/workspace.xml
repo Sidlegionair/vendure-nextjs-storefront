@@ -6,8 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/atoms/MainGrid.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/atoms/MainGrid.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/Pagination/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/Pagination/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/Ratings.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/Ratings.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/SortBy.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/SortBy.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/collections/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/collections/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/products/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/products/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,7 +86,8 @@
       <workItem from="1734085381768" duration="2093000" />
       <workItem from="1734090216602" duration="782000" />
       <workItem from="1734091061118" duration="312000" />
-      <workItem from="1734091440407" duration="7051000" />
+      <workItem from="1734091440407" duration="7737000" />
+      <workItem from="1734352475378" duration="2040000" />
     </task>
     <servers />
   </component>

@@ -122,15 +122,22 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
                     </Wrapper>
                     <Stack w100 column>
                         <Wrapper column justifyBetween>
-                            <Stack itemsEnd>
-                                <TH2 size="30px">{collection?.name}</TH2>
-                            </Stack>
-                            <Stack justifyEnd itemsCenter gap="2.5rem">
+                            {/*<Stack itemsEnd>*/}
+                            {/*    <TH2 size="30px">{collection?.name}</TH2>*/}
+                            {/*</Stack>*/}
+                            <Stack justifyBetween itemsCenter gap="2.5rem">
                                 {/* Show mobile filters button only on mobile */}
                                 <MobileFilters onClick={() => setFiltersOpen(true)}>
                                     <TP>{t('filters')}</TP>
                                     <IconButton title={t('filters')}>
-                                        <Filter />
+                                        <svg width="25" height="24" viewBox="0 0 25 24" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M24 11.9994H8.63973M3.21795 11.9994H1M3.21795 11.9994C3.21795 11.2756 3.50349 10.5815 4.01177 10.0698C4.52004 9.558 5.20941 9.2705 5.92822 9.2705C6.64702 9.2705 7.33639 9.558 7.84467 10.0698C8.35294 10.5815 8.63849 11.2756 8.63849 11.9994C8.63849 12.7231 8.35294 13.4172 7.84467 13.929C7.33639 14.4407 6.64702 14.7282 5.92822 14.7282C5.20941 14.7282 4.52004 14.4407 4.01177 13.929C3.50349 13.4172 3.21795 12.7231 3.21795 11.9994ZM24 20.2699H16.8538M16.8538 20.2699C16.8538 20.9938 16.5676 21.6887 16.0592 22.2005C15.5508 22.7124 14.8613 23 14.1423 23C13.4235 23 12.7341 22.7112 12.2259 22.1995C11.7176 21.6877 11.4321 20.9936 11.4321 20.2699M16.8538 20.2699C16.8538 19.546 16.5676 18.8523 16.0592 18.3404C15.5508 17.8286 14.8613 17.541 14.1423 17.541C13.4235 17.541 12.7341 17.8285 12.2259 18.3403C11.7176 18.852 11.4321 19.5461 11.4321 20.2699M11.4321 20.2699H1M24 3.72888H20.1397M14.7179 3.72888H1M14.7179 3.72888C14.7179 3.00513 15.0035 2.31103 15.5118 1.79927C16.02 1.28751 16.7094 1 17.4282 1C17.7841 1 18.1366 1.07058 18.4654 1.20772C18.7942 1.34486 19.093 1.54587 19.3447 1.79927C19.5963 2.05267 19.796 2.3535 19.9322 2.68458C20.0684 3.01566 20.1385 3.37052 20.1385 3.72888C20.1385 4.08724 20.0684 4.44209 19.9322 4.77317C19.796 5.10425 19.5963 5.40508 19.3447 5.65848C19.093 5.91188 18.7942 6.11289 18.4654 6.25003C18.1366 6.38717 17.7841 6.45775 17.4282 6.45775C16.7094 6.45775 16.02 6.17025 15.5118 5.65848C15.0035 5.14672 14.7179 4.45262 14.7179 3.72888Z"
+                                                stroke="black" stroke-width="1.5" stroke-miterlimit="10"
+                                                stroke-linecap="round" />
+                                        </svg>
+
                                     </IconButton>
                                 </MobileFilters>
 
@@ -211,12 +218,26 @@ const DesktopFacets = styled.div`
 
 /* Mobile Filters Button */
 const MobileFilters = styled(Stack)`
+    /* Rectangle 45 */
+
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.006);
+    border: 1px solid #4D4D4D;
+    border-radius: 8px;
     width: auto;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 30px;
 
+    padding: 15px;
+
+    p {
+        font-size: 14px;
+        line-height: 14px;
+        font-weight: 300;
+    }
+    
     @media (min-width: ${p => p.theme.breakpoints.xl}) {
         display: none;
     }

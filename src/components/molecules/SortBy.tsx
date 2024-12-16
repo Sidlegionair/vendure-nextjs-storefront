@@ -6,7 +6,7 @@ import { useTranslation } from 'next-i18next';
 import styled from '@emotion/styled';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useOutsideClick } from '@/src/util/hooks/useOutsideClick';
-import { ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 
 interface Props {
     sort: Sort;
@@ -20,17 +20,23 @@ export const SortBy: React.FC<Props> = ({ handleSort, sort }) => {
     const ref = useRef<HTMLDivElement>(null);
     useOutsideClick(ref, () => setOpen(false));
 
+    const selectedOption = `${sort.key} (${t(`sort-directions.${sort.direction}`)})`;
+
     return (
         <Container gap="0.5rem">
-            <Relative ref={ref} itemsCenter justifyBetween>
+            <Relative ref={ref} itemsCenter>
+                <TP capitalize>{t('sort-by')}</TP>:
+                {/* Show the selected option */}
                 <Option itemsCenter onClick={() => setOpen(!open)} gap="0.75rem">
-                    <Stack itemsEnd>
-                        <TP capitalize>{t('sort-by')}</TP>
-                    </Stack>
+                    <TP capitalize weight={400} size="1.5rem">
+                        {selectedOption}
+                    </TP>
                     <IconWrapper justifyCenter itemsCenter>
-                        <ChevronRight />
+                        <ChevronDown />
                     </IconWrapper>
                 </Option>
+
+                {/* Dropdown options */}
                 <AnimatePresence>
                     {open && (
                         <Wrapper
@@ -40,7 +46,7 @@ export const SortBy: React.FC<Props> = ({ handleSort, sort }) => {
                             transition={{ duration: 0.2, ease: 'easeInOut' }}>
                             {sortOptions.map(o => (
                                 <StyledOption
-                                    selected={o.key == sort.key && o.direction == sort.direction}
+                                    selected={o.key === sort.key && o.direction === sort.direction}
                                     itemsCenter
                                     key={o.key + o.direction}
                                     onClick={async () => {
@@ -70,18 +76,19 @@ const IconWrapper = styled(Stack)`
     height: 1.75rem;
 `;
 
-const Container = styled(Stack)``;
+const Container = styled(Stack)`
+`;
 
 const Relative = styled(Stack)`
     position: relative;
 `;
 
 const Wrapper = styled(motion.div)`
-    top: 3rem;
+    top: 7rem;
     right: 0;
     position: absolute;
     z-index: 1;
-    width: 21rem;
+    width: 100%;
     display: flex;
     flex-direction: column;
     background: ${({ theme }) => theme.background.main};
@@ -91,7 +98,16 @@ const Wrapper = styled(motion.div)`
 const Option = styled(Stack)`
     cursor: pointer;
     user-select: none;
+    justify-content: space-between;
+    padding: 1rem;
+    margin-left: 15px;
+
+    // border: 1px solid ${({ theme }) => theme.button.back};
+    background-color: ${({ theme }) => theme.background.main};
+    border: 1px solid #4D4D4D;
+    border-radius: 8px;
 `;
+
 const StyledOption = styled(Stack)<{ selected: boolean }>`
     cursor: pointer;
     user-select: none;
