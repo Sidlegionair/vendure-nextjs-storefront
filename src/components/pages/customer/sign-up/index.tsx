@@ -17,6 +17,7 @@ import { TP } from '@/src/components/atoms/TypoGraphy';
 import { usePush } from '@/src/lib/redirect';
 import { getServerSideProps } from './props';
 import { useChannels } from '@/src/state/channels';
+import styled from '@emotion/styled';
 
 type FormValues = RegisterCustomerInputType & { confirmPassword: string };
 
@@ -94,9 +95,9 @@ export const SignUpPage: React.FC<InferGetServerSidePropsType<typeof getServerSi
 
     return (
         <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation} pageTitle={t('signUpTitle')}>
-            <ContentContainer>
+            <StyledAuthContainer>
                 <FormContainer>
-                    <FormWrapper column itemsCenter gap="3.5rem">
+                    <StyledFormWrapper column itemsCenter gap="3.5rem">
                         {success && (
                             <Absolute w100>
                                 <Banner success={{ message: t('signUpSuccess') }} />
@@ -136,9 +137,59 @@ export const SignUpPage: React.FC<InferGetServerSidePropsType<typeof getServerSi
                                 <Link href="/customer/sign-in">{t('signIn')}</Link>
                             </Stack>
                         </FormContent>
-                    </FormWrapper>
+                    </StyledFormWrapper>
                 </FormContainer>
-            </ContentContainer>
+            </StyledAuthContainer>
         </Layout>
     );
 };
+
+
+const StyledFormWrapper = styled(FormWrapper)`
+    background: white;
+`
+
+
+const StyledAuthContainer = styled(ContentContainer)`
+    z-index: 0;
+    @media (max-width: ${({ theme }) => theme.breakpoints['3xl']}) {
+        width: 100%;
+        padding: 0 4rem;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints['2xl']}) {
+        width: 100%;
+        padding: 0 3rem;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.xl}) {
+        width: 100%;
+        padding: 0 2rem;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+        width: 100%;
+        padding: 0 1.5rem;
+    }
+
+    
+    
+    
+    position: relative;
+    height: 100%;
+    min-height: 100vh;
+    width: 100%;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('/images/bg/authbg.jpeg') no-repeat center center;
+        background-size: cover;
+        opacity: 0.2;
+        z-index: -1; /* Set the background behind the content */
+    }
+`
