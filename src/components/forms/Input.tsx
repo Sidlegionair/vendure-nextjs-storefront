@@ -66,8 +66,8 @@ export const FormError = styled(motion.span)`
 const InputWrapper = styled(Stack)`
     position: relative;
     padding: 25px;
-    border: 1px solid ${p => p.theme.border.lightgray};
-    background: #ffffff;
+    border: 1px solid ${p => p.theme.border.main};
+    //background: #ffffff;
     border-radius: 8px;
 
 `;

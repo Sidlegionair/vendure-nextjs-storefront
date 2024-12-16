@@ -109,27 +109,27 @@ export const SignUpPage: React.FC<InferGetServerSidePropsType<typeof getServerSi
                         <TP weight={600}>{t('signUpTitle')}</TP>
                         <FormContent w100 column itemsCenter gap="1.75rem">
                             <Form onSubmit={handleSubmit(onSubmit)}>
-                                <Input
+                                <StyledInput
                                     error={errors.emailAddress}
                                     label={t('email')}
                                     type="text"
                                     {...register('emailAddress')}
                                 />
-                                <Input
+                                <StyledInput
                                     error={errors.password}
                                     label={t('password')}
                                     type="password"
                                     {...register('password')}
                                 />
-                                <Input
+                                <StyledInput
                                     error={errors.confirmPassword}
                                     label={t('confirmPassword')}
                                     type="password"
                                     {...register('confirmPassword')}
                                 />
-                                <Button loading={isSubmitting} type="submit">
+                                <StyledButton loading={isSubmitting} type="submit">
                                     {t('signUp')}
-                                </Button>
+                                </StyledButton>
                             </Form>
 
                             <Stack column itemsCenter gap="0.5rem">
@@ -145,8 +145,25 @@ export const SignUpPage: React.FC<InferGetServerSidePropsType<typeof getServerSi
 };
 
 
+const StyledLink = styled(Link)`
+    position: relative;
+    color: ${({ theme }) => theme.text.main};
+    display: block;
+    transition: text-decoration 0.3s ease;
+
+    &:hover {
+        text-decoration: underline;
+    }
+`;
+
+
+const StyledTP = styled(TP)`
+    font-size: 38px;
+    line-height: 38px;
+`
+
 const StyledFormWrapper = styled(FormWrapper)`
-    background: white;
+    //background: white;
 `
 
 
@@ -175,7 +192,7 @@ const StyledAuthContainer = styled(ContentContainer)`
     
     
     
-    position: relative;
+        position: relative;
     height: 100%;
     min-height: 100vh;
     width: 100%;
@@ -191,5 +208,20 @@ const StyledAuthContainer = styled(ContentContainer)`
         background-size: cover;
         opacity: 0.2;
         z-index: -1; /* Set the background behind the content */
+    }
+`;
+
+const StyledButton = styled(Button)`
+    background-color: ${({ theme }) => theme.background.accent};
+    color: ${({ theme }) => theme.background.main};
+`
+
+const StyledInput = styled(Input)`
+    width: 100%;
+    
+    label {
+        font-size: 16px;
+        line-height: 16px;
+        font-weight: 300;
     }
 `

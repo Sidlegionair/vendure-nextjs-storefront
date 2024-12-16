@@ -160,7 +160,7 @@ const defaultThemeFunction = (hue: number): FunctionTheme => ({
     accent: (l) => `hsl(${hue}, 100%, ${l}%)`,
     gray: (l) => `hsl(0, 0%, ${l}%)`,
     grayAlpha: (l, alpha) => `hsla(0, 0%, ${l}%, ${alpha})`,
-    borderRadius: "4px",
+    borderRadius: "8px",
     withOpacity: (color, opacity) => {
         // Helper function to convert hex to RGB
         const hexToRgb = (hex: string): [number, number, number] => {

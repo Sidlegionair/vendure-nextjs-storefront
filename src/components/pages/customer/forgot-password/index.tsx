@@ -16,6 +16,7 @@ import { TP } from '@/src/components/atoms/TypoGraphy';
 import { getServerSideProps } from './props';
 import { useChannels } from '@/src/state/channels';
 import styled from '@emotion/styled';
+import theme from 'tailwindcss/defaultTheme';
 
 type FormValues = {
     emailAddress: string;
@@ -91,18 +92,18 @@ export const ForgotPasswordPage: React.FC<InferGetServerSidePropsType<typeof get
                                 }}
                             />
                         </Absolute>
-                        <TP weight={600}>{t('forgotPasswordTitle')}</TP>
+                        <StyledTP weight={600}>{t('forgotPasswordTitle')}</StyledTP>
                         <FormContent w100 column itemsCenter gap="1.75rem">
                             <Form onSubmit={handleSubmit(onSubmit)}>
-                                <Input
+                                <StyledInput
                                     error={errors.emailAddress}
                                     label={t('email')}
                                     type="text"
                                     {...register('emailAddress')}
                                 />
-                                <Button disabled={isSubmitting} type="submit">
+                                <StyledButton disabled={isSubmitting} type="submit">
                                     {t('newPassword')}
-                                </Button>
+                                </StyledButton>
                             </Form>
                             <Stack column itemsCenter gap="0.5rem">
                                 <StyledLink href="/customer/sign-in">{t('signIn')}</StyledLink>
@@ -127,8 +128,14 @@ const StyledLink = styled(Link)`
     }
 `;
 
+
+const StyledTP = styled(TP)`
+    font-size: 38px;
+    line-height: 38px;
+`
+
 const StyledFormWrapper = styled(FormWrapper)`
-    background: white;
+    //background: white;
 `
 
 
@@ -157,7 +164,7 @@ const StyledAuthContainer = styled(ContentContainer)`
     
     
     
-    position: relative;
+        position: relative;
     height: 100%;
     min-height: 100vh;
     width: 100%;
@@ -173,5 +180,20 @@ const StyledAuthContainer = styled(ContentContainer)`
         background-size: cover;
         opacity: 0.2;
         z-index: -1; /* Set the background behind the content */
+    }
+`;
+
+const StyledButton = styled(Button)`
+    background-color: ${({ theme }) => theme.background.accent};
+    color: ${({ theme }) => theme.background.main};
+`
+
+const StyledInput = styled(Input)`
+    width: 100%;
+    
+    label {
+        font-size: 16px;
+        line-height: 16px;
+        font-weight: 300;
     }
 `

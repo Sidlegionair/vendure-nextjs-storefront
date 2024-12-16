@@ -16,17 +16,21 @@ export const FormContainer = styled(Stack)`
 
 export const FormWrapper = styled(Stack)`
     position: relative;
-    padding: 5.5rem 7.5rem;
+    padding: 90px 65px;
     border-radius: ${({ theme }) => theme.borderRadius};
-    box-shadow: 0 0 0.5rem ${({ theme }) => theme.shadow};
+    border: 1px solid #4D4D4D;
 `;
 
 export const Form = styled.form`
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    min-width: 27.5rem;
-    max-width: 27.5rem;
+    min-width: 480px;
+    //max-width: 27.5rem;
+    
+    @media(max-width: ${({ theme }) => theme.breakpoints.md}) {
+        min-width: 100%;
+    }
 `;
 
 export const Absolute = styled(Stack)`
@@ -38,7 +42,7 @@ export const Absolute = styled(Stack)`
 
 export const FormContent = styled(Stack)`
     min-width: 32rem;
-    max-width: 40rem;
+    max-width: 700px;
 `;
 
 export const CustomerWrap = styled(Stack)`

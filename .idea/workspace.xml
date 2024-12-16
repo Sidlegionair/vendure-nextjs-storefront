@@ -6,8 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/Breadcrumbs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/Breadcrumbs.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/collections/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/collections/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/forms/CheckBox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forms/CheckBox.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/forms/Input.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forms/Input.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/components/shared.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/components/shared.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/forgot-password/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/forgot-password/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/reset-password/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/reset-password/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/sign-in/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/sign-in/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/sign-up/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/sign-up/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theme/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/theme/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +43,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/public/images/bg&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
@@ -51,6 +58,11 @@
     ]
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/images/bg" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -84,7 +96,8 @@
       <workItem from="1734090216602" duration="782000" />
       <workItem from="1734091061118" duration="312000" />
       <workItem from="1734091440407" duration="7737000" />
-      <workItem from="1734352475378" duration="2837000" />
+      <workItem from="1734352475378" duration="4274000" />
+      <workItem from="1734356793996" duration="2415000" />
     </task>
     <servers />
   </component>

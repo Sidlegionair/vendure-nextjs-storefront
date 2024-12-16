@@ -100,25 +100,25 @@ export const ResetPasswordPage: React.FC<InferGetServerSidePropsType<typeof getS
                     <Absolute w100>
                         <Banner error={errors.root} clearErrors={() => setError('root', { message: undefined })} />
                     </Absolute>
-                    <TP weight={600}>{t('resetPasswordTitle')}</TP>
+                    <StyledTP weight={600}>{t('resetPasswordTitle')}</StyledTP>
                     <StyledFormWrapper column itemsCenter gap="1.75rem">
                         <FormContent w100 column itemsCenter gap="1.75rem">
                             <Form onSubmit={handleSubmit(onSubmit)}>
-                                <Input
+                                <StyledInput
                                     error={errors.password}
                                     label={t('newPassword')}
                                     type="password"
                                     {...register('password')}
                                 />
-                                <Input
+                                <StyledInput
                                     error={errors.confirmPassword}
                                     label={t('confirmNewPassword')}
                                     type="password"
                                     {...register('confirmPassword')}
                                 />
-                                <Button loading={isSubmitting} type="submit">
+                                <StyledButton loading={isSubmitting} type="submit">
                                     {t('resetPassword')}
-                                </Button>
+                                </StyledButton>
                             </Form>
                         </FormContent>
                     </StyledFormWrapper>
@@ -128,8 +128,15 @@ export const ResetPasswordPage: React.FC<InferGetServerSidePropsType<typeof getS
     );
 };
 
+
+
+const StyledTP = styled(TP)`
+    font-size: 38px;
+    line-height: 38px;
+`
+
 const StyledFormWrapper = styled(FormWrapper)`
-    background: white;
+    //background: white;
 `
 
 
@@ -158,7 +165,7 @@ const StyledAuthContainer = styled(ContentContainer)`
     
     
     
-    position: relative;
+        position: relative;
     height: 100%;
     min-height: 100vh;
     width: 100%;
@@ -175,4 +182,20 @@ const StyledAuthContainer = styled(ContentContainer)`
         opacity: 0.2;
         z-index: -1; /* Set the background behind the content */
     }
+`;
+
+
+const StyledInput = styled(Input)`
+    width: 100%;
+    
+    label {
+        font-size: 16px;
+        line-height: 16px;
+        font-weight: 300;
+    }
+`
+
+const StyledButton = styled(Button)`
+    background-color: ${({ theme }) => theme.background.accent};
+    color: ${({ theme }) => theme.background.main};
 `

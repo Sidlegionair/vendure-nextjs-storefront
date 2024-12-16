@@ -87,25 +87,25 @@ export const SignInPage: React.FC<InferGetServerSidePropsType<typeof getServerSi
                         <Absolute w100>
                             <Banner error={errors.root} clearErrors={() => setError('root', { message: undefined })} />
                         </Absolute>
-                        <TP weight={600}>{t('signInTitle')}</TP>
+                        <StyledTP weight={600}>{t('signInTitle')}</StyledTP>
                         <FormContent w100 column itemsCenter gap="1.75rem">
                             <Form onSubmit={handleSubmit(onSubmit)}>
-                                <Input
+                                <StyledInput
                                     error={errors.emailAddress}
                                     label={t('email')}
                                     type="text"
                                     {...register('emailAddress')}
                                 />
-                                <Input
+                                <StyledInput
                                     error={errors.password}
                                     label={t('password')}
                                     type="password"
                                     {...register('password')}
                                 />
                                 <CheckBox label={t('rememberMe')} {...register('rememberMe')} />
-                                <Button loading={isSubmitting} type="submit">
+                                <StyledButton loading={isSubmitting} type="submit">
                                     {t('signIn')}
-                                </Button>
+                                </StyledButton>
                             </Form>
                             <Stack column itemsCenter gap="0.5rem">
                                 <StyledLink href="/customer/forgot-password">{t('forgotPassword')}</StyledLink>
@@ -130,8 +130,14 @@ const StyledLink = styled(Link)`
     }
 `;
 
+
+const StyledTP = styled(TP)`
+    font-size: 38px;
+    line-height: 38px;
+`
+
 const StyledFormWrapper = styled(FormWrapper)`
-    background: white;
+    //background: white;
 `
 
 
@@ -157,10 +163,10 @@ const StyledAuthContainer = styled(ContentContainer)`
         padding: 0 1.5rem;
     }
 
-    
-    
-    
-        position: relative;
+
+
+
+    position: relative;
     height: 100%;
     min-height: 100vh;
     width: 100%;
@@ -178,3 +184,19 @@ const StyledAuthContainer = styled(ContentContainer)`
         z-index: -1; /* Set the background behind the content */
     }
 `;
+
+
+const StyledInput = styled(Input)`
+    width: 100%;
+
+    label {
+        font-size: 16px;
+        line-height: 16px;
+        font-weight: 300;
+    }
+`
+
+const StyledButton = styled(Button)`
+    background-color: ${({ theme }) => theme.background.accent};
+    color: ${({ theme }) => theme.background.main};
+`

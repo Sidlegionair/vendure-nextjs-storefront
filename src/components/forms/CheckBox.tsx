@@ -96,9 +96,9 @@ const CheckboxIconHolder = styled.div`
 
     min-width: calc(3rem - 1px);
     min-height: calc(3rem - 1px);
-    border: 1px solid ${p => p.theme.border.lightgray};
-    background: #FFFFFF;
-    border-radius: 5px;
+    border: 1px solid ${p => p.theme.border.main};
+    //background: #FFFFFF;
+    //border-radius: 5px;
 `;
 
 const CheckboxStack = styled(Stack)`
