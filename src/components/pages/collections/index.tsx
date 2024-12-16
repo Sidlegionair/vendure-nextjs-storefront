@@ -125,7 +125,7 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
                             {/*<Stack itemsEnd>*/}
                             {/*    <TH2 size="30px">{collection?.name}</TH2>*/}
                             {/*</Stack>*/}
-                            <Stack justifyBetween itemsCenter gap="2.5rem">
+                            <StyledSortStack itemsCenter gap="2.5rem">
                                 {/* Show mobile filters button only on mobile */}
                                 <MobileFilters onClick={() => setFiltersOpen(true)}>
                                     <TP>{t('filters')}</TP>
@@ -142,7 +142,7 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
                                 </MobileFilters>
 
                                 <SortBy sort={sort} handleSort={handleSort} />
-                            </Stack>
+                            </StyledSortStack>
                         </Wrapper>
                         <MainGrid>
                             {products?.map(p => <ProductTile product={p} key={p.slug} />)}
@@ -211,6 +211,17 @@ const Wrapper = styled(Stack)`
         flex-direction: row;
     }
 `;
+
+const StyledSortStack = styled(Stack)`
+    justify-content: flex-end;
+    align-items: end;
+    width: 100%;
+    
+    @media(max-width: 767px) {
+        justify-content: space-between;
+    }
+    
+`
 
 const RelativeStack = styled(Stack)`
     position: relative;
