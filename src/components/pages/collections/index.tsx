@@ -51,7 +51,7 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
         <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation}>
             <HeadingStack>
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
-                <TH1>{collection?.name}</TH1>
+                <StyledTH1>{collection?.name}</StyledTH1>
             </HeadingStack>
 
             <ContentContainer>
@@ -164,12 +164,19 @@ const HeadingStack = styled(Stack)`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 421px;
+    padding: 160px 0px;
     gap: 60px;
     display: flex;
     position: relative;
     z-index: 1;
 
+    @media(max-width: 767px) {
+        min-height: 200px;
+        gap: 36px;
+        padding: 70px 0px;
+        height: unset;
+    }
+    
     ::before {
         content: '';
         position: absolute;
@@ -183,6 +190,17 @@ const HeadingStack = styled(Stack)`
         z-index: -1;
     }
 `;
+
+const StyledTH1 = styled(TH1)`
+    
+    font-size: 55px;
+    line-height: 55px;
+    
+    @media(max-width: 767px) {
+        font-size: 40px;
+        line-height: 40px;
+    }
+`
 
 const Wrapper = styled(Stack)`
     margin-top: 70px;

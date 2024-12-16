@@ -19,15 +19,15 @@ export const Breadcrumbs: React.FC<{
                         <StyledLink href={b.href} blocked={isLast ? 1 : 0}>
                             <Stack itemsCenter gap="0.5rem">
                                 {isHome && <Home size={16} />}
-                                <TP size="1.25rem" weight={isLast ? 600 : 400}>
+                                <StyledTP isLast={isLast} size="1.25rem">
                                     {b.name}
-                                </TP>
+                                </StyledTP>
                             </Stack>
                         </StyledLink>
                         {!isLast && (
-                            <TP size="1.25rem" weight={600}>
+                            <StyledTP size="1.25rem" isLast={isLast}>
                                 /&nbsp;
-                            </TP>
+                            </StyledTP>
                         )}
                     </Stack>
                 );
@@ -40,4 +40,16 @@ const StyledLink = styled(Link)<{ blocked?: number }>`
     text-decoration: none;
     pointer-events: ${p => (p.blocked === 1 ? 'none' : 'auto')};
     color: ${p => p.theme.background.main};
+`;
+
+const StyledTP = styled(TP)<{ isLast?: boolean }>`
+        font-family: 'Calibri', sans-serif; 
+        opacity: ${p => (p.isLast ? 1 : '0.4')};
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 20px;
+    
+        text-decoration: none;
+        pointer-events: ${p => (p.isLast ? 'none' : 'auto')};
+        //color: ${p => p.theme.background.main};
 `;
