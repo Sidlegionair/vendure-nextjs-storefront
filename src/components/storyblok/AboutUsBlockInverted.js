@@ -85,7 +85,7 @@ const AboutUsBlockInverted = ({ blok }) => {
                     align-items: flex-end;
                     justify-content: space-between;
                     margin-right: -100px;
-                    height: 443px;
+                    min-height: 443px;
                     width: 50vw;
                     //max-width: 500px;
                     padding: 2rem;
