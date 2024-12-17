@@ -55,7 +55,7 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
             </HeadingStack>
 
             <ContentContainer>
-                <RelativeStack gap="2rem">
+                <RelativeStack gap="60px">
                     <ScrollPoint id="collection-scroll" />
                     <Wrapper flexWrap>
                         {/* Desktop Filters: Always Visible */}

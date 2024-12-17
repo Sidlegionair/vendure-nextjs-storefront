@@ -1,9 +1,10 @@
-import { Stack, TFacetHeading } from '@/src/components/atoms';
+import { Divider, Stack, TFacetHeading } from '@/src/components/atoms';
 import { FiltersFacetType } from '@/src/graphql/selectors';
 import styled from '@emotion/styled';
 import { CheckBox } from '@/src/components/forms';
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { FacetCheckBox } from '@/src/components/forms/FacetCheckbox';
 
 interface FacetProps {
     facet: FiltersFacetType;
@@ -12,13 +13,14 @@ interface FacetProps {
 }
 
 export const FacetFilterCheckbox: React.FC<FacetProps> = ({ facet: { id, name, values }, onClick, selected }) => {
-    const [open, setOpen] = useState<boolean>(true);
+    const [open, setOpen] = useState<boolean>(false);
     return (
         <GridWrapper w100 column>
+            <StyledDivider></StyledDivider>
             <GridTitle onClick={() => setOpen(!open)}>
-                <TFacetHeading capitalize size="1.5rem">
+                <StyledTFacetHeading capitalize size="1.5rem">
                     {name}
-                </TFacetHeading>
+                </StyledTFacetHeading>
                 <IconWrapper>
                     <ChevronDown />
                 </IconWrapper>
@@ -29,9 +31,10 @@ export const FacetFilterCheckbox: React.FC<FacetProps> = ({ facet: { id, name, v
                         {values.map(v => {
                             const isSelected = selected?.includes(v.id);
                             return (
-                                <CheckBox
+                                <FacetCheckBox
                                     key={v.id}
-                                    label={`${v.name} (${v.count})`}
+                                    label={`${v.name}`}
+                                    count={`(${v.count})`}
                                     checked={isSelected}
                                     onChange={() => onClick({ id, name }, v)}
                                 />
@@ -44,14 +47,32 @@ export const FacetFilterCheckbox: React.FC<FacetProps> = ({ facet: { id, name, v
     );
 };
 
+const StyledDivider = styled(Divider)`   
+    margin-bottom: 18px;
+`
+
+
+const StyledTFacetHeading = styled(TFacetHeading)`
+    /* Brand */
+
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
+
+
+
+`
+
+
 const GridWrapper = styled(Stack)`
-    margin-top: 1.7rem;
+    //margin-top: 1.7rem;
     //min-width: 420px;
     max-width: 100%;
 `;
 
 const Grid = styled.div<{ open: boolean }>`
-    margin-top: 1.7rem;
+    margin-top: 19px;
     display: grid;
     grid-template-rows: ${({ open }) => (open ? '1fr' : '0fr')};
     transition: grid-template-rows 0.3s ease-in-out;

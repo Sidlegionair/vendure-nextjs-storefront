@@ -77,10 +77,10 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
             <StickyContainer>
                 <ContentContainer>
                     <MainStack>
-                        <LeftStack gap="1rem" itemsCenter>
+                        <LeftStack gap="50px" itemsCenter>
                             {/* Desktop: show navigation */}
                             <DesktopWrapper>
-                                <DesktopNavigation navigation={navigation} />
+                                <DesktopNavigation gap={50} navigation={navigation} />
                             </DesktopWrapper>
 
                             {/* Mobile: show logo on left */}
@@ -276,6 +276,7 @@ const DesktopWrapper = styled.div`
 
 const MobileWrapper = styled.div`
     display: block;
+    
     @media (min-width: ${p => p.theme.breakpoints.md}) {
         display: none;
     }
@@ -364,12 +365,12 @@ const MainStack = styled(Stack)`
 `;
 
 const LeftStack = styled(Stack)`
-    width: auto;
-    max-width: 33%;
+    //width: auto;
+    //max-width: 33%;
 
-    @media (min-width: ${p => p.theme.breakpoints.md}) {
+    // @media (min-width: ${p => p.theme.breakpoints.md}) {
         width: 100%;
-    }
+    //}
 `;
 
 const CenterStack = styled(Stack)`

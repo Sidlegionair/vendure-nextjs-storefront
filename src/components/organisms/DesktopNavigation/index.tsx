@@ -27,8 +27,8 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
         20: '0.25rem',
         30: '0.5rem',
         40: '0.75rem',
-        50: '1rem',
-        60: '1.5rem',
+        50: '3.125rem',
+        60: '3.75rem',
         70: '1.75rem',
         80: '2rem',
         90: '2.5rem'
@@ -88,7 +88,8 @@ const DesktopStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '
         font-size: 20px;
         font-weight: 600;
         padding: 30px;
-        gap: 28px;
+        gap: 50px;
+        
         div {
             display: flex;
             flex-direction: row;
