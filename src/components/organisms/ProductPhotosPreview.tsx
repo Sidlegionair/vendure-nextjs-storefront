@@ -2,6 +2,7 @@ import { ProductImage, Stack } from '@/src/components/atoms';
 import styled from '@emotion/styled';
 import { ImageOff } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+
 type Asset = { source: string; preview: string } | undefined;
 
 interface ProductPhotosPreview {
@@ -27,7 +28,7 @@ export const ProductPhotosPreview: React.FC<ProductPhotosPreview> = ({ featuredA
                     return (
                         <StyledProductImage
                             key={a?.preview}
-                            size="thumbnail"
+                            size="full"
                             src={a?.preview}
                             onClick={() => setChosenImage(a)}
                             isSelected={isSelected}
@@ -49,73 +50,56 @@ export const ProductPhotosPreview: React.FC<ProductPhotosPreview> = ({ featuredA
 };
 
 const Wrapper = styled(Stack)`
-    flex-direction: column-reverse;
-    align-items: center;
-    justify-content: center;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
     gap: 20px;
-   
-    //@media (min-width: 1024px) {
-    //    flex-direction: row;
-    //    align-items: flex-start;
-    //    justify-content: space-between;
-    //}
 `;
 
 const StyledProductImage = styled(ProductImage)<{ isSelected: boolean }>`
     cursor: pointer;
     opacity: ${({ isSelected }) => (isSelected ? 1 : 0.4)};
-
     :hover {
         opacity: 1;
     }
 
-    width: 151px;
-    height: 140px;
+    // Remove strict cropping; let the image maintain aspect ratio within a bounding box
+    img {
+        max-width: 151px;
+        max-height: 140px;
+        object-fit: contain;
+    }
+
     border: 1px solid ${({ isSelected }) => (isSelected ? '#0E4632' : 'rgba(77, 77, 77, 0.1)')};
     border-radius: 12px;
-    
-    @media(max-width: 767px) {
-        max-width: 65px;
-        max-height: 65px;
-    }
 `;
 
-
 const ProductImageContainer = styled.div`
+    flex: 1;
     position: relative;
-    width: 100%;
+    display: flex;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-
-    //background: #FFFFFF;
     border: 1px solid rgba(77, 77, 77, 0.1);
     border-radius: 15px;
 
     img {
         width: 100%;
+        height: auto;
+        max-height: 686px;
         object-fit: contain;
-        object-position: center center;
     }
 `;
 
 const AssetBrowser = styled(Stack)`
-    flex-direction: row;
-    max-width: 100%;
-    overflow-x: scroll;
-    padding-bottom: 1rem;
-    
+    flex-direction: column;
+    max-width: auto;
+    max-height: 100%;
+    overflow-y: auto;
+    padding-right: 1rem;
 
-    //@media (min-width: 1024px) {
-    //    flex-direction: column;
-    //    max-width: 52rem;
-    //    max-height: 60rem;
-    //    overflow-y: scroll;
-    //    padding-bottom: 0;
-    //    padding-right: 1rem;
-    //}
     ::-webkit-scrollbar {
-        height: 0.8rem;
         width: 0.8rem;
     }
 
@@ -132,6 +116,7 @@ const AssetBrowser = styled(Stack)`
         background: ${p => p.theme.gray(400)};
     }
 `;
+
 const NoImage = styled(ImageOff)`
     color: ${p => p.theme.gray(50)};
 `;

@@ -343,7 +343,7 @@ const StickyLeft = styled(Stack)`
     @media (min-width: 1024px) {
         position: sticky;
         top: 12rem;
-        width: 40%;
+        width: 60%;
     }
 `;
 
