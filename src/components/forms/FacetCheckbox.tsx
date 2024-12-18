@@ -17,7 +17,7 @@ export const FacetCheckBox = forwardRef((props: InputType, ref: React.ForwardedR
     const [state, setState] = useState<boolean>(!!props.value);
     return (
         <Wrapper column gap="0.125rem">
-            <CheckboxStack itemsCenter gap="10px">
+            <CheckboxStack itemsCenter gap={10}>
                 <CheckboxIconHolder>
                     <AnimatePresence>
                         {(props.checked || state) && (

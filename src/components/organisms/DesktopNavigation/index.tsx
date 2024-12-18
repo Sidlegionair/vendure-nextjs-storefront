@@ -22,7 +22,7 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
     const StackComponent = isSubMenu ? SubMenuStack : DesktopStack;
 
     // Define the mapping for numbers to rem strings
-    const gapMapping: { [key: number]: '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' } = {
+    const gapMapping: Record<number, '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3.125rem' | '3.75rem'> = {
         10: '0.125rem',
         20: '0.25rem',
         30: '0.5rem',
@@ -31,8 +31,9 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
         60: '3.75rem',
         70: '1.75rem',
         80: '2rem',
-        90: '2.5rem'
+        90: '2.5rem',
     };
+
 
     // Get the gap value from mapping or undefined
     const gapValue = gapMapping[gap] || undefined;
@@ -80,16 +81,15 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
     );
 };
 
-const DesktopStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | number }>`
+const DesktopStack = styled(Stack)<{ gap?: number | '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3.125rem' | '3.75rem' }>`
     @media (max-width: ${p => p.theme.breakpoints.md}) {
-        //display: none; // Hide on smaller screens
         display: flex;
         flex-direction: column;
         font-size: 20px;
         font-weight: 600;
         padding: 30px;
-        gap: 50px;
-        
+        gap: ${({ gap }) => (typeof gap === 'number' ? `${gap}px` : gap)};
+
         div {
             display: flex;
             flex-direction: row;
@@ -189,7 +189,8 @@ const AbsoluteStack = styled(Stack)`
     }
 `;
 
-const SubMenuStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | number }>`
+
+const SubMenuStack = styled(Stack)<{ gap?: number | '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3.125rem' | '3.75rem' }>`
     position: relative;
     z-index: 5;
     width: 100%;
@@ -206,7 +207,6 @@ const SubMenuStack = styled(Stack)<{ gap?: '0.125rem' | '0.25rem' | '0.5rem' | '
         gap: 28px;
         font-weight: 400;
         font-size: 18px;
-
     }
 
     @media (max-width: ${p => p.theme.breakpoints.sm}) {

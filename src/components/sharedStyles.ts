@@ -11,7 +11,9 @@ type BaseUnit =
     | 2
     | 2.5
     | 3
+    | 3.125
     | 3.5
+    | 3.75
     | 4
     | 5
     | 5.5
@@ -31,9 +33,10 @@ type BaseUnit =
     | 64;
 
 export type BaseRemUnit = `${BaseUnit}rem`;
+export type BasePixelUnit = `${number}px`; // Add support for pixel units.
 
 export interface BaseFlexParams {
-    gap?: '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.25rem' |'1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3rem' | '3.5rem' | '4rem' | '5rem' | '6rem' | '12rem' | number | undefined;
+    gap?: BaseRemUnit | BasePixelUnit | number | undefined; // Allow rem, px, and numbers.
     justifyEnd?: boolean;
     justifyCenter?: boolean;
     justifyBetween?: boolean;
