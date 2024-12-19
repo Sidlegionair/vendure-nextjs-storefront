@@ -23,7 +23,7 @@ export const ProductImageWithInfo: React.FC<ProductImageWithInfoProps> = ({
 }) => {
     return (
         <StyledLink size={size} hover={text ? 1 : 0} href={href}>
-            <ProductImage {...(lazy ? { lazy: true } : {})} src={imageSrc} size={size} alt={alt} title={title} />
+            <ProductImage {...(lazy ? { lazy: true } : {})} src={imageSrc} alt={alt} title={title} />
             <AbsoluteStyledTP upperCase size="2rem">
                 {text}
             </AbsoluteStyledTP>

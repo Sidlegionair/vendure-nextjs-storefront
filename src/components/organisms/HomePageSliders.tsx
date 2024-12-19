@@ -12,36 +12,42 @@ interface BestOfI {
 }
 
 export const HomePageSliders: React.FC<BestOfI> = ({ sliders, seeAllText }) => {
-    const [mounted, setMounted] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
-        setMounted(true);
+        setIsMounted(true);
     }, []);
 
-    if (!mounted || !sliders?.length) return null;
+    if (!isMounted || !sliders?.length) return null;
+
     return (
         <Stack w100 column gap="6rem">
             {sliders.map(slider => {
-                const slides = slider?.productVariants?.items?.map((variant, index) => (
+                const { slug, parent, name, productVariants } = slider;
+                const slides = productVariants?.items?.map((variant, index) => (
                     <ProductVariantTile key={index} variant={variant} lazy={index > 0} />
                 ));
+
                 if (!slides?.length) return null;
+
                 const href =
-                    slider?.parent?.slug !== '__root_collection__'
-                        ? `/collections/${slider?.parent?.slug}/${slider?.slug}`
-                        : `/collections/${slider?.slug}`;
+                    parent?.slug !== '__root_collection__'
+                        ? `/collections/${parent?.slug}/${slug}`
+                        : `/collections/${slug}`;
 
                 return (
-                    <StyledSection key={slider.slug}>
-                        {/*<Stack w100 justifyBetween>*/}
-                        {/*    <TH2>{`${slider.name} (${slider.productVariants.totalItems})`}</TH2>*/}
-                        {/*    <StyledLink href={href}>*/}
-                        {/*        <TP upperCase color="contrast" weight={500} style={{ letterSpacing: '0.5px' }}>*/}
-                        {/*            {seeAllText}*/}
-                        {/*        </TP>*/}
-                        {/*    </StyledLink>*/}
-                        {/*</Stack>*/}
-                        <Slider  withArrows={true} slides={slides} />
+                    <StyledSection key={slug}>
+                        <Header>
+                            <TH2>
+                                {`${name} (${productVariants.totalItems})`}
+                            </TH2>
+                            {/*<StyledLink href={href}>*/}
+                            {/*    <TP upperCase color="contrast" weight={500} style={{ letterSpacing: '0.5px' }}>*/}
+                            {/*        {seeAllText}*/}
+                            {/*    </TP>*/}
+                            {/*</StyledLink>*/}
+                        </Header>
+                        <Slider height="680" slides={slides} />
                     </StyledSection>
                 );
             })}
@@ -49,12 +55,20 @@ export const HomePageSliders: React.FC<BestOfI> = ({ sliders, seeAllText }) => {
     );
 };
 
+// Styled Components
+
 const StyledSection = styled.section`
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    //margin-top: 120px;
+`;
+
+const Header = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 `;
 
 const StyledLink = styled(Link)`
@@ -64,3 +78,4 @@ const StyledLink = styled(Link)`
     align-items: center;
     justify-content: center;
 `;
+

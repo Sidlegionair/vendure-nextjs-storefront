@@ -17,7 +17,7 @@ export const ProductPageProductsSlider: React.FC<ProductPageProductsSliderProps>
     return (
         <Stack w100 column gap="2rem" style={{ marginTop: '20px', marginBottom: '2rem' }}>
             {/*<TH2>{title}</TH2>*/}
-            <Slider withArrows={true} slides={slides} />
+            <Slider withArrows={false} slides={slides} />
         </Stack>
     );
 };

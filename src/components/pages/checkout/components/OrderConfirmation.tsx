@@ -89,7 +89,7 @@ export const OrderConfirmation: React.FC<{ code: string; order?: OrderType }> = 
                                 <Stack gap="3rem">
                                     <ProductImage
                                         src={line.featuredAsset?.preview}
-                                        size="thumbnail-big"
+                                        // size="thumbnail-big"
                                         alt={line.productVariant.name}
                                         title={line.productVariant.name}
                                     />

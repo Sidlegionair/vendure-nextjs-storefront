@@ -23,7 +23,7 @@ export const CustomerLastOrder: React.FC<{ order?: ActiveOrderType }> = ({ order
             </Stack>
             <Stack gap="1.5rem">
                 <ProductImage
-                    size="thumbnail-big"
+                    // size="thumbnail-big"
                     src={order?.lines[0]?.featuredAsset?.preview}
                     alt={order.code}
                     title={order.code}

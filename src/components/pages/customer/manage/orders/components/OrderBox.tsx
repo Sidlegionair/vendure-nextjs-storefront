@@ -20,7 +20,7 @@ export const OrderBox: React.FC<{ order: ActiveOrderType }> = ({ order }) => {
                     <Stack column w100 gap="0.75rem">
                         <Stack gap="1.75rem" itemsStart>
                             <ProductImage
-                                size="thumbnail"
+                                // size="thumbnail"
                                 src={order.lines[0].featuredAsset?.preview}
                                 alt={order.lines[0].productVariant.product.name}
                                 title={order.lines[0].productVariant.product.name}

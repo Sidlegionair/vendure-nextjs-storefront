@@ -19,7 +19,7 @@ export const OrderLine: React.FC<Props> = ({ currencyCode, line }) => {
     return (
         <Stack gap="2rem" w100 key={line.id}>
             <ProductImage
-                size="thumbnail"
+                // size="thumbnail"
                 src={line.productVariant.featuredAsset?.source ?? line.featuredAsset?.preview}
                 alt={line.productVariant.name}
                 title={line.productVariant.name}

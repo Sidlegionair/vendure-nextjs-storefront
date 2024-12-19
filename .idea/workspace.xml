@@ -6,9 +6,20 @@
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/forms/FacetCheckbox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forms/FacetCheckbox.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/sharedStyles.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sharedStyles.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/atoms/ProductImage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/atoms/ProductImage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductImageWithInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductImageWithInfo.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductTile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductTile.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductVariantTile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductVariantTile.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/ProductsSellout/ProductCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/ProductsSellout/ProductCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/RelatedCollections/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/RelatedCollections/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/HomePageSliders.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/HomePageSliders.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/ProductPageProductsSlider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/ProductPageProductsSlider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/ProductPhotosPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/ProductPhotosPreview.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/Slider/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/Slider/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderConfirmation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderConfirmation.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderSummary/Line/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderSummary/Line/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/components/atoms/CustomerLastOrder.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/components/atoms/CustomerLastOrder.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/components/OrderBox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/components/OrderBox.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,26 +44,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/public/images/bg&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/prettier&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/floris/PhpstormProjects/one-click-deploy",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/prettier",
+    "ts.external.directory.path": "/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;PHP&quot;
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "PHP"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/public/images/bg" />
@@ -95,7 +106,7 @@
       <workItem from="1734356793996" duration="3051000" />
       <workItem from="1734428097169" duration="4180000" />
       <workItem from="1734444670301" duration="6006000" />
-      <workItem from="1734509930810" duration="2232000" />
+      <workItem from="1734509930810" duration="24006000" />
     </task>
     <servers />
   </component>

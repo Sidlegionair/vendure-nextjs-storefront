@@ -42,7 +42,7 @@ export const Line: React.FC<LineProps> = ({
                 <Stack gap="1.75rem" itemsStart>
                     <ProductImage
                         src={featuredAsset?.preview}
-                        size="thumbnail"
+                        // size="thumbnail"
                         alt={productVariant.product.name}
                         title={productVariant.product.name}
                     />

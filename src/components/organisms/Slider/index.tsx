@@ -1,166 +1,110 @@
-import React, { ReactNode, useEffect, useState } from 'react';
-import { useSlider } from './hooks';
+import React, { ReactNode } from 'react';
 import styled from '@emotion/styled';
-import { Stack } from '@/src/components/atoms';
-import { motion } from 'framer-motion';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, A11y } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import { ArrowLeft, ArrowRight } from '@/src/assets/svg';
 
 interface SliderProps {
     withDots?: boolean;
     withArrows?: boolean;
-    spacing?: number; // Keep as number
+    spacing?: number; // Spacing in pixels
     slides: ReactNode[];
+    loop?: boolean;
+    height?: string; // Optional height for the slider
+    slideWidth?: string; // Optional width for each slide
 }
 
 export const Slider: React.FC<SliderProps> = ({
                                                   slides,
-                                                  withArrows,
-                                                  withDots,
-                                                  spacing = 1 // spacing as a number
+                                                  withArrows = false,
+                                                  withDots = false,
+                                                  spacing = 5,
+                                                  loop = true,
+                                                  height = 'auto', // Default height is auto
+                                                  slideWidth = 'auto', // Default width for slides
                                               }) => {
-    const [duplicatedSlides, setDuplicatedSlides] = useState<ReactNode[]>(slides);
-    const [visibleSlides, setVisibleSlides] = useState<number>(1);
+    if (!slides?.length) return null;
 
-    const determineVisibleSlides = (): number => {
-        const width = window.innerWidth;
-        if (width >= 2000) return 8;
-        if (width >= 1200) return 6;
-        if (width >= 992) return 4;
-        if (width >= 768) return 3;
-        return 2;
+    // Dynamic breakpoints for responsive slidesPerView
+    const dynamicBreakpoints = {
+        0: { slidesPerView: 2 }, // Mobile
+        640: { slidesPerView: 5 }, // Small tablets
+        1024: { slidesPerView: 8 }, // Desktops
+        1920: { slidesPerView: 10 }, // Full HD
+        2560: { slidesPerView: 15 }, // 2K
+        3840: { slidesPerView: 15 }, // 4K
     };
 
-    useEffect(() => {
-        const handleResize = () => {
-            const visSlides = determineVisibleSlides();
-            setVisibleSlides(visSlides);
+    // Get maximum slidesPerView for duplication logic
+    const maxSlidesPerView = Math.max(...Object.values(dynamicBreakpoints).map(b => b.slidesPerView));
 
-            const requiredSlides = visSlides * 2;
-            let newSlides = [...slides];
-            while (newSlides.length < requiredSlides) {
-                newSlides = [...newSlides, ...slides];
-            }
-            setDuplicatedSlides(newSlides);
-        };
-
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, [slides]);
-
-    if (!duplicatedSlides.length) return null;
-
-    // Removed `visibleSlides` from useSlider call, as it's not defined in useSlider's type
-    const { jsEnabled, ref, nextSlide, prevSlide, goToSlide, currentSlide } = useSlider({
-        spacing,
-        loop: duplicatedSlides.length > visibleSlides,
-    });
+    // Duplicate slides to ensure seamless looping
+    const extendedSlides = loop
+        ? Array.from({ length: Math.ceil(maxSlidesPerView * 2 / slides.length) })
+            .flatMap(() => slides)
+        : slides;
 
     return (
-        <Wrapper column>
-            <Content>
-                {jsEnabled && withArrows && duplicatedSlides.length > visibleSlides && (
-                    <Button whileTap={{ scale: 0.95 }} left onClick={prevSlide} aria-label="Previous Slide">
+        <StyledSwiper
+            modules={[Navigation, Pagination, A11y]}
+            spaceBetween={spacing}
+            slidesPerView={1}
+            navigation={withArrows ? { prevEl: '.swiper-button-prev', nextEl: '.swiper-button-next' } : false}
+            pagination={withDots ? { clickable: true } : undefined}
+            loop={loop}
+            breakpoints={dynamicBreakpoints}
+            autoHeight={height === 'auto'}
+            style={{ height }} // Apply height directly
+        >
+            {extendedSlides.map((slide, index) => (
+                <SwiperSlide key={index} style={{ width: slideWidth }}>
+                    {slide}
+                </SwiperSlide>
+            ))}
+
+            {withArrows && (
+                <>
+                    <CustomButton className="swiper-button-prev">
                         <ArrowLeft />
-                    </Button>
-                )}
-                {jsEnabled ? (
-                    <StyledSlider className="keen-slider" ref={ref} visibleSlides={visibleSlides} spacing={spacing}>
-                        {duplicatedSlides.map((slide, idx) => (
-                            <StyledSlide column key={idx} className="keen-slider__slide" visibleSlides={visibleSlides}>
-                                {slide}
-                            </StyledSlide>
-                        ))}
-                    </StyledSlider>
-                ) : (
-                    // Convert numeric spacing to rem or another unit here:
-                    <StyledNoJSSlider gap={spacing}>{duplicatedSlides}</StyledNoJSSlider>
-                )}
-                {jsEnabled && withArrows && duplicatedSlides.length > visibleSlides && (
-                    <Button whileTap={{ scale: 0.95 }} onClick={nextSlide} aria-label="Next Slide">
+                    </CustomButton>
+                    <CustomButton className="swiper-button-next">
                         <ArrowRight />
-                    </Button>
-                )}
-            </Content>
-            {jsEnabled && duplicatedSlides.length > 1 && withDots && (
-                <DotsWrapper justifyCenter itemsCenter gap="1rem">
-                    {slides.map((_, i) => (
-                        <Dot key={i} active={i === currentSlide} onClick={() => goToSlide(i)} />
-                    ))}
-                </DotsWrapper>
+                    </CustomButton>
+                </>
             )}
-        </Wrapper>
+        </StyledSwiper>
     );
 };
 
 // Styled Components
 
-const DotsWrapper = styled(Stack)`
-    margin-top: 3rem;
-`;
-
-const Dot = styled.div<{ active: boolean }>`
-    width: 0.8rem;
-    height: 0.8rem;
-    border-radius: 50%;
-    background: ${({ active }) => (active ? '#000' : '#ccc')};
-    transition: background 0.3s ease;
-    cursor: pointer;
-`;
-
-const Wrapper = styled(Stack)`
+const StyledSwiper = styled(Swiper)`
     width: 100%;
-    overflow: hidden;
-`;
 
-const Content = styled(Stack)`
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-`;
+    .swiper-pagination-bullet {
+        background: #ccc; /* Default dot color */
+        opacity: 1;
+    }
 
-const Button = styled(motion.button)<{ left?: boolean }>`
-    appearance: none;
-    border: none;
-    background: #f0f0f0;
-    border-radius: 8px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    ${({ left }) => (left ? 'left: 0.5rem;' : 'right: 0.5rem;')}
-    z-index: 1;
-
-    transition: opacity 0.3s ease;
-    cursor: pointer;
-
-    &:hover {
-        opacity: 0.8;
+    .swiper-pagination-bullet-active {
+        background: #000; /* Active dot color */
     }
 `;
 
-const StyledNoJSSlider = styled.div<{ gap: number }>`
+const CustomButton = styled.div`
     display: flex;
     align-items: center;
-    gap: ${({ gap }) => `${gap}rem`}; /* convert numeric gap to rem */
-    overflow: hidden;
-`;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 
-const StyledSlider = styled(Stack)<{ visibleSlides: number; spacing: number }>`
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-    gap: ${({ spacing }) => `${spacing}rem`}; /* convert numeric spacing to rem */
-    width: 100%;
-`;
-
-const StyledSlide = styled(Stack)<{ visibleSlides: number }>`
-    flex: 0 0 ${({ visibleSlides }) => 100 / visibleSlides}%;
-    box-sizing: border-box;
-    padding: 0rem;
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
 `;

@@ -24,7 +24,7 @@ export const RelatedCollections: React.FC<{
                             <Link href={href}>
                                 <ProductImage
                                     src={children.featuredAsset?.preview || ''}
-                                    size="thumbnail-big"
+                                    // size="thumbnail-big"
                                     alt={collection.name}
                                     title={collection.name}
                                 />

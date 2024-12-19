@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack, Link, ProductImageGrid, TP } from '@/src/components/atoms/';
+import { Stack, Link, TP, ProductImage } from '@/src/components/atoms/';
 import { priceFormatter } from '@/src/util/priceFormatter';
 import styled from '@emotion/styled';
 import { Ratings } from './Ratings';
@@ -52,9 +52,9 @@ export const ProductTile: React.FC<{
 
     return (
         <Main column gap="1rem">
-            <Stack style={{ position: 'relative', width: '32rem' }}>
+            <Stack style={{ position: 'relative', maxWidth: '32rem' }}>
                 <Link href={`/products/${product.slug}/`}>
-                    <ProductImageGrid
+                    <ProductImage
                         loading={lazy ? 'lazy' : undefined}
                         src={src}
                         alt={product.productName}
