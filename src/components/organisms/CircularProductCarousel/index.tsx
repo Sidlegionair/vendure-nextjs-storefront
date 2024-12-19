@@ -148,7 +148,7 @@ const ProductSlide = styled.div<{
 
 const ProductImageContainer = styled.div<{ height: number }>`
     width: 150px;
-    height: 300px;
+    height: 480px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -393,7 +393,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                 newRotationAngle = 360 / newDisplayCount;
                 newCarouselDistance = 400;
                 newFlattened = false;
-                newMaxLiftAmount = 200;
+                newMaxLiftAmount = 150;
                 newExtraLiftFlattened = 0;
             }
 
