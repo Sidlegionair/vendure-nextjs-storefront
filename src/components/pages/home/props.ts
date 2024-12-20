@@ -8,20 +8,28 @@ import { ContextModel, makeStaticProps } from '@/src/lib/getStatic';
 import { arrayToTree } from '@/src/util/arrayToTree';
 import { SortOrder } from '@/src/zeus';
 import { HomePageSlidersType, homePageSlidersSelector } from '@/src/graphql/selectors';
-// import { ValueTypes } from '/mnt/data/index';
 
-const slugsOfBestOf = ['snowboards'];
+const slugsOfBestOf = ['home-slider-snowboards'];
 
 export const getStaticProps = async (ctx: ContextModel) => {
     const r = await makeStaticProps(['common', 'homepage'])(ctx);
     const api = SSGQuery(r.context);
 
-    // Primary query to fetch SearchResult items
+    // Specify collection slug for main products (optional)
+    const mainProductCollectionSlug = process.env.MAIN_PRODUCTS_COLLECTION_SLUG || 'carousel-snowboards';
+
+    // Fetch main products, optionally filtering by collection slug
+    const mainProductsQuery = {
+        input: {
+            take: 15,
+            groupByProduct: true,
+            sort: { price: SortOrder.ASC },
+            ...(mainProductCollectionSlug && { collectionSlug: mainProductCollectionSlug }),
+        },
+    };
+
     const products = await api({
-        search: [
-            { input: { take: 15, groupByProduct: true, sort: { price: SortOrder.ASC } } },
-            SearchResponseSelector,
-        ],
+        search: [mainProductsQuery, SearchResponseSelector],
     });
 
     // Fetch all facets to resolve facetValueIds
@@ -70,7 +78,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
         };
     });
 
-    // Fetch stock levels and brand details in a separate query
+    // Fetch stock levels, brand, and variant photos in a separate query
     const stockAndBrandData = await Promise.all(
         productsWithFacets.map(async (product) => {
             const stockAndBrand = await api({
@@ -83,51 +91,55 @@ export const getStaticProps = async (ctx: ContextModel) => {
                         variants: {
                             id: true,
                             stockLevel: true,
+                            customFields: {
+                                frontPhoto: {
+                                    id: true,
+                                    preview: true,
+                                    source: true,
+                                },
+                                backPhoto: {
+                                    id: true,
+                                    preview: true,
+                                    source: true,
+                                },
+                            },
                         },
                     },
                 ],
             });
 
-            // Determine if any variant has stockLevel "IN_STOCK"
             const inStock = stockAndBrand.product?.variants?.some(
                 (variant) => Number(variant.stockLevel) > 0
             );
+
+            const variantData = stockAndBrand.product?.variants?.map((variant) => ({
+                id: variant.id,
+                stockLevel: variant.stockLevel,
+                frontPhoto: variant.customFields.frontPhoto,
+                backPhoto: variant.customFields.backPhoto,
+            })) || [];
 
             return {
                 product: product.productId,
                 brand: stockAndBrand.product?.customFields?.brand || null,
                 inStock,
+                variants: variantData,
             };
         })
     );
 
-    // Merge stock and brand details with original product data
+    // Merge stock and brand details as well as variant custom fields into the product data
     const productsWithDetails = productsWithFacets.map((product) => {
         const stockAndBrand = stockAndBrandData.find((data) => data.product === product.productId);
         return {
             ...product,
             customFields: {
                 brand: stockAndBrand?.brand || null,
+                variants: stockAndBrand?.variants || [],
             },
             inStock: stockAndBrand?.inStock || false,
         };
     });
-
-    // Extract unique collection IDs
-    const uniqueCollectionIds = [...new Set(productsWithDetails.flatMap((item) => item.collectionIds))];
-
-    // Fetch collection details
-    const collectionsData = await Promise.all(
-        uniqueCollectionIds.map(async (id) => {
-            const collectionData = await api({
-                collection: [
-                    { id },
-                    CollectionSelector,
-                ],
-            });
-            return collectionData.collection;
-        })
-    );
 
     // Fetch sliders
     const sliders = await Promise.all(
@@ -139,6 +151,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
         })
     ).then((result) => result.filter((x): x is HomePageSlidersType => x !== null));
 
+    // Fetch collections
     const collections = await getCollections(r.context);
     const navigation = arrayToTree(collections);
 
@@ -154,8 +167,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
             ...r.context,
             products: productsWithDetails,
             categories: collections,
-            facetValues: allFacets.facets.items, // Use allFacets here
-            collections: collectionsData,
+            facetValues: allFacets.facets.items,
             navigation,
             subnavigation,
             sliders,
@@ -163,4 +175,3 @@ export const getStaticProps = async (ctx: ContextModel) => {
         revalidate: parseInt(process.env.NEXT_REVALIDATE || '10'),
     };
 };
-

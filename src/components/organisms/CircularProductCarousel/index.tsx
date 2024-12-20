@@ -8,7 +8,6 @@ import { Divider, Stack } from '@/src/components';
 const CarouselContainer = styled.div`
     position: relative;
     display: flex;
-    //align-items: center;
     justify-content: center;
     flex-direction: column;
     width: 100%;
@@ -17,10 +16,6 @@ const CarouselContainer = styled.div`
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-
-    /* Responsive Top and Bottom Margins */
-    //margin: 1rem auto; /* Default for large desktops */
-
 
     &::before {
         content: '';
@@ -70,7 +65,6 @@ const SlidesWrapper = styled.div`
     }
 `;
 
-// Center anchor to ensure the carousel rotates around a known center
 const CenterAnchor = styled.div`
     position: absolute;
     top: 50%;
@@ -102,33 +96,24 @@ const ProductSlide = styled.div<{
 
     ${({ flattened, angle, distance, translateY, index, activeIndex, extraLift }) => {
         const distanceFromActive = Math.abs(index - activeIndex);
-
-        // Calculate opacity for both mobile and desktop
-        // Active item (distanceFromActive=0): full opacity.
-        // Others fade out as they move away: no lower than 0.4.
         const computedOpacity = distanceFromActive === 0 ? 1 : Math.max(0.4, 1 - distanceFromActive * 0.2);
 
         if (flattened) {
-            // Mobile (flattened) view:
-            // Center item is largest and fully opaque, others get progressively smaller and more transparent.
+            // Mobile (flattened) view
             const scale = distanceFromActive === 0 ? 1.3 : Math.max(0.7, 1 - distanceFromActive * 0.1);
-
-            // Horizontal spacing
             const xShift = (index - activeIndex) * 120;
-            // Slight vertical lift for layering
             const yShift = -Math.abs(index - activeIndex) * extraLift;
 
             return `
                 opacity: ${computedOpacity};
                 transform:
-                    translate(-50%, -50%)    /* Center each item on the anchor point */
-                    translateX(${xShift}px)  /* Spread items horizontally around the active item */
+                    translate(-50%, -50%)
+                    translateX(${xShift}px)
                     translateY(${yShift}px)
                     scale(${scale});
             `;
         } else {
-            // Desktop (3D) view:
-            // Keep original rotation and spacing, but apply new opacity logic.
+            // Desktop (3D) view
             return `
                 opacity: ${computedOpacity};
                 transform:
@@ -143,8 +128,6 @@ const ProductSlide = styled.div<{
 
     z-index: ${({ zIndex }) => zIndex};
 `;
-
-
 
 const ProductImageContainer = styled.div<{ height: number }>`
     width: 150px;
@@ -166,25 +149,24 @@ const ProductImageContainer = styled.div<{ height: number }>`
         width: 120px;
         height: 240px;
     }
-
 `;
 
 const BottomStackWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 2rem auto; /* Default for large desktops */
+    margin: 2rem auto;
     width: 100%;
     max-width: 700px;
     padding: 0 1rem;
     box-sizing: border-box;
 
     @media (max-width: 1023px) and (min-width: 769px) {
-        margin: 2rem auto; /* Small desktops/tablets */
+        margin: 2rem auto;
     }
 
     @media (max-width: 768px) {
-        margin-top: 60px; /* Tablets */
+        margin-top: 60px;
     }
 `;
 
@@ -216,10 +198,6 @@ const InfoBlock = styled.div`
         padding: 15px 20px;
         margin: 0px 60px;
     }
-
-    //@media (max-width: 480px) {
-    //    padding: 10px;
-    //}
 `;
 
 const ProductTitle = styled.h3`
@@ -326,13 +304,6 @@ const Quote = styled(Stack)`
     @media (max-width: 768px) {
         display: none;
     }
-
-    //@media (max-width: 480px) {
-    //    font-size: 18px;
-    //    & > small {
-    //        font-size: 16px !important;
-    //    }
-    //}
 `;
 
 // CircularProductCarousel Component
@@ -352,6 +323,9 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
 
     const [flattened, setFlattened] = useState(false);
 
+    // State for hover effect on the active slide
+    const [activeHover, setActiveHover] = useState(false);
+
     useEffect(() => {
         const handleResize = () => {
             const width = window.innerWidth;
@@ -362,7 +336,6 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
             let newMaxLiftAmount: number;
             let newExtraLiftFlattened: number;
 
-            // Configure carousel settings based on viewport
             if (width < 480) {
                 // Mobile
                 newDisplayCount = Math.min(productCount, 5);
@@ -488,6 +461,12 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                                 ? 1
                                 : 0.4 + 0.5 * (1 - Math.abs(cosAngle));
 
+                        // Get front and back photo URLs. Adjust fields if needed.
+                        console.log(product);
+                        const frontPhoto = product?.customFields?.variants?.[0]?.frontPhoto?.source || product.productAsset?.preview;
+                        const backPhoto = product?.customFields?.variants?.[0]?.customFields?.backPhoto?.source || product.productAsset?.preview;
+                        const imageSrc = isActive && activeHover ? backPhoto : frontPhoto;
+
                         return (
                             <ProductSlide
                                 key={index}
@@ -502,10 +481,16 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                                 index={index}
                                 activeIndex={activeIndex}
                                 extraLift={extraLiftFlattened}
+                                onMouseEnter={() => {
+                                    if (isActive) setActiveHover(true);
+                                }}
+                                onMouseLeave={() => {
+                                    if (isActive) setActiveHover(false);
+                                }}
                             >
                                 <ProductImageContainer height={height}>
                                     <img
-                                        src={product.productAsset?.preview}
+                                        src={imageSrc}
                                         alt={product.productName}
                                         draggable={false}
                                         style={{
@@ -544,21 +529,21 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                         <Divider marginBlock="1.5rem" />
                         <Stack gap={26}>
                             <ProductDetails>
-                <span>
-                  Price:{' '}
-                    <span className="amount">
-                    &euro;{(currentProduct?.priceWithTax?.min / 100).toFixed(2)}
-                  </span>
-                </span>
+                                <span>
+                                    Price:{' '}
+                                    <span className="amount">
+                                        &euro;{(currentProduct?.priceWithTax?.min / 100).toFixed(2)}
+                                    </span>
+                                </span>
                                 {currentProduct?.terrain && (
                                     <span>
-                    Terrain: <span>{currentProduct?.terrain}</span>
-                  </span>
+                                        Terrain: <span>{currentProduct?.terrain}</span>
+                                    </span>
                                 )}
                                 {currentProduct?.level && (
                                     <span>
-                    Rider Level: <span>{currentProduct?.level}</span>
-                  </span>
+                                        Rider Level: <span>{currentProduct?.level}</span>
+                                    </span>
                                 )}
                             </ProductDetails>
                         </Stack>

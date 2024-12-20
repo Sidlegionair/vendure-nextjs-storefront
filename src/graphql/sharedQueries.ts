@@ -16,8 +16,13 @@ export const GetSubNavigation = () => {
 }
 
 export const getCollections = async (params: { locale: string; channel: string }) => {
+    const excludedSlugs = ['carousel-snowboards', 'home-slider-snowboards']; // Replace with slugs you want to exclude
+
     const _collections = await SSGQuery(params)({
-        collections: [{ options: { filter: { slug: { notEq: 'search' } } } }, { items: CollectionTileSelector }],
+        collections: [
+            { options: { filter: { slug: { notIn: excludedSlugs } } } }, // Exclude collections based on slug
+            { items: CollectionTileSelector },
+        ],
     });
 
     let variantForCollections: {
@@ -45,13 +50,16 @@ export const getCollections = async (params: { locale: string; channel: string }
     } catch (e) {
         variantForCollections = [];
     }
-    const collections = _collections.collections.items.map(c => {
-        const collection = variantForCollections.length
-            ? variantForCollections.find(p => p.id === c.id)
-            : { productVariants: { items: [], totalItems: 0 } };
 
-        return { ...c, productVariants: collection?.productVariants };
-    });
+    const collections = _collections.collections.items
+        .filter(c => !excludedSlugs.includes(c.slug)) // Additional hardcoded filter if needed
+        .map(c => {
+            const collection = variantForCollections.length
+                ? variantForCollections.find(p => p.id === c.id)
+                : { productVariants: { items: [], totalItems: 0 } };
+
+            return { ...c, productVariants: collection?.productVariants };
+        });
 
     return collections;
 };

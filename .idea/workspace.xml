@@ -5,21 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/storyblok/MultiColGrid.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/storyblok/TwoColGrid.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/atoms/ProductImage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/atoms/ProductImage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductImageWithInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductImageWithInfo.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductTile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductTile.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductVariantTile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductVariantTile.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/ProductsSellout/ProductCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/ProductsSellout/ProductCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/RelatedCollections/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/RelatedCollections/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/HomePageSliders.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/HomePageSliders.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/ProductPageProductsSlider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/ProductPageProductsSlider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/ProductPhotosPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/ProductPhotosPreview.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/Slider/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/Slider/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderConfirmation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderConfirmation.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderSummary/Line/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderSummary/Line/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/components/atoms/CustomerLastOrder.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/components/atoms/CustomerLastOrder.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/components/OrderBox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/components/OrderBox.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/home/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/home/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphql/sharedQueries.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/sharedQueries.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/_app.page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/_app.page.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +23,11 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/node_modules/@types/react/index.d.ts" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/node_modules/lucide-react/dist/lucide-react.d.ts" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/node_modules/swiper/swiper-react.d.ts" root0="SKIP_INSPECTION" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php" />
   <component name="ProblemsViewState">
@@ -44,28 +41,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/floris/PhpstormProjects/one-click-deploy",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "prettierjs.PrettierConfiguration.Package": "/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/prettier",
-    "ts.external.directory.path": "/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/src/components/storyblok&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/prettier&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
-      "PHP"
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;PHP&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/components/storyblok" />
       <recent name="$PROJECT_DIR$/public/images/bg" />
     </key>
   </component>
@@ -106,7 +104,8 @@
       <workItem from="1734356793996" duration="3051000" />
       <workItem from="1734428097169" duration="4180000" />
       <workItem from="1734444670301" duration="6006000" />
-      <workItem from="1734509930810" duration="24006000" />
+      <workItem from="1734509930810" duration="31841000" />
+      <workItem from="1734694480287" duration="1099000" />
     </task>
     <servers />
   </component>

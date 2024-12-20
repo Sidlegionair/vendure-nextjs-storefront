@@ -38,6 +38,8 @@ import ArticleGrid from '@/src/components/storyblok/ArticleGrid';
 import ArticlesOverviewPage from '@/src/components/storyblok/ArticlesOverviewPage';
 import RelatedArticles from '@/src/components/storyblok/RelatedArticles';
 import ProfileGrid from '@/src/components/storyblok/ProfileGrid';
+import TwoColGrid from '@/src/components/storyblok/TwoColGrid';
+import MultiColGrid from '@/src/components/storyblok/MultiColGrid';
 
 
 // Register your components
@@ -48,6 +50,8 @@ const components = {
     'feature': Feature,
     'footer': Footer,
     'grid': Grid,
+    'two-col-grid': TwoColGrid,
+    'multi-col-grid': MultiColGrid,
     'hero': Hero,
     'layout': Layout,
     'navigation': Navigation,
