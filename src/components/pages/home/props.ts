@@ -115,8 +115,8 @@ export const getStaticProps = async (ctx: ContextModel) => {
             const variantData = stockAndBrand.product?.variants?.map((variant) => ({
                 id: variant.id,
                 stockLevel: variant.stockLevel,
-                frontPhoto: variant.customFields.frontPhoto,
-                backPhoto: variant.customFields.backPhoto,
+                frontPhoto: variant?.customFields?.frontPhoto,
+                backPhoto: variant?.customFields?.backPhoto,
             })) || [];
 
             return {
