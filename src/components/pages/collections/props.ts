@@ -99,8 +99,8 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
         ...r.context,
         slug: context.params?.slug,
         collections: collections,
-        name: collections.find(c => c.slug === lastIndexSlug)?.name,
-        products: productsWithBrands, // Use updated products
+        name: collections.find(c => c.slug === lastIndexSlug)?.name ?? null, // Use null fallback
+        products: productsWithBrands,
         facets,
         totalProducts: productsQuery.search?.totalItems,
         collection,
@@ -112,4 +112,5 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
         props: returnedStuff,
         revalidate: process.env.NEXT_REVALIDATE ? parseInt(process.env.NEXT_REVALIDATE) : 10,
     };
+
 };

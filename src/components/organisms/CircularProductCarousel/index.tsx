@@ -464,7 +464,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                         // Get front and back photo URLs. Adjust fields if needed.
                         console.log(product);
                         const frontPhoto = product?.customFields?.variants?.[0]?.frontPhoto?.source || product.productAsset?.preview;
-                        const backPhoto = product?.customFields?.variants?.[0]?.customFields?.backPhoto?.source || product.productAsset?.preview;
+                        const backPhoto = product?.customFields?.variants?.[0]?.backPhoto?.source || product.productAsset?.preview;
                         const imageSrc = isActive && activeHover ? backPhoto : frontPhoto;
 
                         return (

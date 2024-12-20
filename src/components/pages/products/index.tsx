@@ -131,15 +131,25 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                         </TP>
                                     </StockDisplay>
                                 </StockInfo>
-                                {product?.description && (
-                                    <StyledDescription
-                                        dangerouslySetInnerHTML={{ __html: product.description }}
-                                        color="main"
-                                        size="1rem"
-                                        lineHeight="1.5rem"
-                                        style={{ marginTop: '1rem' }}
-                                    />
-                                )}
+                                {(() => {
+                                    // Attempt to get variant-level short description
+                                    console.log(variant);
+// Safely convert to string
+                                    const shortDescription = String(
+                                        variant?.customFields?.shortdescription || product?.description || ''
+                                    );
+
+                                    return shortDescription ? (
+                                        <StyledDescription
+                                            dangerouslySetInnerHTML={{ __html: shortDescription }} // now always a string
+                                            color="main"
+                                            size="1rem"
+                                            lineHeight="1.5rem"
+                                            style={{ marginTop: '1rem' }}
+                                        />
+                                    ) : null;
+                                })()}
+
                             </Stack>
 
                             <Stack w100 column>
@@ -157,7 +167,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                             ),
                                         },
                                         ...(variant?.customFields
-                                            ? Array.from({ length: 3 }, (_, i) => i + 1)
+                                            ? Array.from({ length: 4 }, (_, i) => i + 1)
                                                 .filter(tabIndex => (variant.customFields as Record<string, any>)[`optionTab${tabIndex}Visible`])
                                                 .map(tabIndex => ({
                                                     title: (variant.customFields as Record<string, any>)[`optionTab${tabIndex}Label`] || `Option Tab ${tabIndex}`,

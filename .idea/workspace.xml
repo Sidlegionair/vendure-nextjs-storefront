@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/storyblok/MultiColGrid.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/storyblok/TwoColGrid.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/home/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/home/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphql/sharedQueries.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/sharedQueries.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/_app.page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/_app.page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/OptionTabContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/OptionTabContent.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/products/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/products/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphql/selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/selectors.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +103,8 @@
       <workItem from="1734428097169" duration="4180000" />
       <workItem from="1734444670301" duration="6006000" />
       <workItem from="1734509930810" duration="31841000" />
-      <workItem from="1734694480287" duration="1099000" />
+      <workItem from="1734694480287" duration="2587000" />
+      <workItem from="1734697391141" duration="3323000" />
     </task>
     <servers />
   </component>

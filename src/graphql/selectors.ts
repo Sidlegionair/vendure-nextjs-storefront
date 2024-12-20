@@ -244,6 +244,7 @@ export const ProductDetailSelector = Selector('Product')({
             name: true,
         },
         customFields: {
+            shortdescription: true,
             // Description Tabs
             descriptionTab1Visible: true,
             descriptionTab1Label: true,
@@ -305,7 +306,13 @@ export const ProductDetailSelector = Selector('Product')({
             optionTab2Bar3Rating: true,
             optionTab2Bar3MinLabel: true,
             optionTab2Bar3MaxLabel: true,
-
+            optionTab2Bar4Visible: true,
+            optionTab2Bar4Name: true,
+            optionTab2Bar4Min: true,
+            optionTab2Bar4Max: true,
+            optionTab2Bar4Rating: true,
+            optionTab2Bar4MinLabel: true,
+            optionTab2Bar4MaxLabel: true,
             optionTab3Visible: true,
             optionTab3Label: true,
             // optionTab3Content: true, // Removed as Option Tabs don't have content

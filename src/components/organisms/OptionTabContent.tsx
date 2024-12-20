@@ -8,7 +8,7 @@ interface OptionTabContentProps {
 }
 
 export const OptionTabContent: React.FC<OptionTabContentProps> = ({ customFields, tabIndex }) => {
-    const MAX_BARS = 3;
+    const MAX_BARS = 4;
 
     const bars = Array.from({ length: MAX_BARS }, (_, j) => j + 1)
         .filter(
