@@ -6,14 +6,18 @@
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/next-i18next.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/next-i18next.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/next.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/locales/en/common.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/locales/en/common.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/NavgationSearch/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/NavgationSearch/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/collections/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/collections/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/home/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/home/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/search/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/search/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/products/[slug].page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/snowboards/[slug].page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/state/collection/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/state/collection/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlockInverted.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlockInverted.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/ArticlesOverviewPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/ArticlesOverviewPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/Carousel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/Carousel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/MosaicBlock.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/MosaicBlock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/Navigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Navigation.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/menuConfig.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/menuConfig.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/content/[...slug].page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/content/[...slug].page.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,26 +47,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/src/components/storyblok&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/prettier&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/floris/PhpstormProjects/one-click-deploy",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "prettierjs.PrettierConfiguration.Package": "/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/prettier",
+    "ts.external.directory.path": "/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;PHP&quot;
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "PHP"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/components/storyblok" />
@@ -109,7 +113,7 @@
       <workItem from="1734509930810" duration="31841000" />
       <workItem from="1734694480287" duration="2587000" />
       <workItem from="1734697391141" duration="5490000" />
-      <workItem from="1736243740258" duration="3987000" />
+      <workItem from="1736243740258" duration="10431000" />
     </task>
     <servers />
   </component>

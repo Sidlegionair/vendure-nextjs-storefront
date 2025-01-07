@@ -111,7 +111,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
                     image: story.content?.featuredImage ?? '',
                     description: story.content?.description ?? '',
                     first_published_at: story.first_published_at,
-                    link: { url: `/stories/articles/${story.slug}` },
+                    link: { url: `/stories/blog/${story.slug}` },
                 })),
                 content_above_grid: overviewStory?.content?.content_above_grid || [],
                 content_below_grid: overviewStory?.content?.content_below_grid || [],
@@ -143,7 +143,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
             if (!data?.story) return { notFound: true };
 
             const relatedData = await storyblokApi.get('cdn/stories', {
-                starts_with: 'content/articles',
+                starts_with: 'content/blog',
                 sort_by: 'published_at:desc',
                 version: 'draft',
                 per_page: 3,
@@ -165,7 +165,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
                         image: story.content?.featuredImage || '',
                         description: story.content?.description || '',
                         first_published_at: story.first_published_at,
-                        link: { url: `/stories/articles/${story.slug}` },
+                        link: { url: `/stories/blog/${story.slug}` },
                     })),
                     articles: [],
                     contentAboveGrid: [],

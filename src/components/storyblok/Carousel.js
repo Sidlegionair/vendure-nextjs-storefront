@@ -31,6 +31,13 @@ const Carousel = ({ blok }) => {
         };
     }, [emblaApi, setupLooping]);
 
+    const getSlideLink = (link) => {
+        if (!link) return '#'; // Default fallback
+        if (link.linktype === 'url') return link.url; // External URL
+        if (link.linktype === 'story') return `/${link.cached_url || ''}`; // Internal Storyblok story
+        return '#'; // Fallback for unknown types
+    };
+
     return (
         <div className="carouselWrapper" ref={emblaRef}>
             <div className="carouselContainer" style={{ '--slide-size': `${slideWidthPercent}%` }}>
@@ -45,7 +52,11 @@ const Carousel = ({ blok }) => {
                         <div className="slideOverlay">
                             <div className="slideContent">
                                 <h2>{slide.title}</h2>
-                                <a href={slide.link.url.cached_url} target="_blank" rel="noopener noreferrer">
+                                <a
+                                    href={getSlideLink(slide.link)}
+                                    // target="_blank"
+                                    rel="noopener noreferrer"
+                                >
                                     {slide.ctaText}
                                 </a>
                             </div>
@@ -56,7 +67,6 @@ const Carousel = ({ blok }) => {
 
             <style jsx>{`
                 .carouselWrapper {
-
                     overflow: hidden;
                     position: relative;
                     width: 100%;
@@ -79,7 +89,7 @@ const Carousel = ({ blok }) => {
                     background-position: center;
                     height: 60vh;
                     position: relative;
-                    @media(max-width: 767px) {
+                    @media (max-width: 767px) {
                         min-width: 70vw;
                         height: 35vh;
                         margin-left: 15px;
@@ -90,8 +100,6 @@ const Carousel = ({ blok }) => {
                     position: absolute;
                     top: 0;
                     left: 0;
-                    //padding: 40px;
-                    
                     width: 100%;
                     height: 100%;
                     background-color: rgba(0, 0, 0, 0.3);
@@ -102,27 +110,26 @@ const Carousel = ({ blok }) => {
                     color: #fff;
                     text-align: center;
                 }
-                
+
                 .slideContent {
                     padding: 40px;
                     display: flex;
                     flex-direction: column;
-                    
-                    @media(max-width: 767px) {
+
+                    @media (max-width: 767px) {
                         padding: 15px;
                         gap: 15px;
                     }
                 }
 
                 .slideOverlay h2 {
-                    //font-family: Suisse BP Int'l;
                     font-size: 35px;
                     font-weight: 600;
                     line-height: 35px;
                     text-align: left;
                     margin: 0;
 
-                    @media(max-width: 767px) {
+                    @media (max-width: 767px) {
                         font-size: 24px;
                         line-height: 24px;
                     }
@@ -138,11 +145,10 @@ const Carousel = ({ blok }) => {
                     margin-top: 8px;
                     color: #fff;
                     transition: color 0.2s;
-                    @media(max-width: 767px) {
+                    @media (max-width: 767px) {
                         font-size: 14px;
                         line-height: 14px;
                     }
-
                 }
 
                 .slideOverlay a:hover {

@@ -32,10 +32,10 @@ export const mainNavigation: NavigationItemType[] = [
         children: [],
     },
     {
-        name: 'Snowboards',
+        name: 'Boardtech',
         id: 'none',
         parentId: '1',
-        slug: 'content/snowboards',
+        slug: 'content/boardtech',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],
@@ -44,24 +44,6 @@ export const mainNavigation: NavigationItemType[] = [
 
 // Define the subNavigation array with productVariants always defined
 export const subNavigation: NavigationItemType[] = [
-    {
-        name: 'Boardbrands',
-        id: 'none',
-        parentId: '1',
-        slug: 'content/boardbrands',
-        description: '',
-        productVariants: emptyProductVariants, // Use default empty structure
-        children: [],
-    },
-    {
-        name: 'Sustainable',
-        id: 'none',
-        parentId: '1',
-        slug: 'content/sustainable',
-        description: '',
-        productVariants: emptyProductVariants, // Use default empty structure
-        children: [],
-    },
     {
         name: 'Powder',
         id: 'none',
@@ -84,7 +66,7 @@ export const subNavigation: NavigationItemType[] = [
         name: 'All mountain',
         id: 'none',
         parentId: '1',
-        slug: 'content/all_mountain',
+        slug: 'content/all-mountain',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],
@@ -93,28 +75,18 @@ export const subNavigation: NavigationItemType[] = [
         name: 'Park',
         id: 'none',
         parentId: '1',
-        slug: 'content/park',
+        slug: 'content/sustainable',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],
     },
     {
-        name: 'Tutorials',
+        name: 'Brands',
         id: 'none',
         parentId: '1',
-        slug: 'content/tutorials',
+        slug: 'content/brands',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],
     },
-    {
-        name: 'About us',
-        id: 'none',
-        parentId: '1',
-        slug: 'content/about-us',
-        description: '',
-        productVariants: emptyProductVariants, // Use default empty structure
-        children: [],
-    }
-
 ];

@@ -29,9 +29,9 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
         40: '0.75rem',
         50: '3.125rem',
         60: '3.75rem',
-        70: '1.75rem',
-        80: '2rem',
-        90: '2.5rem',
+        70: '4.75rem',
+        80: '5rem',
+        90: '6rem',
     };
 
 

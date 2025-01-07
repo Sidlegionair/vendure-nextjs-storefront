@@ -8,7 +8,7 @@ const ArticlesOverviewPage = ({ stories }) => {
             <div className="grid">
                 {stories?.length ? (
                     stories.map((story) => (
-                        <Link href={`/articles/${story.slug}`} key={story.id}>
+                        <Link href={`/blog/${story.slug}`} key={story.id}>
                             <a>
                                 <StoryblokComponent blok={{
                                     component: "card",

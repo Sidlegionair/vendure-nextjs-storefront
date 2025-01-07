@@ -10,6 +10,16 @@ const nextConfig = {
     images: {
         domains: ['a.storyblok.com'], // Allows images from Storyblok CDN
     },
+    // async rewrites() {
+    //     return [
+    //         // Catch-all fallback to Storyblok for unmatched routes
+    //         {
+    //             source: '/:slug*',
+    //             destination: '/content/:slug*', // Redirects to Storyblok's content
+    //         },
+    //
+    //     ];
+    // }
 };
 
 module.exports = nextConfig;

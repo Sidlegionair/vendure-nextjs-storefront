@@ -20,7 +20,7 @@
     "proceed-to-checkout": "Proceed to checkout",
     "continue-shopping": "Continue shopping",
     "price": "Price",
-    "search-for-best-products": "Search for best products",
+    "search-for-best-products": "Find your perfect board",
     "discount": "Discount",
     "discounts-errors": {
         "coupon-code-invalid": "Couldn't find a coupon with that code",
@@ -45,7 +45,7 @@
     "search-query-to-short": "Search query must be at least 3 characters long",
     "search-results-no-results": "No results for <1>{{searchQuery}}</1>",
     "search-results-loading": "Loading search results...",
-    "popular-searches-heading": "Popular searches",
+    "popular-searches-heading": "Top searches",
     "cart-empty": "Your cart is empty",
     "select-options": "Please select an options",
     "shipping-protection": {

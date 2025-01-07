@@ -75,12 +75,12 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
     return (
         <>
             <StickyContainer>
-                <ContentContainer>
+                <CustomContentContainer>
                     <MainStack>
                         <LeftStack gap="50px" itemsCenter>
                             {/* Desktop: show navigation */}
                             <DesktopWrapper>
-                                <DesktopNavigation gap={50} navigation={navigation} />
+                                <DesktopNavigation gap={90} navigation={navigation} />
                             </DesktopWrapper>
 
                             {/* Mobile: show logo on left */}
@@ -162,7 +162,7 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                             </DesktopNavigationContainer>
                         </AnimatePresence>
                     </SearchStack>
-                </ContentContainer>
+                </CustomContentContainer>
 
                 {/* Mobile: search underneath menubar if open */}
                 {navigationSearch.searchOpen && (
@@ -248,6 +248,15 @@ const StickyContainer = styled.nav`
         max-height: 4rem;
     }
 `;
+
+const CustomContentContainer = styled(ContentContainer)`
+    //display: flex;
+    //align-items: center;
+    //justify-content: center;
+    //width: 100%;
+    gap: 2.5rem;
+`;
+
 
 const DesktopNavigationContainer = styled(motion.div)`
     display: flex;

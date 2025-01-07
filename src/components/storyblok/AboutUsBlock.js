@@ -5,16 +5,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const AboutUsBlock = ({ blok }) => {
-    // Render and sanitize the rich text content
-    const htmlContent = renderRichText(blok.description);
-    const sanitizedContent = sanitizeHtml(htmlContent, {
-        allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'button']),
-        allowedAttributes: {
-            ...sanitizeHtml.defaults.allowedAttributes,
-            img: ['src', 'alt', 'title', 'width', 'height', 'class', 'srcset'],
-            button: ['href', 'target'],
-        },
-    });
+    const getButtonLink = (link) => {
+        if (!link) return '#'; // Default fallback link
+        if (link.linktype === 'url') return link.url; // External URL
+        if (link.linktype === 'story') return `/${link.cached_url || ''}`; // Internal Storyblok story
+        return '#'; // Fallback for unknown link types
+    };
 
     return (
         <section className="about-us-section">
@@ -32,15 +28,32 @@ const AboutUsBlock = ({ blok }) => {
                 {/* Text Content */}
                 <div className="about-us-text">
                     <h2>{blok.title || 'About Us'}</h2>
-                    <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
+                    <div
+                        className="rich-text-content"
+                        dangerouslySetInnerHTML={{
+                            __html: sanitizeHtml(renderRichText(blok.description), {
+                                allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'button']),
+                                allowedAttributes: {
+                                    ...sanitizeHtml.defaults.allowedAttributes,
+                                    img: ['src', 'alt', 'title', 'width', 'height', 'class', 'srcset'],
+                                    button: ['href', 'target'],
+                                },
+                            }),
+                        }}
+                    />
                     {blok.buttonLink && (
-                        <a className="learn-more-button" href={blok.buttonLink.url.cached_url}>
+                        <a
+                            className="learn-more-button"
+                            href={getButtonLink(blok.buttonLink)}
+                            target={blok.buttonLink.target || '_self'}
+                            rel={blok.buttonLink.target === '_blank' ? 'noopener noreferrer' : undefined}
+                        >
                             {blok.buttonText || 'Learn More'} →
                         </a>
                     )}
                 </div>
             </div>
-
+            {/* Styles */}
             <style jsx>{`
                 .about-us-section {
                     position: relative;
