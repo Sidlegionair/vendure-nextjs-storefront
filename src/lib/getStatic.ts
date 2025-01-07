@@ -13,15 +13,15 @@ export interface ContextModel<T = Record<string, string>> {
 export const getAllPossibleWithChannels = () => {
     const paths: { params: { locale: string; channel: string } }[] = [];
     channels.forEach(c => {
-        if (c.locales.length === 0) {
-            paths.push({ params: { channel: c.slug, locale: c.nationalLocale } });
-        } else {
-            c.locales
-                .filter(l => l !== c.nationalLocale)
-                .forEach(locale => {
-                    paths.push({ params: { channel: c.slug, locale } });
-                });
-        }
+        // Always include the national locale
+        paths.push({ params: { channel: c.slug, locale: c.nationalLocale } });
+
+        // Include additional locales, if any
+        c.locales
+            .filter(l => l !== c.nationalLocale)
+            .forEach(locale => {
+                paths.push({ params: { channel: c.slug, locale } });
+            });
     });
     return paths;
 };

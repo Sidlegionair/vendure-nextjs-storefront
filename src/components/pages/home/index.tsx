@@ -15,21 +15,24 @@ const Main = styled(Stack)`
 `;
 
 export const Home: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = props => {
-    const { t } = useTranslation('homepage');
+    const { i18n, t } = useTranslation('homepage');
     const [storyblokSections, setStoryblokSections] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchStory = async () => {
             const storyblokApi = getStoryblokApi();
-            const { data } = await storyblokApi.get(`cdn/stories/homepage-story`); // Use your actual Storyblok story slug
-            setStoryblokSections(data?.story?.content?.body || []);
+            const locale = i18n.language; // Current locale (e.g., 'nl', 'en')
+            const storySlug = locale === 'nl' ? 'homepage-story-nl' : 'homepage-story'; // Adjust based on locale
+            try {
+                const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`);
+                setStoryblokSections(data?.story?.content?.body || []);
+            } catch (error) {
+                console.error(`Failed to fetch Storyblok content for slug: ${storySlug}`, error);
+            }
         };
 
         fetchStory();
-    }, []);
-
-
-
+    }, [i18n.language]); // Re-fetch when the locale changes
 
     return (
         <Layout navigation={props.navigation} subnavigation={props.subnavigation} categories={props.categories} pageTitle={t('seo.home')}>
@@ -39,36 +42,17 @@ export const Home: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = pr
                 <CircularProductCarousel products={props.products} />
 
                 {/* Inject Storyblok Content if available */}
-                {storyblokSections[0] && (
-                    <StoryblokComponent blok={storyblokSections[0]} />
-                )}
+                {storyblokSections[0] && <StoryblokComponent blok={storyblokSections[0]} />}
 
-                {/*/!* Default Sliders *!/*/}
-                {/*<ContentContainer>*/}
-                {/*    <HomePageSliders sliders={props.sliders} seeAllText={t('see-all')} />*/}
-                {/*</ContentContainer>*/}
-
-
-                {/* Repeat Sliders */}
-                {/*<ContentContainer>*/}
+                {/* Default Sliders */}
                 <HomePageSliders sliders={props.sliders} seeAllText={t('see-all')} />
-                {/*</ContentContainer>*/}
 
                 {/* Additional Storyblok Content */}
-                {storyblokSections[1] && (
-                    // <ContentContainer>
-                    <StoryblokComponent blok={storyblokSections[1]} />
-                    // </ContentContainer>
-                )}
-
-
-                {/* More Storyblok Content if available */}
-                {storyblokSections.slice(2).map((section, index) => (
+                {storyblokSections.slice(1).map((section, index) => (
                     <ContentContainer key={index}>
                         <StoryblokComponent blok={section} />
                     </ContentContainer>
                 ))}
-
             </Main>
         </Layout>
     );

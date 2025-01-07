@@ -145,7 +145,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
     };
 
     // Since this route does not include [locale], use DEFAULT_LOCALE
-    const locale = DEFAULT_LOCALE;
+    const locale = channel;
 
     // Debugging: Log received parameters
     console.log('Parameters received in getStaticProps for /[channel]/content/[...slug]:', {
