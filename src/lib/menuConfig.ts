@@ -48,7 +48,7 @@ export const subNavigation: NavigationItemType[] = [
         name: 'Powder',
         id: 'none',
         parentId: '1',
-        slug: 'content/powder',
+        slug: 'collections/snowboarding/?terrain=powder&page=1',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],
@@ -57,7 +57,7 @@ export const subNavigation: NavigationItemType[] = [
         name: 'Freeride',
         id: 'none',
         parentId: '1',
-        slug: 'content/freeride',
+        slug: 'collections/snowboarding/?style=freeride',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],
@@ -66,13 +66,13 @@ export const subNavigation: NavigationItemType[] = [
         name: 'All mountain',
         id: 'none',
         parentId: '1',
-        slug: 'content/all-mountain',
+        slug: 'collections/snowboarding/?page=1&terrain=all+mountain',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],
     },
     {
-        name: 'Park',
+        name: 'Sustainable',
         id: 'none',
         parentId: '1',
         slug: 'content/sustainable',

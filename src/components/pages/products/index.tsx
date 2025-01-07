@@ -143,8 +143,8 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                         <StyledDescription
                                             dangerouslySetInnerHTML={{ __html: shortDescription }} // now always a string
                                             color="main"
-                                            size="1rem"
-                                            lineHeight="1.5rem"
+                                            // size="1rem"
+                                            // lineHeight="1.5rem"
                                             style={{ marginTop: '1rem' }}
                                         />
                                     ) : null;
@@ -287,7 +287,7 @@ const StyledDescription = styled(Stack)`
     line-height: 24px;
     font-weight: 400;
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
 `
 
 const Wrapper = styled(Stack)`

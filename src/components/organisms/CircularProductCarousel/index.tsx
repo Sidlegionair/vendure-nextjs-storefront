@@ -284,6 +284,7 @@ const StockButton = styled.button<{ inStock: boolean }>`
 `;
 
 const Quote = styled(Stack)`
+    margin-top: 30px;
     font-size: 24px;
     font-style: italic;
     font-weight: 500;
@@ -489,10 +490,6 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
 
             <BottomStackWrapper>
                 <BottomStack column>
-                    <Quote justifyCenter column>
-                        “By far the best freeride board that I have ever ridden.”
-                        <small>- Jasper Bazuin</small>
-                    </Quote>
 
                     <InfoBlock>
                         <Stack justifyBetween itemsCenter>
@@ -528,6 +525,11 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                             </ProductDetails>
                         </Stack>
                     </InfoBlock>
+                    <Quote justifyCenter column>
+                        “By far the best freeride board that I have ever ridden.”
+                        <small>- Jasper Bazuin</small>
+                    </Quote>
+
                 </BottomStack>
             </BottomStackWrapper>
         </CarouselContainer>
