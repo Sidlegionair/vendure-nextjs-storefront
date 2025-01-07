@@ -196,51 +196,53 @@ const SubMenuStack = styled(Stack)<{ gap?: number | '0.125rem' | '0.25rem' | '0.
     z-index: 5;
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: ${({ gap }) => (typeof gap === 'number' ? `${gap}px` : gap)};
     font-size: 16px;
     font-weight: 400;
+    align-items: center; // Ensures vertical alignment of items
+
+    // Add a default gap of 200px if none is provided
+    gap: ${({ gap }) => gap || '50px'};
 
     @media (max-width: ${p => p.theme.breakpoints.md}) {
-        gap: 10px;
+        flex-wrap: wrap; // Allow wrapping for smaller screens
+        gap: 50px; // Adjust gap for smaller screens
         font-size: 14px;
-        padding: 30px;
-        gap: 28px;
-        font-weight: 400;
-        font-size: 18px;
     }
 
     @media (max-width: ${p => p.theme.breakpoints.sm}) {
+        padding: 30px;
+        flex-direction: column; // Stack links vertically on small screens
+        gap: 20px;
         font-size: 12px;
-        flex-wrap: wrap; // Allow wrapping for smaller screens
     }
 `;
 
 const StyledLink = styled(Link)<{ isSubMenu?: boolean }>`
     color: ${p => p.theme.text.main} !important;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    font-style: normal;
+    align-items: start;
+    //justify-content: center;
+    //white-space: nowrap;
+    //font-style: normal;
 
     // Desktop defaults
     font-weight: ${p => (p.isSubMenu ? 400 : 600)};
-    color: ${p => (p.isSubMenu ? p.theme.text.main : p.theme.text.accent)};
     font-size: ${p => (p.isSubMenu ? '18px' : '20px')};
     line-height: ${p => (p.isSubMenu ? '18px' : '20px')};
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+        text-underline-offset: 4px;
+    }
 
     @media (max-width: ${p => p.theme.breakpoints.md}) {
-        // At md breakpoint, use the same sizing
-        font-weight: ${p => (p.isSubMenu ? 400 : 600)};
-        font-size: ${p => (p.isSubMenu ? '18px' : '20px')};
-        line-height: ${p => (p.isSubMenu ? '18px' : '20px')};
+        font-size: 16px;
     }
 
     @media (max-width: ${p => p.theme.breakpoints.sm}) {
-        // On mobile (sm and below), apply the requested mobile styling directly
-        font-weight: ${p => (p.isSubMenu ? 400 : 600)};
-        font-size: ${p => (p.isSubMenu ? '18px' : '20px')};
-        line-height: ${p => (p.isSubMenu ? '18px' : '20px')};
+        font-size: 14px;
     }
 `;

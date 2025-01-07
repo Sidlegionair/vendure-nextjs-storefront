@@ -80,7 +80,7 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                         <LeftStack gap="50px" itemsCenter>
                             {/* Desktop: show navigation */}
                             <DesktopWrapper>
-                                <DesktopNavigation gap={90} navigation={navigation} />
+                                <DesktopNavigation gap={100} navigation={navigation} />
                             </DesktopWrapper>
 
                             {/* Mobile: show logo on left */}
@@ -142,7 +142,7 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                     <DesktopWrapper>
                         <Stack>
                             {subnavigation ? (
-                                <DesktopNavigation gap={135} navigation={subnavigation} isSubMenu={true} />
+                                <DesktopNavigation gap={5} navigation={subnavigation} isSubMenu={true} />
                             ) : (
                                 <Stack />
                             )}
@@ -365,7 +365,7 @@ const MainStack = styled(Stack)`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: start;
     gap: 25px; /* Default gap for mobile */
 
     @media (min-width: ${p => p.theme.breakpoints.md}) {
