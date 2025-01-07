@@ -65,7 +65,7 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                             }
                         }}
                         ref={inputRef}
-                        placeholder={t('search-for-best-snowboards')}
+                        placeholder={t('search-for-best-products')}
                         value={searchQuery}
                         onFocus={handleFocus}
                         onChange={e => {
@@ -84,7 +84,7 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                         </SearchButton>
                     ) : (
                         <SearchButton type="submit">
-                            <SearchIcon size="15px" />
+                            {/*<SearchIcon size="15px" />*/}
                         </SearchButton>
                     )}
                 </Form>

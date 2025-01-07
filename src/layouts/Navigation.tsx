@@ -106,16 +106,16 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                             <CartDrawer activeOrder={cart} />
                             <Picker changeModal={changeModal} />
 
-                            {/* Desktop: Search icon */}
-                            <DesktopWrapper>
-                                <IconButton
-                                    aria-label="Search products"
-                                    onClick={navigationSearch.toggleSearch}
-                                    ref={iconRef}
-                                >
-                                    <SearchIcon />
-                                </IconButton>
-                            </DesktopWrapper>
+                            {/*/!* Desktop: Search icon *!/*/}
+                            {/*<DesktopWrapper>*/}
+                            {/*    <IconButton*/}
+                            {/*        aria-label="Search products"*/}
+                            {/*        onClick={navigationSearch.toggleSearch}*/}
+                            {/*        ref={iconRef}*/}
+                            {/*    >*/}
+                            {/*        <SearchIcon />*/}
+                            {/*    </IconButton>*/}
+                            {/*</DesktopWrapper>*/}
 
                             {/* Mobile: hamburger menu */}
                             <MobileWrapper>

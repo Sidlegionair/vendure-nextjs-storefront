@@ -138,6 +138,12 @@ const Footer = ({ blok }) => {
                     flex-wrap: wrap;
                     box-sizing: border-box;
                 }
+                
+                .column {
+                    justify-content: start;
+                    align-items: start;
+                    text-align: start;
+                }
 
                 .brand-section {
                     flex: 1 1 250px;

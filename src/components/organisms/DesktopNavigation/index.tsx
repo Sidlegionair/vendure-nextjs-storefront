@@ -22,16 +22,17 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
     const StackComponent = isSubMenu ? SubMenuStack : DesktopStack;
 
     // Define the mapping for numbers to rem strings
-    const gapMapping: Record<number, '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3.125rem' | '3.75rem'> = {
+    const gapMapping: Record<number, '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3.125rem' | '3.75rem' | '5rem'> = {
         10: '0.125rem',
         20: '0.25rem',
         30: '0.5rem',
         40: '0.75rem',
         50: '3.125rem',
         60: '3.75rem',
-        70: '4.75rem',
-        80: '5rem',
-        90: '6rem',
+        70: '1.75rem',
+        80: '2rem',
+        90: '2.5rem',
+        100: '5rem'
     };
 
 
@@ -64,7 +65,7 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
                                     <NavigationLinks collection={collection} />
                                     <ProductSelloutWrapper gap="1.5rem">
                                         <ProductsSellout
-                                            title={t('featured-snowboards')}
+                                            title={t('featured-products')}
                                             addToCart={addToCart}
                                             addToCartLabel={t('add-to-cart')}
                                             collection={collection}
@@ -81,7 +82,7 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
     );
 };
 
-const DesktopStack = styled(Stack)<{ gap?: number | '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3.125rem' | '3.75rem' }>`
+const DesktopStack = styled(Stack)<{ gap?: number | '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3.125rem' | '3.75rem' | '5rem'}>`
     @media (max-width: ${p => p.theme.breakpoints.md}) {
         display: flex;
         flex-direction: column;
@@ -190,7 +191,7 @@ const AbsoluteStack = styled(Stack)`
 `;
 
 
-const SubMenuStack = styled(Stack)<{ gap?: number | '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3.125rem' | '3.75rem' }>`
+const SubMenuStack = styled(Stack)<{ gap?: number | '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3.125rem' | '3.75rem' | '5rem' }>`
     position: relative;
     z-index: 5;
     width: 100%;
