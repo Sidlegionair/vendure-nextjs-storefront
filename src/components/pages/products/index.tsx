@@ -281,11 +281,13 @@ const StyledBoughtContent = styled('p')`
     }
 `
 
-const StyledDescription = styled(TP)`
+const StyledDescription = styled(Stack)`
     font-family: 'Calibri', sans-serif;
     font-size: 16px;
     line-height: 24px;
     font-weight: 400;
+    flex-direction: column;
+    gap: 10px;
 `
 
 const Wrapper = styled(Stack)`
