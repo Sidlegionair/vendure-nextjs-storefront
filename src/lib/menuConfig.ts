@@ -31,15 +31,15 @@ export const mainNavigation: NavigationItemType[] = [
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],
     },
-    {
-        name: 'Boardtech',
-        id: 'none',
-        parentId: '1',
-        slug: 'content/boardtech',
-        description: '',
-        productVariants: emptyProductVariants, // Use default empty structure
-        children: [],
-    },
+    // {
+    //     name: 'Boardtech',
+    //     id: 'none',
+    //     parentId: '1',
+    //     slug: 'content/boardtech',
+    //     description: '',
+    //     productVariants: emptyProductVariants, // Use default empty structure
+    //     children: [],
+    // },
 ];
 
 // Define the subNavigation array with productVariants always defined
