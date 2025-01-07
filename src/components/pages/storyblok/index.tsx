@@ -3,7 +3,7 @@ import { InferGetStaticPropsType } from 'next';
 import { Layout } from '@/src/layouts';
 import Head from 'next/head';
 import { StoryblokComponent, SbBlokData } from "@storyblok/react";
-import { getStaticProps } from '@/src/pages/stories/[...slug].page';
+import { getStaticProps } from '@/src/pages/content/[...slug].page';
 
 type StoryPageProps = InferGetStaticPropsType<typeof getStaticProps>;
 

@@ -95,14 +95,13 @@ const ProductSlide = styled.div<{
     border-radius: 8px;
 
     ${({ flattened, angle, distance, translateY, index, activeIndex, extraLift }) => {
-        const distanceFromActive = Math.abs(index - activeIndex);
+        const distanceFromActive = Math.abs((index % 1000) - (activeIndex % 1000));
         const computedOpacity = distanceFromActive === 0 ? 1 : Math.max(0.4, 1 - distanceFromActive * 0.2);
 
         if (flattened) {
-            // Mobile (flattened) view
             const scale = distanceFromActive === 0 ? 1.3 : Math.max(0.7, 1 - distanceFromActive * 0.1);
-            const xShift = (index - activeIndex) * 120;
-            const yShift = -Math.abs(index - activeIndex) * extraLift;
+            const xShift = ((index % 1000) - (activeIndex % 1000)) * 120;
+            const yShift = -Math.abs(((index % 1000) - (activeIndex % 1000))) * extraLift;
 
             return `
                 opacity: ${computedOpacity};
@@ -113,7 +112,6 @@ const ProductSlide = styled.div<{
                     scale(${scale});
             `;
         } else {
-            // Desktop (3D) view
             return `
                 opacity: ${computedOpacity};
                 transform:
@@ -306,8 +304,6 @@ const Quote = styled(Stack)`
     }
 `;
 
-// CircularProductCarousel Component
-
 export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ products }) => {
     const productCount = products.length;
     const [displayCount, setDisplayCount] = useState<number>(Math.min(productCount, 11));
@@ -323,9 +319,6 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
 
     const [flattened, setFlattened] = useState(false);
 
-    // State for hover effect on the active slide
-    const [activeHover, setActiveHover] = useState(false);
-
     useEffect(() => {
         const handleResize = () => {
             const width = window.innerWidth;
@@ -337,7 +330,6 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
             let newExtraLiftFlattened: number;
 
             if (width < 480) {
-                // Mobile
                 newDisplayCount = Math.min(productCount, 5);
                 newRotationAngle = 0;
                 newCarouselDistance = -100;
@@ -345,7 +337,6 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                 newMaxLiftAmount = 50;
                 newExtraLiftFlattened = 0;
             } else if (width < 768) {
-                // Tablet
                 newDisplayCount = Math.min(productCount, 8);
                 newRotationAngle = 360 / newDisplayCount;
                 newCarouselDistance = 250;
@@ -353,7 +344,6 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                 newMaxLiftAmount = 150;
                 newExtraLiftFlattened = 0;
             } else if (width < 1024) {
-                // Small Desktop/Tablets
                 newDisplayCount = Math.min(productCount, 12);
                 newRotationAngle = 360 / newDisplayCount;
                 newCarouselDistance = 300;
@@ -361,7 +351,6 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                 newMaxLiftAmount = 180;
                 newExtraLiftFlattened = 0;
             } else {
-                // Large Desktop
                 newDisplayCount = Math.min(productCount, 16);
                 newRotationAngle = 360 / newDisplayCount;
                 newCarouselDistance = 400;
@@ -429,7 +418,8 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
         setActiveIndex((current) => wrappedIndex(current));
     }, [activeIndex, productCount, duplicatedProducts]);
 
-    const currentProduct = products[activeIndex % productCount];
+    const modActiveIndex = activeIndex % productCount;
+    const currentProduct = products[modActiveIndex];
 
     return (
         <CarouselContainer
@@ -443,8 +433,8 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
             <SlidesWrapper>
                 <CenterAnchor>
                     {duplicatedProducts.map((product, index) => {
-                        const angle = rotationAngle * (index - activeIndex);
-                        const isActive = index === activeIndex;
+                        const angle = rotationAngle * ((index % productCount) - modActiveIndex);
+                        const isActive = (index % productCount) === modActiveIndex;
                         const cosAngle = Math.cos((angle * Math.PI) / 180);
                         const translateY = flattened ? 0 : cosAngle * maxLiftAmount;
                         const zIndex = flattened ? 1 : cosAngle * 1000;
@@ -461,11 +451,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                                 ? 1
                                 : 0.4 + 0.5 * (1 - Math.abs(cosAngle));
 
-                        // Get front and back photo URLs. Adjust fields if needed.
-                        console.log(product);
                         const frontPhoto = product?.customFields?.variants?.[0]?.frontPhoto?.source || product.productAsset?.preview;
-                        const backPhoto = product?.customFields?.variants?.[0]?.backPhoto?.source || product.productAsset?.preview;
-                        const imageSrc = isActive && activeHover ? backPhoto : frontPhoto;
 
                         return (
                             <ProductSlide
@@ -481,16 +467,10 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                                 index={index}
                                 activeIndex={activeIndex}
                                 extraLift={extraLiftFlattened}
-                                onMouseEnter={() => {
-                                    if (isActive) setActiveHover(true);
-                                }}
-                                onMouseLeave={() => {
-                                    if (isActive) setActiveHover(false);
-                                }}
                             >
                                 <ProductImageContainer height={height}>
                                     <img
-                                        src={imageSrc}
+                                        src={frontPhoto}
                                         alt={product.productName}
                                         draggable={false}
                                         style={{

@@ -60,7 +60,7 @@ export const getStaticPaths = async () => {
 
     try {
         const { data } = await storyblokApi.get('cdn/stories', { version: 'draft' });
-        if (!data?.stories) throw new Error('No stories found');
+        if (!data?.stories) throw new Error('No content found');
 
         const paths = data.stories.map((story: StoryItem) => ({
             params: { slug: story.full_slug.split('/') },
@@ -68,7 +68,7 @@ export const getStaticPaths = async () => {
 
         return { paths, fallback: 'blocking' };
     } catch (error) {
-        console.error('Error fetching stories from Storyblok in getStaticPaths:', error);
+        console.error('Error fetching content from Storyblok in getStaticPaths:', error);
         return { paths: [], fallback: 'blocking' };
     }
 };
@@ -90,14 +90,14 @@ export const getStaticProps = async (ctx: ContextModel) => {
 
         if (isOverview) {
             const { data } = await storyblokApi.get('cdn/stories', {
-                starts_with: 'stories/articles',
+                starts_with: 'content/articles',
                 sort_by: 'published_at:desc',
                 version: 'draft',
                 per_page: 10,
                 is_startpage: false,
             });
 
-            const overviewContent = await storyblokApi.get('cdn/stories/stories/articles', { version: 'draft' });
+            const overviewContent = await storyblokApi.get('cdn/stories/content/articles', { version: 'draft' });
             const overviewStory = overviewContent?.data?.story;
 
             const articleGridProps = {
@@ -135,15 +135,15 @@ export const getStaticProps = async (ctx: ContextModel) => {
                     articleGridProps,
                     key: 'overview',
                 },
-                revalidate: 3600,
+                revalidate: 15, // Revalidate every 15 seconds
             };
         } else {
-            const apiSlug = fullSlug.startsWith('stories/') ? fullSlug : `stories/${fullSlug}`;
+            const apiSlug = fullSlug.startsWith('content/') ? fullSlug : `content/${fullSlug}`;
             const { data } = await storyblokApi.get(`cdn/stories/${apiSlug}`, { version: 'draft' });
             if (!data?.story) return { notFound: true };
 
             const relatedData = await storyblokApi.get('cdn/stories', {
-                starts_with: 'stories/articles',
+                starts_with: 'content/articles',
                 sort_by: 'published_at:desc',
                 version: 'draft',
                 per_page: 3,
@@ -175,7 +175,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
                     categories: [],
                     articleGridProps: null,
                 },
-                revalidate: 3600,
+                revalidate: 15, // Revalidate every 15 seconds
             };
         }
     } catch (error) {
