@@ -1,0 +1,178 @@
+{
+    "breadcrumbs": {
+        "home": "Home"
+    },
+    "announcements-bar": [
+        "SHOP BESTE PRODUCTEN",
+        "GRATIS VERZENDING BIJ BESTELLINGEN BOVEN €100",
+        "VEILIGE BETALING",
+        "30 DAGEN RETOURBELEID"
+    ],
+    "shop": "Demo Winkel",
+    "title": "Hallo",
+    "search-products": "Zoek producten",
+    "made-by": "Gemaakt door VendureAgency.com 2023",
+    "select-category": "Selecteer categorie",
+    "cart": "Winkelwagen",
+    "cart-summary": "Winkelwagenoverzicht",
+    "your-cart": "Jouw winkelwagen",
+    "items": "artikelen",
+    "proceed-to-checkout": "Doorgaan naar afrekenen",
+    "continue-shopping": "Verder winkelen",
+    "price": "Prijs",
+    "search-for-best-products": "Vind jouw perfecte board",
+    "discount": "Korting",
+    "discounts-errors": {
+        "coupon-code-invalid": "Kon geen kortingscode vinden met die code",
+        "something-went-wrong": "Er ging iets mis",
+        "enter-code": "Voer een code in"
+    },
+    "shipping": "Verzending",
+    "subtotal": "Subtotaal",
+    "total": "Totaal",
+    "coupon-code": "Code:",
+    "empty-cart": "Je winkelwagen is leeg",
+    "remove": "Verwijderen",
+    "add-to-cart": "Toevoegen aan winkelwagen",
+    "buy-now": "Nu kopen",
+    "featured-products": "Uitgelichte producten",
+    "best-collections": "Beste collecties",
+    "commonError": "Er is iets misgegaan",
+    "send": "Versturen",
+    "search-results": "Zoekresultaten voor:",
+    "search-results-header": "Zoekresultaten",
+    "search-results-total": "Bekijk {{totalItems}} resultaten voor <1>{{searchQuery}}</1>",
+    "search-query-to-short": "Zoekopdracht moet minimaal 3 tekens lang zijn",
+    "search-results-no-results": "Geen resultaten voor <1>{{searchQuery}}</1>",
+    "search-results-loading": "Zoekresultaten laden...",
+    "popular-searches-heading": "Populaire zoekopdrachten",
+    "cart-empty": "Je winkelwagen is leeg",
+    "select-options": "Selecteer een optie",
+    "shipping-protection": {
+        "title": "Verzendbescherming",
+        "subtitle": "Tegen schade, verlies & diefstal voor {{value}}"
+    },
+    "navigation": {
+        "manageAccount": "Account beheren",
+        "manageAddresses": "Adressen beheren",
+        "manageOrders": "Bestellingen beheren",
+        "logout": "Uitloggen"
+    },
+    "orderStates": {
+        "Created": "Aangemaakt",
+        "Draft": "Concept",
+        "AddingItems": "Artikelen toevoegen",
+        "Cancelled": "Geannuleerd",
+        "ArrangingPayment": "Betaling regelen",
+        "PaymentAuthorized": "Betaling geautoriseerd",
+        "PaymentSettled": "Betaling afgerond",
+        "PartiallyShipped": "Gedeeltelijk verzonden",
+        "Shipped": "Verzonden",
+        "PartiallyDelivered": "Gedeeltelijk geleverd",
+        "Delivered": "Geleverd",
+        "Modifying": "Wijzigen",
+        "ArrangingAdditionalPayment": "Aanvullende betaling regelen"
+    },
+    "paymentStates": {
+        "Authorized": "Geautoriseerd",
+        "Settled": "Afgerond",
+        "Declined": "Afgewezen"
+    },
+    "notifyMe": {
+        "invalidEmail": "Voer een geldig e-mailadres in",
+        "backendError": "Kon je niet abonneren, probeer het later opnieuw",
+        "placeholder": "Houd me op de hoogte"
+    },
+    "errors": {
+        "clearErrors": "Fouten wissen",
+        "backend": {
+            "UNKNOWN_ERROR": "Onbekende fout",
+            "NATIVE_AUTH_STRATEGY_ERROR": "Authenticatiefout",
+            "INVALID_CREDENTIALS_ERROR": "Ongeldige inloggegevens",
+            "ORDER_STATE_TRANSITION_ERROR": "Fout bij wijziging van bestelstatus",
+            "EMAIL_ADDRESS_CONFLICT_ERROR": "E-mailadres conflict",
+            "GUEST_CHECKOUT_ERROR": "Gastafrekenfout",
+            "ORDER_LIMIT_ERROR": "Bestellimietfout",
+            "NEGATIVE_QUANTITY_ERROR": "Negatieve hoeveelheid fout",
+            "INSUFFICIENT_STOCK_ERROR": "Onvoldoende voorraad",
+            "COUPON_CODE_INVALID_ERROR": "Ongeldige kortingscode",
+            "COUPON_CODE_EXPIRED_ERROR": "Kortingscode verlopen",
+            "COUPON_CODE_LIMIT_ERROR": "Kortingscode limiet bereikt",
+            "ORDER_MODIFICATION_ERROR": "Fout bij wijziging van bestelling",
+            "INELIGIBLE_SHIPPING_METHOD_ERROR": "Onmogelijke verzendmethode",
+            "NO_ACTIVE_ORDER_ERROR": "Geen actieve bestelling",
+            "ORDER_PAYMENT_STATE_ERROR": "Betalingsstatus fout",
+            "INELIGIBLE_PAYMENT_METHOD_ERROR": "Onmogelijke betalingsmethode",
+            "PAYMENT_FAILED_ERROR": "Betaling mislukt",
+            "PAYMENT_DECLINED_ERROR": "Betaling afgewezen",
+            "ALREADY_LOGGED_IN_ERROR": "Reeds ingelogd",
+            "MISSING_PASSWORD_ERROR": "Wachtwoord ontbreekt",
+            "PASSWORD_VALIDATION_ERROR": "Wachtwoord validatiefout",
+            "PASSWORD_ALREADY_SET_ERROR": "Wachtwoord al ingesteld",
+            "VERIFICATION_TOKEN_INVALID_ERROR": "Ongeldige verificatietoken",
+            "VERIFICATION_TOKEN_EXPIRED_ERROR": "Verificatietoken verlopen",
+            "IDENTIFIER_CHANGE_TOKEN_INVALID_ERROR": "Ongeldige wijzigingstoken",
+            "IDENTIFIER_CHANGE_TOKEN_EXPIRED_ERROR": "Wijzigingstoken verlopen",
+            "PASSWORD_RESET_TOKEN_INVALID_ERROR": "Ongeldige reset token",
+            "PASSWORD_RESET_TOKEN_EXPIRED_ERROR": "Reset token verlopen",
+            "NOT_VERIFIED_ERROR": "Niet geverifieerd"
+        },
+        "email": {
+            "required": "E-mailadres is verplicht",
+            "invalid": "Ongeldig e-mailadres"
+        },
+        "password": {
+            "required": "Wachtwoord is verplicht",
+            "minLength": "Wachtwoord moet minstens 8 tekens lang zijn",
+            "maxLength": "Wachtwoord mag niet meer dan 25 tekens lang zijn",
+            "mustDifferent": "Wachtwoord moet anders zijn dan het huidige"
+        },
+        "confirmPassword": {
+            "required": "Bevestig wachtwoord is verplicht",
+            "mustMatch": "Wachtwoorden moeten overeenkomen"
+        },
+        "firstName": {
+            "required": "Voornaam is verplicht"
+        },
+        "lastName": {
+            "required": "Achternaam is verplicht"
+        },
+        "phoneNumber": {
+            "required": "Telefoonnummer is verplicht"
+        }
+    },
+    "footer": {
+        "notify": {
+            "header": "Blijf stralend!",
+            "paragraph": "Meld je aan voor exclusieve aanbiedingen & beauty tips",
+            "placeholder": "email@voorbeeld.com",
+            "alert": "Meldingen ontvangen!"
+        },
+        "sections": [
+            {
+                "header": "Essentiële huidverzorging",
+                "linksTitles": ["Gezichtsverzorging", "Lichaamsverzorging"]
+            },
+            {
+                "header": "Haarverzorging & meer",
+                "linksTitles": ["Hoofdhuid & haargezondheid", "Lippenbalsem"]
+            },
+            {
+                "header": "Ontspanning & vernieuwing",
+                "linksTitles": ["Voetverzorging", "Lichaamsbehandelingen"]
+            }
+        ],
+        "law": [
+            { "name": "Over ons", "href": "/about" },
+            { "name": "Privacybeleid", "href": "/privacy" },
+            { "name": "Algemene voorwaarden", "href": "/terms" }
+        ]
+    },
+    "picker": {
+        "ship-to-country": "Verzend naar land",
+        "change-language": "Wijzig taal",
+        "save": "Opslaan",
+        "cancel": "Annuleren",
+        "detected": "We detecteerden je locatie als <1>{{country}}</1>, wil je doorgaan met de geselecteerde opties?"
+    }
+}

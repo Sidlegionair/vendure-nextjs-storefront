@@ -16,25 +16,32 @@ const StoryPage = ({
                        articles = [],
                        articleGridProps,
                        contentAboveGrid = [],
-                       contentBelowGrid = []
+                       contentBelowGrid = [],
                    }: StoryPageProps) => {
-
     console.log("Story received in StoryPage:", story);
     console.log("Number of articles:", articles.length);
-    console.log(contentAboveGrid);
+    console.log("Content above grid:", contentAboveGrid);
 
-    // Check if both story content and articles are missing
-    if (!story?.content && articles.length === 0) {
-        console.warn("Story content and articles are missing or incorrectly structured");
+    const hasStoryContent = !!story?.content;
+    const hasArticles = articles.length > 0;
+
+    // Handle missing story and articles
+    if (!hasStoryContent && !hasArticles) {
+        console.warn("Both story content and articles are missing or incorrectly structured");
         return (
             <Layout navigation={navigation} categories={categories} pageTitle="Story not found">
-                <div>Story not found</div>
+                <div className="story-not-found">Story not found</div>
             </Layout>
         );
     }
 
     return (
-        <Layout navigation={navigation} subnavigation={subnavigation} categories={categories} pageTitle={story?.name || 'Boardrush'}>
+        <Layout
+            navigation={navigation}
+            subnavigation={subnavigation}
+            categories={categories}
+            pageTitle={story?.name || 'Boardrush'}
+        >
             <Head>
                 <title>{story?.name || 'Boardrush'}</title>
             </Head>
@@ -49,7 +56,7 @@ const StoryPage = ({
             )}
 
             {/* Render the Grid if there are articles */}
-            {articles.length > 0 && (
+            {hasArticles && articleGridProps && (
                 <div className="article-grid">
                     <StoryblokComponent blok={articleGridProps} />
                 </div>
@@ -64,8 +71,8 @@ const StoryPage = ({
                 </div>
             )}
 
-            {/* Render the main story component only if articles are not present */}
-            {articles.length === 0 && story?.content && (
+            {/* Render the Main Story Component */}
+            {!hasArticles && hasStoryContent && (
                 <StoryblokComponent blok={story.content} articles={relatedArticles} />
             )}
         </Layout>

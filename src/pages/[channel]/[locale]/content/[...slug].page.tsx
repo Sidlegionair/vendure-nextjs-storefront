@@ -1,25 +1,22 @@
-// pages/content/[...slug].tsx
+// pages/[channel]/[locale]/content/[...slug].tsx
 
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
-import {
-    GetStaticProps,
-    GetStaticPaths,
-    InferGetStaticPropsType,
-} from 'next';
+import { GetStaticProps, GetStaticPaths, InferGetStaticPropsType } from 'next';
+import Head from 'next/head';
+import { StoryblokComponent, SbBlokData } from "@storyblok/react";
 import StoryPage from '@/src/components/pages/storyblok/index';
+// import Layout from '@/src/components/Layout'; // Ensure correct import
 import { ContextModel, makeStaticProps } from '@/src/lib/getStatic';
-import { DEFAULT_LOCALE, DEFAULT_CHANNEL } from '@/src/lib/consts';
+import { channels, DEFAULT_LOCALE } from '@/src/lib/consts';
 import { fetchStory, fetchNavigation, fetchRelatedArticles } from '@/src/lib/storyblok';
 import { getStoryblokApi } from '@storyblok/react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { arrayToTree, RootNode } from '@/src/util/arrayToTree';
 import { NavigationType } from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
-import { arrayToTree, RootNode } from '@/src/util/arrayToTree';
 import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
-import { SSGQuery } from '@/src/graphql/client';
 
-// Define the StoryItem interface
 interface StoryItem {
     id: string;
     name: string;
@@ -32,7 +29,6 @@ interface StoryItem {
 }
 
 const StoryPageWrapper = ({
-                              slug,
                               story,
                               relatedArticles,
                               navigation,
@@ -45,6 +41,7 @@ const StoryPageWrapper = ({
                               contentBelowGrid,
                               locale,
                               channel,
+                              slug,
                           }: InferGetStaticPropsType<typeof getStaticProps>) => {
     const { i18n } = useTranslation();
 
@@ -78,13 +75,15 @@ export default StoryPageWrapper; // Removed appWithTranslation
 
 export const getStaticPaths: GetStaticPaths = async () => {
     try {
-        // Fetch all stories from Storyblok
         const { data } = await fetchStoryblokStories();
 
         if (!data?.stories) throw new Error('No content found');
 
+        const shippingLocales = channels.map((channel) => channel.slug); // e.g., ['en', 'nl']
+        const contentLocales = ['en', 'nl']; // Content locales
+
         const paths: {
-            params: { slug: string[] };
+            params: { channel: string; locale: string; slug: string[] };
         }[] = [];
 
         data.stories.forEach((story: StoryItem) => {
@@ -92,18 +91,27 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
             const slugParts = story.full_slug.split('/').slice(1); // Remove 'content'
 
-            // Since route does not include [channel] or [locale], generate paths based solely on slug
-            paths.push({
-                params: { slug: slugParts },
+            contentLocales.forEach((contentLocale) => {
+                shippingLocales.forEach((shippingLocale) => {
+                    paths.push({
+                        params: {
+                            channel: shippingLocale,
+                            locale: contentLocale,
+                            slug: slugParts,
+                        },
+                    });
+                    console.log(
+                        `Generated path: /${shippingLocale}/${contentLocale}/content/${slugParts.join('/')}`
+                    );
+                });
             });
-            console.log(`Generated path: /content/${slugParts.join('/')}`);
         });
 
-        console.log(`Total paths generated for /content/[...slug]: ${paths.length}`);
+        console.log(`Total paths generated for /[channel]/[locale]/content/[...slug]: ${paths.length}`);
 
         return { paths, fallback: 'blocking' };
     } catch (error) {
-        console.error('Error fetching content from Storyblok in getStaticPaths for /content/[...slug]:', error);
+        console.error('Error fetching content from Storyblok in getStaticPaths for /[channel]/[locale]/content/[...slug]:', error);
         return { paths: [], fallback: 'blocking' };
     }
 };
@@ -124,15 +132,32 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
         ...context,
         params: { ...context.params, slug: lastIndexSlug },
     };
-    // Since this route does not include [locale] or [channel], use default values
-    const locale = DEFAULT_LOCALE;
-    const channel = DEFAULT_CHANNEL; // Adjust based on your DEFAULT_CHANNEL structure
+
+    const r = await makeStaticProps(['common', 'homepage'])(_context);
+    const collections = await getCollections(r.context);
+    const navigation = arrayToTree(collections);
+
+    // Append main and sub-navigation from menuConfig
+    navigation.children.unshift(...mainNavigation);
+    const subnavigation = {
+        children: [...subNavigation],
+    };
+
+    const { channel, locale } = context.params as {
+        channel: string;
+        locale: string;
+        slug?: string[];
+    };
 
     // Debugging: Log received parameters
-    console.log('Parameters received in getStaticProps for /content/[...slug]:', { locale, channel, slug });
+    console.log('Parameters received in getStaticProps for /[channel]/[locale]/content/[...slug]:', {
+        channel,
+        locale,
+        slug,
+    });
 
-    if (!slug) {
-        console.log('Missing parameters:', { locale, channel, slug });
+    if (!channel || !locale || !slug) {
+        console.log('Missing parameters:', { channel, locale, slug });
         return { notFound: true };
     }
 
@@ -153,16 +178,6 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
         }
 
         console.log('Story found:', story.name);
-
-        const r = await makeStaticProps(['common', 'collections'])(_context);
-        const collections = await getCollections(r.context);
-        const navigation = arrayToTree(collections);
-
-        // Append main and sub-navigation from menuConfig
-        navigation.children.unshift(...mainNavigation);
-        const subnavigation = {
-            children: [...subNavigation],
-        };
 
         // Fetch related articles using the utility function
         const relatedArticles = await fetchRelatedArticles(locale, story.id);
@@ -187,10 +202,10 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
                 locale: locale || DEFAULT_LOCALE,
                 isOverview: false,
             },
-            revalidate: process.env.NEXT_REVALIDATE ? parseInt(process.env.NEXT_REVALIDATE) : 10,
+            revalidate: process.env.NEXT_REVALIDATE ? parseInt(process.env.NEXT_REVALIDATE) : 1,
         };
     } catch (error) {
-        console.error('Error fetching Storyblok data in getStaticProps for /content/[...slug]:', error);
+        console.error('Error fetching Storyblok data in getStaticProps for /[channel]/[locale]/content/[...slug]:', error);
         return { notFound: true };
     }
 };

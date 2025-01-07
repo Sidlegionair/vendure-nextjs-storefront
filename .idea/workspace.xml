@@ -5,7 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/lib/menuConfig.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/menuConfig.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/locales/nl/checkout.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/locales/nl/collections.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/locales/nl/common.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/locales/nl/customer.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/locales/nl/homepage.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/locales/nl/products.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/storyblok.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/[channel]/[locale]/content/[...slug].page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pages/[channel]/content/[...slug].page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/next-i18next.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/next-i18next.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/next.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/storyblok/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/storyblok/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphql/selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/selectors.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/consts.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/consts.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/content/[...slug].page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/content/[...slug].page.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +55,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/floris/PhpstormProjects/one-click-deploy",
+    "last_opened_file_path": "/home/floris/PhpstormProjects/vendure-nextjs-storefront/src/pages/[channel]",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -57,6 +72,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/pages/[channel]" />
+      <recent name="$PROJECT_DIR$/src/pages/[channel]/[locale]" />
+      <recent name="$PROJECT_DIR$/public/locales/nl" />
       <recent name="$PROJECT_DIR$/src/components/storyblok" />
       <recent name="$PROJECT_DIR$/public/images/bg" />
     </key>
@@ -101,7 +119,7 @@
       <workItem from="1734509930810" duration="31841000" />
       <workItem from="1734694480287" duration="2587000" />
       <workItem from="1734697391141" duration="5490000" />
-      <workItem from="1736243740258" duration="15171000" />
+      <workItem from="1736243740258" duration="28674000" />
     </task>
     <servers />
   </component>

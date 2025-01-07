@@ -4,7 +4,7 @@
  * @type {import('next-i18next').UserConfig}
  */
 module.exports = {
-    // https://www.i18next.com/overview/configuration-options#logging
+    // Previous configuration commented out
     // i18n: {
     //     defaultLocale: 'pl',
     //     locales: ['pl', 'de', 'cz'],
@@ -12,8 +12,8 @@ module.exports = {
     //     fallbackLng: 'pl',
     // },
     i18n: {
-        defaultLocale: 'nl',
-        locales: ['en', 'pl', 'fr', 'de', 'ja', 'es', 'nl'],
+        defaultLocale: 'en',
+        locales: ['en', 'nl'],
         returnObjects: true,
         fallbackLng: 'en',
     },

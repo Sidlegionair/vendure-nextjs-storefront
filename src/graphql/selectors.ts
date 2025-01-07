@@ -24,7 +24,6 @@ export type NavigationType = CollectionTileType & {
 };
 
 
-
 export type FiltersFacetType = FacetType & { values: (FacetType & { count: number })[] };
 
 export const ProductTileSelector = Selector('Product')({

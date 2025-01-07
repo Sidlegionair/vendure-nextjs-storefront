@@ -10,6 +10,12 @@ const nextConfig = {
     images: {
         domains: ['a.storyblok.com'], // Allows images from Storyblok CDN
     },
+    // i18n: {
+    //     locales: ['en', 'nl'], // Supported content locales
+    //     defaultLocale: 'nl', // Default locale
+    //     // localeDetection: false, // Disable automatic locale detection
+    // },
+
     // async rewrites() {
     //     return [
     //         // Catch-all fallback to Storyblok for unmatched routes
