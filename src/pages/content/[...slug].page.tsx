@@ -135,7 +135,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
                     articleGridProps,
                     key: 'overview',
                 },
-                revalidate: 15, // Revalidate every 15 seconds
+                revalidate: 1, // Revalidate every 1 seconds
             };
         } else {
             const apiSlug = fullSlug.startsWith('content/') ? fullSlug : `content/${fullSlug}`;
@@ -175,7 +175,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
                     categories: [],
                     articleGridProps: null,
                 },
-                revalidate: 15, // Revalidate every 15 seconds
+                revalidate: 1, // Revalidate every 1 seconds
             };
         }
     } catch (error) {
