@@ -15,7 +15,7 @@ export const ProductCard: React.FC<{ variant: CollectionTileProductVariantType }
     if (!asset) return null;
     return (
         <Stack column gap="1rem">
-            <Link href={`/products/${variant.product.slug}?variant=${variant.id}`}>
+            <Link href={`/snowboards/${variant.product.slug}?variant=${variant.id}`}>
                 <ProductImage src={asset} alt={variant.name} title={variant.name} />
             </Link>
             <Stack gap="0.5rem" justifyBetween>

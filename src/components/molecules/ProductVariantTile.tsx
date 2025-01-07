@@ -84,10 +84,10 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
     return (
         <TileContainer>
             <ProductImageWrapper src={getOptimizedSrc(src) as string}>
-                <ImageLink href={`/products/${variant.product.slug}?variant=${variant.id}`} />
+                <ImageLink href={`/snowboards/${variant.product.slug}?variant=${variant.id}`} />
             </ProductImageWrapper>
             <ContentWrapper>
-                <TextWrapper href={`/products/${variant.product.slug}?variant=${variant.id}`}>
+                <TextWrapper href={`/snowboards/${variant.product.slug}?variant=${variant.id}`}>
                     <Stack gap="7px">
                         {typeof variant.product.customFields?.brand === 'string' && (
                             <BrandName size="18px" weight={700} noWrap>

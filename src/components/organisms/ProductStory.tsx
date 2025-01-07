@@ -17,7 +17,7 @@ export const ProductStory: React.FC<ProductStoryProps> = ({ slug }) => {
         const fetchProductStory = async () => {
             const storyblokApi = getStoryblokApi();
             try {
-                const { data } = await storyblokApi.get(`cdn/stories/products/${slug}`);
+                const { data } = await storyblokApi.get(`cdn/stories/snowboards/${slug}`);
                 if (isMounted) {
                     setStoryContent(data?.story?.content || null);
                     setError(null); // Clear any previous errors

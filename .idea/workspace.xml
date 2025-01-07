@@ -7,9 +7,13 @@
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/storyblok/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/storyblok/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/menuConfig.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/menuConfig.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/stories/[...slug].page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/content/[...slug].page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/NavgationSearch/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/NavgationSearch/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/collections/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/collections/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/home/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/home/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/search/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/search/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/products/[slug].page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/snowboards/[slug].page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/state/collection/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/state/collection/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +109,7 @@
       <workItem from="1734509930810" duration="31841000" />
       <workItem from="1734694480287" duration="2587000" />
       <workItem from="1734697391141" duration="5490000" />
-      <workItem from="1736243740258" duration="1173000" />
+      <workItem from="1736243740258" duration="3987000" />
     </task>
     <servers />
   </component>

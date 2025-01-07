@@ -38,7 +38,7 @@ export const ProductsSellout: React.FC<{
                         title: variant.product.name,
                         variant: optionInName ? variant.name : undefined,
                         image: variant.product.featuredAsset?.preview || '',
-                        href: `/products/${variant.product.slug}`,
+                        href: `/snowboards/${variant.product.slug}`,
                         price: variant.priceWithTax,
                         currencyCode: variant.currencyCode,
                     };

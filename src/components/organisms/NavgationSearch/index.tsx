@@ -65,7 +65,7 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                             }
                         }}
                         ref={inputRef}
-                        placeholder={t('search-for-best-products')}
+                        placeholder={t('search-for-best-snowboards')}
                         value={searchQuery}
                         onFocus={handleFocus}
                         onChange={e => {
@@ -122,7 +122,7 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                                                     <ProductImageWithInfo
                                                         size="thumbnail-big"
                                                         imageSrc={result.productAsset?.preview}
-                                                        href={`/products/${result.slug}`}
+                                                        href={`/snowboards/${result.slug}`}
                                                     />
                                                     <Stack itemsCenter column gap="0.5rem">
                                                         <MobileText size="1.8rem" weight={500}>

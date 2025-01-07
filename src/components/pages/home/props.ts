@@ -15,10 +15,10 @@ export const getStaticProps = async (ctx: ContextModel) => {
     const r = await makeStaticProps(['common', 'homepage'])(ctx);
     const api = SSGQuery(r.context);
 
-    // Specify collection slug for main products (optional)
+    // Specify collection slug for main snowboards (optional)
     const mainProductCollectionSlug = process.env.MAIN_PRODUCTS_COLLECTION_SLUG || 'carousel-snowboards';
 
-    // Fetch main products, optionally filtering by collection slug
+    // Fetch main snowboards, optionally filtering by collection slug
     const mainProductsQuery = {
         input: {
             take: 15,

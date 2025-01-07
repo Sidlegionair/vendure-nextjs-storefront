@@ -32,7 +32,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
     });
     if (!collection) return { notFound: true };
 
-    // Fetch products
+    // Fetch snowboards
     const productsQuery = await api({
         search: [
             {
@@ -75,7 +75,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
         })
     );
 
-    // Map brands to products
+    // Map brands to snowboards
     const productsWithBrands = productsQuery.search.items.map(product => {
         const matchingBrandData = brandData.find(brand => brand.id === product.productId);
         if (!matchingBrandData) {

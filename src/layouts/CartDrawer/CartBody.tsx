@@ -35,7 +35,7 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
                                 <Stack gap="2rem">
                                     <ProductImageWithInfo
                                         size="thumbnail-big"
-                                        href={`/products/${productVariant.product.slug}`}
+                                        href={`/snowboards/${productVariant.product.slug}`}
                                         imageSrc={featuredAsset?.preview}
                                     />
                                     <Stack column gap={18}>

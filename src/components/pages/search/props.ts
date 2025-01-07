@@ -71,7 +71,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         sort: sort.key === 'title' ? { name: sort.direction } : { price: sort.direction },
     };
 
-    // Fetch products
+    // Fetch snowboards
     const productsQuery = await api({
         search: [{ input }, { items: ProductSearchSelector, totalItems: true }],
     });
@@ -104,7 +104,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         })
     );
 
-    // Map brands to products
+    // Map brands to snowboards
     const productsWithBrands = productsQuery.search.items.map(product => {
         const matchingBrandData = brandData.find(brand => brand.id === product.productId);
         if (!matchingBrandData) {
@@ -127,7 +127,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         navigation,
         subnavigation,
         collection,
-        products: productsWithBrands, // Use products with brands
+        products: productsWithBrands, // Use snowboards with brands
         totalProducts: productsQuery.search.totalItems,
         filters,
         searchQuery: q,

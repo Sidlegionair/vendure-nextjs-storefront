@@ -12,7 +12,7 @@ import { ProductOptions } from '@/src/components/organisms/ProductOptions';
 import { Breadcrumbs } from '@/src/components/molecules';
 import { useProduct } from '@/src/state/product';
 import { ProductPhotosPreview } from '@/src/components/organisms/ProductPhotosPreview';
-import { getStaticProps } from '@/src/components/pages/products/props';
+import { getStaticProps } from '@/src/components/pages/snowboards/props';
 import { storefrontApiQuery } from '@/src/graphql/client';
 import { useChannels } from '@/src/state/channels';
 import { ProductVariantTileType, productVariantTileSelector } from '@/src/graphql/selectors';
@@ -41,7 +41,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
 
     const breadcrumbs = [
         { name: breadcrumb('breadcrumbs.home'), href: '/' },
-        { name: props.product.name, href: `/products/${props.product.slug}` },
+        { name: props.product.name, href: `/snowboards/${props.product.slug}` },
     ];
 
     const [recentlyProducts, setRecentlyProducts] = useState<ProductVariantTileType[]>([]);

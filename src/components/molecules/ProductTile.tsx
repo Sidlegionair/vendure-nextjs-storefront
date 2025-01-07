@@ -53,7 +53,7 @@ export const ProductTile: React.FC<{
     return (
         <Main column gap="1rem">
             <Stack style={{ position: 'relative', maxWidth: '32rem' }}>
-                <Link href={`/products/${product.slug}/`}>
+                <Link href={`/snowboards/${product.slug}/`}>
                     <ProductImage
                         loading={lazy ? 'lazy' : undefined}
                         src={src}
@@ -63,7 +63,7 @@ export const ProductTile: React.FC<{
                 </Link>
             </Stack>
             <Stack column gap="0.75rem">
-                <TextWrapper href={`/products/${product.slug}/`}>
+                <TextWrapper href={`/snowboards/${product.slug}/`}>
                     <Stack gap="0.5rem">
                         {brand && (
                             <Brand size="20px" weight={700} noWrap>

@@ -85,7 +85,7 @@ const useCollectionContainer = createContainer<
         fetchBrandData();
     }, [products, ctx]);
 
-    // Enrich products
+    // Enrich snowboards
     const enrichedProducts: EnrichedProductType[] = useMemo(() => {
         if (!facetValues.length && !brandData.length) return products;
 
@@ -134,7 +134,7 @@ const useCollectionContainer = createContainer<
         }
         url.searchParams.set('page', '1'); // Reset to page 1 on filter change
 
-        // Update state and fetch filtered products
+        // Update state and fetch filtered snowboards
         setFilters(newState);
         window.history.pushState({}, '', url.toString());
         await getFilteredProducts(newState, 1, sort, q);
@@ -158,14 +158,14 @@ const useCollectionContainer = createContainer<
         }
         url.searchParams.set('page', '1'); // Reset to page 1 on filter change
 
-        // Update state and fetch filtered products
+        // Update state and fetch filtered snowboards
         setFilters(newState);
         window.history.pushState({}, '', url.toString());
         await getFilteredProducts(newState, 1, sort, q);
     };
 
 
-    // Fetch filtered products
+    // Fetch filtered snowboards
     const getFilteredProducts = async (
         state: { [key: string]: string[] },
         page: number,

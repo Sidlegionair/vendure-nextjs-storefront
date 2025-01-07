@@ -500,7 +500,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                                 <b>{currentProduct?.customFields?.brand}</b>
                                 {currentProduct?.productName} ({currentProduct?.productVariantName})
                             </ProductTitle>
-                            <Link href={`/products/${currentProduct?.slug}`} passHref>
+                            <Link href={`/snowboards/${currentProduct?.slug}`} passHref>
                                 <StockButton inStock={currentProduct?.inStock}>
                                     {currentProduct?.inStock ? 'In Stock' : 'Out of Stock'}
                                 </StockButton>
