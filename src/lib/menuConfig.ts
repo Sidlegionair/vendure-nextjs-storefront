@@ -72,15 +72,6 @@ export const subNavigation: NavigationItemType[] = [
         children: [],
     },
     {
-        name: 'Sustainable',
-        id: 'none',
-        parentId: '1',
-        slug: 'content/sustainable',
-        description: '',
-        productVariants: emptyProductVariants, // Use default empty structure
-        children: [],
-    },
-    {
         name: 'Brands',
         id: 'none',
         parentId: '1',
