@@ -1,28 +1,28 @@
 import styled from '@emotion/styled';
 import React from 'react';
+import { useRouter } from 'next/router';
 import { Stack, Link, ContentContainer } from '@/src/components/atoms';
 import { RootNode } from '@/src/util/arrayToTree';
 import { NavigationType } from '@/src/graphql/selectors';
 import { NavigationLinks } from './NavigationLinks';
 import { ProductsSellout } from './ProductsSellout';
-import { RelatedCollections } from './RelatedCollections';
 import { useTranslation } from 'next-i18next';
 import { useCart } from '@/src/state/cart';
 
 interface NavProps {
     navigation: RootNode<NavigationType> | null;
-    gap?: number; // Restricting to number for simplicity
+    gap?: number;
     isSubMenu?: boolean;
 }
 
 export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, isSubMenu = false }) => {
     const { t } = useTranslation('common');
     const { addToCart } = useCart();
+    const router = useRouter();
 
     const StackComponent = isSubMenu ? SubMenuStack : DesktopStack;
 
-    // Define the mapping for numbers to rem strings
-    const gapMapping: Record<number, '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3.125rem' | '3.75rem' | '5rem'> = {
+    const gapMapping: Record<number, string> = {
         10: '0.125rem',
         20: '0.25rem',
         30: '0.5rem',
@@ -32,33 +32,61 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
         70: '1.75rem',
         80: '2rem',
         90: '2.5rem',
-        100: '5rem'
+        100: '5rem',
     };
 
-
-    // Get the gap value from mapping or undefined
     const gapValue = gapMapping[gap] || undefined;
+
+    const isActiveLink = (href: string): boolean => {
+        const currentPath = router.asPath.split(/[?#]/)[0]; // Remove query params and fragments
+        const normalizedHref = href.replace(/\/$/, ''); // Remove trailing slash
+        const normalizedPath = currentPath.replace(/\/$/, ''); // Remove trailing slash
+
+        // Remove locale prefixes from the path (e.g., /nl/en or /en)
+        const removeLocalePrefix = (path: string): string => {
+            return path.replace(/^\/(nl|en|de|fr|es)(\/(nl|en|de|fr|es))?/, '');
+        };
+
+        const cleanPath = removeLocalePrefix(normalizedPath) || '/';
+        const cleanHref = removeLocalePrefix(normalizedHref) || '/';
+
+        // Exact match for Home
+        if (cleanHref === '/' && cleanPath === '/') {
+            return true;
+        }
+
+        // Partial match for other paths
+        return cleanHref !== '/' && cleanPath.startsWith(cleanHref);
+    };
+
 
     return (
         <StackComponent itemsCenter gap={gapValue}>
             {navigation?.children.map((collection) => {
-                const href = collection.id === 'none'
-                    ? `/${collection.slug}`
-                    : collection.parent?.slug !== '__root_collection__'
-                        ? `/collections/${collection.parent?.slug}/${collection.slug}`
-                        : `/collections/${collection.slug}`;
+                const href =
+                    collection.id === 'none'
+                        ? `/${collection.slug}`
+                        : collection.parent?.slug !== '__root_collection__'
+                            ? `/collections/${collection.parent?.slug}/${collection.slug}`
+                            : `/collections/${collection.slug}`;
+
+                const isActive = isActiveLink(href);
 
                 if (!collection.children || collection.children.length === 0) {
                     return (
                         <RelativeStack w100 key={collection.name}>
-                            <StyledLink href={href} isSubMenu={isSubMenu}>{collection.name}</StyledLink>
+                            <StyledLink href={href} isSubMenu={isSubMenu} isActive={isActive}>
+                                {collection.name}
+                            </StyledLink>
                         </RelativeStack>
                     );
                 }
 
                 return (
                     <RelativeStack w100 key={collection.name}>
-                        <StyledLink href={href} isSubMenu={isSubMenu}>{collection.name}</StyledLink>
+                        <StyledLink href={href} isSubMenu={isSubMenu} isActive={isActive}>
+                            {collection.name}
+                        </StyledLink>
                         <AbsoluteStack w100>
                             <ContentContainer>
                                 <Background w100 justifyBetween>
@@ -70,7 +98,6 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
                                             addToCartLabel={t('add-to-cart')}
                                             collection={collection}
                                         />
-                                        {/*<RelatedCollections title={t('best-collections')} collection={collection} />*/}
                                     </ProductSelloutWrapper>
                                 </Background>
                             </ContentContainer>
@@ -82,82 +109,65 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
     );
 };
 
-const DesktopStack = styled(Stack)<{ gap?: number | '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3.125rem' | '3.75rem' | '5rem'}>`
+const StyledLink = styled(Link)<{ isSubMenu?: boolean; isActive?: boolean }>`
+    color: ${p => (p.isActive ? p.theme.text.accent : p.theme.text.main)} !important;
+    text-decoration: ${p => (p.isActive ? 'underline' : 'none')};
+    text-underline-offset: 4px;
+
+    &:hover {
+        color: ${p => p.theme.text.accent};
+        text-decoration: underline;
+    }
+
+    display: flex;
+    align-items: start;
+    font-weight: ${p => (p.isSubMenu ? 400 : 600)};
+    font-size: ${p => (p.isSubMenu ? '18px' : '20px')};
+    line-height: ${p => (p.isSubMenu ? '18px' : '20px')};
+
+    @media (max-width: ${p => p.theme.breakpoints.md}) {
+        font-size: 16px;
+    }
+
+    @media (max-width: ${p => p.theme.breakpoints.sm}) {
+        font-size: 14px;
+    }
+`;
+
+const DesktopStack = styled(Stack)`
     @media (max-width: ${p => p.theme.breakpoints.md}) {
         display: flex;
         flex-direction: column;
         font-size: 20px;
         font-weight: 600;
         padding: 30px;
-        gap: ${({ gap }) => (typeof gap === 'number' ? `${gap}px` : gap)};
-
-        div {
-            display: flex;
-            flex-direction: row;
-            justify-self: start;
-        }
     }
     z-index: 9999;
 `;
 
-const ProductSelloutWrapper = styled(Stack)`
-    max-width: 50%;
-    overflow: hidden;
-`
-
-const Background = styled(Stack)`
-    //left: 40vw;
-    height: 100%;
-    background: ${p => p.theme.background.main};
-    box-shadow: 0px 0px 12px ${p => p.theme.shadow};
-    border: 1px solid ${p => p.theme.gray(100)};
-    margin-top: 4rem;
-    padding: 40px;
+const SubMenuStack = styled(Stack)`
+    position: relative;
+    z-index: 5;
+    width: fit-content;
+    display: flex;
+    gap: ${({ gap }) => gap || '100px'};
 
     @media (max-width: ${p => p.theme.breakpoints.md}) {
-        margin-top: 2rem;
-        padding: 20px;
-    }
-
-    @media (max-width: ${p => p.theme.breakpoints.sm}) {
-        margin-top: 1rem;
-        padding: 10px;
+        flex-wrap: wrap;
+        gap: 50px;
+        font-size: 14px;
     }
 `;
 
 const RelativeStack = styled(Stack)`
-    position: relative; // Ensure stacking context
+    position: relative;
     z-index: 10;
     width: fit-content;
-    
-    & > div {
-        
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-        position: absolute;
-        top: 100%;
-        left: 17vw;
-        @media(max-width: 1300px) {
-            left: 20vw;
-        }
-        transform: translateX(-50%) translateY(-1rem); // Initial state off-screen
-        transition: all 0.35s ease-in-out;
-    }
 
-    &:hover {
-        & > a {
-            color: ${p => p.theme.text.main};
-            text-decoration: underline;
-            text-decoration-thickness: 0.1rem;
-            text-underline-offset: 0.5rem;
-        }
-        & > div {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(-50%) translateY(0); // Dropdown is visible
-            pointer-events: all;
-        }
+    &:hover > a {
+        color: ${p => p.theme.text.main};
+        text-decoration: underline;
+        text-underline-offset: 0.5rem;
     }
 `;
 
@@ -169,81 +179,28 @@ const AbsoluteStack = styled(Stack)`
     transform: translateX(-50%);
     margin-top: 0;
     transition: all 0.35s ease-in-out;
-    width: auto; // Dynamically adjust to content
-    min-width: 200px;
-    max-width: 70vw; // Responsive constraint for smaller screens
     overflow: visible;
 
     @media (max-width: ${p => p.theme.breakpoints.sm}) {
         left: 0;
-        transform: translateX(0); // Align left for smaller screens
-        max-width: 100%; // Ensure full width on small screens
-    }
-
-    &::before {
-        content: '';
-        position: absolute;
-        top: -10px;
-        left: 0;
-        width: 100%;
-        height: 10px;
-        z-index: 15;
+        transform: translateX(0);
     }
 `;
 
-
-const SubMenuStack = styled(Stack)<{ gap?: number | '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3.125rem' | '3.75rem' | '5rem' }>`
-    position: relative;
-    z-index: 5;
-    width: fit-content;
-    display: flex;
-    justify-content: flex-start;
-    gap: ${({ gap }) => (typeof gap === 'number' ? `${gap}px` : gap)};
-    font-size: 16px;
-    font-weight: 400;
-    align-items: center; // Ensures vertical alignment of items
-
-    // Add a default gap of 200px if none is provided
-    gap: ${({ gap }) => gap || '100px'};
-
-    @media (max-width: ${p => p.theme.breakpoints.md}) {
-        flex-wrap: wrap; // Allow wrapping for smaller screens
-        gap: 50px; // Adjust gap for smaller screens
-        font-size: 14px;
-    }
-
-    @media (max-width: ${p => p.theme.breakpoints.sm}) {
-        padding: 30px;
-        flex-direction: column; // Stack links vertically on small screens
-        gap: 20px;
-        font-size: 12px;
-    }
+const ProductSelloutWrapper = styled(Stack)`
+    max-width: 50%;
+    overflow: hidden;
 `;
 
-const StyledLink = styled(Link)<{ isSubMenu?: boolean }>`
-    color: ${p => p.theme.text.main} !important;
-    display: flex;
-    align-items: start;
-    //justify-content: center;
-    //white-space: nowrap;
-    //font-style: normal;
-
-    // Desktop defaults
-    font-weight: ${p => (p.isSubMenu ? 400 : 600)};
-    font-size: ${p => (p.isSubMenu ? '18px' : '20px')};
-    line-height: ${p => (p.isSubMenu ? '18px' : '20px')};
-    text-decoration: none;
-
-    &:hover {
-        text-decoration: underline;
-        text-underline-offset: 4px;
-    }
+const Background = styled(Stack)`
+    background: ${p => p.theme.background.main};
+    box-shadow: 0px 0px 12px ${p => p.theme.shadow};
+    border: 1px solid ${p => p.theme.gray(100)};
+    margin-top: 4rem;
+    padding: 40px;
 
     @media (max-width: ${p => p.theme.breakpoints.md}) {
-        font-size: 16px;
-    }
-
-    @media (max-width: ${p => p.theme.breakpoints.sm}) {
-        font-size: 14px;
+        margin-top: 2rem;
+        padding: 20px;
     }
 `;
