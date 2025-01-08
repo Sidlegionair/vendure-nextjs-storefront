@@ -161,6 +161,36 @@ export const Picker: React.FC<{
                         </Header>
                         <StyledForm onSubmit={handleSubmit(onSubmit)}>
                             <Controller
+                                name="locale"
+                                control={control}
+                                render={({ field: { value, onChange } }) => (
+                                    <Dropdown
+                                        items={
+                                            channels
+                                                .find(c => c.nationalLocale === watch('channel'))
+                                                ?.locales.map(l => {
+                                                return {
+                                                    key: l,
+                                                    children: (
+                                                        <LocaleInList itemsCenter gap="1rem">
+                                                            {getFlagByCode(l)}
+                                                        </LocaleInList>
+                                                    ),
+                                                };
+                                            }) ?? []
+                                        }
+                                        placeholder={t('picker.change-language')}
+                                        setSelected={onChange}
+                                        selected={value}
+                                        renderSelected={value => (
+                                            <LocaleInList w100 gap="1rem" style={{ marginTop: '0.25rem' }}>
+                                                {getFlagByCode(value)}
+                                            </LocaleInList>
+                                        )}
+                                    />
+                                )}
+                            />
+                            <Controller
                                 name="channel"
                                 control={control}
                                 render={({ field: { value, onChange } }) => (
@@ -194,36 +224,7 @@ export const Picker: React.FC<{
                                     />
                                 )}
                             />
-                            <Controller
-                                name="locale"
-                                control={control}
-                                render={({ field: { value, onChange } }) => (
-                                    <Dropdown
-                                        items={
-                                            channels
-                                                .find(c => c.nationalLocale === watch('channel'))
-                                                ?.locales.map(l => {
-                                                return {
-                                                    key: l,
-                                                    children: (
-                                                        <LocaleInList itemsCenter gap="1rem">
-                                                            {getFlagByCode(l)}
-                                                        </LocaleInList>
-                                                    ),
-                                                };
-                                            }) ?? []
-                                        }
-                                        placeholder={t('picker.change-language')}
-                                        setSelected={onChange}
-                                        selected={value}
-                                        renderSelected={value => (
-                                            <LocaleInList w100 gap="1rem" style={{ marginTop: '0.25rem' }}>
-                                                {getFlagByCode(value)}
-                                            </LocaleInList>
-                                        )}
-                                    />
-                                )}
-                            />
+
                             <WhiteStyledButton type="submit">{t('picker.save')} </WhiteStyledButton>
                             <WhiteStyledButton type="button" onClick={() => setIsOpen(false)}>
                                 {t('picker.cancel')}
