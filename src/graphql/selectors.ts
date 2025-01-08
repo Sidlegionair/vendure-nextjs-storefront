@@ -17,6 +17,8 @@ export type OrderStateType =
     | 'ArrangingAdditionalPayment';
 
 export type NavigationType = CollectionTileType & {
+    id: string; // Ensure this matches the required type
+    parentId: string; // Ensure this matches the required type
     productVariants?: {
         items: CollectionTileProductVariantType[];
         totalItems: number;

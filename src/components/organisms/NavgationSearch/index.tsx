@@ -6,6 +6,17 @@ import { ProductImageWithInfo } from '../../molecules/ProductImageWithInfo';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigationSearch } from './hooks';
 import { PopularSearches } from './PopularSearches';
+import { ProductTile } from '@/src/components/molecules/ProductTile';
+
+// Import Swiper React components and styles
+import { Swiper, SwiperSlide } from 'swiper/react';
+import SwiperCore from 'swiper';
+import 'swiper/css';
+// import 'swiper/css/pagination';
+import { Pagination } from 'swiper/modules';
+
+// Initialize Swiper modules
+SwiperCore.use([Pagination]);
 
 export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> = ({
                                                                                        loading,
@@ -50,8 +61,6 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
             document.removeEventListener('keydown', handleEscape);
         };
     }, [closeSearch]);
-
-    // Removed the automatic focus on component mount
 
     return (
         <ResponsiveStack itemsCenter ref={containerRef}>
@@ -100,71 +109,67 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                             </PopularSearches>
                         </PopularSearchesWrapper>
                         <SearchResultsWrapper>
-                        {searchQuery.length === 0 ? (
-                            <Stack column gap='16px'>
-                                <MobileHeading size={'18px'} weight={400}>{t('search-query-start-typing')}</MobileHeading>
-                                <MobileHeadingOpacity size={'18px'} weight={300}>{t('search-query-to-short')}</MobileHeadingOpacity>
-                            </Stack>
-                        ) : searchQuery.length < 3 ? (
-                            <MobileText>{t('search-query-to-short')}</MobileText>
-                        ) : loading ? (
-                            <Stack column gap='24px'>
-                                <MobileHeading size="20px" weight={600} noWrap>
-                                    {t('search-results-header')}
-                                </MobileHeading>
-                                <MobileText>{t('search-results-loading')}</MobileText>
-
-                            </Stack>
-                        ) : searchResults.length === 0 ? (
-                            <Stack column gap={'16px'}>
-                                <MobileText>
-                                    <Trans
-                                        i18nKey="search-results-no-results"
-                                        values={{ searchQuery }}
-                                        components={{ 1: <strong></strong> }}
-                                    />
-
-                                </MobileText>
-                                <MobileHeadingOpacity size={'18px'} weight={300}>{t('search-query-try-searching-something-else')}</MobileHeadingOpacity>
-
-                            </Stack>
-                        ) : (
-                            <Wrapper column w100 gap={'2rem'}>
-                                <Container>
-                                    <Stack column w100 gap={'2rem'}>
-                                        <MobileHeading size="20px" weight={600} noWrap>
-                                            {t('search-results-header')}
-                                        </MobileHeading>
-                                        <Results w100 flexWrap>
-                                            {searchResults.slice(0, 6).map(result => (
-                                                <ResultCard gap="0.5rem" itemsCenter column key={result.slug}>
-                                                    <ProductImageWithInfo
-                                                        size="thumbnail-big"
-                                                        imageSrc={result.productAsset?.preview}
-                                                        href={`/snowboards/${result.slug}`}
-                                                    />
-                                                    <Stack itemsCenter column gap="0.5rem">
-                                                        <MobileText size="1.8rem" weight={500}>
-                                                            {result.productName}
-                                                        </MobileText>
-                                                    </Stack>
-                                                </ResultCard>
-                                            ))}
-                                        </Results>
-                                    </Stack>
-                                </Container>
-                                <StyledLink href={`/search?q=${searchQuery}`}>
-                                    <Trans
-                                        i18nKey="search-results-total"
-                                        components={{ 1: <strong></strong> }}
-                                        values={{ totalItems, searchQuery }}
-                                    />
-                                    <IconWrapper>
-                                        <ArrowRight size="1.5rem" />
-                                    </IconWrapper>
-                                </StyledLink>
-                            </Wrapper>
-                        )}
+                            {searchQuery.length === 0 ? (
+                                <Stack column gap='16px'>
+                                    <MobileHeading size={'18px'} weight={400}>{t('search-query-start-typing')}</MobileHeading>
+                                    <MobileHeadingOpacity size={'18px'} weight={300}>{t('search-query-to-short')}</MobileHeadingOpacity>
+                                </Stack>
+                            ) : searchQuery.length < 3 ? (
+                                <MobileText>{t('search-query-to-short')}</MobileText>
+                            ) : loading ? (
+                                <Stack column gap='24px'>
+                                    <MobileHeading size="20px" weight={600} noWrap>
+                                        {t('search-results-header')}
+                                    </MobileHeading>
+                                    <MobileText>{t('search-results-loading')}</MobileText>
+                                </Stack>
+                            ) : searchResults.length === 0 ? (
+                                <Stack column gap={'16px'}>
+                                    <MobileText>
+                                        <Trans
+                                            i18nKey="search-results-no-results"
+                                            values={{ searchQuery }}
+                                            components={{ 1: <strong></strong> }}
+                                        />
+                                    </MobileText>
+                                    <MobileHeadingOpacity size={'18px'} weight={300}>{t('search-query-try-searching-something-else')}</MobileHeadingOpacity>
+                                </Stack>
+                            ) : (
+                                <Wrapper column w100 gap={'0rem'}>
+                                    <Container>
+                                        <Stack column w100 gap={'0rem'}>
+                                            <MobileHeading size="20px" weight={600} noWrap>
+                                                {t('search-results-header')}
+                                            </MobileHeading>
+                                            <SliderWrapper>
+                                                <StyledSwiper
+                                                    slidesPerView="auto"
+                                                    spaceBetween={40} // Adjust as needed
+                                                    pagination={{
+                                                        clickable: true,
+                                                    }}
+                                                >
+                                                    {searchResults.slice(0, 6).map(result => (
+                                                        <StyledSwiperSlide key={result.slug}>
+                                                            <ProductTile product={result} />
+                                                        </StyledSwiperSlide>
+                                                    ))}
+                                                </StyledSwiper>
+                                            </SliderWrapper>
+                                        </Stack>
+                                    </Container>
+                                    <StyledLink href={`/search?q=${searchQuery}`}>
+                                        <Trans
+                                            i18nKey="search-results-total"
+                                            components={{ 1: <strong></strong> }}
+                                            values={{ totalItems, searchQuery }}
+                                        />
+                                        <IconWrapper>
+                                            <ArrowRight size="1.5rem" />
+                                        </IconWrapper>
+                                    </StyledLink>
+                                </Wrapper>
+                            )}
                         </SearchResultsWrapper>
                     </SearchContent>
                 </SearchPosition>
@@ -173,11 +178,60 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
     );
 };
 
+// Styled Components for Swiper and Pagination
+
+const StyledSwiper = styled(Swiper)`
+    width: 100%;
+    height: 100%;
+
+    .swiper-pagination {
+        width: fit-content !important;
+        left: unset !important;
+        position: absolute;
+        right: 0px !important; /* Adjust as needed */
+        top: 50%;
+        //transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .swiper-pagination-bullet {
+        width: 10px;
+        height: 10px;
+         background: transparent;
+        border: 1px solid black;
+        opacity: 1;
+    }
+
+    .swiper-pagination-bullet-active {
+        opacity: 1;
+        background: ${p => p.theme.text.black};
+    }
+
+    @media (max-width: ${p => p.theme.breakpoints.md}) {
+        .swiper-pagination {
+            right: 10px; /* Adjust for smaller screens */
+        }
+    }
+`;
+
+const SliderWrapper = styled.div`
+    position: relative;
+    width: 80%;
+    padding-right: 40px; /* Space for vertical pagination */
+
+    @media (max-width: ${p => p.theme.breakpoints.md}) {
+        padding-right: 30px; /* Adjust for smaller screens */
+    }
+`;
+
+// ... (rest of your styled components remain unchanged)
+
 const ResponsiveStack = styled(Stack)`
     position: relative;
     width: 100%;
 
-    
     @media (max-width: ${p => p.theme.breakpoints.md}) {
         padding: 0 1rem;
     }
@@ -204,32 +258,30 @@ const StyledLink = styled(Link)`
 `;
 
 const PopularSearchesWrapper = styled(Stack)`
-    width: 33.3%;
+    min-width: 20%;
     max-width: 521px;
     display: flex;
     padding-top: 56px;
     justify-content: center;
-
-    //padding: 56px;
     border-right: 0.5px solid ${p => p.theme.outline};
-`
+
+    @media (max-width: ${p => p.theme.breakpoints.md}) {
+        width: 100%;
+        border-right: none;
+        border-bottom: 0.5px solid ${p => p.theme.outline};
+        padding-bottom: 20px;
+    }
+`;
 
 const SearchResultsWrapper = styled(Stack)`
     padding: 56px;
     width: 100%;
-    //padding-left: calc(56px + 33.3%); /* Accounts for the width of the left div and adds 56px */
     display: flex;
     align-items: flex-start;
 
     @media (max-width: ${p => p.theme.breakpoints.md}) {
         padding-left: 56px; /* Adjust for smaller screens */
-    }
-`;
-
-const Results = styled(Stack)`
-    row-gap: 2rem;
-    @media (min-width: ${p => p.theme.breakpoints.md}) {
-        flex-direction: row;
+        padding-right: 56px;
     }
 `;
 
@@ -260,9 +312,7 @@ const SearchContent = styled(Stack)`
     position: relative;
     width: 100%;
     min-height: 40vh;
-    //padding: 0rem 4rem;
     border: 1px solid ${p => p.theme.gray(100)};
-    //border-radius: ${({ theme }) => theme.borderRadius};
     outline: none;
     font-size: 1.5rem;
     color: ${p => p.theme.text.main};
@@ -313,7 +363,6 @@ const Input = styled.input`
     }
 `;
 
-
 const SearchIconContainer = styled.div`
     position: absolute;
     right: 1.5rem; /* Matches padding-right in Input */
@@ -327,7 +376,6 @@ const SearchIconContainer = styled.div`
         color: ${p => p.theme.text.accent};
     }
 `;
-
 
 const SearchButton = styled.button`
     position: absolute;
@@ -380,7 +428,6 @@ const MobileHeadingOpacity = styled(TypoGraphy)`
     }
 `;
 
-
 const MobileHeading = styled(TypoGraphy)`
     @media (max-width: ${p => p.theme.breakpoints.md}) {
         font-size: 2rem;
@@ -390,21 +437,20 @@ const MobileHeading = styled(TypoGraphy)`
 `;
 
 const MobileText = styled(TP)`
-
     font-style: normal;
     font-weight: 300;
     font-size: 18px;
     line-height: 18px;
-    /* identical to box height */
-
-    //color: #000000;
-    //
-    //opacity: 0.5;
-    
 
     @media (max-width: ${p => p.theme.breakpoints.md}) {
         font-size: 1.8rem;
         line-height: 1.9rem;
         font-weight: 400;
     }
+`;
+const StyledSwiperSlide = styled(SwiperSlide)`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto; /* Let the content determine the width */
 `;

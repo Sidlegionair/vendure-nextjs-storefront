@@ -1,5 +1,9 @@
 import { storefrontApiQuery } from '@/src/graphql/client';
-import { ProductSearchSelector, ProductSearchType } from '@/src/graphql/selectors';
+import {
+    ProductSearchSelector,
+    ProductSearchType,
+    FacetsSelector,
+} from '@/src/graphql/selectors';
 import { usePush } from '@/src/lib/redirect';
 import { useChannels } from '@/src/state/channels';
 import { useDebounce } from '@/src/util/hooks/useDebounce';
@@ -15,7 +19,7 @@ export const useNavigationSearch = () => {
     const [searchOpen, setSearchOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState(query.q ? query.q.toString() : '');
-    const [searchResults, setSearchResult] = useState<ProductSearchType[]>([]);
+    const [searchResults, setSearchResults] = useState<ProductSearchType[]>([]);
     const debouncedSearch = useDebounce(searchQuery, 200);
     const [totalItems, setTotalItems] = useState(0);
 
@@ -24,11 +28,11 @@ export const useNavigationSearch = () => {
         setSearchOpen(false);
     }, [asPath]);
 
-    const toggleSearch = () => setSearchOpen(prev => !prev);
+    const toggleSearch = () => setSearchOpen((prev) => !prev);
     const closeSearch = () => {
         toggleSearch();
         setSearchQuery('');
-        setSearchResult([]);
+        setSearchResults([]);
     };
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -39,13 +43,15 @@ export const useNavigationSearch = () => {
 
     useEffect(() => {
         if (!debouncedSearch || debouncedSearch.length < 3) {
-            setSearchResult([]);
+            setSearchResults([]);
             return;
         }
 
         const getResults = async () => {
             try {
                 setLoading(true);
+
+                // Fetch search results
                 const results = await storefrontApiQuery(ctx)({
                     search: [
                         {
@@ -59,12 +65,86 @@ export const useNavigationSearch = () => {
                         { items: ProductSearchSelector, totalItems: true },
                     ],
                 });
-                setSearchResult(results.search.items);
-                setLoading(false);
+
+                const products = results.search.items;
+
+                // Fetch all facets for enrichment
+                const facets = await storefrontApiQuery(ctx)({
+                    facets: [
+                        {},
+                        {
+                            items: {
+                                id: true,
+                                name: true,
+                                code: true, // Include facet code
+                                values: {
+                                    id: true,
+                                    name: true,
+                                    code: true, // Include facet value code
+                                },
+                            },
+                        },
+                    ],
+                });
+
+                const facetValueMap = facets.facets.items.reduce((map, facet) => {
+                    facet.values.forEach((value) => {
+                        map[value.id] = {
+                            code: value.code,
+                            name: value.name,
+                            value: value.name,
+                            facet: {
+                                code: facet.code,
+                                name: facet.name,
+                            },
+                        };
+                    });
+                    return map;
+                }, {} as Record<string, { code: string; name: string; value: string; facet: { code: string; name: string } }>);
+
+                // Enrich products with facetValues and brand
+                const enrichedResults = await Promise.all(
+                    products.map(async (product) => {
+                        const facetValues = product.facetValueIds
+                            .map((id) => facetValueMap[id])
+                            .filter(Boolean); // Filter out undefined facet values
+
+                        const stockAndBrand = await storefrontApiQuery(ctx)({
+                            product: [
+                                { id: product.productId },
+                                {
+                                    customFields: {
+                                        brand: true,
+                                    },
+                                    variants: {
+                                        id: true,
+                                        stockLevel: true,
+                                    },
+                                },
+                            ],
+                        });
+
+                        const inStock = stockAndBrand.product?.variants?.some(
+                            (variant) => Number(variant.stockLevel) > 0
+                        );
+
+                        return {
+                            ...product,
+                            facetValues, // Add enriched facetValues
+                            customFields: {
+                                brand: stockAndBrand.product?.customFields?.brand || null,
+                            },
+                            inStock,
+                        };
+                    })
+                );
+
+                setSearchResults(enrichedResults);
                 setTotalItems(results.search.totalItems);
             } catch (error) {
-                console.log(error);
-                setSearchResult([]);
+                console.error(error);
+                setSearchResults([]);
+            } finally {
                 setLoading(false);
             }
         };

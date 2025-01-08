@@ -147,7 +147,7 @@ const TextWrapper = styled(Link)`
 
 const Main = styled(Stack)`
     position: relative;
-    width: 100%;
+    width: fit-content;
     font-weight: 500;
 
     @media (min-width: ${({ theme }) => theme.breakpoints.xl}) {
