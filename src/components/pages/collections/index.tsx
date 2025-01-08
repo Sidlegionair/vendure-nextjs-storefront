@@ -164,7 +164,7 @@ const HeadingStack = styled(Stack)`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 160px 0px;
+    padding: 100px 0px;
     gap: 60px;
     display: flex;
     position: relative;
