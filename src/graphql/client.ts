@@ -54,10 +54,14 @@ const apiFetchVendure =
                     });
             }
             const additionalHeaders: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
+
+            const credentialsPolicy = 'include';
+
+
             return fetch(`${options[0]}`, {
                 body: JSON.stringify({ query, variables }),
                 method: 'POST',
-                credentials: 'include',
+                credentials: credentialsPolicy, // Dynamically set based on protocol
                 headers: {
                     'Content-Type': 'application/json',
                     ...additionalHeaders,
