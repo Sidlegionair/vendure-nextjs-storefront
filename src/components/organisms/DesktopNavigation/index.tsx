@@ -22,7 +22,7 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
 
     const StackComponent = isSubMenu ? SubMenuStack : DesktopStack;
 
-    const gapMapping: Record<number, string> = {
+    const gapMapping: Record<number, '0rem' | '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.25rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3rem' | '3.125rem' | '3.5rem'| '3.75rem' | '4rem' | '5rem' | undefined> = {
         10: '0.125rem',
         20: '0.25rem',
         30: '0.5rem',

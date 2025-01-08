@@ -12,12 +12,9 @@ import { ContextModel, makeStaticProps } from '@/src/lib/getStatic';
 import { DEFAULT_LOCALE, DEFAULT_CHANNEL } from '@/src/lib/consts';
 import { fetchStory, fetchNavigation, fetchRelatedArticles } from '@/src/lib/storyblok';
 import { getStoryblokApi } from '@storyblok/react';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { NavigationType } from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
 import { arrayToTree, RootNode } from '@/src/util/arrayToTree';
 import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
-import { SSGQuery } from '@/src/graphql/client';
 
 // Define the StoryItem interface
 interface StoryItem {

@@ -42,7 +42,7 @@ export const getFlagByCode = (langCode: string | undefined, isCurrent?: boolean)
         default:
             return (
                 <>
-                    <US className="no-default-fill" />
+                    <US width={'50px'} height={'50px'} className="no-default-fill" />
                     {!isCurrent && <p>English</p>}
                 </>
             );

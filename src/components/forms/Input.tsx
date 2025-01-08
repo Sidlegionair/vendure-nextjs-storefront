@@ -93,7 +93,7 @@ export const StyledInput = styled.input<{ error?: boolean }>`
     outline: none;
     margin-top: 0.6rem;
     padding: 15px 0px;
-    color: ${p => p.theme.background.main};
+    color: ${p => p.theme.text.main};
     border-bottom: 1px solid ${p => p.theme.border.lightgray};
     font-size: 16px;
     line-height: 16px;

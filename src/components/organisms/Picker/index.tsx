@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { Stack, TP } from '@/src/components';
 import { LogoAexol } from '@/src/assets';
-import { XIcon } from 'lucide-react';
+import { ChevronDown, XIcon } from 'lucide-react';
 import { Dropdown } from './Dropdown';
 import { Trans, useTranslation } from 'next-i18next';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -139,7 +139,18 @@ export const Picker: React.FC<{
 
     return (
         <>
-            <CurrentLocale onClick={() => setIsOpen(true)}>{getFlagByCode(locale, true)}</CurrentLocale>
+            <Stack itemsCenter gap={'5px'}>
+                <CurrentLocale onClick={() => setIsOpen(true)}>
+                    <SvgWrapper>
+                        {getFlagByCode(locale, true)}
+                    </SvgWrapper>
+                </CurrentLocale>
+                <svg width="5" height="3" viewBox="0 0 5 3" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M2.53212 2.42575L4.62826 0.193098C4.64861 0.171281 4.67286 0.154041 4.69957 0.1424C4.72627 0.130758 4.7549 0.124952 4.78375 0.125325C4.81261 0.125698 4.84109 0.132243 4.86753 0.144571C4.89397 0.1569 4.91782 0.174761 4.93766 0.197098C4.97833 0.242786 5.00068 0.303585 4.99998 0.366576C4.99928 0.429566 4.97558 0.489783 4.93391 0.534429L2.68276 2.93208C2.66256 2.95377 2.63851 2.97095 2.61202 2.98261C2.58552 2.99427 2.55711 3.00018 2.52845 3C2.49979 2.99981 2.47145 2.99353 2.44508 2.98153C2.41872 2.96952 2.39487 2.95203 2.37492 2.93008L0.0637635 0.40643C0.0228605 0.361252 0 0.300901 0 0.238098C0 0.175294 0.0228605 0.114944 0.0637635 0.0697655C0.083863 0.0476906 0.107911 0.0301417 0.134484 0.0181582C0.161057 0.00617463 0.189615 0 0.218466 0C0.247317 0 0.275874 0.00617463 0.302447 0.0181582C0.32902 0.0301417 0.353068 0.0476906 0.373168 0.0697655L2.53212 2.42575Z"
+                        fill="black" />
+                </svg>
+            </Stack>
             {isOpen && (
                 <Overlay>
                     <PickerWrapper ref={ref} column gap={'3rem'} justifyCenter>
@@ -262,10 +273,9 @@ const CurrentLocale = styled.button`
     position: relative;
     width: 21px;
     height: 21px;
-
-    border: none; /* Remove the existing border */
+    border: none;
     border-radius: 50%;
-    overflow: hidden;
+    overflow: hidden; /* Ensures the circle shape */
     background-color: transparent;
     cursor: pointer;
     display: flex;
@@ -273,7 +283,6 @@ const CurrentLocale = styled.button`
     align-items: center;
     padding: 0;
     margin: 0;
-    box-sizing: border-box;
 
     &:focus {
         outline: none;
@@ -287,19 +296,26 @@ const CurrentLocale = styled.button`
         left: 0;
         width: 100%;
         height: 100%;
-        border: 1px solid black; /* Define your border style here */
+        border: 1px solid black;
         border-radius: 50%;
-        pointer-events: none; /* Allows clicks to pass through to the button */
-    }
-
-    /* Ensure the SVG fills the button */
-    svg {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; /* Scales the SVG to cover the entire button */
+        pointer-events: none;
     }
 `;
 
+const SvgWrapper = styled.div`
+    position: absolute; /* Allow positioning within the button */
+    width: 150%; /* Scale to ensure it covers the circle */
+    height: 150%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Fill the wrapper */
+    }
+`;
 
 
 const Overlay = styled.div`

@@ -9,17 +9,17 @@ interface PopularSearchesProps extends PropsWithChildren {
 
 export const PopularSearches: React.FC<PopularSearchesProps> = ({ children, popularSearches, onClick }) => {
     return (
-        <Stack column gap="1rem">
+        <Stack column gap="24px">
             {children}
-            <PopularSearchesWrapper gap="1rem">
+            <PopularSearchesWrapper gap="16px">
                 {popularSearches &&
                     popularSearches.map(item => (
                         <TypoGraphy
                             key={item}
-                            size={'1.5rem'}
+                            size={'18px'}
                             weight={400}
                             onClick={() => onClick(item)}
-                            style={{ cursor: 'pointer' }}>
+                            style={{ cursor: 'pointer', opacity: 0.5 }}>
                             {item}
                         </TypoGraphy>
                     ))}
@@ -30,6 +30,7 @@ export const PopularSearches: React.FC<PopularSearchesProps> = ({ children, popu
 
 const PopularSearchesWrapper = styled(Stack)`
     flex-direction: row;
+
 
     @media (min-width: ${p => p.theme.breakpoints.lg}) {
         flex-direction: column;

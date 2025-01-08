@@ -37,6 +37,7 @@
     "search-results-header": "Wyniki wyszukiwania",
     "search-results-total": "Zobacz {{totalItems}} wyniki dla <1>{{searchQuery}}</1>",
     "search-query-to-short": "Zapytanie wyszukiwania musi zawierać co najmniej 3 znaki",
+    "search-query-to-short": "Zapytanie wyszukiwania musi zawierać co najmniej 3 znaki",
     "search-results-no-results": "Brak wyników dla <1>{{searchQuery}}</1>",
     "search-results-loading": "Ładowanie wyników wyszukiwania...",
     "popular-searches-heading": "Popularne wyszukiwania",
