@@ -264,7 +264,7 @@ const LocaleInList = styled(Stack)`
     cursor: pointer;
 
     svg {
-        width: 2rem;
+        width: 3rem;
         height: 2rem;
     }
 `;
@@ -305,7 +305,7 @@ const CurrentLocale = styled.button`
 const SvgWrapper = styled.div`
     position: absolute; /* Allow positioning within the button */
     width: 150%; /* Scale to ensure it covers the circle */
-    height: 150%;
+    height: 120%;
     display: flex;
     justify-content: center;
     align-items: center;

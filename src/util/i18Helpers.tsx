@@ -1,5 +1,6 @@
 import { US, PL, FR, DE, ES, JP, NL, DK, CZ } from 'country-flag-icons/react/3x2';
 import React from 'react';
+import { GB } from 'country-flag-icons/react/1x1';
 
 export const getFlagByCode = (langCode: string | undefined, isCurrent?: boolean) => {
     switch (langCode) {
@@ -42,7 +43,7 @@ export const getFlagByCode = (langCode: string | undefined, isCurrent?: boolean)
         default:
             return (
                 <>
-                    <US width={'50px'} height={'50px'} className="no-default-fill" />
+                    <GB className="no-default-fill" />
                     {!isCurrent && <p>English</p>}
                 </>
             );

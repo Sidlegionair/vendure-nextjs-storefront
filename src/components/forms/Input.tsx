@@ -83,7 +83,7 @@ const EyeWrapper = styled(Stack)<{ active: boolean }>`
     cursor: pointer;
 
     & > svg {
-        color: ${p => (p.active ? p.theme.gray(800) : p.theme.gray(200))};
+        color: ${p => (p.active ? p.theme.text.accent : p.theme.text.main)};
         transition: color 0.2s ease-in-out;
     }
 `;
@@ -94,12 +94,12 @@ export const StyledInput = styled.input<{ error?: boolean }>`
     margin-top: 0.6rem;
     padding: 15px 0px;
     color: ${p => p.theme.text.main};
-    border-bottom: 1px solid ${p => p.theme.border.lightgray};
+    border-bottom: 1px solid #BBBBBB;
     font-size: 16px;
     line-height: 16px;
 
     :focus {
-        border-color: ${p => p.theme.gray(1000)};
+        border-bottom: 1px solid #BBBBBB;
     }
 
     ::placeholder {
