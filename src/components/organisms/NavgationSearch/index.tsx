@@ -83,9 +83,9 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                             <X size="1.5rem" />
                         </SearchButton>
                     ) : (
-                        <SearchButton type="submit">
-                            <SearchIcon size="15px" />
-                        </SearchButton>
+                        <SearchIconContainer>
+                            <SearchIcon size="18px" />
+                        </SearchIconContainer>
                     )}
                 </Form>
             </Stack>
@@ -263,6 +263,25 @@ const Input = styled.input`
         height: 55px;
     }
 `;
+
+
+const SearchIconContainer = styled.div`
+    position: absolute;
+    right: 1.5rem;
+    height: 100%;
+    top: 1.8rem;
+    appearance: none;
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    
+    svg {
+        color: ${p => p.theme.text.accent};
+
+    }
+`;
+
 
 const SearchButton = styled.button`
     position: absolute;
