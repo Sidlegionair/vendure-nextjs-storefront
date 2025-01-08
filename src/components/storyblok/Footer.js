@@ -2,6 +2,13 @@ import React from 'react';
 import { storyblokEditable } from '@storyblok/react';
 import RichTextEditor from '@/src/components/storyblok/RichTextEditor';
 
+const getButtonLink = (link) => {
+    if (!link) return '#'; // Default fallback
+    if (link.linktype === 'url') return link.url; // External URL
+    if (link.linktype === 'story') return `/${link.cached_url || ''}`; // Internal Storyblok story
+    return '#'; // Fallback for unknown types
+};
+
 const Footer = ({ blok }) => {
     const {
         background,
@@ -42,7 +49,12 @@ const Footer = ({ blok }) => {
                             <ul className="link-list">
                                 {column.links.map((link, i) => (
                                     <li key={i} className="link-item">
-                                        <a href={link.url?.cached_url} className="link">
+                                        <a
+                                            href={getButtonLink(link.url)}
+                                            className="link"
+                                            target={link.url?.target || '_self'}
+                                            rel={link.url?.target === '_blank' ? 'noopener noreferrer' : undefined}
+                                        >
                                             {link.text}
                                         </a>
                                     </li>
@@ -73,7 +85,7 @@ const Footer = ({ blok }) => {
                         {social_links.map((social, index) => (
                             <a
                                 key={index}
-                                href={social.url?.url}
+                                href={getButtonLink(social.url)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="social-icon"
@@ -90,6 +102,7 @@ const Footer = ({ blok }) => {
                     </div>
                 </div>
             </div>
+
 
             <style jsx>{`
                 .footer {
