@@ -11,6 +11,12 @@ export const ProductImage = forwardRef<HTMLImageElement, ImageType>((props, ref)
 });
 
 const StyledProductImage = styled.img`
+    transition: transform 0.3s ease; /* Smooth transition for the zoom effect */
+
+    &:hover {
+        transform: scale(1.05); /* Slight zoom on hover */
+    }
+
     display: block; /* Ensure the image does not have inline spacing */
     max-height: 100%; /* Restrict the image height to the container */
     max-width: 100%; /* Restrict the image width to the container */
