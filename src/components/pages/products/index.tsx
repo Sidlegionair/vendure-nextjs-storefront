@@ -79,7 +79,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                     <MobileHideWrapper>
                     <Breadcrumbs breadcrumbs={breadcrumbs} />
                     </MobileHideWrapper>
-                    <Main gap="2rem">
+                    <Main gap="15px">
                         <StickyLeft w100 itemsCenter justifyCenter gap="2rem">
                             <ProductPhotosPreview
                                 featuredAsset={product?.featuredAsset}
@@ -87,8 +87,8 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                 name={product?.name}
                             />
                         </StickyLeft>
-                        <ResponsiveRightColumn w100 column>
-                            <ProductInfoStack w100 column gap={25}>
+                        <ResponsiveRightColumn w100 column gap={10}>
+                            <ProductInfoStack w100 column gap={15}>
                                 <Stack gap={15}>
                                     {typeof product?.customFields?.brand === 'string' && (
                                         <StyledBrand noWrap>
@@ -100,7 +100,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                 <Ratings rating={Math.random() * 5} />
                                 {variant && <Price size="40px" price={variant.priceWithTax} currencyCode={variant.currencyCode} />}
                             </ProductInfoStack>
-                            <Stack w100 gap="1rem" column>
+                            <Stack w100 gap="10px" column>
                                 {variant && Number(variant.stockLevel) > 0 && Number(variant.stockLevel) <= 10 && (
                                     <MakeItQuick size="1rem" weight={500}>
                                         <Trans
@@ -145,7 +145,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                             color="main"
                                             // size="1rem"
                                             // lineHeight="1.5rem"
-                                            style={{ marginTop: '1rem' }}
+                                            // style={{ marginTop: '1rem' }}
                                         />
                                     ) : null;
                                 })()}
@@ -372,7 +372,7 @@ const ResponsiveRightColumn = styled(Stack)`
 const ProductInfoStack = styled(Stack)`
     border-bottom: 2px solid ${({ theme }) => theme.gray(100)};
     width: 100%;
-    padding-bottom: 1rem;
+    //padding-bottom: 1rem;
 `;
 
 const MakeItQuick = styled(TP)`
@@ -389,7 +389,7 @@ const StockInfo = styled(Stack)<{ outOfStock?: boolean; comingSoon?: boolean }>`
 const StyledDividerTop = styled(Divider)`
     background-color: ${p => p.theme.border.thin};
     height: 1px;
-    margin: 1.5rem 0;
+    //margin: 1.5rem 0;
     width: 100%;
 `;
 
