@@ -48,16 +48,7 @@ export const subNavigation: NavigationItemType[] = [
         name: 'Powder',
         id: 'none',
         parentId: '1',
-        slug: 'collections/snowboarding/?terrain=powder&page=1',
-        description: '',
-        productVariants: emptyProductVariants, // Use default empty structure
-        children: [],
-    },
-    {
-        name: 'Freeride',
-        id: 'none',
-        parentId: '1',
-        slug: 'collections/snowboarding/?style=freeride',
+        slug: 'collections/snowboards/?terrain=powder&page=1',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],
@@ -66,7 +57,16 @@ export const subNavigation: NavigationItemType[] = [
         name: 'All mountain',
         id: 'none',
         parentId: '1',
-        slug: 'collections/snowboarding/?page=1&terrain=all+mountain',
+        slug: 'collections/snowboards/?page=1&terrain=all+mountain',
+        description: '',
+        productVariants: emptyProductVariants, // Use default empty structure
+        children: [],
+    },
+    {
+        name: 'Freestyle',
+        id: 'none',
+        parentId: '1',
+        slug: 'collections/snowboards/?style=freestyle',
         description: '',
         productVariants: emptyProductVariants, // Use default empty structure
         children: [],

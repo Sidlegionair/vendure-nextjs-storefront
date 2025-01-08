@@ -254,7 +254,7 @@ const CustomContentContainer = styled(ContentContainer)`
     //align-items: center;
     //justify-content: center;
     //width: 100%;
-    gap: 2.5rem;
+    gap: 2rem;
 `;
 
 
@@ -369,7 +369,7 @@ const MainStack = styled(Stack)`
     gap: 25px; /* Default gap for mobile */
 
     @media (min-width: ${p => p.theme.breakpoints.md}) {
-        gap: 50px; /* Increased gap for desktop */
+        gap: 15px; /* Increased gap for desktop */
     }
 `;
 

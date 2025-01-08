@@ -128,6 +128,7 @@ const Background = styled(Stack)`
 const RelativeStack = styled(Stack)`
     position: relative; // Ensure stacking context
     z-index: 10;
+    width: fit-content;
     
     & > div {
         
@@ -194,7 +195,7 @@ const AbsoluteStack = styled(Stack)`
 const SubMenuStack = styled(Stack)<{ gap?: number | '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3.125rem' | '3.75rem' | '5rem' }>`
     position: relative;
     z-index: 5;
-    width: 100%;
+    width: fit-content;
     display: flex;
     justify-content: flex-start;
     gap: ${({ gap }) => (typeof gap === 'number' ? `${gap}px` : gap)};
@@ -203,7 +204,7 @@ const SubMenuStack = styled(Stack)<{ gap?: number | '0.125rem' | '0.25rem' | '0.
     align-items: center; // Ensures vertical alignment of items
 
     // Add a default gap of 200px if none is provided
-    gap: ${({ gap }) => gap || '50px'};
+    gap: ${({ gap }) => gap || '100px'};
 
     @media (max-width: ${p => p.theme.breakpoints.md}) {
         flex-wrap: wrap; // Allow wrapping for smaller screens

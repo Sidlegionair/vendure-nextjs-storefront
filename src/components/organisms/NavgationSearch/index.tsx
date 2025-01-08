@@ -84,7 +84,7 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                         </SearchButton>
                     ) : (
                         <SearchButton type="submit">
-                            {/*<SearchIcon size="15px" />*/}
+                            <SearchIcon size="15px" />
                         </SearchButton>
                     )}
                 </Form>
