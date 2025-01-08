@@ -195,7 +195,7 @@ const RichTextEditor = ({ blok }) => {
                         max-width: 100%;
                         height: auto;
                         display: block;
-                        margin: 1rem auto;
+                        //margin: 1rem auto;
                         border-radius: 4px;
                     }
 
