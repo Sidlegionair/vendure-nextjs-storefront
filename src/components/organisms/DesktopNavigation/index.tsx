@@ -93,7 +93,7 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
                                     <NavigationLinks collection={collection} />
                                     <ProductSelloutWrapper gap="1.5rem">
                                         <ProductsSellout
-                                            title={t('featured-snowboards')}
+                                            title={t('featured-products')}
                                             addToCart={addToCart}
                                             addToCartLabel={t('add-to-cart')}
                                             collection={collection}
