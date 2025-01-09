@@ -1,4 +1,4 @@
-import Page from '@/src/pages/[channel]/products/[slug].page';
+import Page from '@/src/pages/[channel]/snowboards/[slug].page';
 import { Redirect } from '@/src/lib/redirect';
 import React from 'react';
 import type { InferGetStaticPropsType } from 'next';

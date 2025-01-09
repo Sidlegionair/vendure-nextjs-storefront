@@ -109,7 +109,7 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                             {/*/!* Desktop: Search icon *!/*/}
                             {/*<DesktopWrapper>*/}
                             {/*    <IconButton*/}
-                            {/*        aria-label="Search products"*/}
+                            {/*        aria-label="Search snowboards"*/}
                             {/*        onClick={navigationSearch.toggleSearch}*/}
                             {/*        ref={iconRef}*/}
                             {/*    >*/}
