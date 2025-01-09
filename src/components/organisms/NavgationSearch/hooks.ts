@@ -102,7 +102,7 @@ export const useNavigationSearch = () => {
                     return map;
                 }, {} as Record<string, { code: string; name: string; value: string; facet: { code: string; name: string } }>);
 
-                // Enrich products with facetValues and brand
+                // Enrich snowboards with facetValues and brand
                 const enrichedResults = await Promise.all(
                     products.map(async (product) => {
                         const facetValues = product.facetValueIds
