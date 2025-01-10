@@ -82,10 +82,34 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                     <Main gap="15px">
                         <StickyLeft w100 itemsCenter justifyCenter gap="2rem">
                             <ProductPhotosPreview
-                                featuredAsset={product?.featuredAsset}
-                                images={product?.assets}
+                                featuredAsset={
+                                    variant?.assets?.length
+                                        ? {
+                                            source: variant.assets[0].source,
+                                            preview: variant.assets[0].preview,
+                                        }
+                                        : product?.featuredAsset
+                                            ? {
+                                                source: product.featuredAsset.source,
+                                                preview: product.featuredAsset.preview,
+                                            }
+                                            : undefined
+                                }
+                                images={[
+                                    // Map each asset to match your `Asset` type
+                                    ...(variant?.assets?.map(a => ({
+                                        source: a.source,
+                                        preview: a.preview,
+                                    })) ?? []),
+                                    ...(product?.assets?.map(a => ({
+                                        source: a.source,
+                                        preview: a.preview,
+                                    })) ?? []),
+                                ]}
                                 name={product?.name}
                             />
+
+
                         </StickyLeft>
                         <ResponsiveRightColumn w100 column gap={10}>
                             <ProductInfoStack w100 column gap={15}>

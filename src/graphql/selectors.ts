@@ -244,6 +244,10 @@ export const ProductDetailSelector = Selector('Product')({
             code: true,
             name: true,
         },
+        assets: {
+            source: true,
+            preview: true,
+        },
         customFields: {
             shortdescription: true,
             // Description Tabs
@@ -684,6 +688,10 @@ export const productVariantTileSelector = Selector('ProductVariant')({
     currencyCode: true,
     priceWithTax: true,
     featuredAsset: { preview: true },
+    assets: {
+        source: true,
+        preview: true,
+    },
     product: {
         collections: { slug: true, name: true, parent: { slug: true } },
         slug: true,
@@ -701,6 +709,11 @@ export const homePageSlidersSelector = Selector('Collection')({
     name: true,
     slug: true,
     parent: { slug: true },
+    assets: {
+        source: true,
+        preview: true,
+    },
+
     productVariants: [
         { options: { take: 8, sort: { priceWithTax: SortOrder.DESC } } },
         {
