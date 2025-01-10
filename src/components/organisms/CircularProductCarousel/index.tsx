@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import { Divider, Stack } from '@/src/components';
@@ -16,6 +16,8 @@ const CarouselContainer = styled.div`
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
+    user-select: none; /* Prevent text/image selection */
+    cursor: grab; /* Indicate draggable area */
 
     &::before {
         content: '';
@@ -28,6 +30,10 @@ const CarouselContainer = styled.div`
         background-size: cover;
         opacity: 0.2;
         z-index: -1;
+    }
+
+    &:active {
+        cursor: grabbing; /* Change cursor when active */
     }
 
     @media (min-width: 1024px) {
@@ -75,6 +81,46 @@ const CenterAnchor = styled.div`
     height: 0;
 `;
 
+// Updated SlideLink Component with Enhanced Flip Effect
+const SlideLink = styled.a<{ isHovered: boolean }>`
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    perspective: 1000px;
+    cursor: pointer;
+    text-decoration: none; /* Remove underline */
+
+    .flip-card-inner {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+        transform: ${({ isHovered }) => (isHovered ? 'rotateY(180deg)' : 'rotateY(0deg)')};
+    }
+
+    .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 8px;
+        transition: opacity 0.6s;
+    }
+
+    .flip-card-front {
+        z-index: 2; /* Front image above when not flipped */
+        opacity: ${({ isHovered }) => (isHovered ? 0 : 1)};
+    }
+
+    .flip-card-back {
+        transform: rotateY(180deg);
+        z-index: 1; /* Back image below when not flipped */
+        opacity: ${({ isHovered }) => (isHovered ? 1 : 0)};
+    }
+`;
+
 const ProductSlide = styled.div<{
     angle: number;
     distance: number;
@@ -93,10 +139,10 @@ const ProductSlide = styled.div<{
     transform-origin: center;
     transition: transform 0.5s ease, opacity 0.5s ease;
     border-radius: 8px;
+    touch-action: pan-y; /* Allow vertical scrolling on touch devices */
 
     ${({ flattened, angle, distance, translateY, index, activeIndex, extraLift }) => {
         const distanceFromActive = Math.abs((index % 1000) - (activeIndex % 1000));
-        const computedOpacity = distanceFromActive === 0 ? 1 : Math.max(0.4, 1 - distanceFromActive * 0.2);
 
         if (flattened) {
             const scale = distanceFromActive === 0 ? 1.3 : Math.max(0.7, 1 - distanceFromActive * 0.1);
@@ -104,7 +150,7 @@ const ProductSlide = styled.div<{
             const yShift = -Math.abs(((index % 1000) - (activeIndex % 1000))) * extraLift;
 
             return `
-                opacity: ${computedOpacity};
+                opacity: 1;
                 transform:
                     translate(-50%, -50%)
                     translateX(${xShift}px)
@@ -113,7 +159,7 @@ const ProductSlide = styled.div<{
             `;
         } else {
             return `
-                opacity: ${computedOpacity};
+                opacity: 1;
                 transform:
                     rotateY(${angle}deg)
                     translateZ(${distance}px)
@@ -137,6 +183,7 @@ const ProductImageContainer = styled.div<{ height: number }>`
     object-position: center center;
     overflow: hidden;
     transform-origin: center;
+    position: relative; /* For positioning flip elements */
 
     @media (max-width: 1023px) and (min-width: 769px) {
         width: 130px;
@@ -149,6 +196,7 @@ const ProductImageContainer = styled.div<{ height: number }>`
     }
 `;
 
+// Bottom Stack Styles
 const BottomStackWrapper = styled.div`
     display: flex;
     justify-content: center;
@@ -305,10 +353,39 @@ const Quote = styled(Stack)`
     }
 `;
 
+// Updated ImageFlipContainer for Enhanced Flip Effect
+const ImageFlipContainer = styled.div`
+    width: 100%;
+    height: 100%;
+    position: relative;
+    perspective: 1000px;
+
+    .flip-card-inner {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+    }
+
+    .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 8px;
+    }
+
+    .flip-card-back {
+        transform: rotateY(180deg);
+    }
+`;
+
+// CircularProductCarousel Component
 export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ products }) => {
     const productCount = products.length;
     const [displayCount, setDisplayCount] = useState<number>(Math.min(productCount, 11));
-    const [activeIndex, setActiveIndex] = useState(productCount);
+    const [activeIndex, setActiveIndex] = useState<number>(productCount);
     const [startX, setStartX] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
 
@@ -319,6 +396,12 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
     const [extraLiftFlattened, setExtraLiftFlattened] = useState<number>(0);
 
     const [flattened, setFlattened] = useState(false);
+
+    // New State for Hover Detection
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+    // Ref to track dragging state for smoother updates
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleResize = () => {
@@ -373,7 +456,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
         return () => window.removeEventListener('resize', handleResize);
     }, [productCount]);
 
-    const duplicatedProducts = [...products, ...products];
+    const duplicatedProducts = [...products];
 
     const handleTouchStart = (e: React.TouchEvent) => {
         setStartX(e.touches[0].clientX);
@@ -381,6 +464,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
     };
 
     const handleMouseDown = (e: React.MouseEvent) => {
+        e.preventDefault(); // Prevent image selection
         setStartX(e.clientX);
         setIsDragging(true);
     };
@@ -397,21 +481,24 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
 
     const handleSwipeMove = (currentX: number) => {
         const moveX = currentX - startX;
-        if (moveX > 50) {
-            setActiveIndex((prevIndex) => prevIndex - 1);
-            setIsDragging(false);
-        } else if (moveX < -50) {
-            setActiveIndex((prevIndex) => prevIndex + 1);
+        // Implement smoother swipe detection
+        if (Math.abs(moveX) > 50) {
+            if (moveX > 0) {
+                setActiveIndex((prevIndex) => prevIndex - 1);
+            } else {
+                setActiveIndex((prevIndex) => prevIndex + 1);
+            }
             setIsDragging(false);
         }
     };
 
     const handleTouchEnd = () => setIsDragging(false);
     const handleMouseUp = () => setIsDragging(false);
+    const handleMouseLeave = () => setIsDragging(false); // Handle case when mouse leaves the container
 
     const wrappedIndex = (index: number) => {
-        if (index >= duplicatedProducts.length) return productCount;
-        else if (index < 0) return duplicatedProducts.length - productCount;
+        if (index >= duplicatedProducts.length) return index % productCount;
+        else if (index < 0) return (index + productCount) % productCount;
         return index;
     };
 
@@ -424,9 +511,11 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
 
     return (
         <CarouselContainer
+            ref={containerRef}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
@@ -438,7 +527,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                         const isActive = (index % productCount) === modActiveIndex;
                         const cosAngle = Math.cos((angle * Math.PI) / 180);
                         const translateY = flattened ? 0 : cosAngle * maxLiftAmount;
-                        const zIndex = flattened ? 1 : cosAngle * 1000;
+                        const zIndex = flattened ? 1 : Math.round(cosAngle * 1000);
 
                         const minHeight = 159.35;
                         const maxHeight = 356.2;
@@ -446,13 +535,60 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                             ? 200
                             : minHeight + (maxHeight - minHeight) * ((cosAngle + 1) / 2);
 
-                        const opacity = flattened
-                            ? 1
-                            : isActive
-                                ? 1
-                                : 0.4 + 0.5 * (1 - Math.abs(cosAngle));
-
                         const frontPhoto = product?.customFields?.variants?.[0]?.frontPhoto?.source || product.productAsset?.preview;
+                        const backPhoto = product?.customFields?.variants?.[0]?.backPhoto?.source;
+
+                        // Slide Content with Enhanced Flip Effect
+                        const SlideContent = (
+                            <ProductImageContainer height={height}>
+                                {isActive && backPhoto ? (
+                                    <ImageFlipContainer>
+                                        <div className="flip-card-inner">
+                                            <img
+                                                className="flip-card-front"
+                                                src={frontPhoto}
+                                                alt={product.productName}
+                                                draggable={false}
+                                                loading="lazy"
+                                                style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    objectFit: 'contain',
+                                                }}
+                                            />
+                                            <img
+                                                className="flip-card-back"
+                                                src={backPhoto}
+                                                alt={`${product.productName} Back`}
+                                                draggable={false}
+                                                loading="lazy"
+                                                style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    objectFit: 'contain',
+                                                }}
+                                            />
+                                        </div>
+                                    </ImageFlipContainer>
+                                ) : (
+                                    <img
+                                        src={frontPhoto}
+                                        alt={product.productName}
+                                        draggable={false}
+                                        loading="lazy"
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'contain',
+                                            borderRadius: '8px',
+                                        }}
+                                    />
+                                )}
+                            </ProductImageContainer>
+                        );
+
+                        // Determine if the current slide is hovered
+                        const isHovered = hoveredIndex === index;
 
                         return (
                             <ProductSlide
@@ -461,27 +597,40 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                                 distance={carouselDistance}
                                 isActive={isActive}
                                 translateY={translateY}
-                                zIndex={Math.round(zIndex)}
+                                zIndex={zIndex}
                                 height={height}
-                                opacity={opacity}
+                                opacity={1} // All slides have full opacity
                                 flattened={flattened}
                                 index={index}
                                 activeIndex={activeIndex}
                                 extraLift={extraLiftFlattened}
                             >
-                                <ProductImageContainer height={height}>
-                                    <img
-                                        src={frontPhoto}
-                                        alt={product.productName}
-                                        draggable={false}
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            objectFit: 'contain',
-                                            borderRadius: '8px',
-                                        }}
-                                    />
-                                </ProductImageContainer>
+                                {isActive ? (
+                                    <SlideLink
+                                        href={`/snowboards/${product.slug}`}
+                                        aria-label={`View details for ${product.productName}`}
+                                        isHovered={isHovered}
+                                        onMouseEnter={() => setHoveredIndex(index)}
+                                        onMouseLeave={() => setHoveredIndex(null)}
+                                        onFocus={() => setHoveredIndex(index)} // Accessibility: Handle focus
+                                        onBlur={() => setHoveredIndex(null)}   // Accessibility: Handle blur
+                                        onDragStart={(e) => e.preventDefault()} // Prevent default drag behavior
+                                    >
+                                        {SlideContent}
+                                    </SlideLink>
+                                ) : (
+                                    <div
+                                        onMouseEnter={() => setHoveredIndex(index)}
+                                        onMouseLeave={() => setHoveredIndex(null)}
+                                        onFocus={() => setHoveredIndex(index)} // Accessibility: Handle focus
+                                        onBlur={() => setHoveredIndex(null)}   // Accessibility: Handle blur
+                                        style={{ width: '100%', height: '100%' }}
+                                        tabIndex={0} // Make div focusable for accessibility
+                                        onDragStart={(e) => e.preventDefault()} // Prevent default drag behavior
+                                    >
+                                        {SlideContent}
+                                    </div>
+                                )}
                             </ProductSlide>
                         );
                     })}
@@ -498,7 +647,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                                 {currentProduct?.productName} ({currentProduct?.productVariantName})
                             </ProductTitle>
                             <Link href={`/snowboards/${currentProduct?.slug}`} passHref>
-                                <StockButton inStock={currentProduct?.inStock}>
+                                <StockButton as="a" inStock={currentProduct?.inStock}>
                                     {currentProduct?.inStock ? 'In Stock' : 'Out of Stock'}
                                 </StockButton>
                             </Link>
@@ -535,3 +684,5 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
         </CarouselContainer>
     );
 };
+
+
