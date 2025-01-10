@@ -64,7 +64,7 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
 
     return (
         <ResponsiveStack itemsCenter ref={containerRef}>
-            <Stack w100 itemsCenter gap="1rem">
+            <Stack w100 justifyCenter itemsCenter gap="1rem">
                 <Form onSubmit={onSubmit}>
                     <Input
                         onKeyDown={e => {
@@ -112,7 +112,12 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                             {searchQuery.length === 0 ? (
                                 <Stack column gap='16px'>
                                     <MobileHeading size={'18px'} weight={400}>{t('search-query-start-typing')}</MobileHeading>
-                                    <MobileHeadingOpacity size={'18px'} weight={300}>{t('search-query-to-short')}</MobileHeadingOpacity>
+                                    <MobileHeadingOpacity italic size={'16px'} weight={300}>
+                                        <Trans
+                                            i18nKey="search-query-to-short"
+                                            components={{ strong: <BoldText /> }}
+                                        />
+                                    </MobileHeadingOpacity>
                                 </Stack>
                             ) : searchQuery.length < 3 ? (
                                 <MobileText>{t('search-query-to-short')}</MobileText>
@@ -261,7 +266,7 @@ const PopularSearchesWrapper = styled(Stack)`
     min-width: 20%;
     max-width: 521px;
     display: flex;
-    padding-top: 56px;
+    padding-top: 36px;
     justify-content: center;
     border-right: 0.5px solid ${p => p.theme.outline};
 
@@ -309,9 +314,12 @@ const SearchPosition = styled(Stack)`
 `;
 
 const SearchContent = styled(Stack)`
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.12);
     position: relative;
     width: 100%;
     min-height: 40vh;
+    padding-top: 10px;
+    padding-bottom: 10px;
     border: 1px solid ${p => p.theme.gray(100)};
     outline: none;
     font-size: 1.5rem;
@@ -329,14 +337,17 @@ const SearchContent = styled(Stack)`
 `;
 
 const Form = styled.form`
-    width: 50%;
     max-width: 675px;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 0;
-    left: 25%;
+    width: 50vw; /* Default width */
+
+    @media (max-width: ${p => p.theme.breakpoints.md}) {
+        width: 100%; /* 75% width for mobile screens */
+    }
 `;
 
 const Input = styled.input`
@@ -418,6 +429,11 @@ const IconWrapper = styled.div`
 `;
 
 const Wrapper = styled(Stack)``;
+
+const BoldText = styled.strong`
+    font-weight: bold;
+`;
+
 
 const MobileHeadingOpacity = styled(TypoGraphy)`
     opacity: 0.5;

@@ -16,10 +16,14 @@ const TwoColGrid = ({ blok }) => {
     // Extract top margin from Storyblok field or set a default
     const topMargin = blok.topMargin || 0;
 
+    // Extract gap between columns or set a default
+    const columnGap = blok.columnGap || 24; // Default gap in pixels (e.g., 24px)
+
     // Define the grid content
     const gridContent = (
         <div
-            className="flex w-full gap-6 mx-auto"
+            className="flex w-full mx-auto"
+            style={{ gap: `${columnGap}px` }} // Apply gap
             {...storyblokEditable(blok)}
         >
             <div style={{ flexBasis: `${width1}%` }}>

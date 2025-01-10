@@ -140,7 +140,10 @@ const DesktopStack = styled(Stack)`
         flex-direction: column;
         font-size: 20px;
         font-weight: 600;
+        gap: 10px;
         padding: 30px;
+        justify-content: start;
+        align-items: start;
     }
     z-index: 9999;
 `;
@@ -154,7 +157,11 @@ const SubMenuStack = styled(Stack)`
 
     @media (max-width: ${p => p.theme.breakpoints.md}) {
         flex-wrap: wrap;
-        gap: 50px;
+        padding: 30px;
+        flex-direction: column;
+        justify-content: start;
+        align-items: start;
+        gap: 10px;
         font-size: 14px;
     }
 `;

@@ -9,6 +9,7 @@ export type BaseProps = {
     color?: keyof (typeof thv)['text'];
     noWrap?: boolean;
     lineHeight?: string | number; // Add lineHeight to enable custom line height
+    italic?: boolean; // New property to enable italic text
 };
 
 export const TypoGraphy = styled.div<BaseProps>`
@@ -17,7 +18,8 @@ export const TypoGraphy = styled.div<BaseProps>`
     text-transform: ${p => (p.upperCase ? 'uppercase' : p.capitalize ? 'capitalize' : 'none')};
     color: ${p => (p.color ? thv.text[p.color] : thv.text.main)};
     white-space: ${p => (p.noWrap ? 'nowrap' : 'normal')};
-    line-height: ${p => (p.lineHeight ? p.lineHeight : 'normal')}; // Apply line-height if provided
+    line-height: ${p => (p.lineHeight ? p.lineHeight : 'normal')};
+    font-style: ${p => (p.italic ? 'italic' : 'normal')}; // Apply italic if enabled
 `;
 
 type TypoGraphyProps = Partial<Parameters<typeof TypoGraphy>[0]>;

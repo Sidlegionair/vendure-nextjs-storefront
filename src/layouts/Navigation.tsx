@@ -313,23 +313,25 @@ const MobileMenuOverlay = styled(motion.div)`
 
 const MobileMenuContent = styled.div`
     background: #ffffff;
-    width: 90vw;
+    //width: 90vw;
     height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: start;
+    align-items: start;
     overflow-y: auto;
 `;
 
 const MobileMenuHeader = styled.div`
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: start;
+    justify-content: start;
     padding: 30px 20px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.06);
 
     a {
         display: inline-flex;
-        align-items: center;
+        align-items: start;
     }
 
     button {
@@ -391,11 +393,14 @@ const CenterStack = styled(Stack)`
 
 const RightStack = styled(Stack)`
     width: auto;
-    gap: 20px;
+    gap: 5px;
+
     flex-wrap: nowrap;
     justify-content: flex-end;
 
     @media (min-width: ${p => p.theme.breakpoints.md}) {
         width: 100%;
+        gap: 20px;
+
     }
 `;

@@ -18,7 +18,7 @@ export const ProductOptions: React.FC<ProductOptionsProps> = ({ productOptionsGr
                         <TP capitalize>{og.name}</TP>
                         <StyledStack gap="1rem">
                             {og.options.map((o, j) => {
-                                if (og.name.includes('color') || og.name.includes('kolor')) {
+                                if ((og.name.includes('color') || og.name.includes('kolor')) && o.name) {
                                     return (
                                         <ColorSwatch
                                             outOfStock={!(o.stockLevel > 0)}
@@ -57,6 +57,7 @@ export const ProductOptions: React.FC<ProductOptionsProps> = ({ productOptionsGr
         </Stack>
     );
 };
+
 
 const Error = styled(TP)`
     color: ${({ theme }) => theme.error};
@@ -124,12 +125,16 @@ const SizeSelector = styled(VariantButton)<{ selected: boolean; outOfStock: bool
         background: ${p => (p.selected || p.outOfStock ? null : p.theme.gray(500))};
         color: ${p => (p.selected || p.outOfStock ? null : p.theme.gray(0))};
     }
+    
+    @media(max-width: 767px) {
+        
+    }
 `;
 
 
 const StyledStack = styled(Stack)`
-    justify-content: center;
-    align-items: center;
+    //justify-content: center;
+    //align-items: center;
     @media (min-width: 1024px) {
         justify-content: flex-start;
         align-items: flex-start;
