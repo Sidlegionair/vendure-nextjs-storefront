@@ -10,6 +10,7 @@
     "scripts": {
         "dev": "next dev --experimental-https -p 3001",
         "build": "next build",
+        "postbuild": "next-sitemap",
         "start": "next start",
         "zeus": "zeus http://localhost:3000/shop-api ./src --td",
         "toc": "i18next-resources-for-ts toc -i ./public/locales/en -o ./src/@types/resources.ts",
@@ -46,6 +47,7 @@
         "next": "^14.0.3",
         "next-i18next": "^15.3.1",
         "next-language-detector": "^1.1.0",
+        "next-sitemap": "^4.2.3",
         "photoswipe": "^5.4.3",
         "postcss": "^8.4.47",
         "react": "^18.2.0",
