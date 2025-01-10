@@ -64,7 +64,7 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
 
     return (
         <ResponsiveStack itemsCenter ref={containerRef}>
-            <Stack w100 itemsCenter gap="1rem">
+            <Stack w100 justifyCenter itemsCenter gap="1rem">
                 <Form onSubmit={onSubmit}>
                     <Input
                         onKeyDown={e => {
@@ -337,14 +337,17 @@ const SearchContent = styled(Stack)`
 `;
 
 const Form = styled.form`
-    width: 50%;
     max-width: 675px;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 0;
-    left: 25%;
+    width: 50vw; /* Default width */
+
+    @media (max-width: ${p => p.theme.breakpoints.md}) {
+        width: 100%; /* 75% width for mobile screens */
+    }
 `;
 
 const Input = styled.input`
