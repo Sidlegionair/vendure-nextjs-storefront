@@ -112,7 +112,12 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                             {searchQuery.length === 0 ? (
                                 <Stack column gap='16px'>
                                     <MobileHeading size={'18px'} weight={400}>{t('search-query-start-typing')}</MobileHeading>
-                                    <MobileHeadingOpacity size={'18px'} weight={300}>{t('search-query-to-short')}</MobileHeadingOpacity>
+                                    <MobileHeadingOpacity italic size={'16px'} weight={300}>
+                                        <Trans
+                                            i18nKey="search-query-to-short"
+                                            components={{ strong: <BoldText /> }}
+                                        />
+                                    </MobileHeadingOpacity>
                                 </Stack>
                             ) : searchQuery.length < 3 ? (
                                 <MobileText>{t('search-query-to-short')}</MobileText>
@@ -261,7 +266,7 @@ const PopularSearchesWrapper = styled(Stack)`
     min-width: 20%;
     max-width: 521px;
     display: flex;
-    padding-top: 56px;
+    padding-top: 36px;
     justify-content: center;
     border-right: 0.5px solid ${p => p.theme.outline};
 
@@ -312,6 +317,8 @@ const SearchContent = styled(Stack)`
     position: relative;
     width: 100%;
     min-height: 40vh;
+    padding-top: 10px;
+    padding-bottom: 10px;
     border: 1px solid ${p => p.theme.gray(100)};
     outline: none;
     font-size: 1.5rem;
@@ -418,6 +425,11 @@ const IconWrapper = styled.div`
 `;
 
 const Wrapper = styled(Stack)``;
+
+const BoldText = styled.strong`
+    font-weight: bold;
+`;
+
 
 const MobileHeadingOpacity = styled(TypoGraphy)`
     opacity: 0.5;
