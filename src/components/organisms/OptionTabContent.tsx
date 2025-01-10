@@ -35,10 +35,12 @@ export const OptionTabContent: React.FC<OptionTabContentProps> = ({ customFields
                     <BarRangeContainer>
                         <BarRange value={bar.value} max={bar.max} steps={bar.steps} />
                     </BarRangeContainer>
-                    <BarLabels>
-                        <span>{bar.minLabel || bar.min}</span>
-                        <span>{bar.maxLabel || bar.max}</span>
-                    </BarLabels>
+                    {(bar.minLabel || bar.maxLabel) && (
+                        <BarLabels>
+                            <span>{bar.minLabel || bar.min}</span>
+                            <span>{bar.maxLabel || bar.max}</span>
+                        </BarLabels>
+                    )}
                 </BarContainer>
             ))}
         </Stack>
