@@ -314,6 +314,7 @@ const SearchPosition = styled(Stack)`
 `;
 
 const SearchContent = styled(Stack)`
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.12);
     position: relative;
     width: 100%;
     min-height: 40vh;
