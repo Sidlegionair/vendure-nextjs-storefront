@@ -203,7 +203,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                     defaultOpenIndex={0}
                                     data={[
                                         {
-                                            title: 'Product Options',
+                                            title: 'Size & Color',
                                             children: (
                                                 <ProductOptions
                                                     productOptionsGroups={productOptionsGroups}
