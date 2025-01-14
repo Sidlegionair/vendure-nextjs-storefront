@@ -35,15 +35,55 @@ const StoryPage = ({
         );
     }
 
+    // Destructure the metatags from story.content
+    const { metatags } = story?.content || {};
+
+    // Extract individual meta fields
+    const metaTitle = metatags?.title || story?.name || 'Boardrush';
+    const metaDescription = metatags?.description;
+    const ogTitle = metatags?.og_title || metaTitle;
+    const ogDescription = metatags?.og_description || metaDescription;
+    const ogImage = metatags?.og_image?.filename;
+    const twitterTitle = metatags?.twitter_title || metaTitle;
+    const twitterDescription = metatags?.twitter_description || metaDescription;
+    const twitterImage = metatags?.twitter_image?.filename;
+
     return (
         <Layout
             navigation={navigation}
             subnavigation={subnavigation}
             categories={categories}
-            pageTitle={story?.name || 'Boardrush'}
+            pageTitle={metaTitle} // Pass SEO title into the Layout if needed
         >
             <Head>
-                <title>{story?.name || 'Boardrush'}</title>
+                {/* Standard Meta Tags */}
+                {metaTitle && <title>{metaTitle}</title>}
+                {metaDescription && (
+                    <meta name="description" content={metaDescription} />
+                )}
+
+                {/* Open Graph Meta Tags */}
+                {ogTitle && <meta property="og:title" content={ogTitle} />}
+                {ogDescription && (
+                    <meta property="og:description" content={ogDescription} />
+                )}
+                {ogImage && <meta property="og:image" content={ogImage} />}
+
+                {/* Twitter Card Meta Tags */}
+                {twitterTitle && (
+                    <meta name="twitter:title" content={twitterTitle} />
+                )}
+                {twitterDescription && (
+                    <meta name="twitter:description" content={twitterDescription} />
+                )}
+                {twitterImage && (
+                    <meta name="twitter:image" content={twitterImage} />
+                )}
+
+                {/* Optional: Specify Twitter Card Type */}
+                {(twitterTitle || twitterDescription || twitterImage) && (
+                    <meta name="twitter:card" content="summary_large_image" />
+                )}
             </Head>
 
             {/* Render Content Above Grid */}

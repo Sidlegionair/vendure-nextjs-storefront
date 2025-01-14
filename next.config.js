@@ -4,7 +4,7 @@ const path = require('node:path');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     trailingSlash: true,
-    pageExtensions: ['page.tsx', 'page.ts'],
+    pageExtensions: ['page.ts', 'page.tsx', 'ts', 'tsx'],
     swcMinify: true,
     reactStrictMode: true,
     images: {

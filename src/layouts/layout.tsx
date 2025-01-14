@@ -27,6 +27,12 @@ interface CheckoutLayoutProps {
     children: React.ReactNode;
 }
 
+const ContentStack = styled(Stack)`
+    @media(max-width: ${({ theme }) => theme.breakpoints.md}) {
+        margin-top: 80px;
+    }
+`;
+
 const MainStack = styled.main`
     position: relative;
     height: 100%;
@@ -107,9 +113,9 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, categories,
                 categories={categories}
                 subnavigation={subnavigation ?? null}
             />
-            <Stack w100 itemsCenter column>
+            <ContentStack w100 itemsCenter column>
                 {children}
-            </Stack>
+            </ContentStack>
             <Stack w100>
                 <Footer />
             </Stack>

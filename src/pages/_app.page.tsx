@@ -22,6 +22,7 @@ import Navigation from '@/src/components/storyblok/Navigation';
 import Page from '@/src/components/storyblok/Page';
 import PopularArticles from '@/src/components/storyblok/PopularArticles';
 import Teaser from '@/src/components/storyblok/Teaser';
+import { ReactCookieFirst } from '@cookiefirst/cookiefirst-react'
 
 
 import { apiPlugin, storyblokInit } from '@storyblok/react';
@@ -40,7 +41,7 @@ import RelatedArticles from '@/src/components/storyblok/RelatedArticles';
 import ProfileGrid from '@/src/components/storyblok/ProfileGrid';
 import TwoColGrid from '@/src/components/storyblok/TwoColGrid';
 import MultiColGrid from '@/src/components/storyblok/MultiColGrid';
-
+// import { VendureCollectionSlider } from '@/src/components/molecules/VendureCollectionSlider';
 
 // Register your components
 const components = {
@@ -70,7 +71,8 @@ const components = {
     'article-grid': ArticleGrid,
     'article-overview-page': ArticlesOverviewPage,
     'related-articles': RelatedArticles,
-    'profile-grid': ProfileGrid
+    'profile-grid': ProfileGrid,
+    // 'vendure-collection-slider': VendureCollectionSlider,
 };
 
 
@@ -90,6 +92,8 @@ const customFontStyle = `
 
 const App = ({ Component, pageProps }: AppProps) => {
     return (
+        <ReactCookieFirst url="https://consent.cookiefirst.com/sites/demo.boardrush.com-e0a83e47-ae65-43a0-915c-89dc0a764efc/consent.js">
+
         <ThemeProvider theme={LightTheme}>
             <ChannelsProvider initialState={{ channel: pageProps.channel, locale: pageProps.locale }}>
                 {/* Apply the custom font globally */}
@@ -123,6 +127,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                 )}
             </ChannelsProvider>
         </ThemeProvider>
+        </ReactCookieFirst>
     );
 };
 
