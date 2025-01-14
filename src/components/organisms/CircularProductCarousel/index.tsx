@@ -2,8 +2,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import { Divider, Stack } from '@/src/components';
+import useIsMobile from '@/src/util/hooks/useIsMobile';
 
-// Styled Components
+// Styled Components (unchanged)
 
 const CarouselContainer = styled.div`
     position: relative;
@@ -81,7 +82,8 @@ const CenterAnchor = styled.div`
     height: 0;
 `;
 
-// Updated SlideLink Component with Enhanced Flip Effect
+// SlideLink Component (unchanged)
+
 const SlideLink = styled.a<{ isHovered: boolean }>`
     display: block;
     width: 100%;
@@ -120,6 +122,8 @@ const SlideLink = styled.a<{ isHovered: boolean }>`
         opacity: ${({ isHovered }) => (isHovered ? 1 : 0)};
     }
 `;
+
+// ProductSlide Component (unchanged)
 
 const ProductSlide = styled.div<{
     angle: number;
@@ -196,7 +200,8 @@ const ProductImageContainer = styled.div<{ height: number }>`
     }
 `;
 
-// Bottom Stack Styles
+// Bottom Stack Styles (unchanged)
+
 const BottomStackWrapper = styled.div`
     display: flex;
     justify-content: center;
@@ -353,7 +358,8 @@ const Quote = styled(Stack)`
     }
 `;
 
-// Updated ImageFlipContainer for Enhanced Flip Effect
+// ImageFlipContainer Component (unchanged)
+
 const ImageFlipContainer = styled.div`
     width: 100%;
     height: 100%;
@@ -382,7 +388,9 @@ const ImageFlipContainer = styled.div`
 `;
 
 // CircularProductCarousel Component
+
 export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ products }) => {
+    const isMobile = useIsMobile(); // Use the isMobile hook
     const productCount = products.length;
     const [displayCount, setDisplayCount] = useState<number>(Math.min(productCount, 11));
     const [activeIndex, setActiveIndex] = useState<number>(productCount);
@@ -509,6 +517,11 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
     const modActiveIndex = activeIndex % productCount;
     const currentProduct = products[modActiveIndex];
 
+    // Handle click on mobile to toggle flip
+    const handleSlideClick = (index: number) => {
+        setHoveredIndex((prev) => (prev === index ? null : index));
+    };
+
     return (
         <CarouselContainer
             ref={containerRef}
@@ -606,18 +619,33 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                                 extraLift={extraLiftFlattened}
                             >
                                 {isActive ? (
-                                    <SlideLink
-                                        href={`/snowboards/${product.slug}`}
-                                        aria-label={`View details for ${product.productName}`}
-                                        isHovered={isHovered}
-                                        onMouseEnter={() => setHoveredIndex(index)}
-                                        onMouseLeave={() => setHoveredIndex(null)}
-                                        onFocus={() => setHoveredIndex(index)} // Accessibility: Handle focus
-                                        onBlur={() => setHoveredIndex(null)}   // Accessibility: Handle blur
-                                        onDragStart={(e) => e.preventDefault()} // Prevent default drag behavior
-                                    >
-                                        {SlideContent}
-                                    </SlideLink>
+                                    !isMobile ? (
+                                        <SlideLink
+                                            href={`/snowboards/${product.slug}`}
+                                            aria-label={`View details for ${product.productName}`}
+                                            isHovered={isHovered}
+                                            onMouseEnter={() => setHoveredIndex(index)}
+                                            onMouseLeave={() => setHoveredIndex(null)}
+                                            onFocus={() => setHoveredIndex(index)} // Accessibility: Handle focus
+                                            onBlur={() => setHoveredIndex(null)}   // Accessibility: Handle blur
+                                            onDragStart={(e) => e.preventDefault()} // Prevent default drag behavior
+                                        >
+                                            {SlideContent}
+                                        </SlideLink>
+                                    ) : (
+                                        <SlideLink
+                                            // href={`/snowboards/${product.slug}`}
+                                            aria-label={`View details for ${product.productName}`}
+                                            isHovered={isHovered}
+                                            onMouseEnter={() => setHoveredIndex(index)}
+                                            onMouseLeave={() => setHoveredIndex(null)}
+                                            onFocus={() => setHoveredIndex(index)} // Accessibility: Handle focus
+                                            onBlur={() => setHoveredIndex(null)}   // Accessibility: Handle blur
+                                            onDragStart={(e) => e.preventDefault()} // Prevent default drag behavior
+                                        >
+                                            {SlideContent}
+                                        </SlideLink>
+                                    )
                                 ) : (
                                     <div
                                         onMouseEnter={() => setHoveredIndex(index)}
@@ -684,5 +712,3 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
         </CarouselContainer>
     );
 };
-
-

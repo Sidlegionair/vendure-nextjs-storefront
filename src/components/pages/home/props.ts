@@ -1,177 +1,229 @@
 import { SSGQuery } from '@/src/graphql/client';
-import { SearchResponseSelector, FacetsSelector, CollectionSelector } from '@/src/graphql/selectors';
+import {
+    SearchResponseSelector,
+    SearchSelector,
+} from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
-
 import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
-
 import { ContextModel, makeStaticProps } from '@/src/lib/getStatic';
 import { arrayToTree } from '@/src/util/arrayToTree';
 import { SortOrder } from '@/src/zeus';
-import { HomePageSlidersType, homePageSlidersSelector } from '@/src/graphql/selectors';
+import { PER_PAGE } from '@/src/state/collection/utils';
 
 const slugsOfBestOf = ['home-slider-snowboards'];
 
 export const getStaticProps = async (ctx: ContextModel) => {
-    const r = await makeStaticProps(['common', 'homepage'])(ctx);
-    const api = SSGQuery(r.context);
+    try {
+        const r = await makeStaticProps(['common', 'homepage'])(ctx);
+        const api = SSGQuery(r.context);
 
-    // Specify collection slug for main snowboards (optional)
-    const mainProductCollectionSlug = process.env.MAIN_PRODUCTS_COLLECTION_SLUG || 'carousel-snowboards';
+        const mainProductCollectionSlug = process.env.MAIN_PRODUCTS_COLLECTION_SLUG || 'default-carousel';
+        const mainProductsQuery = {
+            input: {
+                take: 15,
+                groupByProduct: true,
+                sort: { price: SortOrder.ASC },
+                ...(mainProductCollectionSlug && { collectionSlug: mainProductCollectionSlug }),
+            },
+        };
+        const productsResponse = await api({ search: [mainProductsQuery, SearchResponseSelector] });
 
-    // Fetch main snowboards, optionally filtering by collection slug
-    const mainProductsQuery = {
-        input: {
-            take: 15,
-            groupByProduct: true,
-            sort: { price: SortOrder.ASC },
-            ...(mainProductCollectionSlug && { collectionSlug: mainProductCollectionSlug }),
-        },
-    };
+        if (!productsResponse?.search?.items) {
+            throw new Error('Invalid products response structure.');
+        }
 
-    const products = await api({
-        search: [mainProductsQuery, SearchResponseSelector],
-    });
+        const products = productsResponse.search;
 
-    // Fetch all facets to resolve facetValueIds
-    const allFacets = await api({
-        facets: [
-            {}, // Fetch all facets
-            {
-                items: {
-                    id: true,
-                    name: true,
-                    values: {
+        const allFacetsResponse = await api({
+            facets: [
+                {},
+                {
+                    items: {
                         id: true,
                         name: true,
+                        code: true,
+                        values: { code: true, id: true, name: true },
                     },
                 },
-            },
-        ],
-    });
-
-    // Create a map of facetValueIds to their names
-    const facetValueMap = allFacets.facets.items.reduce((map, facet) => {
-        facet.values.forEach((value) => {
-            map[value.id] = { name: facet.name, value: value.name };
+            ],
         });
-        return map;
-    }, {} as Record<string, { name: string; value: string }>);
 
-    // Map facets to each product
-    const productsWithFacets = products.search.items.map((product) => {
-        const levelFacet = product.facetValueIds
-            .map((id) => facetValueMap[id])
-            .filter((facet) => facet?.name.toLowerCase() === 'level')
-            .map((facet) => facet?.value)
-            .join(', ') || null;
+        if (!allFacetsResponse?.facets?.items) {
+            throw new Error('Invalid facets response structure.');
+        }
 
-        const terrainFacet = product.facetValueIds
-            .map((id) => facetValueMap[id])
-            .filter((facet) => facet?.name.toLowerCase() === 'terrain')
-            .map((facet) => facet?.value)
-            .join(', ') || null;
+        const facetValueMap: Record<
+            string,
+            { code: string; name: string; value: string }
+        > = allFacetsResponse.facets.items.reduce(
+            (map, facet) => {
+                facet.values.forEach((value) => {
+                    map[value.id] = { code: value.code, name: facet.name, value: value.name };
+                });
+                return map;
+            },
+            {} as Record<string, { code: string; name: string; value: string }>
+        );
 
-        return {
-            ...product,
-            level: levelFacet,
-            terrain: terrainFacet,
-        };
-    });
-
-    // Fetch stock levels, brand, and variant photos in a separate query
-    const stockAndBrandData = await Promise.all(
-        productsWithFacets.map(async (product) => {
-            const stockAndBrand = await api({
-                product: [
-                    { id: product.productId },
-                    {
-                        customFields: {
-                            brand: true,
-                        },
-                        variants: {
-                            id: true,
-                            stockLevel: true,
-                            customFields: {
-                                frontPhoto: {
-                                    id: true,
-                                    preview: true,
-                                    source: true,
-                                },
-                                backPhoto: {
-                                    id: true,
-                                    preview: true,
-                                    source: true,
-                                },
-                            },
-                        },
-                    },
-                ],
-            });
-
-            const inStock = stockAndBrand.product?.variants?.some(
-                (variant) => Number(variant.stockLevel) > 0
+        const productsWithFacets = products.items.map((product) => {
+            const uniqueFacets = Array.from(
+                new Map(
+                    product.facetValueIds?.map((id) => [
+                        id,
+                        facetValueMap[id] || { code: 'Unknown', name: 'Unknown', value: 'Unknown' },
+                    ])
+                ).values()
             );
 
-            const variantData = stockAndBrand.product?.variants?.map((variant) => ({
-                id: variant.id,
-                stockLevel: variant.stockLevel,
-                frontPhoto: variant?.customFields?.frontPhoto,
-                backPhoto: variant?.customFields?.backPhoto,
-            })) || [];
+            const levelFacet =
+                uniqueFacets
+                    .filter((facet) => facet.name.toLowerCase() === 'level')
+                    .map((facet) => facet.value)
+                    .join(', ') || 'Unknown Level';
+
+            const terrainFacet =
+                uniqueFacets
+                    .filter((facet) => facet.name.toLowerCase() === 'terrain')
+                    .map((facet) => facet.value)
+                    .join(', ') || 'Unknown Terrain';
 
             return {
-                product: product.productId,
-                brand: stockAndBrand.product?.customFields?.brand || null,
-                inStock,
-                variants: variantData,
+                ...product,
+                level: levelFacet,
+                terrain: terrainFacet,
+                uniqueFacets,
             };
-        })
-    );
+        });
 
-    // Merge stock and brand details as well as variant custom fields into the product data
-    const productsWithDetails = productsWithFacets.map((product) => {
-        const stockAndBrand = stockAndBrandData.find((data) => data.product === product.productId);
+        const stockAndBrandData = await Promise.all(
+            productsWithFacets.map(async (product) => {
+                try {
+                    const stockAndBrand = await api({
+                        product: [
+                            { id: product.productId },
+                            {
+                                customFields: { brand: true },
+                                variants: {
+                                    id: true,
+                                    stockLevel: true,
+                                    customFields: {
+                                        frontPhoto: { id: true, preview: true, source: true },
+                                        backPhoto: { id: true, preview: true, source: true },
+                                    },
+                                },
+                            },
+                        ],
+                    });
+
+                    const inStock = stockAndBrand.product?.variants?.some(
+                        (variant) => Number(variant.stockLevel) > 0
+                    );
+
+                    const variantData =
+                        stockAndBrand.product?.variants?.map((variant) => ({
+                            id: variant.id,
+                            stockLevel: variant.stockLevel || 0,
+                            frontPhoto: variant?.customFields?.frontPhoto || null,
+                            backPhoto: variant?.customFields?.backPhoto || null,
+                        })) || [];
+
+                    return {
+                        product: product.productId,
+                        brand: typeof stockAndBrand.product?.customFields?.brand === 'string'
+                            ? stockAndBrand.product.customFields.brand
+                            : 'Unknown Brand',
+                        inStock: inStock || false,
+                        variants: variantData,
+                    };
+                } catch (error) {
+                    console.error(`Failed to fetch stock and brand data for product ID: ${product.productId}`, error);
+                    return {
+                        product: product.productId,
+                        brand: 'Unknown Brand',
+                        inStock: false,
+                        variants: [],
+                    };
+                }
+            })
+        );
+
+        const productsWithDetails = productsWithFacets.map((product) => {
+            const stockAndBrand = stockAndBrandData.find((data) => data.product === product.productId);
+            return {
+                ...product,
+                customFields: {
+                    brand: stockAndBrand?.brand || 'Unknown Brand',
+                    variants: stockAndBrand?.variants || [],
+                },
+                inStock: stockAndBrand?.inStock || false,
+            };
+        });
+
+        const sliders = await Promise.all(
+            slugsOfBestOf.map(async (slug) => {
+                try {
+                    const productsQuery = await api({
+                        search: [
+                            {
+                                input: {
+                                    collectionSlug: slug,
+                                    groupByProduct: true,
+                                    take: PER_PAGE,
+                                    sort: { name: SortOrder.ASC },
+                                },
+                            },
+                            SearchSelector,
+                        ],
+                    });
+
+                    if (!productsQuery?.search?.items) {
+                        console.warn(`No products found for slider slug: ${slug}`);
+                        return { slug, products: [] };
+                    }
+
+                    const productsInSlider = productsQuery.search.items;
+
+                    const productsWithDetails = productsInSlider.map((product) => ({
+                        ...product,
+                        facetValues: Array.from(
+                            new Map(
+                                product.facetValueIds.map((id) => [
+                                    id,
+                                    facetValueMap[id] || { code: 'Unknown', name: 'Unknown', value: 'Unknown' },
+                                ])
+                            ).values()
+                        ),
+                        customFields: {
+                            brand: 'Unknown Brand',
+                        },
+                    }));
+
+                    return { slug, products: productsWithDetails };
+                } catch (error) {
+                    console.error(`Failed to fetch slider data for slug: ${slug}`, error);
+                    return { slug, products: [] };
+                }
+            })
+        );
+
+        const collections = await getCollections(r.context);
+        const navigation = arrayToTree(collections);
+        navigation.children.unshift(...mainNavigation);
+        const subnavigation = { children: [...subNavigation] };
+
         return {
-            ...product,
-            customFields: {
-                brand: stockAndBrand?.brand || null,
-                variants: stockAndBrand?.variants || [],
+            props: {
+                ...r.props,
+                products: productsWithDetails.length ? productsWithDetails : [{ name: 'Placeholder Product', slug: 'placeholder-product' }],
+                navigation: navigation || { children: [] },
+                subnavigation: subnavigation || { children: [] },
+                sliders: sliders.length ? sliders : [{ slug: 'placeholder-slider', products: [] }],
+                categories: collections || [],
             },
-            inStock: stockAndBrand?.inStock || false,
+            revalidate: parseInt(process.env.NEXT_REVALIDATE || '10', 10),
         };
-    });
-
-    // Fetch sliders
-    const sliders = await Promise.all(
-        slugsOfBestOf.map(async (slug) => {
-            const section = await api({
-                collection: [{ slug }, homePageSlidersSelector],
-            });
-            return section.collection || null;
-        })
-    ).then((result) => result.filter((x): x is HomePageSlidersType => x !== null));
-
-    // Fetch collections
-    const collections = await getCollections(r.context);
-    const navigation = arrayToTree(collections);
-
-    // Append main and sub-navigation
-    navigation.children.unshift(...mainNavigation);
-    const subnavigation = {
-        children: [...subNavigation],
-    };
-
-    return {
-        props: {
-            ...r.props,
-            ...r.context,
-            products: productsWithDetails,
-            categories: collections,
-            facetValues: allFacets.facets.items,
-            navigation,
-            subnavigation,
-            sliders,
-        },
-        revalidate: parseInt(process.env.NEXT_REVALIDATE || '10'),
-    };
+    } catch (error) {
+        console.error('Error in getStaticProps:', error);
+        return { notFound: true };
+    }
 };
