@@ -1,5 +1,6 @@
 import { SSGQuery } from '@/src/graphql/client';
 import {
+    ProductSearchType,
     SearchResponseSelector,
     SearchSelector,
 } from '@/src/graphql/selectors';
@@ -183,20 +184,55 @@ export const getStaticProps = async (ctx: ContextModel) => {
 
                     const productsInSlider = productsQuery.search.items;
 
-                    const productsWithDetails = productsInSlider.map((product) => ({
-                        ...product,
-                        facetValues: Array.from(
-                            new Map(
-                                product.facetValueIds.map((id) => [
-                                    id,
-                                    facetValueMap[id] || { code: 'Unknown', name: 'Unknown', value: 'Unknown' },
-                                ])
-                            ).values()
-                        ),
-                        customFields: {
-                            brand: 'Unknown Brand',
-                        },
-                    }));
+                    const productsWithDetails: ProductSearchType[] = await Promise.all(
+                        productsInSlider.map(async (product) => {
+                            try {
+                                // Fetch additional details for brand
+                                const productDetails = await api({
+                                    product: [
+                                        { id: product.productId },
+                                        { customFields: { brand: true } },
+                                    ],
+                                });
+
+                                const brand = productDetails.product?.customFields?.brand || 'Unknown Brand';
+
+                                // Map facetValues
+                                const facetValues = Array.from(
+                                    new Map(
+                                        product.facetValueIds.map((id) => [
+                                            id,
+                                            facetValueMap[id] || { code: 'Unknown', name: 'Unknown', value: 'Unknown' },
+                                        ])
+                                    ).values()
+                                );
+
+                                return {
+                                    ...product,
+                                    customFields: { brand }, // Add brand to customFields
+                                    facetValues, // Add mapped facetValues
+                                };
+                            } catch (error) {
+                                console.error(`Failed to fetch brand for product ID: ${product.productId}`, error);
+
+                                // Fallback product structure
+                                const facetValues = Array.from(
+                                    new Map(
+                                        product.facetValueIds.map((id) => [
+                                            id,
+                                            facetValueMap[id] || { code: 'Unknown', name: 'Unknown', value: 'Unknown' },
+                                        ])
+                                    ).values()
+                                );
+
+                                return {
+                                    ...product,
+                                    customFields: { brand: 'Unknown Brand' }, // Fallback brand
+                                    facetValues, // Add mapped facetValues
+                                };
+                            }
+                        })
+                    );
 
                     return { slug, products: productsWithDetails };
                 } catch (error) {
@@ -205,6 +241,8 @@ export const getStaticProps = async (ctx: ContextModel) => {
                 }
             })
         );
+
+
 
         const collections = await getCollections(r.context);
         const navigation = arrayToTree(collections);
