@@ -216,6 +216,20 @@ export const ProductDetailSelector = Selector('Product')({
     name: true,
     description: true,
     id: true,
+    featuredAsset: {
+        preview: true,
+        source: true
+    },
+    // currencyCode: true,
+    // priceWithTax: {
+    //     '...on PriceRange': {
+    //         max: true,
+    //         min: true,
+    //     },
+    //     '...on SinglePrice': {
+    //         value: true,
+    //     },
+    // },
     slug: true,
     optionGroups: {
         name: true,
@@ -346,10 +360,6 @@ export const ProductDetailSelector = Selector('Product')({
         }
     },
     collections: { slug: true, name: true, parent: { slug: true } },
-    featuredAsset: {
-        source: true,
-        preview: true,
-    },
     customFields: {
         brand: true
     },
@@ -706,6 +716,7 @@ export const productVariantTileSelector = Selector('ProductVariant')({
 export type ProductVariantTileType = FromSelector<typeof productVariantTileSelector, 'ProductVariant', typeof scalars>;
 
 export const homePageSlidersSelector = Selector('Collection')({
+    id: true,
     name: true,
     slug: true,
     parent: { slug: true },

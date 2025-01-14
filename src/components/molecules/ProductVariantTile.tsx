@@ -42,16 +42,16 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
     const theme = useTheme(); // Access the theme
     const [rating, setRating] = useState<number | null>(null);
     const imgRef = useRef<HTMLImageElement>(null);
-    const src = variant.featuredAsset?.preview ?? variant.product.featuredAsset?.preview;
+    const src = variant?.featuredAsset?.preview ?? variant?.product?.featuredAsset?.preview;
     const ImageLink = withoutRedirect ? ImageContainer : LinkContainer;
     const TextWrapper = withoutRedirect ? TextContainer : TextRedirectContainer;
 
     // Define excluded facet codes
-    const excludedFacetCodes = ['category', 'brand'];
+    const includedFacetCodes = ['terrain', 'riderlevel'];
 
     // Filter out excluded facets
     const facets = variant.product.facetValues
-        ?.filter(facet => !excludedFacetCodes.includes(facet.facet.code))
+        ?.filter(facet => includedFacetCodes.includes(facet.facet.code))
         .slice(0, 3); // Limit to 3 facets
 
     useEffect(() => {

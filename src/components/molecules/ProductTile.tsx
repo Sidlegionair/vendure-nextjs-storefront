@@ -3,7 +3,12 @@ import { Stack, Link, TP, ProductImage } from '@/src/components/atoms/';
 import { priceFormatter } from '@/src/util/priceFormatter';
 import styled from '@emotion/styled';
 import { Ratings } from './Ratings';
-import { CollectionTileType, ProductSearchType as OriginalProductSearchType } from '@/src/graphql/selectors';
+import {
+    CollectionTileType,
+    ProductDetailType,
+    ProductSearchType as OriginalProductSearchType,
+} from '@/src/graphql/selectors';
+import { CurrencyCode } from '@/src/zeus';
 
 type ProductSearchType = OriginalProductSearchType & {
     customFields?: {
@@ -20,31 +25,58 @@ type ProductSearchType = OriginalProductSearchType & {
     }>;
 };
 
-
 export const ProductTile: React.FC<{
     product: ProductSearchType;
     lazy?: boolean;
 }> = ({ product, lazy }) => {
-    const excludedFacetCodes = ['category', 'brand', 'unknown'];
 
-    // Filter facets and limit to 3
+
+
+    const includedFacetCodes = ['terrain', 'Riderlevel'];
+
+    console.log(product.facetValues, includedFacetCodes);
+
+
+    // Filter and ensure unique facets by 'code'
     const facets = product.facetValues
-        ?.filter(facet => !excludedFacetCodes.includes(facet.code))
-        .slice(0, 3) || []; // Ensure facets is always an array
+        ?.filter((facet) => includedFacetCodes.includes(facet.name))
+        .reduce((unique, facet) => {
+            if (!unique.some((item) => item.code === facet.code)) {
+                unique.push(facet);
+            }
+            return unique;
+        }, [] as Array<{ code: string; name: string; value: string }>)
+        .slice(0, 3) || []; // Limit to 3 facets
 
-    // console.log(product.facetValues, facets);
+    console.log(product.facetValues, facets);
 
 
-    // Determine price formatting
-    const priceValue =
-        'value' in product.priceWithTax
-            ? priceFormatter(product.priceWithTax.value, product.currencyCode)
-            : product.priceWithTax.min === product.priceWithTax.max
-                ? priceFormatter(product.priceWithTax.min, product.currencyCode)
-                : `${priceFormatter(product.priceWithTax.min, product.currencyCode)} - ${priceFormatter(
-                    product.priceWithTax.max,
-                    product.currencyCode,
-                )}`;
+    function isSinglePrice(priceWithTax: any): priceWithTax is { value: number } {
+        return priceWithTax && 'value' in priceWithTax;
+    }
+
+    function isPriceRange(priceWithTax: any): priceWithTax is { min: number; max: number } {
+        return priceWithTax && 'min' in priceWithTax && 'max' in priceWithTax;
+    }
+
+        const priceValue = product.priceWithTax
+            ? isSinglePrice(product.priceWithTax)
+                ? priceFormatter(product.priceWithTax.value, product.currencyCode as CurrencyCode)
+                : isPriceRange(product.priceWithTax)
+                    ? product.priceWithTax.min === product.priceWithTax.max
+                        ? priceFormatter(product.priceWithTax.min, product.currencyCode as CurrencyCode)
+                        : `${priceFormatter(product.priceWithTax.min, product.currencyCode as CurrencyCode)} - ${priceFormatter(
+                            product.priceWithTax.max,
+                            product.currencyCode as CurrencyCode
+                        )}`
+                    : 'Price not available'
+            : 'Price not available';
+
+        // return <div>{priceValue}</div>;
+
+
+
+    // return <div>{priceValue}</div>;
 
     // Get product image and brand
     const src = product.productAsset?.preview;

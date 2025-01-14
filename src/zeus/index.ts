@@ -3328,7 +3328,7 @@ export type ResolverInputTypes = {
             { options?: ResolverInputTypes['ProductVariantListOptions'] | undefined | null },
             ResolverInputTypes['ProductVariantList'],
         ];
-        customFields?: boolean | `@${string}`;
+        customFields?: Object | `@${string}`;
         __typename?: boolean | `@${string}`;
     }>;
     ['CollectionBreadcrumb']: AliasType<{
@@ -5590,7 +5590,7 @@ export type ModelTypes = {
         outOfStockThreshold?: number | undefined;
         pricesIncludeTax: boolean;
         seller?: ModelTypes['Seller'] | undefined;
-        customFields?: ModelTypes['JSON'] | undefined;
+        customFields?: Object | undefined;
     };
     ['Collection']: {
         id: string;
@@ -5610,7 +5610,7 @@ export type ModelTypes = {
         filters: Array<ModelTypes['ConfigurableOperation']>;
         translations: Array<ModelTypes['CollectionTranslation']>;
         productVariants: ModelTypes['ProductVariantList'];
-        customFields?: ModelTypes['JSON'] | undefined;
+        customFields?: Object | undefined;
     };
     ['CollectionBreadcrumb']: {
         id: string;
