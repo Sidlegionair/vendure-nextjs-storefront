@@ -6,12 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductTile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductTile.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductVariantTile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductVariantTile.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/HomePageSliders.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/HomePageSliders.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/home/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/home/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphql/selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/selectors.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/zeus/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/zeus/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +39,7 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;staging&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;last_opened_file_path&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -122,7 +116,8 @@
       <workItem from="1736856362238" duration="1404000" />
       <workItem from="1736859423018" duration="4154000" />
       <workItem from="1736863637891" duration="23000" />
-      <workItem from="1736865243474" duration="6411000" />
+      <workItem from="1736865243474" duration="6706000" />
+      <workItem from="1736879680449" duration="3819000" />
     </task>
     <servers />
   </component>
