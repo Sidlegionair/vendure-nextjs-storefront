@@ -32,14 +32,14 @@ export const ProductTile: React.FC<{
 
 
 
-    const includedFacetCodes = ['terrain', 'Riderlevel'];
+    const includedFacetCodes = ['terrain', 'rider-level'];
 
     console.log(product.facetValues, includedFacetCodes);
 
 
     // Filter and ensure unique facets by 'code'
     const facets = product.facetValues
-        ?.filter((facet) => includedFacetCodes.includes(facet.name))
+        ?.filter((facet) => includedFacetCodes.includes(facet.code))
         .reduce((unique, facet) => {
             if (!unique.some((item) => item.code === facet.code)) {
                 unique.push(facet);

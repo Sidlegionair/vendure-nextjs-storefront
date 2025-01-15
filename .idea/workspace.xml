@@ -6,6 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductTile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductTile.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductVariantTile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductVariantTile.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/home/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/home/props.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +22,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/.env" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/node_modules/@types/react/index.d.ts" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/node_modules/lucide-react/dist/lucide-react.d.ts" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/node_modules/swiper/swiper-react.d.ts" root0="SKIP_INSPECTION" />
@@ -118,6 +122,8 @@
       <workItem from="1736863637891" duration="23000" />
       <workItem from="1736865243474" duration="6706000" />
       <workItem from="1736879680449" duration="3819000" />
+      <workItem from="1736924471494" duration="1044000" />
+      <workItem from="1736945283786" duration="1728000" />
     </task>
     <servers />
   </component>

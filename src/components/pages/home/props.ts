@@ -59,7 +59,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
         > = allFacetsResponse.facets.items.reduce(
             (map, facet) => {
                 facet.values.forEach((value) => {
-                    map[value.id] = { code: value.code, name: facet.name, value: value.name };
+                    map[value.id] = { code: facet.code, name: facet.name, value: value.name };
                 });
                 return map;
             },
@@ -78,13 +78,13 @@ export const getStaticProps = async (ctx: ContextModel) => {
 
             const levelFacet =
                 uniqueFacets
-                    .filter((facet) => facet.name.toLowerCase() === 'level')
+                    .filter((facet) => facet.code === 'rider-level')
                     .map((facet) => facet.value)
                     .join(', ') || 'Unknown Level';
 
             const terrainFacet =
                 uniqueFacets
-                    .filter((facet) => facet.name.toLowerCase() === 'terrain')
+                    .filter((facet) => facet.code === 'terrain')
                     .map((facet) => facet.value)
                     .join(', ') || 'Unknown Terrain';
 

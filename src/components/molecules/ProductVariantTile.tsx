@@ -47,11 +47,11 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
     const TextWrapper = withoutRedirect ? TextContainer : TextRedirectContainer;
 
     // Define excluded facet codes
-    const includedFacetCodes = ['terrain', 'riderlevel'];
+    const includedFacetCodes = ['terrain', 'rider-level'];
 
     // Filter out excluded facets
     const facets = variant.product.facetValues
-        ?.filter(facet => includedFacetCodes.includes(facet.facet.code))
+        ?.filter(facet => includedFacetCodes.includes(facet.code))
         .slice(0, 3); // Limit to 3 facets
 
     useEffect(() => {
