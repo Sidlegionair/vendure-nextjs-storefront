@@ -15,6 +15,7 @@ interface ProductVariantTileProps {
             featuredAsset?: { preview: string };
             customFields?: { brand?: string | unknown };
             facetValues?: Array<{
+                code: string;
                 id: string;
                 name: string;
                 facet: { name: string; code: string };
