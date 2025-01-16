@@ -84,18 +84,18 @@ export const HomePageSliders: React.FC<BestOfI> = ({ sliders, seeAllText, useVar
 
                 return (
                     <StyledSection key={slug}>
-                        <Header>
-                            <TH2>
-                                {`${name} (${useVariants ? productVariants?.totalItems : 1})`}
-                            </TH2>
-                            {/* Uncomment and adjust if needed
-                            <StyledLink href={href}>
-                                <TP upperCase color="contrast" weight={500} style={{ letterSpacing: '0.5px' }}>
-                                    {seeAllText}
-                                </TP>
-                            </StyledLink>
-                            */}
-                        </Header>
+                        {/*<Header>*/}
+                        {/*    <TH2>*/}
+                        {/*        {`${name} (${useVariants ? productVariants?.totalItems : 1})`}*/}
+                        {/*    </TH2>*/}
+                        {/*    /!* Uncomment and adjust if needed*/}
+                        {/*    <StyledLink href={href}>*/}
+                        {/*        <TP upperCase color="contrast" weight={500} style={{ letterSpacing: '0.5px' }}>*/}
+                        {/*            {seeAllText}*/}
+                        {/*        </TP>*/}
+                        {/*    </StyledLink>*/}
+                        {/*    *!/*/}
+                        {/*</Header>*/}
                         <Slider height="680" slides={slides} />
                     </StyledSection>
                 );

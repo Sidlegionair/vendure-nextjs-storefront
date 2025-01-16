@@ -46,7 +46,7 @@ export const Home: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = pr
                 {storyblokSections[0] && <StoryblokComponent blok={storyblokSections[0]} />}
 
                 {/* Default Sliders */}
-                <HomePageSliders sliders={props.sliders} seeAllText={t('see-all')} />
+                {/*<HomePageSliders sliders={props.sliders} seeAllText={t('see-all')} />*/}
 
                 {/* Additional Storyblok Content */}
                 {storyblokSections.slice(1).map((section, index) => (
