@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { Stack, TP } from '@/src/components';
 import { LogoAexol } from '@/src/assets';
-import { ChevronDown, XIcon } from 'lucide-react';
+import { Check, ChevronDown, XIcon } from 'lucide-react';
 import { Dropdown } from './Dropdown';
 import { Trans, useTranslation } from 'next-i18next';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -160,9 +160,9 @@ export const Picker: React.FC<{
                         <IconWrapper onClick={() => setIsOpen(false)}>
                             <XIcon />
                         </IconWrapper>
-                        <Header gap="2rem" column itemsCenter>
-                            <LogoAexol />
-                            {changeModal?.modal ? (
+                        {changeModal?.modal ? (
+
+                                <Header gap="2rem" column itemsCenter>
                                 <TP>
                                     <Trans
                                         values={{ country: changeModal.country_name }}
@@ -171,8 +171,9 @@ export const Picker: React.FC<{
                                         t={t}
                                     />
                                 </TP>
-                            ) : null}
                         </Header>
+                        ) : null}
+
                         <StyledForm onSubmit={handleSubmit(onSubmit)}>
                             <Controller
                                 name="locale"
@@ -238,11 +239,12 @@ export const Picker: React.FC<{
                                     />
                                 )}
                             />
-
-                            <WhiteStyledButton type="submit">{t('picker.save')} </WhiteStyledButton>
-                            <WhiteStyledButton type="button" onClick={() => setIsOpen(false)}>
-                                {t('picker.cancel')}
-                            </WhiteStyledButton>
+                            <Stack gap={'16px'}>
+                                <WhiteStyledButton type="button" onClick={() => setIsOpen(false)}>
+                                    {t('picker.cancel')}
+                                </WhiteStyledButton>
+                                <PrimaryStyledButton type="submit">{t('picker.save')}  &nbsp;<Check></Check></PrimaryStyledButton>
+                            </Stack>
                         </StyledForm>
                     </PickerWrapper>
                 </Overlay>
@@ -257,7 +259,7 @@ const Header = styled(Stack)`
 `;
 
 const StyledForm = styled.form`
-    width: 24rem;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -339,27 +341,59 @@ const Overlay = styled.div`
 `;
 
 const PickerWrapper = styled(Stack)`
+    min-width: 480px;
+
     position: relative;
-    padding: 4rem 8rem;
+    padding: 66px;
     align-items: center;
     background-color: ${({ theme }) => theme.background.main};
 `;
 
 const IconWrapper = styled.div`
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 35px;
+    right: 35px;
     cursor: pointer;
+    
+    
+    svg {
+        width: 17px;
+        height: 17px;
+        color: ${({ theme }) => theme.text.accent}
+    }
 `;
 
 const WhiteStyledButton = styled(Button)`
     display: flex;
+    flex-direction: row;
     justify-content: center;
+    align-items: center;
+    padding: 18px 30px;
     width: 100%;
     background-color: ${({ theme }) => theme.background.main};
-    color: ${({ theme }) => theme.gray(1000)};
+    color: ${({ theme }) => theme.text.main};
     transition: all 0.2s ease-in-out;
-
+    border: 1px solid #4D4D4D;
+    border-radius: 12px;
+    
+    @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
+        padding-block: 1.5rem;
+    }
+`;
+const PrimaryStyledButton = styled(Button)`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 18px 30px;
+    width: 100%;
+    background-color: ${({ theme }) => theme.background.accent};
+    color: ${({ theme }) => theme.text.white};
+    transition: all 0.2s ease-in-out;
+    border: 1px solid #4D4D4D;
+    border-radius: 12px;
+    
+    
     @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
         padding-block: 1.5rem;
     }
