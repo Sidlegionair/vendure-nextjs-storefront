@@ -20,7 +20,7 @@
     "proceed-to-checkout": "Still running demo, please come back.",
     "continue-shopping": "Still running demo, please come back.",
     "price": "Price",
-    "search-for-best-products": "Find your perfect board",
+    "search-for-best-products": "Find your board",
     "discount": "Discount",
     "discounts-errors": {
         "coupon-code-invalid": "Couldn't find a coupon with that code",
