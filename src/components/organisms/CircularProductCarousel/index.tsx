@@ -676,7 +676,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                             </ProductTitle>
                             <Link href={`/snowboards/${currentProduct?.slug}`} passHref>
                                 <StockButton as="a" inStock={currentProduct?.inStock}>
-                                    {currentProduct?.inStock ? 'In Stock' : 'Out of Stock'}
+                                    {currentProduct?.inStock ? 'In Stock' : 'Read more'}
                                 </StockButton>
                             </Link>
                         </Stack>
