@@ -13,24 +13,28 @@ export const ProductStory: React.FC<ProductStoryProps> = ({ slug }) => {
     const [loading, setLoading] = useState<boolean>(true); // Loading state
     const [error, setError] = useState<string | null>(null); // Error state
 
+    const fetchStory = async (slug: string, fallback: boolean = false) => {
+        const storyblokApi = getStoryblokApi();
+        const locale = i18n.language; // Current language
+        const localizedSlug = fallback ? `${locale}/snowboards/fallback-story` : `${locale}/snowboards/${slug}`;
+        try {
+            const { data } = await storyblokApi.get(`cdn/stories/${localizedSlug}`);
+            return data?.story?.content || null;
+        } catch (err) {
+            console.error(`Error fetching Storyblok content (${localizedSlug}):`, err);
+            return null;
+        }
+    };
+
     useEffect(() => {
         let isMounted = true; // To track if the component is still mounted
 
         const fetchProductStory = async () => {
-            const storyblokApi = getStoryblokApi();
-            const locale = i18n.language; // Current language
-            const localizedSlug = `${locale}/snowboards/${slug}`; // Adjust slug based on locale
             try {
-                const { data } = await storyblokApi.get(`cdn/stories/${localizedSlug}`);
+                const content = await fetchStory(slug);
                 if (isMounted) {
-                    setStoryContent(data?.story?.content || null);
-                    setError(null); // Clear any previous errors
-                }
-            } catch (err) {
-                if (isMounted) {
-                    console.error('Error fetching Storyblok content:', err);
-                    console.log(localizedSlug);
-                    setError('Failed to load the product story. Please try again later.');
+                    setStoryContent(content || (await fetchStory('', true))); // Fallback to "fallback-story"
+                    setError(content ? null : 'Failed to load the product story. Showing fallback content.');
                 }
             } finally {
                 if (isMounted) {
@@ -50,28 +54,21 @@ export const ProductStory: React.FC<ProductStoryProps> = ({ slug }) => {
         return <Message>Loading product story...</Message>;
     }
 
-    if (error) {
+    if (error && !storyContent) {
         return <ErrorMessage>{error}</ErrorMessage>;
     }
 
-    if (!storyContent) {
-        return <Message>No content available for this product.</Message>;
-    }
-
-    return (
+    return storyContent ? (
         <StoryWrapper>
             <StoryblokComponent blok={storyContent} {...storyblokEditable(storyContent)} />
         </StoryWrapper>
+    ) : (
+        <Message>No content available for this product or fallback story.</Message>
     );
 };
 
 const StoryWrapper = styled.div`
     width: 100%;
-    //margin-top: 2rem;
-    //padding: 2rem;
-    //background-color: #f9f9f9;
-    //border-radius: 8px;
-    //box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const Message = styled.p`
