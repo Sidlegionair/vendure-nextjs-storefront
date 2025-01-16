@@ -41,6 +41,7 @@ import RelatedArticles from '@/src/components/storyblok/RelatedArticles';
 import ProfileGrid from '@/src/components/storyblok/ProfileGrid';
 import TwoColGrid from '@/src/components/storyblok/TwoColGrid';
 import MultiColGrid from '@/src/components/storyblok/MultiColGrid';
+import CollectionSlider from '@/src/components/storyblok/DynamicSlider';
 // import { VendureCollectionSlider } from '@/src/components/molecules/VendureCollectionSlider';
 
 // Register your components
@@ -72,6 +73,7 @@ const components = {
     'article-overview-page': ArticlesOverviewPage,
     'related-articles': RelatedArticles,
     'profile-grid': ProfileGrid,
+    'collection-slider': CollectionSlider,
     // 'vendure-collection-slider': VendureCollectionSlider,
 };
 
