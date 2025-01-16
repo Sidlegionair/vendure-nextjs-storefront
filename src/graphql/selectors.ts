@@ -220,16 +220,6 @@ export const ProductDetailSelector = Selector('Product')({
         preview: true,
         source: true
     },
-    // currencyCode: true,
-    // priceWithTax: {
-    //     '...on PriceRange': {
-    //         max: true,
-    //         min: true,
-    //     },
-    //     '...on SinglePrice': {
-    //         value: true,
-    //     },
-    // },
     slug: true,
     optionGroups: {
         name: true,
@@ -264,7 +254,6 @@ export const ProductDetailSelector = Selector('Product')({
         },
         customFields: {
             shortdescription: true,
-            // Description Tabs
             descriptionTab1Visible: true,
             descriptionTab1Label: true,
             descriptionTab1Content: true,
@@ -278,7 +267,6 @@ export const ProductDetailSelector = Selector('Product')({
             // Option Tabs
             optionTab1Visible: true,
             optionTab1Label: true,
-            // optionTab1Content: true, // Removed as Option Tabs don't have content
             optionTab1Bar1Visible: true,
             optionTab1Bar1Name: true,
             optionTab1Bar1Min: true,
@@ -334,7 +322,6 @@ export const ProductDetailSelector = Selector('Product')({
             optionTab2Bar4MaxLabel: true,
             optionTab3Visible: true,
             optionTab3Label: true,
-            // optionTab3Content: true, // Removed as Option Tabs don't have content
             optionTab3Bar1Visible: true,
             optionTab3Bar1Name: true,
             optionTab3Bar1Min: true,
@@ -356,15 +343,56 @@ export const ProductDetailSelector = Selector('Product')({
             optionTab3Bar3Rating: true,
             optionTab3Bar3MinLabel: true,
             optionTab3Bar3MaxLabel: true,
-            // brand: true
+
+            // Variant-specific fields
+            boardWidth: true,
+            riderLengthMin: true,
+            riderLengthMax: true,
+            riderWeightMin: true,
+            riderWeightMax: true,
+            bootLengthMax: true,
+            flex: true,
+            noseWidth: true,
+            waistWidth: true,
+            tailWidth: true,
+            taper: true,
+            effectiveEdge: true,
+            averageSidecutRadius: true,
+            setback: true,
+            stanceMin: true,
+            stanceMax: true,
+            weightKg: true,
+            bindingSizeVariant: true
         }
     },
-    collections: { slug: true, name: true, parent: { slug: true } },
     customFields: {
-        brand: true
+        brand: true,
+        warranty: true,
+        camberProfile: true,
+        profile: true,
+        baseProfile: true,
+        bindingSize: true,
+        bindingMount: true,
+        edges: true,
+        sidewall: true,
+        core: true,
+        layup1: true,
+        layup2: true,
+        layup3: true,
+        boardbase: true,
+        terrain: true,
+        taperProfile: true
+    },
+    collections: {
+        slug: true,
+        name: true,
+        parent: {
+            slug: true
+        }
     },
     facetValues: ProductDetailsFacetSelector,
 });
+
 
 
 export type ProductDetailType = FromSelector<typeof ProductDetailSelector, 'Product', typeof scalars>;

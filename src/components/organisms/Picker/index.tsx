@@ -32,8 +32,11 @@ export const Picker: React.FC<{
     const { query, push, pathname, asPath } = useRouter();
     const [isOpen, setIsOpen] = useState(false);
 
+
+
+    // Good to note for future notice, this was used to open the popup if lng was detected.
     useEffect(() => {
-        if (changeModal?.modal) setIsOpen(true);
+        // if (changeModal?.modal) setIsOpen(true);
     }, [changeModal?.modal]);
 
     const defaultChannel = channels.find(c => c.channel === channel)?.slug as string;
