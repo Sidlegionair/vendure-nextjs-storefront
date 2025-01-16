@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/molecules/ProductSizingTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/organisms/Picker/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/Picker/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/graphql/selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/selectors.ts" afterDir="false" />
