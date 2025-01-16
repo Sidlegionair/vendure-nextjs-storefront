@@ -103,7 +103,11 @@ export const getStaticProps = async (ctx: ContextModel) => {
                         product: [
                             { id: product.productId },
                             {
-                                customFields: { brand: true },
+                                customFields: {
+                                    brand: true,
+                                    quote: true,
+                                    quoteOwner: true,
+                                },
                                 variants: {
                                     id: true,
                                     stockLevel: true,
@@ -130,17 +134,19 @@ export const getStaticProps = async (ctx: ContextModel) => {
 
                     return {
                         product: product.productId,
-                        brand: typeof stockAndBrand.product?.customFields?.brand === 'string'
-                            ? stockAndBrand.product.customFields.brand
-                            : 'Unknown Brand',
+                        brand: stockAndBrand.product?.customFields?.brand || 'Unknown Brand',
+                        quote: stockAndBrand.product?.customFields?.quote,
+                        quoteOwner: stockAndBrand.product?.customFields?.quoteOwner,
                         inStock: inStock || false,
                         variants: variantData,
                     };
                 } catch (error) {
-                    console.error(`Failed to fetch stock and brand data for product ID: ${product.productId}`, error);
+                    console.error(`Failed to fetch stock, brand, and quote data for product ID: ${product.productId}`, error);
                     return {
                         product: product.productId,
                         brand: 'Unknown Brand',
+                        // quote: 'No Quote',
+                        // quoteOwner: 'Unknown Owner',
                         inStock: false,
                         variants: [],
                     };
@@ -148,12 +154,15 @@ export const getStaticProps = async (ctx: ContextModel) => {
             })
         );
 
+
         const productsWithDetails = productsWithFacets.map((product) => {
             const stockAndBrand = stockAndBrandData.find((data) => data.product === product.productId);
             return {
                 ...product,
                 customFields: {
                     brand: stockAndBrand?.brand || 'Unknown Brand',
+                    quote: stockAndBrand?.quote,
+                    quoteOwner: stockAndBrand?.quoteOwner,
                     variants: stockAndBrand?.variants || [],
                 },
                 inStock: stockAndBrand?.inStock || false,

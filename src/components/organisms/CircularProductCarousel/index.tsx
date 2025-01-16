@@ -702,10 +702,12 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                             </ProductDetails>
                         </Stack>
                     </InfoBlock>
-                    <Quote justifyCenter column>
-                        “By far the best freeride board that I have ever ridden.”
-                        <small>- Jasper Bazuin</small>
-                    </Quote>
+                    {currentProduct?.customFields?.quote && (
+                        <Quote justifyCenter column>
+                            {currentProduct.customFields.quote}
+                            <small>{currentProduct.customFields.quoteOwner}</small>
+                        </Quote>
+                    )}
 
                 </BottomStack>
             </BottomStackWrapper>
