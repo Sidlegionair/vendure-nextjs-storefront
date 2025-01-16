@@ -220,16 +220,6 @@ export const ProductDetailSelector = Selector('Product')({
         preview: true,
         source: true
     },
-    // currencyCode: true,
-    // priceWithTax: {
-    //     '...on PriceRange': {
-    //         max: true,
-    //         min: true,
-    //     },
-    //     '...on SinglePrice': {
-    //         value: true,
-    //     },
-    // },
     slug: true,
     optionGroups: {
         name: true,
@@ -264,7 +254,6 @@ export const ProductDetailSelector = Selector('Product')({
         },
         customFields: {
             shortdescription: true,
-            // Description Tabs
             descriptionTab1Visible: true,
             descriptionTab1Label: true,
             descriptionTab1Content: true,
@@ -356,15 +345,55 @@ export const ProductDetailSelector = Selector('Product')({
             optionTab3Bar3Rating: true,
             optionTab3Bar3MinLabel: true,
             optionTab3Bar3MaxLabel: true,
-            // brand: true
+            // Variant-specific fields from your list
+            boardWidth: true,
+            riderLengthMin: true,
+            riderLengthMax: true,
+            riderWeightMin: true,
+            riderWeightMax: true,
+            bootLengthMax: true,
+            flex: true,
+            noseWidth: true,
+            waistWidth: true,
+            tailWidth: true,
+            taper: true,
+            effectiveEdge: true,
+            averageSidecutRadius: true,
+            setback: true,
+            stanceMin: true,
+            stanceMax: true,
+            weightKg: true,
+            bindingSizeVariant: true
         }
     },
-    collections: { slug: true, name: true, parent: { slug: true } },
     customFields: {
-        brand: true
+        brand: true,
+        warranty: true,
+        camberProfile: true,
+        profile: true,
+        baseProfile: true,
+        bindingSize: true,
+        bindingMount: true,
+        edges: true,
+        sidewall: true,
+        core: true,
+        layup1: true,
+        layup2: true,
+        layup3: true,
+        boardbase: true,
+        terrain: true,
+        taperProfile: true
+    },
+    collections: {
+        slug: true,
+        name: true,
+        parent: {
+            slug: true
+        }
     },
     facetValues: ProductDetailsFacetSelector,
 });
+
 
 
 export type ProductDetailType = FromSelector<typeof ProductDetailSelector, 'Product', typeof scalars>;

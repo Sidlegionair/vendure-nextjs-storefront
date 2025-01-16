@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/components/molecules/ProductSizingTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductTile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductTile.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductVariantTile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductVariantTile.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/home/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/home/props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/products/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/products/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphql/selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/selectors.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +124,9 @@
       <workItem from="1736865243474" duration="6706000" />
       <workItem from="1736879680449" duration="3819000" />
       <workItem from="1736924471494" duration="1044000" />
-      <workItem from="1736945283786" duration="1728000" />
+      <workItem from="1736945283786" duration="12703000" />
+      <workItem from="1737021928058" duration="6739000" />
+      <workItem from="1737031451380" duration="753000" />
     </task>
     <servers />
   </component>
