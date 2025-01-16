@@ -13,7 +13,7 @@ const ArticleCard = ({ blok }) => {
         <div className="article-card" {...storyblokEditable(blok)}>
             {image && (
                 <div className="image-container">
-                    <img src={image.filename} alt={title} />
+                    <img src={image.filename + '/m/'} alt={title} />
                     <div className="overlay">
                         <div className="date-tag-container">
                             <div className="date">

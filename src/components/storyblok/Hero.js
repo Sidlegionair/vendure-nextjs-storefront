@@ -16,7 +16,7 @@ const Hero = ({ blok }) => {
         <h2 className="text-4xl text-white font-light">{blok.subheadline}</h2>
       </div>
       <img
-        src={blok.background_image.filename}
+        src={blok.background_image.filename + '/m/'}
         alt={blok.background_image.alt}
         className="absolute top-0 left-0 z-0 w-full h-full object-cover"
       />

@@ -38,7 +38,7 @@ const ProfileGrid = ({ blok }) => {
                         onClick={() => handleProfileSelect(index)}
                         className={`profile-dot ${index === activeIndex ? 'active' : ''}`}
                         style={{
-                            backgroundImage: `url(${profile.image.filename})`,
+                            backgroundImage: `url(${profile.image.filename + '/m/'})`,
                         }}
                     />
                 ))}
@@ -52,7 +52,7 @@ const ProfileGrid = ({ blok }) => {
                             onClick={() => handleProfileSelect(index)}
                             className={`carousel-slide ${index === activeIndex ? 'active' : ''}`}
                             style={{
-                                backgroundImage: `url(${profile.image.filename})`,
+                                backgroundImage: `url(${profile.image.filename + '/m/'})`,
                             }}
                         >
                             {index === activeIndex && (

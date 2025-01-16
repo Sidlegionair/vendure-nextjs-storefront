@@ -11,7 +11,7 @@ const PageHeading = ({ blok }) => {
     });
 
     // Optional background image URL from the Storyblok content object
-    const backgroundImageUrl = blok.backgroundImage.filename || '/images/bg/collectionheaderbg.jpeg';
+    const backgroundImageUrl = blok.backgroundimage.filename + '/m/' || '/images/bg/collectionheaderbg.jpeg';
     const enableNegativeMargin = blok.enableNegativeMargin ?? true; // Default to true if the field is undefined
 
     return (
