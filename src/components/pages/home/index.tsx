@@ -22,7 +22,7 @@ export const Home: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = pr
         const fetchStory = async () => {
             const storyblokApi = getStoryblokApi();
             const locale = i18n.language; // Current locale (e.g., 'nl', 'en')
-            const storySlug = locale === 'en' ? 'homepage-story' : `footer-${locale}`; // Adjust based on locale
+            const storySlug = locale === 'en' ? 'homepage-story' : `homepage-${locale}`; // Adjust based on locale
             // const storySlug = locale === 'nl' ? 'homepage-story-nl' : 'homepage-story'; // Adjust based on locale
             try {
                 const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`);
