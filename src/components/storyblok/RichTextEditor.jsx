@@ -50,8 +50,10 @@ const RichTextEditor = ({ blok }) => {
     const options = {
         nodeResolvers: {
             [NODE_PARAGRAPH]: (children) => <p>{children}</p>,
-            [NODE_HEADING]: (children, { level }) =>
-                React.createElement(`h${level}`, {}, children),
+            [NODE_HEADING]: (children, { level, ...rest }) => {
+                const anchorId = rest.id || ''; // Add logic to extract or pass an ID
+                return React.createElement(`h${level}`, { id: anchorId }, children);
+            },
             [NODE_UL]: (children) => <ul className="list-disc list-inside mb-4 pl-4">{children}</ul>,
             [NODE_OL]: (children) => <ol className="list-decimal list-inside mb-4 pl-4">{children}</ol>,
             [NODE_LI]: (children) => (
@@ -64,11 +66,27 @@ const RichTextEditor = ({ blok }) => {
         markResolvers: {
             [MARK_BOLD]: (children) => <strong>{children}</strong>,
             [MARK_ITALIC]: (children) => <em>{children}</em>,
-            [MARK_LINK]: (children, { href, target, rel, title }) => (
+            [MARK_LINK]: (children, { href, target, rel, title }) => {
+                // Check for anchors and add an ID if necessary
+                if (href.startsWith('#')) {
+                    return (
+                        <a id={href.substring(1)} href={href} title={title}>
+                            {children}
+                        </a>
+                    );
+                }
+                return (
                     <a href={href} target={target} rel={rel} title={title}>
                         {children}
                     </a>
+                );
+            },
+            anchor: (children, { id }) => (
+                <span id={id} className="anchor">
+                {children}
+            </span>
             ),
+
         },
         defaultBlokResolver: (name, props) => {
             const blok = { ...props, component: name };
