@@ -107,11 +107,17 @@ export const ProductTile: React.FC<{
                     <Stack column gap={10}>
                         <FacetsWrapper>
                             {/* Dynamically render facets */}
-                            {facets.map(facet => (
+                            {facets.map((facet) => (
                                 <Facet key={facet?.code}>
-                                    <b>{facet?.name}:</b>&nbsp;{facet.value}
+                                    <b>{facet?.name}:</b>&nbsp;{facet?.value || 'N/A'}
                                 </Facet>
                             ))}
+                            {/* Explicitly handle the 'rider-level' if not present */}
+                            {!facets.some((facet) => facet.code === 'rider-level') && (
+                                <Facet>
+                                    <b>Rider Level:</b>&nbsp;N/A
+                                </Facet>
+                            )}
                         </FacetsWrapper>
                         <Ratings rating={Math.random() * 5} />
                     </Stack>

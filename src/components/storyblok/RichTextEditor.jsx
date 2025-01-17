@@ -111,7 +111,7 @@ const RichTextEditor = ({ blok }) => {
                     font-family: 'Calibri', sans-serif;
                     color: #4d4d4d;
                     line-height: 1.6;
-                    background-color: ${blok.backgroundColor || '#fff'};
+                    ${blok.backgroundColor ? `background-color: ${blok.backgroundColor};` : ''}
                     border: ${blok.border || 'none'};
                     border-radius: ${blok.borderRadius || '0'};
                     box-shadow: ${blok.boxShadow || 'none'};
