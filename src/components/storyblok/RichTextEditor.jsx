@@ -67,6 +67,7 @@ const RichTextEditor = ({ blok }) => {
             [MARK_BOLD]: (children) => <strong>{children}</strong>,
             [MARK_ITALIC]: (children) => <em>{children}</em>,
             [MARK_LINK]: (children, { href, target, rel, title }) => {
+                console.log(href, target, rel, title);
                 if (href.startsWith('#')) {
                     return (
                         <a id={href.substring(1)} href={href} title={title}>
@@ -106,19 +107,6 @@ const RichTextEditor = ({ blok }) => {
         <div ref={contentRef} className="rich-text-editor" style={dynamicStyles}>
             {renderedContent}
             <style jsx>{`
-                @font-face {
-                    font-family: 'Suisse BP Int'l';
-                    font-weight: 400 600;
-                    font-style: normal;
-                }
-
-                @font-face {
-                    font-family: 'Calibri';
-                    src: local('Calibri');
-                    font-weight: 400 700;
-                    font-style: normal;
-                }
-
                 .rich-text-editor {
                     font-family: 'Calibri', sans-serif;
                     color: #4d4d4d;
@@ -128,57 +116,61 @@ const RichTextEditor = ({ blok }) => {
                     border-radius: ${blok.borderRadius || '0'};
                     box-shadow: ${blok.boxShadow || 'none'};
                     overflow: hidden;
+
+                    h1,
+                    h2,
+                    h3 {
+                        font-family: 'Suisse BP Int\'l', sans-serif;
+                        font-size: 35px;
+                        font-weight: 600;
+                        line-height: 35px;
+                        color: #000;
+                    }
+
+                    p {
+                        font-family: 'Calibri', sans-serif;
+                        font-size: 20px;
+                        font-weight: 400;
+                        line-height: 26px;
+                        margin-bottom: 1.25rem;
+                        color: #4d4d4d;
+                    }
+
+                    a,
+                    a * {
+                        font-family: 'Calibri', sans-serif;
+                        color: #9E2E3A !important;
+                        font-weight: bold;
+                        text-decoration: none;
+                    }
+
+                    a:hover {
+                        text-decoration: underline;
+                    }
+
+                    blockquote {
+                        font-family: 'Calibri', sans-serif;
+                        font-style: italic;
+                        margin-left: 1em;
+                        border-left: 4px solid #ddd;
+                        padding-left: 1em;
+                        color: #555;
+                    }
+
+                    ul,
+                    ol {
+                        margin: 1rem 0;
+                    }
+
+                    img {
+                        max-width: 100%;
+                        height: auto;
+                        margin: 1rem 0;
+                    }
+
+
                 }
 
-                .rich-text-editor h1,
-                .rich-text-editor h2,
-                .rich-text-editor h3 {
-                    font-family: 'Suisse BP Int'l', sans-serif;
-                    font-size: 35px;
-                    font-weight: 600;
-                    line-height: 35px;
-                    color: #000;
-                }
-
-                .rich-text-editor p {
-                    font-family: 'Calibri', sans-serif;
-                    font-size: 20px;
-                    font-weight: 400;
-                    line-height: 26px;
-                    margin-bottom: 1.25rem;
-                    color: #4d4d4d;
-                }
-
-                .rich-text-editor a {
-                    font-family: 'Calibri', sans-serif;
-                    color: #9E2E3A;
-                    font-weight: bold;
-                    text-decoration: none;
-                }
-
-                .rich-text-editor a:hover {
-                    text-decoration: underline;
-                }
-
-                .rich-text-editor blockquote {
-                    font-family: 'Calibri', sans-serif;
-                    font-style: italic;
-                    margin-left: 1em;
-                    border-left: 4px solid #ddd;
-                    padding-left: 1em;
-                    color: #555;
-                }
-
-                .rich-text-editor ul,
-                .rich-text-editor ol {
-                    margin: 1rem 0;
-                }
-
-                .rich-text-editor img {
-                    max-width: 100%;
-                    height: auto;
-                    margin: 1rem 0;
-                }
             `}</style>
         </div>
     );
