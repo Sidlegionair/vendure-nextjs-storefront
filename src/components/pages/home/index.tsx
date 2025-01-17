@@ -50,9 +50,9 @@ export const Home: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = pr
 
                 {/* Additional Storyblok Content */}
                 {storyblokSections.slice(1).map((section, index) => (
-                    <ContentContainer key={index}>
+                    // <ContentContainer key={index}>
                         <StoryblokComponent blok={section} />
-                    </ContentContainer>
+                    // </ContentContainer>
                 ))}
             </Main>
         </Layout>

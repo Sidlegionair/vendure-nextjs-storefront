@@ -102,10 +102,10 @@ const CollectionSlider: React.FC<CollectionSliderProps> = ({ blok }) => {
     }
 
     return (
-        <div>
-            {title && <h2>{title}</h2>}
+        // <div>
+        //     {title && <h2>{title}</h2>}
             <HomePageSliders sliders={sliders} seeAllText="See All" />
-        </div>
+        // </div>
     );
 };
 
