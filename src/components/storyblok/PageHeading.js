@@ -6,7 +6,7 @@ const PageHeading = ({ blok }) => {
     // Render and sanitize the rich text content
     const htmlContent = renderRichText(blok.content);
     const sanitizedContent = sanitizeHtml(htmlContent, {
-        allowedTags: sanitizeHtml.defaults.allowedTags,
+        allowedTags: [...sanitizeHtml.defaults.allowedTags, "img"],
         allowedAttributes: sanitizeHtml.defaults.allowedAttributes,
     });
 
