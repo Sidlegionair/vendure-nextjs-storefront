@@ -6,27 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductTile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductTile.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/organisms/Picker/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/Picker/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/confirmation/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/confirmation/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/collections/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/collections/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/forgot-password/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/forgot-password/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/addresses/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/addresses/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/order/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/order/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/orders/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/manage/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/manage/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/reset-password/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/reset-password/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/sign-in/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/sign-in/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/sign-up/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/sign-up/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/verify/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/verify/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/home/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/home/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/products/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/products/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/search/props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/search/props.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/menuConfig.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/menuConfig.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/storyblok.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/storyblok.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/[channel]/[locale]/content/[...slug].page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/[channel]/[locale]/content/[...slug].page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/[channel]/content/[...slug].page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/[channel]/content/[...slug].page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/content/[...slug].page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/content/[...slug].page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,7 +128,7 @@
       <workItem from="1737044918856" duration="964000" />
       <workItem from="1737046076095" duration="640000" />
       <workItem from="1737047526145" duration="24176000" />
-      <workItem from="1737131900366" duration="4874000" />
+      <workItem from="1737131900366" duration="8441000" />
     </task>
     <servers />
   </component>
