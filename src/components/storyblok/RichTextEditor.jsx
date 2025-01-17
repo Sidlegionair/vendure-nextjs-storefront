@@ -61,11 +61,9 @@ const RichTextEditor = ({ blok }) => {
             [MARK_BOLD]: (children) => <strong>{children}</strong>,
             [MARK_ITALIC]: (children) => <em>{children}</em>,
             [MARK_LINK]: (children, { href, target, rel, title }) => (
-                <Link href={href} passHref>
-                    <a target={target} rel={rel} title={title}>
+                    <a href={href} target={target} rel={rel} title={title}>
                         {children}
                     </a>
-                </Link>
             ),
         },
         defaultBlokResolver: (name, props) => {
