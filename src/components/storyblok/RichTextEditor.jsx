@@ -51,7 +51,7 @@ const RichTextEditor = ({ blok }) => {
         nodeResolvers: {
             [NODE_PARAGRAPH]: (children) => <p>{children}</p>,
             [NODE_HEADING]: (children, { level, ...rest }) => {
-                const anchorId = rest.id || ''; // Add logic to extract or pass an ID
+                const anchorId = rest.id || '';
                 return React.createElement(`h${level}`, { id: anchorId }, children);
             },
             [NODE_UL]: (children) => <ul className="list-disc list-inside mb-4 pl-4">{children}</ul>,
@@ -67,7 +67,6 @@ const RichTextEditor = ({ blok }) => {
             [MARK_BOLD]: (children) => <strong>{children}</strong>,
             [MARK_ITALIC]: (children) => <em>{children}</em>,
             [MARK_LINK]: (children, { href, target, rel, title }) => {
-                // Check for anchors and add an ID if necessary
                 if (href.startsWith('#')) {
                     return (
                         <a id={href.substring(1)} href={href} title={title}>
@@ -81,12 +80,6 @@ const RichTextEditor = ({ blok }) => {
                     </a>
                 );
             },
-            anchor: (children, { id }) => (
-                <span id={id} className="anchor">
-                {children}
-            </span>
-            ),
-
         },
         defaultBlokResolver: (name, props) => {
             const blok = { ...props, component: name };
@@ -103,46 +96,61 @@ const RichTextEditor = ({ blok }) => {
         renderedContent = <p>Error rendering content.</p>;
     }
 
-    // Apply spacing dynamically from blok
     const dynamicStyles = {
-        margin: blok.margin || '0', // Default to 0 if not set
-        padding: blok.padding || '0', // Default to 0 if not set
-        textAlign: blok.textAlign || 'left', // Allow text alignment customization
+        margin: blok.margin || '0',
+        padding: blok.padding || '0',
+        textAlign: blok.textAlign || 'left',
     };
 
     return (
         <div ref={contentRef} className="rich-text-editor" style={dynamicStyles}>
             {renderedContent}
             <style jsx>{`
+                @font-face {
+                    font-family: 'Suisse BP Int'l';
+                    font-weight: 400 600;
+                    font-style: normal;
+                }
+
+                @font-face {
+                    font-family: 'Calibri';
+                    src: local('Calibri');
+                    font-weight: 400 700;
+                    font-style: normal;
+                }
+
                 .rich-text-editor {
-                    color: #333;
                     font-family: 'Calibri', sans-serif;
+                    color: #4d4d4d;
                     line-height: 1.6;
-                    background-color: ${blok.backgroundColor || '#fff'}; /* Allow background color customization */
-                    border: ${blok.border || 'none'}; /* Optional border */
-                    border-radius: ${blok.borderRadius || '0'}; /* Optional border radius */
-                    box-shadow: ${blok.boxShadow || 'none'}; /* Optional box shadow */
+                    background-color: ${blok.backgroundColor || '#fff'};
+                    border: ${blok.border || 'none'};
+                    border-radius: ${blok.borderRadius || '0'};
+                    box-shadow: ${blok.boxShadow || 'none'};
                     overflow: hidden;
                 }
 
                 .rich-text-editor h1,
                 .rich-text-editor h2,
                 .rich-text-editor h3 {
-                    font-size: 1.5rem;
-                    font-weight: bold;
-                    color: #111;
-                    margin-bottom: 1rem;
+                    font-family: 'Suisse BP Int'l', sans-serif;
+                    font-size: 35px;
+                    font-weight: 600;
+                    line-height: 35px;
+                    color: #000;
                 }
 
                 .rich-text-editor p {
-                    font-family: 'Calibri';
-                    font-size: 18px;
-                    line-height: 1.8;
-                    color: #555;
+                    font-family: 'Calibri', sans-serif;
+                    font-size: 20px;
+                    font-weight: 400;
+                    line-height: 26px;
                     margin-bottom: 1.25rem;
+                    color: #4d4d4d;
                 }
 
                 .rich-text-editor a {
+                    font-family: 'Calibri', sans-serif;
                     color: #9E2E3A;
                     font-weight: bold;
                     text-decoration: none;
@@ -153,13 +161,19 @@ const RichTextEditor = ({ blok }) => {
                 }
 
                 .rich-text-editor blockquote {
+                    font-family: 'Calibri', sans-serif;
                     font-style: italic;
                     margin-left: 1em;
                     border-left: 4px solid #ddd;
                     padding-left: 1em;
                     color: #555;
                 }
-                
+
+                .rich-text-editor ul,
+                .rich-text-editor ol {
+                    margin: 1rem 0;
+                }
+
                 .rich-text-editor img {
                     max-width: 100%;
                     height: auto;
