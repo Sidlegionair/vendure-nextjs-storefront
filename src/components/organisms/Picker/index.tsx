@@ -50,7 +50,7 @@ export const Picker: React.FC<{
 
             const story = response.data.story;
 
-            console.log(story.alternates[0]);
+            // console.log(story.alternates[0]);
             return story.alternates?.find((alt: Alternate) => alt.full_slug.includes(`${newLang}/`)) || null;
         } catch (error) {
             console.error('Error fetching Storyblok alternative:', error);
@@ -123,7 +123,7 @@ export const Picker: React.FC<{
                     const channelPrefix =
                         channelAsLocale?.slug === DEFAULT_CHANNEL_SLUG ? '' : `${channelAsLocale?.slug || ''}/`;
                     const newPath = `/${channelPrefix}${alternative.full_slug}`;
-                    console.log('Redirecting to Storyblok alternative:', newPath);
+                    // console.log('Redirecting to Storyblok alternative:', newPath);
                     push(newPath);
                     setIsOpen(false);
                     return;
@@ -148,7 +148,7 @@ export const Picker: React.FC<{
                     split[0] + (newLang === channelAsLocale?.slug ? '' : newLang) + split[1],
                     newLang
                 );
-                console.log(correctPathname);
+                // console.log(correctPathname);
                 push(correctPathname);
             } else if (haveChannel && !haveLocale) {
                 const split = preparedPathname.split('[channel]');
@@ -156,7 +156,7 @@ export const Picker: React.FC<{
                     split[0] + (channelAsLocale?.nationalLocale || ''),
                     newLang
                 ) + split[1];
-                console.log(correctPathname);
+                // console.log(correctPathname);
                 push(correctPathname);
             } else if (!haveChannel && !haveLocale) {
                 const _channel =
@@ -165,14 +165,14 @@ export const Picker: React.FC<{
                         : `${channelAsLocale?.nationalLocale || ''}/`;
                 const _newLang = newLang === DEFAULT_LOCALE ? '' : newLang;
                 const correctPathname = `/${_channel}${_newLang}${asPath}`;
-                console.log(correctPathname);
+                // console.log(correctPathname);
                 push(correctPathname);
             }
         } else {
             if (haveChannel && haveLocale) {
                 const split = preparedPathname.split('[locale]');
                 const correctPathname = buildPath(split[0] + newLang + split[1], newLang);
-                console.log(correctPathname);
+                // console.log(correctPathname);
                 push(correctPathname);
             } else if (haveChannel && !haveLocale) {
                 const split = preparedPathname.split('[channel]');
@@ -180,7 +180,7 @@ export const Picker: React.FC<{
                     split[0] + `${channelAsLocale?.nationalLocale}/${newLang}`,
                     newLang
                 ) + split[1];
-                console.log(correctPathname);
+                // console.log(correctPathname);
                 push(correctPathname);
             } else if (!haveChannel && !haveLocale) {
                 const _channel =
@@ -189,7 +189,7 @@ export const Picker: React.FC<{
                         : channelAsLocale?.nationalLocale;
 
                 const correctPathname = `/${_channel}/${newLang}${asPath}`;
-                console.log('Redirecting:', correctPathname);
+                // console.log('Redirecting:', correctPathname);
                 push(correctPathname);
             }
         }
@@ -444,7 +444,7 @@ const PrimaryStyledButton = styled(Button)`
     align-items: center;
     padding: 18px 30px;
     width: 100%;
-    background-color: ${({ theme }) => theme.background.accent};
+    background-color: ${({ theme }) => theme.background.accentGreen};
     color: ${({ theme }) => theme.text.white};
     transition: all 0.2s ease-in-out;
     border: 1px solid #4D4D4D;

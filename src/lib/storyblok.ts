@@ -3,8 +3,7 @@
 import { getStoryblokApi } from '@storyblok/react';
 import { arrayToTree, RootNode } from '@/src/util/arrayToTree';
 import { getCollections } from '@/src/graphql/sharedQueries';
-import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
-import { CollectionTileType } from '@/src/graphql/selectors';
+import { getNavigationTree } from '@/src/lib/menuConfig';import { CollectionTileType } from '@/src/graphql/selectors';
 interface StoryItem {
     id: string;
     name: string;
@@ -41,10 +40,14 @@ export const fetchNavigation = async (
 ): Promise<{ navigation: RootNode<CollectionTileType>; subnavigation: RootNode<CollectionTileType> }> => {
     const collections: CollectionTileType[] = await getCollections(context); // Ensure type matches
 
-    const navigation: RootNode<CollectionTileType> = arrayToTree(collections) || { children: [] };
-    navigation.children.unshift(...mainNavigation);
 
-    const subnavigation: RootNode<CollectionTileType> = { children: [...subNavigation] };
+    const { navigation, subnavigation } = await getNavigationTree(
+        context,
+        collections
+    );
+
+
+    // const subnavigation: RootNode<CollectionTileType> = { children: [...subNavigation] };
 
     return { navigation, subnavigation };
 };

@@ -15,7 +15,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { arrayToTree, RootNode } from '@/src/util/arrayToTree';
 import { NavigationType } from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
-import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
+import { getNavigationTree } from '@/src/lib/menuConfig';
 
 interface StoryItem {
     id: string;
@@ -135,14 +135,10 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
 
     const r = await makeStaticProps(['common', 'homepage'])(_context);
     const collections = await getCollections(r.context);
-    const navigation = arrayToTree(collections);
-
-    // Append main and sub-navigation from menuConfig
-    navigation.children.unshift(...mainNavigation);
-    const subnavigation = {
-        children: [...subNavigation],
-    };
-
+    const { navigation, subnavigation } = await getNavigationTree(
+        r.context,
+        collections
+    );
     const { channel, locale } = context.params as {
         channel: string;
         locale: string;

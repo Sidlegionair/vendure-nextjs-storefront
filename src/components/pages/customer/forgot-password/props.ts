@@ -1,6 +1,5 @@
 import { getCollections } from '@/src/graphql/sharedQueries';
-import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
-
+import { getNavigationTree } from '@/src/lib/menuConfig';
 import { makeServerSideProps } from '@/src/lib/getStatic';
 import { arrayToTree } from '@/src/util/arrayToTree';
 import { GetServerSidePropsContext } from 'next';
@@ -8,13 +7,11 @@ import { GetServerSidePropsContext } from 'next';
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const r = await makeServerSideProps(['common', 'customer'])(context);
     const collections = await getCollections(r.context);
-    const navigation = arrayToTree(collections);
+    const { navigation, subnavigation } = await getNavigationTree(
+        r.context,
+        collections
+    );
 
-    // Append main and sub-navigation from menuConfig
-    navigation.children.unshift(...mainNavigation);
-    const subnavigation = {
-        children: [...subNavigation],
-    };
 
     const returnedStuff = {
         ...r.props,

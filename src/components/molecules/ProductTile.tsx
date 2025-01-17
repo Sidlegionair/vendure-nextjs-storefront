@@ -34,7 +34,7 @@ export const ProductTile: React.FC<{
 
     const includedFacetCodes = ['terrain', 'rider-level'];
 
-    console.log(product.facetValues, includedFacetCodes);
+    // console.log(product.facetValues, includedFacetCodes);
 
 
     // Filter and ensure unique facets by 'code'
@@ -48,7 +48,7 @@ export const ProductTile: React.FC<{
         }, [] as Array<{ code: string; name: string; value: string }>)
         .slice(0, 3) || []; // Limit to 3 facets
 
-    console.log(product.facetValues, facets);
+    // console.log(product.facetValues, facets);
 
 
     function isSinglePrice(priceWithTax: any): priceWithTax is { value: number } {

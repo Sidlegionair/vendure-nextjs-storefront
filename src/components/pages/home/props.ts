@@ -5,7 +5,7 @@ import {
     SearchSelector,
 } from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
-import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
+import { getNavigationTree } from '@/src/lib/menuConfig';
 import { ContextModel, makeStaticProps } from '@/src/lib/getStatic';
 import { arrayToTree } from '@/src/util/arrayToTree';
 import { SortOrder } from '@/src/zeus';
@@ -254,9 +254,10 @@ export const getStaticProps = async (ctx: ContextModel) => {
 
 
         const collections = await getCollections(r.context);
-        const navigation = arrayToTree(collections);
-        navigation.children.unshift(...mainNavigation);
-        const subnavigation = { children: [...subNavigation] };
+        const { navigation, subnavigation } = await getNavigationTree(
+            r.context,
+            collections
+        );
 
         return {
             props: {

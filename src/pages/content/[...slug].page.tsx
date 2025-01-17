@@ -14,7 +14,7 @@ import { fetchStory, fetchNavigation, fetchRelatedArticles } from '@/src/lib/sto
 import { getStoryblokApi } from '@storyblok/react';
 import { getCollections } from '@/src/graphql/sharedQueries';
 import { arrayToTree, RootNode } from '@/src/util/arrayToTree';
-import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
+import { getNavigationTree } from '@/src/lib/menuConfig';
 
 // Define the StoryItem interface
 interface StoryItem {
@@ -152,14 +152,12 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
         console.log('Story found:', story.name);
 
         const r = await makeStaticProps(['common', 'collections'])(_context);
-        const collections = await getCollections(r.context);
-        const navigation = arrayToTree(collections);
 
-        // Append main and sub-navigation from menuConfig
-        navigation.children.unshift(...mainNavigation);
-        const subnavigation = {
-            children: [...subNavigation],
-        };
+        const collections = await getCollections(r.context);
+        const { navigation, subnavigation } = await getNavigationTree(
+            r.context,
+            collections
+        );
 
         // Fetch related articles using the utility function
         const relatedArticles = await fetchRelatedArticles(locale, story.id);
