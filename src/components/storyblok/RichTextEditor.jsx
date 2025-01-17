@@ -52,9 +52,13 @@ const RichTextEditor = ({ blok }) => {
             [NODE_PARAGRAPH]: (children) => <p>{children}</p>,
             [NODE_HEADING]: (children, { level }) =>
                 React.createElement(`h${level}`, {}, children),
-            [NODE_UL]: (children) => <ul>{children}</ul>,
-            [NODE_OL]: (children) => <ol>{children}</ol>,
-            [NODE_LI]: (children) => <li>{children}</li>,
+            [NODE_UL]: (children) => <ul className="list-disc list-inside mb-4 pl-4">{children}</ul>,
+            [NODE_OL]: (children) => <ol className="list-decimal list-inside mb-4 pl-4">{children}</ol>,
+            [NODE_LI]: (children) => (
+                <li className="mb-2 leading-relaxed">
+                    <span className="inline-block">{children}</span>
+                </li>
+            ),
             [NODE_QUOTE]: (children) => <blockquote>{children}</blockquote>,
         },
         markResolvers: {
@@ -137,17 +141,7 @@ const RichTextEditor = ({ blok }) => {
                     padding-left: 1em;
                     color: #555;
                 }
-
-                .rich-text-editor ul,
-                .rich-text-editor ol {
-                    margin: 1rem 0;
-                    padding-left: 2rem;
-                }
-
-                .rich-text-editor li {
-                    margin-bottom: 0.5rem;
-                }
-
+                
                 .rich-text-editor img {
                     max-width: 100%;
                     height: auto;
