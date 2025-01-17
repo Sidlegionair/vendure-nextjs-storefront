@@ -13,11 +13,17 @@ import { DEFAULT_CHANNEL, DEFAULT_CHANNEL_SLUG, DEFAULT_LOCALE, channels } from 
 import { getFlagByCode } from '@/src/util/i18Helpers';
 import { useOutsideClick } from '@/src/util/hooks/useOutsideClick';
 import { Button } from '../../molecules/Button';
+import { getStoryblokApi } from '@storyblok/react';
 
 type FormValues = {
     channel: string;
     locale: string;
 };
+
+type Alternate = {
+    full_slug: string;
+};
+
 
 export const Picker: React.FC<{
     changeModal?: {
@@ -32,6 +38,42 @@ export const Picker: React.FC<{
     const { query, push, pathname, asPath } = useRouter();
     const [isOpen, setIsOpen] = useState(false);
 
+    const fetchStoryblokAlternative = async (slug: string, language: string, newLang: string) => {
+        try {
+            const storyblokApi = getStoryblokApi();
+
+            // Normalize slug by removing the channel and adding the current language
+            const normalizedSlug = `${language}/content/${slug.replace(/^.*\/content\//, '')}`;
+
+            const response = await storyblokApi.get(`cdn/stories/${normalizedSlug}`, { version: 'draft' });
+
+
+            const story = response.data.story;
+
+            console.log(story.alternates[0]);
+            return story.alternates?.find((alt: Alternate) => alt.full_slug.includes(`${newLang}/`)) || null;
+        } catch (error) {
+            console.error('Error fetching Storyblok alternative:', error);
+            return null;
+        }
+    };
+
+    const isStoryblokPage = async (slug: string, language: string): Promise<boolean> => {
+        try {
+            const storyblokApi = getStoryblokApi();
+
+            // Normalize slug by removing the channel and adding the current language
+            const normalizedSlug = `${language}/content/${slug.replace(/^.*\/content\//, '')}`;
+
+            const response = await storyblokApi.get(`cdn/stories/${normalizedSlug}`, { version: 'draft' });
+
+
+            return !!response.data.story; // Page exists if response contains a story
+        } catch (error) {
+            console.error(`Error checking Storyblok page for slug "${slug}" in language "${language}":`, error);
+            return false;
+        }
+    };
 
 
     // Good to note for future notice, this was used to open the popup if lng was detected.
@@ -51,94 +93,109 @@ export const Picker: React.FC<{
         values: changeModal?.modal ? { channel: changeModal.channel, locale: changeModal.locale } : undefined,
     });
 
-    const onSubmit: SubmitHandler<FormValues> = data => {
+    const onSubmit: SubmitHandler<FormValues> = async (data) => {
         const newLang = data.locale;
-        const channelAsLocale = channels.find(c => c.slug === data.channel);
+        const channelAsLocale = channels.find((c) => c.slug === data.channel);
         const sameAsChannel = newLang === channelAsLocale?.slug;
 
         languageDetector.cache && languageDetector.cache(newLang);
+
         const haveChannel = pathname.includes('[channel]');
         const haveLocale = pathname.includes('[locale]');
-        if (haveChannel) document.cookie = `channel=${channelAsLocale?.channel}; path=/`;
+        if (haveChannel && channelAsLocale) {
+            document.cookie = `channel=${channelAsLocale.channel}; path=/`;
+        }
 
-        const correctSlug = (typeof query.slug === 'string' ? query.slug : query.slug?.join('/')) as string;
+        const correctSlug = Array.isArray(query.slug) ? query.slug.join('/') : query.slug || '';
         const preparedPathname = pathname
             .replace('[slug]', correctSlug)
             .replace('[...slug]', correctSlug)
             .replace('[code]', query.code as string);
 
+        // Check if the current page is a Storyblok page
+        const isStoryblok = await isStoryblokPage(correctSlug, locale);
+
+        if (isStoryblok) {
+            try {
+                const alternative = await fetchStoryblokAlternative(correctSlug, locale, newLang);
+
+                if (alternative) {
+                    const channelPrefix =
+                        channelAsLocale?.slug === DEFAULT_CHANNEL_SLUG ? '' : `${channelAsLocale?.slug || ''}/`;
+                    const newPath = `/${channelPrefix}${alternative.full_slug}`;
+                    console.log('Redirecting to Storyblok alternative:', newPath);
+                    push(newPath);
+                    setIsOpen(false);
+                    return;
+                } else {
+                    console.warn(
+                        `No alternative found for Storyblok slug: ${correctSlug} in language: ${newLang}`
+                    );
+                }
+            } catch (error) {
+                console.error('Error fetching Storyblok alternative:', error);
+            }
+        }
+
+        // Logic for non-Storyblok pages
+        const buildPath = (path: string, localeValue: string) =>
+            path.replace('[locale]', localeValue).replace('[channel]', channelAsLocale?.slug || '');
+
         if (sameAsChannel) {
             if (haveChannel && haveLocale) {
                 const split = preparedPathname.split('[locale]');
-                const correctPathname = (
-                    split[0] +
-                    (newLang === channelAsLocale.slug ? '' : newLang) +
-                    split[1]
-                ).replace(
-                    '[channel]',
-                    channelAsLocale.channel === DEFAULT_CHANNEL ? '' : channelAsLocale.nationalLocale,
+                const correctPathname = buildPath(
+                    split[0] + (newLang === channelAsLocale?.slug ? '' : newLang) + split[1],
+                    newLang
                 );
-
                 console.log(correctPathname);
                 push(correctPathname);
-            }
-            if (haveChannel && !haveLocale) {
+            } else if (haveChannel && !haveLocale) {
                 const split = preparedPathname.split('[channel]');
-                const correctPathname =
-                    split[0] +
-                    (channelAsLocale.slug === DEFAULT_CHANNEL_SLUG ? '' : channelAsLocale.nationalLocale) +
-                    split[1];
-
+                const correctPathname = buildPath(
+                    split[0] + (channelAsLocale?.nationalLocale || ''),
+                    newLang
+                ) + split[1];
                 console.log(correctPathname);
                 push(correctPathname);
-            }
-            if (!haveChannel && !haveLocale) {
+            } else if (!haveChannel && !haveLocale) {
                 const _channel =
                     channelAsLocale?.channel === DEFAULT_CHANNEL
                         ? ''
-                        : channelAsLocale?.nationalLocale === channelAsLocale.slug
-                            ? ''
-                            : channelAsLocale?.nationalLocale;
+                        : `${channelAsLocale?.nationalLocale || ''}/`;
                 const _newLang = newLang === DEFAULT_LOCALE ? '' : newLang;
-                const correctPathname = '/' + (_channel + '/' + _newLang) + asPath;
-
+                const correctPathname = `/${_channel}${_newLang}${asPath}`;
                 console.log(correctPathname);
                 push(correctPathname);
             }
         } else {
             if (haveChannel && haveLocale) {
                 const split = preparedPathname.split('[locale]');
-                const correctPathname = (split[0] + newLang + split[1]).replace(
-                    '[channel]',
-                    channelAsLocale?.slug ?? '',
-                );
-
+                const correctPathname = buildPath(split[0] + newLang + split[1], newLang);
                 console.log(correctPathname);
                 push(correctPathname);
-            }
-            if (haveChannel && !haveLocale) {
+            } else if (haveChannel && !haveLocale) {
                 const split = preparedPathname.split('[channel]');
-                const correctPathname = split[0] + (channelAsLocale?.nationalLocale + '/' + newLang) + split[1];
-
+                const correctPathname = buildPath(
+                    split[0] + `${channelAsLocale?.nationalLocale}/${newLang}`,
+                    newLang
+                ) + split[1];
                 console.log(correctPathname);
                 push(correctPathname);
-            }
-
-            if (!haveChannel && !haveLocale) {
-                console.log(channelAsLocale);
+            } else if (!haveChannel && !haveLocale) {
                 const _channel =
                     channelAsLocale?.channel === DEFAULT_CHANNEL && newLang === DEFAULT_CHANNEL_SLUG
                         ? ''
                         : channelAsLocale?.nationalLocale;
 
-                const correctPathname = '/' + (_channel + '/' + newLang) + asPath;
-
-                console.log('tutaj', correctPathname);
+                const correctPathname = `/${_channel}/${newLang}${asPath}`;
+                console.log('Redirecting:', correctPathname);
                 push(correctPathname);
             }
         }
         setIsOpen(false);
     };
+
 
     return (
         <>
