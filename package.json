@@ -41,6 +41,7 @@
         "fs": "^0.0.1-security",
         "graphql-tag": "^2.12.6",
         "gray-matter": "^4.0.3",
+        "html-react-parser": "^5.2.2",
         "i18next": "^23.7.7",
         "i18next-resources-for-ts": "^1.4.0",
         "keen-slider": "^6.8.6",
