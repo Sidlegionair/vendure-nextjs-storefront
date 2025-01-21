@@ -31,7 +31,7 @@ export const ProductSizingTable: React.FC<ProductSizingTableProps> = ({ product,
                 <tbody>
                 {fields.map((field) => (
                     <tr key={field.key}>
-                        <td>{field.label}</td>
+                        <td><b>{field.label}</b></td>
                         {product.variants.map((variant) => (
                             <td key={`${variant.id}-${field.key}`}>
                                 {typeof variant.customFields?.[field.key as keyof typeof variant.customFields] ===
