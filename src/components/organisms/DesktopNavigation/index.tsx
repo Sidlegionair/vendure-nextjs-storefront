@@ -87,21 +87,21 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
                         <StyledLink href={href} isSubMenu={isSubMenu} isActive={isActive}>
                             {collection.name}
                         </StyledLink>
-                        <AbsoluteStack w100>
-                            <ContentContainer>
-                                <Background w100 justifyBetween>
-                                    <NavigationLinks collection={collection} />
-                                    <ProductSelloutWrapper gap="1.5rem">
-                                        <ProductsSellout
-                                            title={t('featured-products')}
-                                            addToCart={addToCart}
-                                            addToCartLabel={t('add-to-cart')}
-                                            collection={collection}
-                                        />
-                                    </ProductSelloutWrapper>
-                                </Background>
-                            </ContentContainer>
-                        </AbsoluteStack>
+                        {/*<AbsoluteStack w100>*/}
+                        {/*    <ContentContainer>*/}
+                        {/*        <Background w100 justifyBetween>*/}
+                        {/*            <NavigationLinks collection={collection} />*/}
+                        {/*            <ProductSelloutWrapper gap="1.5rem">*/}
+                        {/*                <ProductsSellout*/}
+                        {/*                    title={t('featured-products')}*/}
+                        {/*                    addToCart={addToCart}*/}
+                        {/*                    addToCartLabel={t('add-to-cart')}*/}
+                        {/*                    collection={collection}*/}
+                        {/*                />*/}
+                        {/*            </ProductSelloutWrapper>*/}
+                        {/*        </Background>*/}
+                        {/*    </ContentContainer>*/}
+                        {/*</AbsoluteStack>*/}
                     </RelativeStack>
                 );
             })}

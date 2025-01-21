@@ -30,12 +30,13 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
     return (
         <Wrapper ref={dropdownRef}>
+            <StyledTypoGraphy size={'18px'} weight={300}>
+                {placeholder}
+            </StyledTypoGraphy>
+
             <DropdownButton onClick={() => setIsOpen(!isOpen)}>
-                <Stack column gap={'0.5rem'}>
-                    <TypoGraphy size={'1.25rem'} weight={300}>
-                        {placeholder}
-                    </TypoGraphy>
-                    <TypoGraphy size={'1.25rem'} weight={400}>
+                <Stack w100 column gap={'0.5rem'}>
+                    <TypoGraphy size={'20px'} weight={400}>
                         {renderSelected ? renderSelected(selected) : selected}
                     </TypoGraphy>
                 </Stack>
@@ -60,24 +61,32 @@ export const Dropdown: React.FC<DropdownProps> = ({
     );
 };
 
+const StyledTypoGraphy = styled(TypoGraphy)`
+    opacity: 50%;
+`;
+
 const Wrapper = styled.div`
     width: 100%;
     height: auto;
     position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
     user-select: none;
+    gap: 8px;
 `;
 
 const DropdownButton = styled.div`
+
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
     background-color: ${({ theme }) => theme.background.main};
-    border: 1px solid ${({ theme }) => theme.gray(100)};
+    border: 1px solid ${({ theme }) => theme.text.main};
+    border-radius: 8px;
     font-weight: bold;
     color: ${({ theme }) => theme.background.main};
     cursor: pointer;

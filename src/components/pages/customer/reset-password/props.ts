@@ -1,6 +1,5 @@
 import { getCollections } from '@/src/graphql/sharedQueries';
-import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
-
+import { getNavigationTree } from '@/src/lib/menuConfig';
 import { makeServerSideProps } from '@/src/lib/getStatic';
 import { prepareSSRRedirect, redirectFromDefaultChannelSSR } from '@/src/lib/redirect';
 import { arrayToTree } from '@/src/util/arrayToTree';
@@ -12,13 +11,11 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     if (translationRedirect) return translationRedirect;
 
     const collections = await getCollections(r.context);
-    const navigation = arrayToTree(collections);
+    const { navigation, subnavigation } = await getNavigationTree(
+        r.context,
+        collections
+    );
 
-    // Append main and sub-navigation from menuConfig
-    navigation.children.unshift(...mainNavigation);
-    const subnavigation = {
-        children: [...subNavigation],
-    };
     const token = context.query.token as string;
     const homePageRedirect = prepareSSRRedirect('/')(context);
 

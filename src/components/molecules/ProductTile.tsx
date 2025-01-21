@@ -32,14 +32,14 @@ export const ProductTile: React.FC<{
 
 
 
-    const includedFacetCodes = ['terrain', 'Riderlevel'];
+    const includedFacetCodes = ['terrain', 'rider-level'];
 
-    console.log(product.facetValues, includedFacetCodes);
+    // console.log(product.facetValues, includedFacetCodes);
 
 
     // Filter and ensure unique facets by 'code'
     const facets = product.facetValues
-        ?.filter((facet) => includedFacetCodes.includes(facet.name))
+        ?.filter((facet) => includedFacetCodes.includes(facet.code))
         .reduce((unique, facet) => {
             if (!unique.some((item) => item.code === facet.code)) {
                 unique.push(facet);
@@ -48,7 +48,7 @@ export const ProductTile: React.FC<{
         }, [] as Array<{ code: string; name: string; value: string }>)
         .slice(0, 3) || []; // Limit to 3 facets
 
-    console.log(product.facetValues, facets);
+    // console.log(product.facetValues, facets);
 
 
     function isSinglePrice(priceWithTax: any): priceWithTax is { value: number } {
@@ -107,11 +107,17 @@ export const ProductTile: React.FC<{
                     <Stack column gap={10}>
                         <FacetsWrapper>
                             {/* Dynamically render facets */}
-                            {facets.map(facet => (
+                            {facets.map((facet) => (
                                 <Facet key={facet?.code}>
-                                    <b>{facet?.name}:</b>&nbsp;{facet.value}
+                                    <b>{facet?.name}:</b>&nbsp;{facet?.value || 'N/A'}
                                 </Facet>
                             ))}
+                            {/* Explicitly handle the 'rider-level' if not present */}
+                            {!facets.some((facet) => facet.code === 'rider-level') && (
+                                <Facet>
+                                    <b>Rider Level:</b>&nbsp;N/A
+                                </Facet>
+                            )}
                         </FacetsWrapper>
                         <Ratings rating={Math.random() * 5} />
                     </Stack>

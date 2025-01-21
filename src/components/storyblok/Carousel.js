@@ -46,7 +46,7 @@ const Carousel = ({ blok }) => {
                         className="carouselSlide"
                         key={`${slide._uid}-${index}`}
                         style={{
-                            backgroundImage: `url(${slide.image.filename})`,
+                            backgroundImage: `url(${slide.image.filename + '/m/'})`,
                         }}
                     >
                         <div className="slideOverlay">

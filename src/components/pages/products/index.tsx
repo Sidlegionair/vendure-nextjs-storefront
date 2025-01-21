@@ -27,6 +27,7 @@ import { Ratings } from '@/src/components/molecules/Ratings';
 import { ProductSpecsTable } from '@/src/components/molecules/ProductSpecsTable'; // Import the new component
 import { storefrontApiQuery } from '@/src/graphql/client';
 import { useChannels } from '@/src/state/channels';
+import { ProductSizingTable } from '@/src/components/molecules/ProductSizingTable';
 
 export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = props => {
     const { t } = useTranslation('products');
@@ -274,10 +275,15 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                             ),
                                         }))
                                     : []),
+                                // {
+                                //     title: 'Specifications',
+                                //     children: <ProductSpecsTable specs={specs} />,
+                                // },
                                 {
                                     title: 'Specifications',
-                                    children: <ProductSpecsTable specs={specs} />,
+                                    children: <ProductSizingTable product={product} fields={fields} />,
                                 },
+
                                 {
                                     title: 'Reviews',
                                     children: (
@@ -308,6 +314,29 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
         </Layout>
     );
 };
+
+// Fields to display, with their corresponding keys and labels
+const fields = [
+    { key: 'boardWidth', label: 'Board Width (cm)' },
+    { key: 'riderLengthMin', label: 'Rider Length Min (cm)' },
+    { key: 'riderLengthMax', label: 'Rider Length Max (cm)' },
+    { key: 'riderWeightMin', label: 'Rider Weight Min (kg)' },
+    { key: 'riderWeightMax', label: 'Rider Weight Max (kg)' },
+    { key: 'bootLengthMax', label: 'Boot Length Max (cm)' },
+    { key: 'flex', label: 'Flex' },
+    { key: 'noseWidth', label: 'Nose Width (cm)' },
+    { key: 'waistWidth', label: 'Waist Width (cm)' },
+    { key: 'tailWidth', label: 'Tail Width (cm)' },
+    { key: 'taper', label: 'Taper (cm)' },
+    { key: 'effectiveEdge', label: 'Effective Edge (cm)' },
+    { key: 'averageSidecutRadius', label: 'Average Sidecut Radius (m)' },
+    { key: 'setback', label: 'Setback (cm)' },
+    { key: 'stanceMin', label: 'Stance Min (cm)' },
+    { key: 'stanceMax', label: 'Stance Max (cm)' },
+    { key: 'weightKg', label: 'Weight (kg)' },
+    { key: 'bindingSizeVariant', label: 'Binding Size' },
+];
+
 
 // Styled Components (unchanged)
 const StyledBoughtHeading = styled(TH2)`

@@ -6,7 +6,7 @@ return (
   <div className="p-6">
     <img
       className="object-cover object-center w-full mb-8 lg:h-48 md:h-36 rounded-xl"
-      src={article.image.filename}
+      src={article.image.filename + '/m/'}
       alt={article.image.alt}
     />
 

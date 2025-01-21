@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { Stack, TP } from '@/src/components';
 import { LogoAexol } from '@/src/assets';
-import { ChevronDown, XIcon } from 'lucide-react';
+import { Check, ChevronDown, XIcon } from 'lucide-react';
 import { Dropdown } from './Dropdown';
 import { Trans, useTranslation } from 'next-i18next';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -13,11 +13,17 @@ import { DEFAULT_CHANNEL, DEFAULT_CHANNEL_SLUG, DEFAULT_LOCALE, channels } from 
 import { getFlagByCode } from '@/src/util/i18Helpers';
 import { useOutsideClick } from '@/src/util/hooks/useOutsideClick';
 import { Button } from '../../molecules/Button';
+import { getStoryblokApi } from '@storyblok/react';
 
 type FormValues = {
     channel: string;
     locale: string;
 };
+
+type Alternate = {
+    full_slug: string;
+};
+
 
 export const Picker: React.FC<{
     changeModal?: {
@@ -32,8 +38,47 @@ export const Picker: React.FC<{
     const { query, push, pathname, asPath } = useRouter();
     const [isOpen, setIsOpen] = useState(false);
 
+    const fetchStoryblokAlternative = async (slug: string, language: string, newLang: string) => {
+        try {
+            const storyblokApi = getStoryblokApi();
+
+            // Normalize slug by removing the channel and adding the current language
+            const normalizedSlug = `${language}/content/${slug.replace(/^.*\/content\//, '')}`;
+
+            const response = await storyblokApi.get(`cdn/stories/${normalizedSlug}`, { version: 'draft' });
+
+
+            const story = response.data.story;
+
+            // console.log(story.alternates[0]);
+            return story.alternates?.find((alt: Alternate) => alt.full_slug.includes(`${newLang}/`)) || null;
+        } catch (error) {
+            console.error('Error fetching Storyblok alternative:', error);
+            return null;
+        }
+    };
+
+    const isStoryblokPage = async (slug: string, language: string): Promise<boolean> => {
+        try {
+            const storyblokApi = getStoryblokApi();
+
+            // Normalize slug by removing the channel and adding the current language
+            const normalizedSlug = `${language}/content/${slug.replace(/^.*\/content\//, '')}`;
+
+            const response = await storyblokApi.get(`cdn/stories/${normalizedSlug}`, { version: 'draft' });
+
+
+            return !!response.data.story; // Page exists if response contains a story
+        } catch (error) {
+            console.error(`Error checking Storyblok page for slug "${slug}" in language "${language}":`, error);
+            return false;
+        }
+    };
+
+
+    // Good to note for future notice, this was used to open the popup if lng was detected.
     useEffect(() => {
-        if (changeModal?.modal) setIsOpen(true);
+        // if (changeModal?.modal) setIsOpen(true);
     }, [changeModal?.modal]);
 
     const defaultChannel = channels.find(c => c.channel === channel)?.slug as string;
@@ -48,94 +93,109 @@ export const Picker: React.FC<{
         values: changeModal?.modal ? { channel: changeModal.channel, locale: changeModal.locale } : undefined,
     });
 
-    const onSubmit: SubmitHandler<FormValues> = data => {
+    const onSubmit: SubmitHandler<FormValues> = async (data) => {
         const newLang = data.locale;
-        const channelAsLocale = channels.find(c => c.slug === data.channel);
+        const channelAsLocale = channels.find((c) => c.slug === data.channel);
         const sameAsChannel = newLang === channelAsLocale?.slug;
 
         languageDetector.cache && languageDetector.cache(newLang);
+
         const haveChannel = pathname.includes('[channel]');
         const haveLocale = pathname.includes('[locale]');
-        if (haveChannel) document.cookie = `channel=${channelAsLocale?.channel}; path=/`;
+        if (haveChannel && channelAsLocale) {
+            document.cookie = `channel=${channelAsLocale.channel}; path=/`;
+        }
 
-        const correctSlug = (typeof query.slug === 'string' ? query.slug : query.slug?.join('/')) as string;
+        const correctSlug = Array.isArray(query.slug) ? query.slug.join('/') : query.slug || '';
         const preparedPathname = pathname
             .replace('[slug]', correctSlug)
             .replace('[...slug]', correctSlug)
             .replace('[code]', query.code as string);
 
+        // Check if the current page is a Storyblok page
+        const isStoryblok = await isStoryblokPage(correctSlug, locale);
+
+        if (isStoryblok) {
+            try {
+                const alternative = await fetchStoryblokAlternative(correctSlug, locale, newLang);
+
+                if (alternative) {
+                    const channelPrefix =
+                        channelAsLocale?.slug === DEFAULT_CHANNEL_SLUG ? '' : `${channelAsLocale?.slug || ''}/`;
+                    const newPath = `/${channelPrefix}${alternative.full_slug}`;
+                    // console.log('Redirecting to Storyblok alternative:', newPath);
+                    push(newPath);
+                    setIsOpen(false);
+                    return;
+                } else {
+                    console.warn(
+                        `No alternative found for Storyblok slug: ${correctSlug} in language: ${newLang}`
+                    );
+                }
+            } catch (error) {
+                console.error('Error fetching Storyblok alternative:', error);
+            }
+        }
+
+        // Logic for non-Storyblok pages
+        const buildPath = (path: string, localeValue: string) =>
+            path.replace('[locale]', localeValue).replace('[channel]', channelAsLocale?.slug || '');
+
         if (sameAsChannel) {
             if (haveChannel && haveLocale) {
                 const split = preparedPathname.split('[locale]');
-                const correctPathname = (
-                    split[0] +
-                    (newLang === channelAsLocale.slug ? '' : newLang) +
-                    split[1]
-                ).replace(
-                    '[channel]',
-                    channelAsLocale.channel === DEFAULT_CHANNEL ? '' : channelAsLocale.nationalLocale,
+                const correctPathname = buildPath(
+                    split[0] + (newLang === channelAsLocale?.slug ? '' : newLang) + split[1],
+                    newLang
                 );
-
-                console.log(correctPathname);
+                // console.log(correctPathname);
                 push(correctPathname);
-            }
-            if (haveChannel && !haveLocale) {
+            } else if (haveChannel && !haveLocale) {
                 const split = preparedPathname.split('[channel]');
-                const correctPathname =
-                    split[0] +
-                    (channelAsLocale.slug === DEFAULT_CHANNEL_SLUG ? '' : channelAsLocale.nationalLocale) +
-                    split[1];
-
-                console.log(correctPathname);
+                const correctPathname = buildPath(
+                    split[0] + (channelAsLocale?.nationalLocale || ''),
+                    newLang
+                ) + split[1];
+                // console.log(correctPathname);
                 push(correctPathname);
-            }
-            if (!haveChannel && !haveLocale) {
+            } else if (!haveChannel && !haveLocale) {
                 const _channel =
                     channelAsLocale?.channel === DEFAULT_CHANNEL
                         ? ''
-                        : channelAsLocale?.nationalLocale === channelAsLocale.slug
-                            ? ''
-                            : channelAsLocale?.nationalLocale;
+                        : `${channelAsLocale?.nationalLocale || ''}/`;
                 const _newLang = newLang === DEFAULT_LOCALE ? '' : newLang;
-                const correctPathname = '/' + (_channel + '/' + _newLang) + asPath;
-
-                console.log(correctPathname);
+                const correctPathname = `/${_channel}${_newLang}${asPath}`;
+                // console.log(correctPathname);
                 push(correctPathname);
             }
         } else {
             if (haveChannel && haveLocale) {
                 const split = preparedPathname.split('[locale]');
-                const correctPathname = (split[0] + newLang + split[1]).replace(
-                    '[channel]',
-                    channelAsLocale?.slug ?? '',
-                );
-
-                console.log(correctPathname);
+                const correctPathname = buildPath(split[0] + newLang + split[1], newLang);
+                // console.log(correctPathname);
                 push(correctPathname);
-            }
-            if (haveChannel && !haveLocale) {
+            } else if (haveChannel && !haveLocale) {
                 const split = preparedPathname.split('[channel]');
-                const correctPathname = split[0] + (channelAsLocale?.nationalLocale + '/' + newLang) + split[1];
-
-                console.log(correctPathname);
+                const correctPathname = buildPath(
+                    split[0] + `${channelAsLocale?.nationalLocale}/${newLang}`,
+                    newLang
+                ) + split[1];
+                // console.log(correctPathname);
                 push(correctPathname);
-            }
-
-            if (!haveChannel && !haveLocale) {
-                console.log(channelAsLocale);
+            } else if (!haveChannel && !haveLocale) {
                 const _channel =
                     channelAsLocale?.channel === DEFAULT_CHANNEL && newLang === DEFAULT_CHANNEL_SLUG
                         ? ''
                         : channelAsLocale?.nationalLocale;
 
-                const correctPathname = '/' + (_channel + '/' + newLang) + asPath;
-
-                console.log('tutaj', correctPathname);
+                const correctPathname = `/${_channel}/${newLang}${asPath}`;
+                // console.log('Redirecting:', correctPathname);
                 push(correctPathname);
             }
         }
         setIsOpen(false);
     };
+
 
     return (
         <>
@@ -157,9 +217,9 @@ export const Picker: React.FC<{
                         <IconWrapper onClick={() => setIsOpen(false)}>
                             <XIcon />
                         </IconWrapper>
-                        <Header gap="2rem" column itemsCenter>
-                            <LogoAexol />
-                            {changeModal?.modal ? (
+                        {changeModal?.modal ? (
+
+                                <Header gap="2rem" column itemsCenter>
                                 <TP>
                                     <Trans
                                         values={{ country: changeModal.country_name }}
@@ -168,8 +228,9 @@ export const Picker: React.FC<{
                                         t={t}
                                     />
                                 </TP>
-                            ) : null}
                         </Header>
+                        ) : null}
+
                         <StyledForm onSubmit={handleSubmit(onSubmit)}>
                             <Controller
                                 name="locale"
@@ -235,11 +296,12 @@ export const Picker: React.FC<{
                                     />
                                 )}
                             />
-
-                            <WhiteStyledButton type="submit">{t('picker.save')} </WhiteStyledButton>
-                            <WhiteStyledButton type="button" onClick={() => setIsOpen(false)}>
-                                {t('picker.cancel')}
-                            </WhiteStyledButton>
+                            <Stack gap={'16px'}>
+                                <WhiteStyledButton type="button" onClick={() => setIsOpen(false)}>
+                                    {t('picker.cancel')}
+                                </WhiteStyledButton>
+                                <PrimaryStyledButton type="submit">{t('picker.save')}  &nbsp;<Check></Check></PrimaryStyledButton>
+                            </Stack>
                         </StyledForm>
                     </PickerWrapper>
                 </Overlay>
@@ -254,7 +316,7 @@ const Header = styled(Stack)`
 `;
 
 const StyledForm = styled.form`
-    width: 24rem;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -336,27 +398,59 @@ const Overlay = styled.div`
 `;
 
 const PickerWrapper = styled(Stack)`
+    min-width: 480px;
+
     position: relative;
-    padding: 4rem 8rem;
+    padding: 66px;
     align-items: center;
     background-color: ${({ theme }) => theme.background.main};
 `;
 
 const IconWrapper = styled.div`
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 35px;
+    right: 35px;
     cursor: pointer;
+    
+    
+    svg {
+        width: 17px;
+        height: 17px;
+        color: ${({ theme }) => theme.text.accent}
+    }
 `;
 
 const WhiteStyledButton = styled(Button)`
     display: flex;
+    flex-direction: row;
     justify-content: center;
+    align-items: center;
+    padding: 18px 30px;
     width: 100%;
     background-color: ${({ theme }) => theme.background.main};
-    color: ${({ theme }) => theme.gray(1000)};
+    color: ${({ theme }) => theme.text.main};
     transition: all 0.2s ease-in-out;
-
+    border: 1px solid #4D4D4D;
+    border-radius: 12px;
+    
+    @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
+        padding-block: 1.5rem;
+    }
+`;
+const PrimaryStyledButton = styled(Button)`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 18px 30px;
+    width: 100%;
+    background-color: ${({ theme }) => theme.background.accentGreen};
+    color: ${({ theme }) => theme.text.white};
+    transition: all 0.2s ease-in-out;
+    border: 1px solid #4D4D4D;
+    border-radius: 12px;
+    
+    
     @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
         padding-block: 1.5rem;
     }

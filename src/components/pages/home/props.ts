@@ -1,10 +1,11 @@
 import { SSGQuery } from '@/src/graphql/client';
 import {
+    ProductSearchType,
     SearchResponseSelector,
     SearchSelector,
 } from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
-import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
+import { getNavigationTree } from '@/src/lib/menuConfig';
 import { ContextModel, makeStaticProps } from '@/src/lib/getStatic';
 import { arrayToTree } from '@/src/util/arrayToTree';
 import { SortOrder } from '@/src/zeus';
@@ -58,7 +59,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
         > = allFacetsResponse.facets.items.reduce(
             (map, facet) => {
                 facet.values.forEach((value) => {
-                    map[value.id] = { code: value.code, name: facet.name, value: value.name };
+                    map[value.id] = { code: facet.code, name: facet.name, value: value.name };
                 });
                 return map;
             },
@@ -77,13 +78,13 @@ export const getStaticProps = async (ctx: ContextModel) => {
 
             const levelFacet =
                 uniqueFacets
-                    .filter((facet) => facet.name.toLowerCase() === 'level')
+                    .filter((facet) => facet.code === 'rider-level')
                     .map((facet) => facet.value)
                     .join(', ') || 'Unknown Level';
 
             const terrainFacet =
                 uniqueFacets
-                    .filter((facet) => facet.name.toLowerCase() === 'terrain')
+                    .filter((facet) => facet.code === 'terrain')
                     .map((facet) => facet.value)
                     .join(', ') || 'Unknown Terrain';
 
@@ -102,7 +103,11 @@ export const getStaticProps = async (ctx: ContextModel) => {
                         product: [
                             { id: product.productId },
                             {
-                                customFields: { brand: true },
+                                customFields: {
+                                    brand: true,
+                                    quote: true,
+                                    quoteOwner: true,
+                                },
                                 variants: {
                                     id: true,
                                     stockLevel: true,
@@ -129,17 +134,19 @@ export const getStaticProps = async (ctx: ContextModel) => {
 
                     return {
                         product: product.productId,
-                        brand: typeof stockAndBrand.product?.customFields?.brand === 'string'
-                            ? stockAndBrand.product.customFields.brand
-                            : 'Unknown Brand',
+                        brand: stockAndBrand.product?.customFields?.brand || 'Unknown Brand',
+                        quote: stockAndBrand.product?.customFields?.quote,
+                        quoteOwner: stockAndBrand.product?.customFields?.quoteOwner,
                         inStock: inStock || false,
                         variants: variantData,
                     };
                 } catch (error) {
-                    console.error(`Failed to fetch stock and brand data for product ID: ${product.productId}`, error);
+                    console.error(`Failed to fetch stock, brand, and quote data for product ID: ${product.productId}`, error);
                     return {
                         product: product.productId,
                         brand: 'Unknown Brand',
+                        // quote: 'No Quote',
+                        // quoteOwner: 'Unknown Owner',
                         inStock: false,
                         variants: [],
                     };
@@ -147,12 +154,15 @@ export const getStaticProps = async (ctx: ContextModel) => {
             })
         );
 
+
         const productsWithDetails = productsWithFacets.map((product) => {
             const stockAndBrand = stockAndBrandData.find((data) => data.product === product.productId);
             return {
                 ...product,
                 customFields: {
                     brand: stockAndBrand?.brand || 'Unknown Brand',
+                    quote: stockAndBrand?.quote,
+                    quoteOwner: stockAndBrand?.quoteOwner,
                     variants: stockAndBrand?.variants || [],
                 },
                 inStock: stockAndBrand?.inStock || false,
@@ -183,20 +193,55 @@ export const getStaticProps = async (ctx: ContextModel) => {
 
                     const productsInSlider = productsQuery.search.items;
 
-                    const productsWithDetails = productsInSlider.map((product) => ({
-                        ...product,
-                        facetValues: Array.from(
-                            new Map(
-                                product.facetValueIds.map((id) => [
-                                    id,
-                                    facetValueMap[id] || { code: 'Unknown', name: 'Unknown', value: 'Unknown' },
-                                ])
-                            ).values()
-                        ),
-                        customFields: {
-                            brand: 'Unknown Brand',
-                        },
-                    }));
+                    const productsWithDetails: ProductSearchType[] = await Promise.all(
+                        productsInSlider.map(async (product) => {
+                            try {
+                                // Fetch additional details for brand
+                                const productDetails = await api({
+                                    product: [
+                                        { id: product.productId },
+                                        { customFields: { brand: true } },
+                                    ],
+                                });
+
+                                const brand = productDetails.product?.customFields?.brand || 'Unknown Brand';
+
+                                // Map facetValues
+                                const facetValues = Array.from(
+                                    new Map(
+                                        product.facetValueIds.map((id) => [
+                                            id,
+                                            facetValueMap[id] || { code: 'Unknown', name: 'Unknown', value: 'Unknown' },
+                                        ])
+                                    ).values()
+                                );
+
+                                return {
+                                    ...product,
+                                    customFields: { brand }, // Add brand to customFields
+                                    facetValues, // Add mapped facetValues
+                                };
+                            } catch (error) {
+                                console.error(`Failed to fetch brand for product ID: ${product.productId}`, error);
+
+                                // Fallback product structure
+                                const facetValues = Array.from(
+                                    new Map(
+                                        product.facetValueIds.map((id) => [
+                                            id,
+                                            facetValueMap[id] || { code: 'Unknown', name: 'Unknown', value: 'Unknown' },
+                                        ])
+                                    ).values()
+                                );
+
+                                return {
+                                    ...product,
+                                    customFields: { brand: 'Unknown Brand' }, // Fallback brand
+                                    facetValues, // Add mapped facetValues
+                                };
+                            }
+                        })
+                    );
 
                     return { slug, products: productsWithDetails };
                 } catch (error) {
@@ -206,10 +251,13 @@ export const getStaticProps = async (ctx: ContextModel) => {
             })
         );
 
+
+
         const collections = await getCollections(r.context);
-        const navigation = arrayToTree(collections);
-        navigation.children.unshift(...mainNavigation);
-        const subnavigation = { children: [...subNavigation] };
+        const { navigation, subnavigation } = await getNavigationTree(
+            r.context,
+            collections
+        );
 
         return {
             props: {

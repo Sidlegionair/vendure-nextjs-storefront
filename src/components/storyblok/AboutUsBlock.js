@@ -19,7 +19,7 @@ const AboutUsBlock = ({ blok }) => {
                 <div className="about-us-image">
                     {blok.image && (
                         <img
-                            src={blok.image.filename}
+                            src={blok.image.filename + '/m/'}
                             alt={blok.image.alt || 'About Us Image'}
                         />
                     )}

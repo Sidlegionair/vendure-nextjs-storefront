@@ -3,7 +3,7 @@
 import { SSGQuery } from '@/src/graphql/client';
 import { ProductDetailSelector, homePageSlidersSelector, ProductDetailType, ProductVariantTileType} from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
-import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
+import { getNavigationTree } from '@/src/lib/menuConfig';
 import { ContextModel, makeStaticProps } from '@/src/lib/getStatic';
 import { arrayToTree } from '@/src/util/arrayToTree';
 import React from 'react';
@@ -84,13 +84,10 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string }>) =
     if (!response?.product) return { notFound: true };
 
     const collections = await getCollections(r.context);
-    const navigation = arrayToTree(collections);
-
-    // Append main and sub-navigation from menuConfig
-    navigation.children.unshift(...mainNavigation);
-    const subnavigation = {
-        children: [...subNavigation],
-    };
+    const { navigation, subnavigation } = await getNavigationTree(
+        r.context,
+        collections
+    );
 
     const relatedProducts = await api({
         collection: [{ slug: response.product?.collections?.[0]?.slug || 'search' }, homePageSlidersSelector],

@@ -6,12 +6,15 @@ const PageHeading = ({ blok }) => {
     // Render and sanitize the rich text content
     const htmlContent = renderRichText(blok.content);
     const sanitizedContent = sanitizeHtml(htmlContent, {
-        allowedTags: sanitizeHtml.defaults.allowedTags,
+        allowedTags: [...sanitizeHtml.defaults.allowedTags, "img"],
         allowedAttributes: sanitizeHtml.defaults.allowedAttributes,
     });
 
     // Optional background image URL from the Storyblok content object
-    const backgroundImageUrl = blok.backgroundImage.filename || '/images/bg/collectionheaderbg.jpeg';
+    const backgroundImageUrl = blok.backgroundImage?.filename
+        ? `${blok.backgroundImage.filename}/m/`
+        : '/images/bg/collectionheaderbg.jpeg';
+    console.log(backgroundImageUrl);
     const enableNegativeMargin = blok.enableNegativeMargin ?? true; // Default to true if the field is undefined
 
     return (

@@ -11,7 +11,7 @@ import { getStoryblokApi } from '@storyblok/react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { arrayToTree, RootNode } from '@/src/util/arrayToTree';
 import { getCollections } from '@/src/graphql/sharedQueries';
-import { mainNavigation, subNavigation } from '@/src/lib/menuConfig';
+import { getNavigationTree } from '@/src/lib/menuConfig';
 
 // Define the StoryItem interface
 interface StoryItem {
@@ -130,13 +130,10 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
 
     const r = await makeStaticProps(['common', 'collections'])(_context);
     const collections = await getCollections(r.context);
-    const navigation = arrayToTree(collections);
-
-    // Append main and sub-navigation from menuConfig
-    navigation.children.unshift(...mainNavigation);
-    const subnavigation = {
-        children: [...subNavigation],
-    };
+    const { navigation, subnavigation } = await getNavigationTree(
+        r.context,
+        collections
+    );
 
     // Extract channel and slug from params
     const { channel } = context.params as {
