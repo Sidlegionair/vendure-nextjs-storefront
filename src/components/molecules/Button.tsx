@@ -126,10 +126,10 @@ export const IconButton = styled.button<{ isActive?: boolean }>`
     align-items: center;
     justify-content: center;
     background: ${p => p.theme.button.icon.back || 'transparent'};
-    svg {
-        width: 2rem;
-        height: 2rem;
-    }
+    //svg {
+    //    width: 2rem;
+    //    height: 2rem;
+    //}
     :hover {
         box-shadow: none;
     }

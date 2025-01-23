@@ -247,7 +247,7 @@ const StickyContainer = styled.nav`
     box-shadow: 0px 6px 4px rgba(0, 0, 0, 0.06);
 
     svg {
-        max-height: 4rem;
+        //max-height: 4rem;
     }
 `;
 

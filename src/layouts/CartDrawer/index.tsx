@@ -27,7 +27,7 @@ export const CartDrawer = ({ activeOrder }: { activeOrder?: ActiveOrderType }) =
     return (
         <>
             <IconButton onClick={open}>
-                <ShoppingCartIcon size={'16px'} />
+                <ShoppingCartIcon size={'28px'} />
                 <QuantityBadge id="header-cart-quantity">
                     <Quantity size="1rem" weight={500}>
                         {activeOrder ? activeOrder.lines.length : 0}
@@ -78,8 +78,8 @@ const Quantity = styled(TP)`
 
 const CartComponentMain = styled(motion.div)`
     width: 100%;
-    max-width: 52rem;
-    height: 100dvh;
+    max-width: 28px;
+    height: 28px;
 
     z-index: 2147483647;
 
