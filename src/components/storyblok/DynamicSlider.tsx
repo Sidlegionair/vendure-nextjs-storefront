@@ -67,16 +67,29 @@ const fetchSliderData = async (slug: string, take = 15): Promise<SliderType> => 
                 return map;
             }, {} as Record<string, { code: string; name: string; value: string }>);
 
-        const productsWithFacets = productsQuery.search.items.map((product) => {
-            const facetValues = product.facetValueIds?.map((id) => {
-                return facetValueMap[id] || { code: 'Unknown', name: 'Unknown', value: 'Unknown' };
-            });
+        const productsWithFacets = await Promise.all(
+            productsQuery.search.items.map(async (product) => {
+                const facetValues = product.facetValueIds?.map((id) => {
+                    return facetValueMap[id] || { code: 'Unknown', name: 'Unknown', value: 'Unknown' };
+                });
 
-            return {
-                ...product,
-                facetValues, // Attach facetValues array to each product
-            };
-        });
+                // Fetch additional details for brand
+                const productDetails = await api({
+                    product: [
+                        { id: product.productId },
+                        { customFields: { brand: true } },
+                    ],
+                });
+
+                const brand = productDetails.product?.customFields?.brand || 'Unknown Brand';
+
+                return {
+                    ...product,
+                    customFields: { brand }, // Add brand to customFields
+                    facetValues, // Attach facetValues array to each product
+                };
+            })
+        );
 
         return { slug, products: productsWithFacets };
     } catch (error) {

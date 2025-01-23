@@ -3,8 +3,9 @@ import styled from '@emotion/styled';
 import Link from 'next/link';
 import { Divider, Stack } from '@/src/components';
 import useIsMobile from '@/src/util/hooks/useIsMobile';
+import { Rotate3DIcon, RotateCw } from 'lucide-react';
 
-// Styled Components (unchanged)
+// ---------- Styled Components ----------
 
 const CarouselContainer = styled.div`
     position: relative;
@@ -17,8 +18,8 @@ const CarouselContainer = styled.div`
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-    user-select: none; /* Prevent text/image selection */
-    cursor: grab; /* Indicate draggable area */
+    user-select: none;
+    cursor: grab;
 
     &::before {
         content: '';
@@ -34,7 +35,7 @@ const CarouselContainer = styled.div`
     }
 
     &:active {
-        cursor: grabbing; /* Change cursor when active */
+        cursor: grabbing;
     }
 
     @media (min-width: 1024px) {
@@ -82,8 +83,6 @@ const CenterAnchor = styled.div`
     height: 0;
 `;
 
-// SlideLink Component (unchanged)
-
 const SlideLink = styled.a<{ isHovered: boolean }>`
     display: block;
     width: 100%;
@@ -91,7 +90,7 @@ const SlideLink = styled.a<{ isHovered: boolean }>`
     position: relative;
     perspective: 1000px;
     cursor: pointer;
-    text-decoration: none; /* Remove underline */
+    text-decoration: none;
 
     .flip-card-inner {
         position: absolute;
@@ -102,7 +101,8 @@ const SlideLink = styled.a<{ isHovered: boolean }>`
         transform: ${({ isHovered }) => (isHovered ? 'rotateY(180deg)' : 'rotateY(0deg)')};
     }
 
-    .flip-card-front, .flip-card-back {
+    .flip-card-front,
+    .flip-card-back {
         position: absolute;
         width: 100%;
         height: 100%;
@@ -112,18 +112,16 @@ const SlideLink = styled.a<{ isHovered: boolean }>`
     }
 
     .flip-card-front {
-        z-index: 2; /* Front image above when not flipped */
+        z-index: 2;
         opacity: ${({ isHovered }) => (isHovered ? 0 : 1)};
     }
 
     .flip-card-back {
         transform: rotateY(180deg);
-        z-index: 1; /* Back image below when not flipped */
+        z-index: 1;
         opacity: ${({ isHovered }) => (isHovered ? 1 : 0)};
     }
 `;
-
-// ProductSlide Component (unchanged)
 
 const ProductSlide = styled.div<{
     angle: number;
@@ -143,15 +141,26 @@ const ProductSlide = styled.div<{
     transform-origin: center;
     transition: transform 0.5s ease, opacity 0.5s ease;
     border-radius: 8px;
-    touch-action: pan-y; /* Allow vertical scrolling on touch devices */
+    touch-action: pan-y;
 
     ${({ flattened, angle, distance, translateY, index, activeIndex, extraLift }) => {
         const distanceFromActive = Math.abs((index % 1000) - (activeIndex % 1000));
 
+        // We'll calculate scale & fade for non-flattened boards
+        const scaleFactor = 1 - 0.08 * distanceFromActive;
+        const clampedScale = scaleFactor < 0.4 ? 0.4 : scaleFactor;
+        const fadeFactor = 1 - 0.15 * distanceFromActive;
+        const clampedOpacity = fadeFactor < 0.1 ? 0.1 : fadeFactor;
+
         if (flattened) {
-            const scale = distanceFromActive === 0 ? 1.3 : Math.max(0.7, 1 - distanceFromActive * 0.1);
+            // For mobile "flattened" scenario
+            const scale =
+                    distanceFromActive === 0
+                            ? 1.3
+                            : Math.max(0.7, 1 - distanceFromActive * 0.1);
             const xShift = ((index % 1000) - (activeIndex % 1000)) * 120;
-            const yShift = -Math.abs(((index % 1000) - (activeIndex % 1000))) * extraLift;
+            const yShift =
+                    -Math.abs((index % 1000) - (activeIndex % 1000)) * extraLift;
 
             return `
                 opacity: 1;
@@ -162,14 +171,16 @@ const ProductSlide = styled.div<{
                     scale(${scale});
             `;
         } else {
+            // Non-flattened scenario => rotate in 3D plus scale & fade
             return `
-                opacity: 1;
+                opacity: ${clampedOpacity};
                 transform:
                     rotateY(${angle}deg)
                     translateZ(${distance}px)
                     translateY(${translateY}px)
                     rotateY(${-angle}deg)
-                    translate(-50%, -50%);
+                    translate(-50%, -50%)
+                    scale(${clampedScale});
             `;
         }
     }}
@@ -187,7 +198,7 @@ const ProductImageContainer = styled.div<{ height: number }>`
     object-position: center center;
     overflow: hidden;
     transform-origin: center;
-    position: relative; /* For positioning flip elements */
+    position: relative;
 
     @media (max-width: 1023px) and (min-width: 769px) {
         width: 130px;
@@ -199,8 +210,6 @@ const ProductImageContainer = styled.div<{ height: number }>`
         height: 240px;
     }
 `;
-
-// Bottom Stack Styles (unchanged)
 
 const BottomStackWrapper = styled.div`
     display: flex;
@@ -228,7 +237,7 @@ const BottomStack = styled(Stack)`
     align-items: center;
     text-align: left;
     width: 100%;
-    @media(max-width: 767px) {
+    @media (max-width: 767px) {
         padding: 0px 30px;
     }
 `;
@@ -238,7 +247,7 @@ const InfoBlock = styled.div`
     flex-direction: column;
     background: rgba(255, 255, 255, 0.01);
     padding: 20px 20px;
-    border: 1px solid #4D4D4D;
+    border: 1px solid #4d4d4d;
     text-align: left;
     border-radius: 8px;
     width: 100%;
@@ -314,7 +323,7 @@ const StockButton = styled.button<{ inStock: boolean }>`
     justify-content: center;
     align-items: center;
     background-color: ${({ inStock, theme }) =>
-            inStock ? theme.text.accentGreen : theme.text.accent};
+            inStock ? theme.text.accentGreen : theme.text.accentGreen};
     font-size: 16px;
     font-weight: 600;
     line-height: 16px;
@@ -358,7 +367,11 @@ const Quote = styled(Stack)`
     }
 `;
 
-// ImageFlipContainer Component (unchanged)
+const RotateIconWrapper = styled.div`
+    background: #cccccc;
+    padding: 5px;
+    border-radius: 50%;
+`;
 
 const ImageFlipContainer = styled.div`
     width: 100%;
@@ -374,7 +387,8 @@ const ImageFlipContainer = styled.div`
         transform-style: preserve-3d;
     }
 
-    .flip-card-front, .flip-card-back {
+    .flip-card-front,
+    .flip-card-back {
         position: absolute;
         width: 100%;
         height: 100%;
@@ -387,10 +401,25 @@ const ImageFlipContainer = styled.div`
     }
 `;
 
-// CircularProductCarousel Component
+// Button absolutely near center anchor, to flip the active board.
+// We'll conditionally render it for mobile only.
+const FlipButtonContainer = styled.div`
+    position: absolute;
+    left: 50%;
+    top: 62%;
+    transform: translateX(-50%);
+    z-index: 999;
+    
+    @media(min-width: 767px) {
+        top: 78%; /* Adjust as needed to place the flip button under the board */
+
+    }
+`;
+
+// ---------- Component ----------
 
 export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ products }) => {
-    const isMobile = useIsMobile(); // Use the isMobile hook
+    const isMobile = useIsMobile();
     const productCount = products.length;
     const [displayCount, setDisplayCount] = useState<number>(Math.min(productCount, 11));
     const [activeIndex, setActiveIndex] = useState<number>(productCount);
@@ -399,18 +428,19 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
 
     const [rotationAngle, setRotationAngle] = useState<number>(360 / displayCount);
     const [carouselDistance, setCarouselDistance] = useState<number>(400);
-
     const [maxLiftAmount, setMaxLiftAmount] = useState<number>(200);
     const [extraLiftFlattened, setExtraLiftFlattened] = useState<number>(0);
-
     const [flattened, setFlattened] = useState(false);
 
-    // New State for Hover Detection
+    // Only the active board can be flipped.
+    // For desktop, it's based on hovered index; for mobile, we use a button to force flip.
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+    const [forceFlipActive, setForceFlipActive] = useState<boolean>(false);
 
-    // Ref to track dragging state for smoother updates
     const containerRef = useRef<HTMLDivElement>(null);
+    const activeSlideRef = useRef<HTMLDivElement>(null);
 
+    // Dynamically adjust the carousel shape on resize
     useEffect(() => {
         const handleResize = () => {
             const width = window.innerWidth;
@@ -423,7 +453,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
 
             if (width < 480) {
                 newDisplayCount = Math.min(productCount, 5);
-                newRotationAngle = 0;
+                newRotationAngle = 0; // flatten for very small screens
                 newCarouselDistance = -100;
                 newFlattened = true;
                 newMaxLiftAmount = 50;
@@ -445,7 +475,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
             } else {
                 newDisplayCount = Math.min(productCount, 16);
                 newRotationAngle = 360 / newDisplayCount;
-                newCarouselDistance = 400;
+                newCarouselDistance = 350;
                 newFlattened = false;
                 newMaxLiftAmount = 150;
                 newExtraLiftFlattened = 0;
@@ -466,44 +496,86 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
 
     const duplicatedProducts = [...products];
 
+    // ---- Drag/Swipe Handling ----
     const handleTouchStart = (e: React.TouchEvent) => {
         setStartX(e.touches[0].clientX);
-        setIsDragging(true);
+        setIsDragging(false);
     };
 
     const handleMouseDown = (e: React.MouseEvent) => {
-        e.preventDefault(); // Prevent image selection
+        e.preventDefault();
         setStartX(e.clientX);
-        setIsDragging(true);
+        setIsDragging(false);
     };
 
     const handleTouchMove = (e: React.TouchEvent) => {
-        if (!isDragging) return;
-        handleSwipeMove(e.touches[0].clientX);
-    };
-
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (!isDragging) return;
-        handleSwipeMove(e.clientX);
-    };
-
-    const handleSwipeMove = (currentX: number) => {
-        const moveX = currentX - startX;
-        // Implement smoother swipe detection
-        if (Math.abs(moveX) > 50) {
-            if (moveX > 0) {
-                setActiveIndex((prevIndex) => prevIndex - 1);
-            } else {
-                setActiveIndex((prevIndex) => prevIndex + 1);
-            }
-            setIsDragging(false);
+        const distanceMoved = Math.abs(e.touches[0].clientX - startX);
+        if (distanceMoved > 10) {
+            setIsDragging(true);
         }
     };
 
-    const handleTouchEnd = () => setIsDragging(false);
-    const handleMouseUp = () => setIsDragging(false);
-    const handleMouseLeave = () => setIsDragging(false); // Handle case when mouse leaves the container
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!isDragging) {
+            const distanceMoved = Math.abs(e.clientX - startX);
+            if (distanceMoved > 10) {
+                setIsDragging(true);
+            }
+        }
+    };
 
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        if (!isDragging) {
+            // It's effectively a tap => decide if left or right of active board
+            handleContainerClick(e.changedTouches[0].clientX);
+        } else {
+            // It's a real swipe
+            const moveX = e.changedTouches[0].clientX - startX;
+            if (Math.abs(moveX) > 50) {
+                if (moveX > 0) {
+                    setActiveIndex((prevIndex) => prevIndex - 1);
+                } else {
+                    setActiveIndex((prevIndex) => prevIndex + 1);
+                }
+            }
+        }
+        setIsDragging(false);
+    };
+
+    const handleMouseUp = (e: React.MouseEvent) => {
+        if (!isDragging) {
+            handleContainerClick(e.clientX);
+        } else {
+            const moveX = e.clientX - startX;
+            if (Math.abs(moveX) > 50) {
+                if (moveX > 0) {
+                    setActiveIndex((prevIndex) => prevIndex - 1);
+                } else {
+                    setActiveIndex((prevIndex) => prevIndex + 1);
+                }
+            }
+        }
+        setIsDragging(false);
+    };
+
+    const handleMouseLeave = () => {
+        setIsDragging(false);
+    };
+
+    // Click outside the active board => move left or right
+    const handleContainerClick = (clickX: number) => {
+        if (!activeSlideRef.current) return;
+        const activeRect = activeSlideRef.current.getBoundingClientRect();
+
+        if (clickX < activeRect.left) {
+            setActiveIndex((prev) => prev - 1);
+        } else if (clickX > activeRect.right) {
+            setActiveIndex((prev) => prev + 1);
+        }
+        // if within active board, do nothing (the flip button is separate)
+    };
+
+    // Wrap indexes to avoid going out of array bounds
     const wrappedIndex = (index: number) => {
         if (index >= duplicatedProducts.length) return index % productCount;
         else if (index < 0) return (index + productCount) % productCount;
@@ -516,11 +588,6 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
 
     const modActiveIndex = activeIndex % productCount;
     const currentProduct = products[modActiveIndex];
-
-    // Handle click on mobile to toggle flip
-    const handleSlideClick = (index: number) => {
-        setHoveredIndex((prev) => (prev === index ? null : index));
-    };
 
     return (
         <CarouselContainer
@@ -536,7 +603,8 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
             <SlidesWrapper>
                 <CenterAnchor>
                     {duplicatedProducts.map((product, index) => {
-                        const angle = rotationAngle * ((index % productCount) - modActiveIndex);
+                        const angle =
+                            rotationAngle * ((index % productCount) - modActiveIndex);
                         const isActive = (index % productCount) === modActiveIndex;
                         const cosAngle = Math.cos((angle * Math.PI) / 180);
                         const translateY = flattened ? 0 : cosAngle * maxLiftAmount;
@@ -548,15 +616,35 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                             ? 200
                             : minHeight + (maxHeight - minHeight) * ((cosAngle + 1) / 2);
 
-                        const frontPhoto = product?.customFields?.variants?.[0]?.frontPhoto?.source || product.productAsset?.preview;
-                        const backPhoto = product?.customFields?.variants?.[0]?.backPhoto?.source;
+                        const frontPhoto =
+                            product?.customFields?.variants?.[0]?.frontPhoto?.source ||
+                            product.productAsset?.preview;
+                        const backPhoto =
+                            product?.customFields?.variants?.[0]?.backPhoto?.source;
 
-                        // Slide Content with Enhanced Flip Effect
+                        // Only the active board can flip.
+                        // On desktop, isHovered => flip. On mobile, forceFlipActive => flip.
+                        // So we set isHovered = true if:
+                        //   1) This is the active board, and user is hovering on desktop, OR
+                        //   2) This is the active board and forceFlipActive is true on mobile
+                        const isHoveredOrFlipped =
+                            isActive &&
+                            ((!isMobile && index === hoveredIndex) ||
+                                (isMobile && forceFlipActive));
+
+                        // The front/back images wrapped in an ImageFlipContainer
                         const SlideContent = (
                             <ProductImageContainer height={height}>
-                                {isActive && backPhoto ? (
+                                {backPhoto ? (
                                     <ImageFlipContainer>
-                                        <div className="flip-card-inner">
+                                        <div
+                                            className="flip-card-inner"
+                                            style={{
+                                                transform: isHoveredOrFlipped
+                                                    ? 'rotateY(180deg)'
+                                                    : 'rotateY(0deg)',
+                                            }}
+                                        >
                                             <img
                                                 className="flip-card-front"
                                                 src={frontPhoto}
@@ -567,6 +655,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                                                     width: '100%',
                                                     height: '100%',
                                                     objectFit: 'contain',
+                                                    backfaceVisibility: 'hidden',
                                                 }}
                                             />
                                             <img
@@ -579,6 +668,8 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                                                     width: '100%',
                                                     height: '100%',
                                                     objectFit: 'contain',
+                                                    backfaceVisibility: 'hidden',
+                                                    transform: 'rotateY(180deg)',
                                                 }}
                                             />
                                         </div>
@@ -600,9 +691,6 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                             </ProductImageContainer>
                         );
 
-                        // Determine if the current slide is hovered
-                        const isHovered = hoveredIndex === index;
-
                         return (
                             <ProductSlide
                                 key={index}
@@ -612,49 +700,46 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                                 translateY={translateY}
                                 zIndex={zIndex}
                                 height={height}
-                                opacity={1} // All slides have full opacity
+                                opacity={1}
                                 flattened={flattened}
                                 index={index}
                                 activeIndex={activeIndex}
                                 extraLift={extraLiftFlattened}
+                                ref={isActive ? activeSlideRef : null}
                             >
                                 {isActive ? (
+                                    // ACTIVE BOARD
                                     !isMobile ? (
+                                        // Desktop => Flip on hover/focus
                                         <SlideLink
                                             href={`/snowboards/${product.slug}`}
                                             aria-label={`View details for ${product.productName}`}
-                                            isHovered={isHovered}
+                                            isHovered={isHoveredOrFlipped}
                                             onMouseEnter={() => setHoveredIndex(index)}
                                             onMouseLeave={() => setHoveredIndex(null)}
-                                            onFocus={() => setHoveredIndex(index)} // Accessibility: Handle focus
-                                            onBlur={() => setHoveredIndex(null)}   // Accessibility: Handle blur
-                                            onDragStart={(e) => e.preventDefault()} // Prevent default drag behavior
+                                            onFocus={() => setHoveredIndex(index)}
+                                            onBlur={() => setHoveredIndex(null)}
+                                            onDragStart={(e) => e.preventDefault()}
                                         >
                                             {SlideContent}
                                         </SlideLink>
                                     ) : (
+                                        // Mobile => No hover flipping, use button
                                         <SlideLink
-                                            // href={`/snowboards/${product.slug}`}
                                             aria-label={`View details for ${product.productName}`}
-                                            isHovered={isHovered}
-                                            onMouseEnter={() => setHoveredIndex(index)}
-                                            onMouseLeave={() => setHoveredIndex(null)}
-                                            onFocus={() => setHoveredIndex(index)} // Accessibility: Handle focus
-                                            onBlur={() => setHoveredIndex(null)}   // Accessibility: Handle blur
-                                            onDragStart={(e) => e.preventDefault()} // Prevent default drag behavior
+                                            isHovered={isHoveredOrFlipped}
+                                            // remove mouseEnter/leave so it doesn't flip on hover
+                                            onDragStart={(e) => e.preventDefault()}
                                         >
                                             {SlideContent}
                                         </SlideLink>
                                     )
                                 ) : (
+                                    // NON-ACTIVE BOARD => no flipping at all
                                     <div
-                                        onMouseEnter={() => setHoveredIndex(index)}
-                                        onMouseLeave={() => setHoveredIndex(null)}
-                                        onFocus={() => setHoveredIndex(index)} // Accessibility: Handle focus
-                                        onBlur={() => setHoveredIndex(null)}   // Accessibility: Handle blur
                                         style={{ width: '100%', height: '100%' }}
-                                        tabIndex={0} // Make div focusable for accessibility
-                                        onDragStart={(e) => e.preventDefault()} // Prevent default drag behavior
+                                        onDragStart={(e) => e.preventDefault()}
+                                        tabIndex={0}
                                     >
                                         {SlideContent}
                                     </div>
@@ -665,18 +750,29 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                 </CenterAnchor>
             </SlidesWrapper>
 
+            {/* Flip button: only visible on mobile and only flips the active board */}
+            {isMobile && (
+                <FlipButtonContainer>
+                    <button onClick={() => setForceFlipActive((prev) => !prev)}>
+                        <RotateIconWrapper>
+                            <RotateCw></RotateCw>
+                        </RotateIconWrapper>
+                    </button>
+                </FlipButtonContainer>
+            )}
+
             <BottomStackWrapper>
                 <BottomStack column>
-
                     <InfoBlock>
                         <Stack justifyBetween itemsCenter>
                             <ProductTitle>
                                 <b>{currentProduct?.customFields?.brand}</b>
-                                {currentProduct?.productName} ({currentProduct?.productVariantName})
+                                {currentProduct?.productName} (
+                                {currentProduct?.productVariantName})
                             </ProductTitle>
                             <Link href={`/snowboards/${currentProduct?.slug}`} passHref>
                                 <StockButton as="a" inStock={currentProduct?.inStock}>
-                                    {currentProduct?.inStock ? 'In Stock' : 'Read more'}
+                                    {currentProduct?.inStock ? 'More info' : 'Read more'}
                                 </StockButton>
                             </Link>
                         </Stack>
@@ -708,7 +804,6 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                             <small>{currentProduct.customFields.quoteOwner}</small>
                         </Quote>
                     )}
-
                 </BottomStack>
             </BottomStackWrapper>
         </CarouselContainer>
