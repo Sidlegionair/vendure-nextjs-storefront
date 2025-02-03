@@ -4,8 +4,18 @@ import RichTextEditor from '@/src/components/storyblok/RichTextEditor';
 
 const getButtonLink = (link) => {
     if (!link) return '#'; // Default fallback
-    if (link.linktype === 'url') return link.url; // External URL
+
+    if (link.linktype === 'url') {
+        const url = link.url;
+        // If URL doesn't start with http:// or https://, prepend https://
+        if (!/^https?:\/\//i.test(url)) {
+            return `https://${url}`;
+        }
+        return url;
+    }
+
     if (link.linktype === 'story') return `/${link.cached_url || ''}`; // Internal Storyblok story
+
     return '#'; // Fallback for unknown types
 };
 
@@ -103,7 +113,6 @@ const Footer = ({ blok }) => {
                 </div>
             </div>
 
-
             <style jsx>{`
                 .footer {
                     position: relative;
@@ -151,7 +160,7 @@ const Footer = ({ blok }) => {
                     flex-wrap: wrap;
                     box-sizing: border-box;
                 }
-                
+
                 .column {
                     justify-content: start;
                     align-items: start;
@@ -250,7 +259,7 @@ const Footer = ({ blok }) => {
                     width: 100%;
                     box-sizing: border-box;
                     max-width: 100%;
-                    //border-radius: 30px;
+                    /*border-radius: 30px;*/
                     padding-right: 50px; /* Space for the button */
                 }
 
@@ -260,11 +269,11 @@ const Footer = ({ blok }) => {
                     top: 50%;
                     transform: translateY(-50%);
                     border: none;
-                    //background-color: #c00;
+                    /*background-color: #c00;*/
                     color: #fff;
                     padding: 10px 15px;
                     font-size: 14px;
-                    //border-radius: 50%;
+                    /*border-radius: 50%;*/
                     cursor: pointer;
                 }
 
@@ -293,7 +302,6 @@ const Footer = ({ blok }) => {
                     height: 100%;
                     object-fit: contain;
                 }
-
 
                 @media (max-width: 1024px) {
                     .content-layer {
@@ -346,7 +354,7 @@ const Footer = ({ blok }) => {
                     }
 
                     .logo-image {
-                        //max-width: 150px;
+                        /*max-width: 150px;*/
                         max-height: 28px;
                     }
                 }
