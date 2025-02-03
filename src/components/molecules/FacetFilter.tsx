@@ -1,7 +1,7 @@
+// src/components/molecules/FacetFilter.tsx
 import { Divider, Stack, TFacetHeading } from '@/src/components/atoms';
 import { FiltersFacetType } from '@/src/graphql/selectors';
 import styled from '@emotion/styled';
-import { CheckBox } from '@/src/components/forms';
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { FacetCheckBox } from '@/src/components/forms/FacetCheckbox';
@@ -10,13 +10,20 @@ interface FacetProps {
     facet: FiltersFacetType;
     selected?: string[];
     onClick: (group: { id: string; name: string }, facet: { id: string; name: string }) => void;
+    // New optional prop to let the parent “register” the underlying checkbox ref
+    registerRef?: (facetValueId: string, ref: HTMLButtonElement | null) => void;
 }
 
-export const FacetFilterCheckbox: React.FC<FacetProps> = ({ facet: { id, name, values }, onClick, selected }) => {
+export const FacetFilterCheckbox: React.FC<FacetProps> = ({
+                                                              facet: { id, name, values },
+                                                              onClick,
+                                                              selected,
+                                                              registerRef,
+                                                          }) => {
     const [open, setOpen] = useState<boolean>(false);
     return (
         <GridWrapper w100 column>
-            <StyledDivider></StyledDivider>
+            <StyledDivider />
             <GridTitle onClick={() => setOpen(!open)}>
                 <StyledTFacetHeading capitalize size="1.5rem">
                     {name}
@@ -28,11 +35,15 @@ export const FacetFilterCheckbox: React.FC<FacetProps> = ({ facet: { id, name, v
             <Grid open={open}>
                 <GridEntry>
                     <CheckGrid>
-                        {values.map(v => {
+                        {values.map((v) => {
                             const isSelected = selected?.includes(v.id);
                             return (
                                 <FacetCheckBox
                                     key={v.id}
+                                    // Forward the underlying checkbox element via registerRef (if provided)
+                                    ref={(el: HTMLButtonElement) =>
+                                        registerRef && registerRef(v.id, el)
+                                    }
                                     label={`${v.name}`}
                                     count={`(${v.count})`}
                                     checked={isSelected}
@@ -47,27 +58,18 @@ export const FacetFilterCheckbox: React.FC<FacetProps> = ({ facet: { id, name, v
     );
 };
 
-const StyledDivider = styled(Divider)`   
+const StyledDivider = styled(Divider)`
     margin-bottom: 18px;
-`
-
+`;
 
 const StyledTFacetHeading = styled(TFacetHeading)`
-    /* Brand */
-
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
     line-height: 16px;
-
-
-
-`
-
+`;
 
 const GridWrapper = styled(Stack)`
-    //margin-top: 1.7rem;
-    //min-width: 420px;
     max-width: 100%;
 `;
 
@@ -76,7 +78,7 @@ const Grid = styled.div<{ open: boolean }>`
     display: grid;
     grid-template-rows: ${({ open }) => (open ? '1fr' : '0fr')};
     transition: grid-template-rows 0.3s ease-in-out;
-    border-bottom: 1px solid ${p => p.theme.gray(100)};
+    border-bottom: 1px solid ${(p) => p.theme.gray(100)};
 `;
 
 const GridTitle = styled.button`
@@ -85,9 +87,7 @@ const GridTitle = styled.button`
     background-color: transparent;
     padding: 0;
     cursor: pointer;
-
     position: relative;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -99,11 +99,10 @@ const GridEntry = styled(Stack)`
 
 const CheckGrid = styled.div`
     display: grid;
-    grid-template-columns: 1fr; /* Changed from '1fr 1fr' to '1fr' */
+    grid-template-columns: 1fr;
     gap: 2rem;
     padding-bottom: 2rem;
     width: 100%;
-
     & > label {
         font-size: 1.5rem;
         letter-spacing: -0.64px;

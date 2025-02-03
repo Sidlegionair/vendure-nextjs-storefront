@@ -158,53 +158,61 @@ const useCollectionContainer = createContainer<
         });
     }, [products, facetValues, brandData]);
 
-    const applyFilter = async (group: { id: string; name: string }, value: { id: string; name: string }) => {
-        // Avoid duplicates in filters
-        const updatedGroupFilters = [...(filters[group.id] || []), value.id].filter(
-            (id, index, self) => self.indexOf(id) === index
-        );
-        const newState = { ...filters, [group.id]: updatedGroupFilters };
+    const applyFilter = async (
+        group: { id: string; name: string },
+        value: { id: string; name: string }
+    ) => {
+        // Use a functional update so we always start with the latest state.
+        setFilters((prev) => {
+            const updatedGroupFilters = [...(prev[group.id] || []), value.id].filter(
+                (id, index, self) => self.indexOf(id) === index
+            );
+            const newState = { ...prev, [group.id]: updatedGroupFilters };
 
-        // Update URL only on the client side
-        if (typeof window !== 'undefined') {
-            const url = new URL(window.location.href);
-            const existingValues = url.searchParams.get(group.name)?.split(',') || [];
-            if (!existingValues.includes(value.name)) {
-                url.searchParams.set(group.name, [...existingValues, value.name].join(','));
+            // Update URL only on the client side
+            if (typeof window !== 'undefined') {
+                const url = new URL(window.location.href);
+                // Note: we use group.name as the query param here because that’s how you update the URL.
+                const existingValues = url.searchParams.get(group.name)?.split(',') || [];
+                if (!existingValues.includes(value.name)) {
+                    url.searchParams.set(group.name, [...existingValues, value.name].join(','));
+                }
+                url.searchParams.set('page', '1'); // Reset to page 1 on filter change
+                window.history.pushState({}, '', url.toString());
+                // Fetch filtered products based on new state.
+                getFilteredProducts(newState, 1, sort, q);
             }
-            url.searchParams.set('page', '1'); // Reset to page 1 on filter change
 
-            // Update state and fetch filtered products
-            setFilters(newState);
-            window.history.pushState({}, '', url.toString());
-            await getFilteredProducts(newState, 1, sort, q);
-        }
+            return newState;
+        });
     };
 
-    const removeFilter = async (group: { id: string; name: string }, value: { id: string; name: string }) => {
-        // Handle cases where filters may not exist for the group
-        const updatedGroupFilters = filters[group.id]?.filter((id) => id !== value.id) || [];
-        const newState = updatedGroupFilters.length
-            ? { ...filters, [group.id]: updatedGroupFilters }
-            : Object.fromEntries(Object.entries(filters).filter(([key]) => key !== group.id));
+    const removeFilter = async (
+        group: { id: string; name: string },
+        value: { id: string; name: string }
+    ) => {
+        setFilters((prev) => {
+            const updatedGroupFilters = prev[group.id]?.filter((id) => id !== value.id) || [];
+            const newState = updatedGroupFilters.length
+                ? { ...prev, [group.id]: updatedGroupFilters }
+                : Object.fromEntries(Object.entries(prev).filter(([key]) => key !== group.id));
 
-        // Update URL only on the client side
-        if (typeof window !== 'undefined') {
-            const url = new URL(window.location.href);
-            const existingValues = url.searchParams.get(group.name)?.split(',') || [];
-            const filteredValues = existingValues.filter((v) => v !== value.name);
-            if (filteredValues.length) {
-                url.searchParams.set(group.name, filteredValues.join(','));
-            } else {
-                url.searchParams.delete(group.name);
+            if (typeof window !== 'undefined') {
+                const url = new URL(window.location.href);
+                const existingValues = url.searchParams.get(group.name)?.split(',') || [];
+                const filteredValues = existingValues.filter((v) => v !== value.name);
+                if (filteredValues.length) {
+                    url.searchParams.set(group.name, filteredValues.join(','));
+                } else {
+                    url.searchParams.delete(group.name);
+                }
+                url.searchParams.set('page', '1'); // Reset page
+                window.history.pushState({}, '', url.toString());
+                getFilteredProducts(newState, 1, sort, q);
             }
-            url.searchParams.set('page', '1'); // Reset to page 1 on filter change
 
-            // Update state and fetch filtered products
-            setFilters(newState);
-            window.history.pushState({}, '', url.toString());
-            await getFilteredProducts(newState, 1, sort, q);
-        }
+            return newState;
+        });
     };
 
     // Fetch filtered products
