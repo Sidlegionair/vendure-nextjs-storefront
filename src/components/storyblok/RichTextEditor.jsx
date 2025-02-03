@@ -169,13 +169,25 @@ const RichTextEditor = ({ blok }) => {
                         box-shadow: ${blok.boxShadow || 'none'};
                         overflow: hidden;
 
+                        h1 {
+                            font-size: 5rem;
+                        }
+                        h2 {
+                            font-size: 3.8rem;
+                        }
+                        h3 {
+                            font-size: 3rem;
+                        }
+                        h4 {
+                            font-size: 2.2rem;
+                        }
+
+                        
                         h1,
                         h2,
                         h3 {
                             font-family: 'Suisse BP Int\'l', sans-serif;
-                            font-size: 35px;
                             font-weight: 600;
-                            line-height: 35px;
                             color: #000;
                         }
 
