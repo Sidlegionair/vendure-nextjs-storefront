@@ -181,6 +181,10 @@ const RichTextEditor = ({ blok }) => {
                         h4 {
                             font-size: 2.2rem;
                         }
+                        
+                        b {
+                            font-weight: bold;
+                        }
 
                         
                         h1,
