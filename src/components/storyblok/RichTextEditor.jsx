@@ -190,6 +190,7 @@ const RichTextEditor = ({ blok }) => {
 
                         a,
                         a * {
+                            font-size: inherit;
                             font-family: 'Calibri', sans-serif;
                             color: #9E2E3A !important;
                             font-weight: bold;
