@@ -120,8 +120,10 @@ export const IconButton = styled.button<{ isActive?: boolean }>`
     border-radius: 100%;
     font-weight: 600;
     outline: 0;
-    width: 2.4rem;
-    height: 2.4rem;
+    //@media(min-width: 767px) {
+        width: 24px;
+        height: 24px;
+    //}
     display: flex;
     align-items: center;
     justify-content: center;
@@ -133,6 +135,7 @@ export const IconButton = styled.button<{ isActive?: boolean }>`
     :hover {
         box-shadow: none;
     }
+
 `;
 
 

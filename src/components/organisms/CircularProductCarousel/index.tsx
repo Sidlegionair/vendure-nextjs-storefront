@@ -755,7 +755,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                 <FlipButtonContainer>
                     <button onClick={() => setForceFlipActive((prev) => !prev)}>
                         <RotateIconWrapper>
-                            <RotateCw></RotateCw>
+                            <Rotate3DIcon></Rotate3DIcon>
                         </RotateIconWrapper>
                     </button>
                 </FlipButtonContainer>
@@ -767,8 +767,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                         <Stack justifyBetween itemsCenter>
                             <ProductTitle>
                                 <b>{currentProduct?.customFields?.brand}</b>
-                                {currentProduct?.productName} (
-                                {currentProduct?.productVariantName})
+                                {currentProduct?.productName}
                             </ProductTitle>
                             <Link href={`/snowboards/${currentProduct?.slug}`} passHref>
                                 <StockButton as="a" inStock={currentProduct?.inStock}>

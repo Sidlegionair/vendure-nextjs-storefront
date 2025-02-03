@@ -62,9 +62,11 @@ const QuantityBadge = styled.div`
     top: -0.5rem;
     right: -0.5rem;
 
-    padding: 0.25rem;
-    width: 1.5rem;
-    height: 1.5rem;
+    //@media(min-width: 767px) {
+        padding: 0.25rem;
+        width: 1.5rem;
+        height: 1.5rem;
+    //}
     border-radius: 100%;
     background: ${p => p.theme.gray(100)};
     display: flex;
@@ -77,9 +79,12 @@ const Quantity = styled(TP)`
 `;
 
 const CartComponentMain = styled(motion.div)`
-    width: 100%;
-    max-width: 28px;
-    height: 28px;
+    @media(max-width: 767px) {
+        width: 60%;
+    }
+    
+    height: 10%;
+    height: 100%;
 
     z-index: 2147483647;
 
