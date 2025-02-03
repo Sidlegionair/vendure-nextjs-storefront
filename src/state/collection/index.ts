@@ -14,8 +14,6 @@ type EnrichedProductType = ProductSearchType & {
     };
 };
 
-
-
 const useCollectionContainer = createContainer<
     CollectionContainerType,
     {
@@ -43,11 +41,52 @@ const useCollectionContainer = createContainer<
     const [sort, setSort] = useState(initialSort);
     const [currentPage, setCurrentPage] = useState(initialState.page || 1);
     const [q, setQ] = useState<string | undefined>(initialState.searchQuery);
-    const { query } = useRouter();
+    const router = useRouter(); // Correctly obtain router instance
     const [filtersOpen, setFiltersOpen] = useState(false); // Add this state
     const [brandData, setBrandData] = useState<{ id: string; brand: string | null }[]>([]);
 
     const totalPages = useMemo(() => Math.ceil(totalProducts / PER_PAGE), [totalProducts]);
+
+    // Initialize filters and other state based on router query
+    useEffect(() => {
+        if (!router.isReady) return;
+
+        const { query } = router;
+
+        const initialFilters: { [key: string]: string[] } = {};
+
+        Object.keys(query).forEach((key) => {
+            if (key !== 'page' && key !== 'sort') {
+                const value = query[key];
+
+                let values: string[] = [];
+
+                if (Array.isArray(value)) {
+                    // If it's an array, split each string by ',' and flatten the result
+                    values = value.flatMap((v) => v.split(','));
+                } else if (typeof value === 'string') {
+                    // If it's a single string, split by ','
+                    values = value.split(',');
+                }
+
+                initialFilters[key] = values;
+            }
+        });
+
+        setFilters(initialFilters);
+
+        const initialPage = parseInt((query.page as string) || '1', 10);
+        setCurrentPage(initialPage);
+
+        const initialSort = initialState.sort || { key: 'title', direction: SortOrder.ASC };
+        setSort(initialSort);
+
+        const initialSearchQuery = query.q as string | undefined;
+        setQ(initialSearchQuery);
+
+        // Fetch products based on initial state
+        getFilteredProducts(initialFilters, initialPage, initialSort, initialSearchQuery);
+    }, [router.isReady, router.query]);
 
     // Fetch brand data
     useEffect(() => {
@@ -68,9 +107,10 @@ const useCollectionContainer = createContainer<
 
                         return {
                             id,
-                            brand: typeof product?.customFields?.brand === 'string'
-                                ? product.customFields.brand
-                                : null, // Ensure brand is string or null
+                            brand:
+                                typeof product?.customFields?.brand === 'string'
+                                    ? product.customFields.brand
+                                    : null, // Ensure brand is string or null
                         };
                     } catch (error) {
                         console.error(`Failed to fetch brand for product ID: ${id}`, error);
@@ -85,7 +125,7 @@ const useCollectionContainer = createContainer<
         fetchBrandData();
     }, [products, ctx]);
 
-    // Enrich snowboards
+    // Enrich products with facets and brand data
     const enrichedProducts: EnrichedProductType[] = useMemo(() => {
         if (!facetValues.length && !brandData.length) return products;
 
@@ -112,7 +152,6 @@ const useCollectionContainer = createContainer<
                 ...product,
                 facetValues: enrichedFacets,
                 customFields: {
-                    // ...(product.customFields || {}),
                     brand,
                 },
             };
@@ -126,18 +165,20 @@ const useCollectionContainer = createContainer<
         );
         const newState = { ...filters, [group.id]: updatedGroupFilters };
 
-        // Update URL
-        const url = new URL(window.location.href);
-        const existingValues = url.searchParams.get(group.name)?.split(',') || [];
-        if (!existingValues.includes(value.name)) {
-            url.searchParams.set(group.name, [...existingValues, value.name].join(','));
-        }
-        url.searchParams.set('page', '1'); // Reset to page 1 on filter change
+        // Update URL only on the client side
+        if (typeof window !== 'undefined') {
+            const url = new URL(window.location.href);
+            const existingValues = url.searchParams.get(group.name)?.split(',') || [];
+            if (!existingValues.includes(value.name)) {
+                url.searchParams.set(group.name, [...existingValues, value.name].join(','));
+            }
+            url.searchParams.set('page', '1'); // Reset to page 1 on filter change
 
-        // Update state and fetch filtered snowboards
-        setFilters(newState);
-        window.history.pushState({}, '', url.toString());
-        await getFilteredProducts(newState, 1, sort, q);
+            // Update state and fetch filtered products
+            setFilters(newState);
+            window.history.pushState({}, '', url.toString());
+            await getFilteredProducts(newState, 1, sort, q);
+        }
     };
 
     const removeFilter = async (group: { id: string; name: string }, value: { id: string; name: string }) => {
@@ -147,25 +188,26 @@ const useCollectionContainer = createContainer<
             ? { ...filters, [group.id]: updatedGroupFilters }
             : Object.fromEntries(Object.entries(filters).filter(([key]) => key !== group.id));
 
-        // Update URL
-        const url = new URL(window.location.href);
-        const existingValues = url.searchParams.get(group.name)?.split(',') || [];
-        const filteredValues = existingValues.filter((v) => v !== value.name);
-        if (filteredValues.length) {
-            url.searchParams.set(group.name, filteredValues.join(','));
-        } else {
-            url.searchParams.delete(group.name);
-        }
-        url.searchParams.set('page', '1'); // Reset to page 1 on filter change
+        // Update URL only on the client side
+        if (typeof window !== 'undefined') {
+            const url = new URL(window.location.href);
+            const existingValues = url.searchParams.get(group.name)?.split(',') || [];
+            const filteredValues = existingValues.filter((v) => v !== value.name);
+            if (filteredValues.length) {
+                url.searchParams.set(group.name, filteredValues.join(','));
+            } else {
+                url.searchParams.delete(group.name);
+            }
+            url.searchParams.set('page', '1'); // Reset to page 1 on filter change
 
-        // Update state and fetch filtered snowboards
-        setFilters(newState);
-        window.history.pushState({}, '', url.toString());
-        await getFilteredProducts(newState, 1, sort, q);
+            // Update state and fetch filtered products
+            setFilters(newState);
+            window.history.pushState({}, '', url.toString());
+            await getFilteredProducts(newState, 1, sort, q);
+        }
     };
 
-
-    // Fetch filtered snowboards
+    // Fetch filtered products
     const getFilteredProducts = async (
         state: { [key: string]: string[] },
         page: number,
@@ -173,16 +215,16 @@ const useCollectionContainer = createContainer<
         q?: string
     ) => {
         if (page < 1) page = 1;
-        const facetValueFilters: GraphQLTypes['FacetValueFilterInput'][] = Object.entries(state)
-            .reduce((filters, [key, value]) => {
+        const facetValueFilters: GraphQLTypes['FacetValueFilterInput'][] = Object.entries(state).reduce(
+            (filtersAcc, [key, value]) => {
                 const facet = initialState.facets.find((f) => f.id === key);
-                if (!facet) return filters; // Skip if facet not found
+                if (!facet) return filtersAcc; // Skip if facet not found
 
-                filters.push(
-                    value.length === 1 ? { and: value[0] } : { or: value }
-                );
-                return filters;
-            }, [] as GraphQLTypes['FacetValueFilterInput'][]);
+                filtersAcc.push(value.length === 1 ? { and: value[0] } : { or: value });
+                return filtersAcc;
+            },
+            [] as GraphQLTypes['FacetValueFilterInput'][]
+        );
 
         const input: GraphQLTypes['SearchInput'] = {
             collectionSlug: collection.slug,
@@ -194,13 +236,18 @@ const useCollectionContainer = createContainer<
             term: q,
         };
 
-        const { search } = await storefrontApiQuery(ctx)({
-            search: [{ input }, SearchSelector],
-        });
+        try {
+            const { search } = await storefrontApiQuery(ctx)({
+                search: [{ input }, SearchSelector],
+            });
 
-        setProducts(search.items);
-        setTotalProducts(search?.totalItems);
-        setFacetValues(reduceFacets(search?.facetValues || []));
+            setProducts(search.items);
+            setTotalProducts(search?.totalItems || 0);
+            setFacetValues(reduceFacets(search?.facetValues || []));
+        } catch (error) {
+            console.error('Error fetching filtered products:', error);
+            // Optionally, set an error state here
+        }
     };
 
     const handleSort = async (newSort: Sort) => {
@@ -221,11 +268,13 @@ const useCollectionContainer = createContainer<
             itemsPerPage: PER_PAGE,
         },
         changePage: async (page) => {
-            const url = new URL(window.location.href);
-            url.searchParams.set('page', page.toString());
-            window.history.pushState({}, '', url.toString());
-            setCurrentPage(page);
-            await getFilteredProducts(filters, page, sort, q);
+            if (typeof window !== 'undefined') {
+                const url = new URL(window.location.href);
+                url.searchParams.set('page', page.toString());
+                window.history.pushState({}, '', url.toString());
+                setCurrentPage(page);
+                await getFilteredProducts(filters, page, sort, q);
+            }
         },
         filtersOpen,
         setFiltersOpen, // Expose setter

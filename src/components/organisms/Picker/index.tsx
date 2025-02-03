@@ -333,8 +333,8 @@ const LocaleInList = styled(Stack)`
 
 const CurrentLocale = styled.button`
     position: relative;
-    width: 21px;
-    height: 21px;
+    width: 28px;
+    height: 28px;
     border: none;
     border-radius: 50%;
     overflow: hidden; /* Ensures the circle shape */

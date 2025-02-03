@@ -12,11 +12,11 @@ export const UserMenu: React.FC<{ isLogged: boolean }> = ({ isLogged }) => {
                 <AnimatePresence>
                     {isLogged ? (
                         <IconWrapper initial={{ opacity: 1 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                            <UserCheck2 size="2.4rem" />
+                            <UserCheck2 size="30px" />
                         </IconWrapper>
                     ) : (
                         <IconWrapper initial={{ opacity: 1 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                            <User2 size="2.4rem" />
+                            <User2 size="30px" />
                         </IconWrapper>
                     )}
                 </AnimatePresence>
@@ -26,8 +26,8 @@ export const UserMenu: React.FC<{ isLogged: boolean }> = ({ isLogged }) => {
 };
 
 const IconWrapper = styled(motion.div)`
-    width: 2.4rem;
-    height: 2.4rem;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;

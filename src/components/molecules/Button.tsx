@@ -120,19 +120,22 @@ export const IconButton = styled.button<{ isActive?: boolean }>`
     border-radius: 100%;
     font-weight: 600;
     outline: 0;
-    width: 2.4rem;
-    height: 2.4rem;
+    //@media(min-width: 767px) {
+        width: 24px;
+        height: 24px;
+    //}
     display: flex;
     align-items: center;
     justify-content: center;
     background: ${p => p.theme.button.icon.back || 'transparent'};
-    svg {
-        width: 2rem;
-        height: 2rem;
-    }
+    //svg {
+    //    width: 2rem;
+    //    height: 2rem;
+    //}
     :hover {
         box-shadow: none;
     }
+
 `;
 
 
