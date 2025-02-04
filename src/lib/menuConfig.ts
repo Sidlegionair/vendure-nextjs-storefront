@@ -38,7 +38,7 @@ const languageSlugMapping: { [key: string]: { [key: string]: string } } = {
         en: 'collections/snowboards/?page=1&terrain=all+mountain',
     },
     freestyle: {
-        en: 'collections/snowboards/?style=freestyle',
+        en: 'collections/snowboards/?6=143&terrain=freestyle&page=1',
     },
     brands: {
         en: 'content/brands',
