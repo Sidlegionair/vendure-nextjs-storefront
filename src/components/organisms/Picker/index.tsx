@@ -202,7 +202,10 @@ export const Picker: React.FC<{
             <Stack itemsCenter gap={'5px'}>
                 <CurrentLocale onClick={() => setIsOpen(true)}>
                     <SvgWrapper>
-                        {getFlagByCode(locale, true)}
+                        {getFlagByCode(
+                            (asPath === '/nl/' || pathname === '/nl/') ? 'nl' : locale,
+                            true
+                        )}
                     </SvgWrapper>
                 </CurrentLocale>
                 <svg width="5" height="3" viewBox="0 0 5 3" fill="none" xmlns="http://www.w3.org/2000/svg">
