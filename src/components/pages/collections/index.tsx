@@ -76,7 +76,7 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
             const facetValue = facetGroup.values.find(
                 (v) =>
                     v.id === queryValue ||
-                    v.name.toLowerCase() === queryValue.toLowerCase()
+                    v.name.toLowerCase() === queryValue?.toLowerCase()
             );
 
             if (!facetValue) {

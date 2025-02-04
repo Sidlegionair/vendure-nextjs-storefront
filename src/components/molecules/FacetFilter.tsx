@@ -41,9 +41,9 @@ export const FacetFilterCheckbox: React.FC<FacetProps> = ({
                                 <FacetCheckBox
                                     key={v.id}
                                     // Forward the underlying checkbox element via registerRef (if provided)
-                                    ref={(el: HTMLButtonElement) =>
-                                        registerRef && registerRef(v.id, el)
-                                    }
+                                    // ref={(el: HTMLButtonElement) =>
+                                    //     registerRef && registerRef(v.id, el)
+                                    // }
                                     label={`${v.name}`}
                                     count={`(${v.count})`}
                                     checked={isSelected}
