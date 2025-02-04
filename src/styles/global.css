@@ -333,3 +333,7 @@ body {
     line-height: 20px;
     text-align: left;
 }
+
+strong {
+    font-weight: bold;
+}
