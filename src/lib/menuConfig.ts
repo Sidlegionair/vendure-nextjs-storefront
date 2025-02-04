@@ -33,12 +33,15 @@ const languageSlugMapping: { [key: string]: { [key: string]: string } } = {
     },
     powder: {
         en: 'collections/snowboards/?terrain=powder&page=1',
+        nl: 'collections/snowboards/?terrain=powder&page=1',
     },
     allMountain: {
         en: 'collections/snowboards/?page=1&terrain=all+mountain',
+        nl: 'collections/snowboards/?page=1&terrain=all+mountain',
     },
     freestyle: {
         en: 'collections/snowboards/?6=143&terrain=freestyle&page=1',
+        nl: 'collections/snowboards/?6=143&terrain=freestyle&page=1',
     },
     brands: {
         en: 'content/brands',
