@@ -33,6 +33,10 @@ const ContainerBlock = ({ blok }) => {
                     overflow: hidden;
                     //padding: 20px; /* Optional padding for content spacing */
                     box-shadow: ${blok.shadow ? '0px 4px 20px rgba(0, 0, 0, 0.1)' : 'none'};
+
+                    @media(max-width: 767px) {
+                        padding: 30px 0;
+                    }
                 }
             `}</style>
         </section>
