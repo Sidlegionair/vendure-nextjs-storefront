@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import { Divider, Stack } from '@/src/components';
@@ -98,7 +98,8 @@ const SlideLink = styled.a<{ isHovered: boolean }>`
         height: 100%;
         transition: transform 0.6s;
         transform-style: preserve-3d;
-        transform: ${({ isHovered }) => (isHovered ? 'rotateY(180deg)' : 'rotateY(0deg)')};
+        transform: ${({ isHovered }) =>
+                isHovered ? 'rotateY(180deg)' : 'rotateY(0deg)'};
     }
 
     .flip-card-front,
@@ -135,6 +136,7 @@ const ProductSlide = styled.div<{
     index: number;
     activeIndex: number;
     extraLift: number;
+    activeBoardScale: number;
 }>`
     position: absolute;
     transform-style: preserve-3d;
@@ -143,45 +145,42 @@ const ProductSlide = styled.div<{
     border-radius: 8px;
     touch-action: pan-y;
 
-    ${({ flattened, angle, distance, translateY, index, activeIndex, extraLift }) => {
+    ${({ flattened, angle, distance, translateY, index, activeIndex, extraLift, activeBoardScale }) => {
         const distanceFromActive = Math.abs((index % 1000) - (activeIndex % 1000));
-
-        // We'll calculate scale & fade for non-flattened boards
-        const scaleFactor = 1 - 0.08 * distanceFromActive;
-        const clampedScale = scaleFactor < 0.4 ? 0.4 : scaleFactor;
-        const fadeFactor = 1 - 0.15 * distanceFromActive;
-        const clampedOpacity = fadeFactor < 0.1 ? 0.1 : fadeFactor;
 
         if (flattened) {
             // For mobile "flattened" scenario
             const scale =
-                    distanceFromActive === 0
-                            ? 1.3
-                            : Math.max(0.7, 1 - distanceFromActive * 0.1);
+                    distanceFromActive === 0 ? activeBoardScale : Math.max(0.7, 1 - distanceFromActive * 0.1);
             const xShift = ((index % 1000) - (activeIndex % 1000)) * 120;
-            const yShift =
-                    -Math.abs((index % 1000) - (activeIndex % 1000)) * extraLift;
+            const yShift = -Math.abs((index % 1000) - (activeIndex % 1000)) * extraLift;
+            return `
+          opacity: 1;
+          transform:
+              translate(-50%, -50%)
+              translateX(${xShift}px)
+              translateY(${yShift}px)
+              scale(${scale});
+      `;
+        } else {
+            // Non-flattened scenario: rotate in 3D plus scale & fade
+            const scaleFactor = 1 - 0.08 * distanceFromActive;
+            const clampedScale = scaleFactor < 0.4 ? 0.4 : scaleFactor;
+            const fadeFactor = 1 - 0.15 * distanceFromActive;
+            const clampedOpacity = fadeFactor < 0.1 ? 0.1 : fadeFactor;
+
+            const finalScale = distanceFromActive === 0 ? activeBoardScale : clampedScale;
 
             return `
-                opacity: 1;
-                transform:
-                    translate(-50%, -50%)
-                    translateX(${xShift}px)
-                    translateY(${yShift}px)
-                    scale(${scale});
-            `;
-        } else {
-            // Non-flattened scenario => rotate in 3D plus scale & fade
-            return `
-                opacity: ${clampedOpacity};
-                transform:
-                    rotateY(${angle}deg)
-                    translateZ(${distance}px)
-                    translateY(${translateY}px)
-                    rotateY(${-angle}deg)
-                    translate(-50%, -50%)
-                    scale(${clampedScale});
-            `;
+          opacity: ${clampedOpacity};
+          transform:
+              rotateY(${angle}deg)
+              translateZ(${distance}px)
+              translateY(${translateY}px)
+              rotateY(${-angle}deg)
+              translate(-50%, -50%)
+              scale(${finalScale});
+      `;
         }
     }}
 
@@ -373,6 +372,15 @@ const RotateIconWrapper = styled.div`
     border-radius: 50%;
 `;
 
+// The flip button container no longer uses a fixed top value.
+// We will pass its top position dynamically via inline styles.
+const FlipButtonContainer = styled.div`
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+`;
+
 const ImageFlipContainer = styled.div`
     width: 100%;
     height: 100%;
@@ -401,30 +409,19 @@ const ImageFlipContainer = styled.div`
     }
 `;
 
-// Button absolutely near center anchor, to flip the active board.
-// We'll conditionally render it for mobile only.
-const FlipButtonContainer = styled.div`
-    position: absolute;
-    left: 50%;
-    top: 62%;
-    transform: translateX(-50%);
-    z-index: 999;
-    
-    @media(min-width: 767px) {
-        top: 78%; /* Adjust as needed to place the flip button under the board */
-
-    }
-`;
-
 // ---------- Component ----------
 
-export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ products }) => {
+export const CircularProductCarousel: React.FC<{
+    products: any[];
+    activeBoardScale?: number;
+}> = ({ products, activeBoardScale = 1.2 }) => {
     const isMobile = useIsMobile();
     const productCount = products.length;
     const [displayCount, setDisplayCount] = useState<number>(Math.min(productCount, 11));
     const [activeIndex, setActiveIndex] = useState<number>(productCount);
     const [startX, setStartX] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
+    const [flipButtonTop, setFlipButtonTop] = useState<number>(0);
 
     const [rotationAngle, setRotationAngle] = useState<number>(360 / displayCount);
     const [carouselDistance, setCarouselDistance] = useState<number>(400);
@@ -572,7 +569,6 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
         } else if (clickX > activeRect.right) {
             setActiveIndex((prev) => prev + 1);
         }
-        // if within active board, do nothing (the flip button is separate)
     };
 
     // Wrap indexes to avoid going out of array bounds
@@ -585,6 +581,22 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
     useEffect(() => {
         setActiveIndex((current) => wrappedIndex(current));
     }, [activeIndex, productCount, duplicatedProducts]);
+
+    // Dynamically calculate the flip button’s top position relative to the carousel container.
+    useLayoutEffect(() => {
+        const updateFlipButtonPosition = () => {
+            if (activeSlideRef.current && containerRef.current) {
+                const activeRect = activeSlideRef.current.getBoundingClientRect();
+                const containerRect = containerRef.current.getBoundingClientRect();
+                // Place the button 10px below the active board’s bottom edge
+                setFlipButtonTop(activeRect.bottom - containerRect.top + 10);
+            }
+        };
+
+        updateFlipButtonPosition();
+        window.addEventListener('resize', updateFlipButtonPosition);
+        return () => window.removeEventListener('resize', updateFlipButtonPosition);
+    }, [activeIndex, isMobile, flattened, carouselDistance, maxLiftAmount, extraLiftFlattened]);
 
     const modActiveIndex = activeIndex % productCount;
     const currentProduct = products[modActiveIndex];
@@ -603,8 +615,7 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
             <SlidesWrapper>
                 <CenterAnchor>
                     {duplicatedProducts.map((product, index) => {
-                        const angle =
-                            rotationAngle * ((index % productCount) - modActiveIndex);
+                        const angle = rotationAngle * ((index % productCount) - modActiveIndex);
                         const isActive = (index % productCount) === modActiveIndex;
                         const cosAngle = Math.cos((angle * Math.PI) / 180);
                         const translateY = flattened ? 0 : cosAngle * maxLiftAmount;
@@ -623,16 +634,10 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                             product?.customFields?.variants?.[0]?.backPhoto?.source;
 
                         // Only the active board can flip.
-                        // On desktop, isHovered => flip. On mobile, forceFlipActive => flip.
-                        // So we set isHovered = true if:
-                        //   1) This is the active board, and user is hovering on desktop, OR
-                        //   2) This is the active board and forceFlipActive is true on mobile
                         const isHoveredOrFlipped =
                             isActive &&
-                            ((!isMobile && index === hoveredIndex) ||
-                                (isMobile && forceFlipActive));
+                            ((!isMobile && index === hoveredIndex) || (isMobile && forceFlipActive));
 
-                        // The front/back images wrapped in an ImageFlipContainer
                         const SlideContent = (
                             <ProductImageContainer height={height}>
                                 {backPhoto ? (
@@ -705,12 +710,11 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                                 index={index}
                                 activeIndex={activeIndex}
                                 extraLift={extraLiftFlattened}
+                                activeBoardScale={activeBoardScale}
                                 ref={isActive ? activeSlideRef : null}
                             >
                                 {isActive ? (
-                                    // ACTIVE BOARD
                                     !isMobile ? (
-                                        // Desktop => Flip on hover/focus
                                         <SlideLink
                                             href={`/snowboards/${product.slug}`}
                                             aria-label={`View details for ${product.productName}`}
@@ -724,18 +728,15 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                                             {SlideContent}
                                         </SlideLink>
                                     ) : (
-                                        // Mobile => No hover flipping, use button
                                         <SlideLink
                                             aria-label={`View details for ${product.productName}`}
                                             isHovered={isHoveredOrFlipped}
-                                            // remove mouseEnter/leave so it doesn't flip on hover
                                             onDragStart={(e) => e.preventDefault()}
                                         >
                                             {SlideContent}
                                         </SlideLink>
                                     )
                                 ) : (
-                                    // NON-ACTIVE BOARD => no flipping at all
                                     <div
                                         style={{ width: '100%', height: '100%' }}
                                         onDragStart={(e) => e.preventDefault()}
@@ -750,12 +751,12 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                 </CenterAnchor>
             </SlidesWrapper>
 
-            {/* Flip button: only visible on mobile and only flips the active board */}
+            {/* Flip button: only visible on mobile */}
             {isMobile && (
-                <FlipButtonContainer>
+                <FlipButtonContainer style={{ top: flipButtonTop }}>
                     <button onClick={() => setForceFlipActive((prev) => !prev)}>
                         <RotateIconWrapper>
-                            <Rotate3DIcon></Rotate3DIcon>
+                            <Rotate3DIcon />
                         </RotateIconWrapper>
                     </button>
                 </FlipButtonContainer>
@@ -778,21 +779,21 @@ export const CircularProductCarousel: React.FC<{ products: any[] }> = ({ product
                         <Divider marginBlock="1.5rem" />
                         <Stack gap={26}>
                             <ProductDetails>
-                                <span>
-                                    Price:{' '}
-                                    <span className="amount">
-                                        &euro;{(currentProduct?.priceWithTax?.min / 100).toFixed(2)}
-                                    </span>
-                                </span>
+                <span>
+                  Price:{' '}
+                    <span className="amount">
+                    &euro;{(currentProduct?.priceWithTax?.min / 100).toFixed(2)}
+                  </span>
+                </span>
                                 {currentProduct?.terrain && (
                                     <span>
-                                        Terrain: <span>{currentProduct?.terrain}</span>
-                                    </span>
+                    Terrain: <span>{currentProduct?.terrain}</span>
+                  </span>
                                 )}
                                 {currentProduct?.level && (
                                     <span>
-                                        Rider Level: <span>{currentProduct?.level}</span>
-                                    </span>
+                    Rider Level: <span>{currentProduct?.level}</span>
+                  </span>
                                 )}
                             </ProductDetails>
                         </Stack>
