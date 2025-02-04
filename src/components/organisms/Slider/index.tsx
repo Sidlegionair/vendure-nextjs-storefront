@@ -21,7 +21,7 @@ export const Slider: React.FC<SliderProps> = ({
                                                   slides,
                                                   withArrows = false,
                                                   withDots = false,
-                                                  spacing = 5,
+                                                  spacing = 60,
                                                   loop = true,
                                                   height = 'auto', // Default height is auto
                                                   slideWidth = 'auto', // Default width for slides
