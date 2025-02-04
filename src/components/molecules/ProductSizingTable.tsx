@@ -22,7 +22,7 @@ export const ProductSizingTable: React.FC<ProductSizingTableProps> = ({ product,
             <Table>
                 <thead>
                 <tr>
-                    <th>Specification</th>
+                    <th>SPECIFICATION</th>
                     {product.variants.map((variant) => (
                         <th key={variant.id}>{variant.name}</th>
                     ))}
