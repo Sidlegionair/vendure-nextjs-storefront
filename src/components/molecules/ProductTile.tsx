@@ -95,7 +95,7 @@ export const ProductTile: React.FC<{
             </Stack>
             <Stack column gap="0.75rem">
                 <TextWrapper href={`/snowboards/${product.slug}/`}>
-                    <Stack gap="0.5rem">
+                    <Stack column gap="0.5rem">
                         {brand && (
                             <Brand size="20px" weight={700} noWrap>
                                 {brand}

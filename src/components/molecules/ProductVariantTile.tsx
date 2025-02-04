@@ -109,7 +109,7 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
 
             <ContentWrapper>
                 <TextWrapper href={`/snowboards/${variant.product.slug}?variant=${variant.id}`}>
-                    <Stack gap="7px">
+                    <Stack column gap="7px">
                         {typeof variant.product.customFields?.brand === 'string' && (
                             <BrandName size="18px" weight={700} noWrap>
                                 {variant.product.customFields.brand}
