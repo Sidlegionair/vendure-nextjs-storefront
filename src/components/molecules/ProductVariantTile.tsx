@@ -56,17 +56,20 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
     // Only include facets with these codes
     const includedFacetCodes = ['terrain', 'rider-level'];
 
-    // Filter and deduplicate facets
-    const facets: FacetValue[] =
-        variant.product.facetValues
-            ?.filter((facet) => includedFacetCodes.includes(facet.facet.code))
-            .reduce<FacetValue[]>((unique, facet) => {
-                if (!unique.some((item) => item.code === facet.code)) {
-                    unique.push(facet);
-                }
-                return unique;
-            }, [])
-            .slice(0, 3) || [];
+// Define the desired order for facets
+    const facetOrder = ['terrain', 'rider-level'];
+
+    const facets: FacetValue[] = (variant.product.facetValues
+        ?.filter((facet) => includedFacetCodes.includes(facet.facet.code))
+        .reduce<FacetValue[]>((unique, facet) => {
+            if (!unique.some((item) => item.code === facet.code)) {
+                unique.push(facet);
+            }
+            return unique;
+        }, []) || [])
+        // Sort facets based on the predefined order
+        .sort((a, b) => facetOrder.indexOf(a.facet.code) - facetOrder.indexOf(b.facet.code))
+        .slice(0, 3);
 
     console.log(facets);
 
