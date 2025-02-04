@@ -28,6 +28,7 @@ import { ProductSpecsTable } from '@/src/components/molecules/ProductSpecsTable'
 import { storefrontApiQuery } from '@/src/graphql/client';
 import { useChannels } from '@/src/state/channels';
 import { ProductSizingTable } from '@/src/components/molecules/ProductSizingTable';
+import { HomePageSliders } from '@/src/components/organisms/HomePageSliders';
 
 export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = props => {
     const { t } = useTranslation('products');
@@ -305,11 +306,13 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                     </StyledBoughtContent>
                 </Stack>
             </ContentContainer>
-            <ProductPageProductsSlider
-                title={t('recently-viewed')}
-                products={props.clientsAlsoBought?.collection?.productVariants?.items ?? []}
-            />
-            <ProductPageProductsSlider title={t('recently-viewed')} products={recentlyProducts ?? []} />
+            <HomePageSliders useVariants={true}   sliders={props.clientsAlsoBought} seeAllText={'test'}></HomePageSliders>
+
+            {/*<ProductPageProductsSlider*/}
+            {/*    title={t('recently-viewed')}*/}
+            {/*    products={props.clientsAlsoBought?.collection?.productVariants?.items ?? []}*/}
+            {/*/>*/}
+            {/*<ProductPageProductsSlider title={t('recently-viewed')} products={recentlyProducts ?? []} />*/}
             <ProductStory slug={props.product.slug} />
         </Layout>
     );

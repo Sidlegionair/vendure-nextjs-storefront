@@ -4,7 +4,18 @@ import { Stack, Price, Link, TP, ProductImage, TH1 } from '@/src/components/atom
 import { Button } from './Button';
 import { Ratings } from './Ratings';
 import { CurrencyCode } from '@/src/zeus';
-import { useTheme } from '@emotion/react'; // Import useTheme
+import { useTheme } from '@emotion/react';
+
+// Define a type matching the facet structure
+interface FacetValue {
+    code: string;
+    id: string;
+    name: string;
+    facet: {
+        name: string;
+        code: string;
+    };
+}
 
 interface ProductVariantTileProps {
     variant: {
@@ -14,12 +25,7 @@ interface ProductVariantTileProps {
             slug: string;
             featuredAsset?: { preview: string };
             customFields?: { brand?: string | unknown };
-            facetValues?: Array<{
-                code: string;
-                id: string;
-                name: string;
-                facet: { name: string; code: string };
-            }>;
+            facetValues?: FacetValue[];
         };
         featuredAsset?: { preview: string };
         priceWithTax: number;
@@ -37,38 +43,47 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
                                                                           addToCart,
                                                                           lazy,
                                                                           withoutRatings = false,
-                                                                          withoutRedirect,
+                                                                          withoutRedirect = false,
                                                                           displayAllCategories,
                                                                       }) => {
-    const theme = useTheme(); // Access the theme
+    const theme = useTheme();
     const [rating, setRating] = useState<number | null>(null);
     const imgRef = useRef<HTMLImageElement>(null);
     const src = variant?.featuredAsset?.preview ?? variant?.product?.featuredAsset?.preview;
     const ImageLink = withoutRedirect ? ImageContainer : LinkContainer;
     const TextWrapper = withoutRedirect ? TextContainer : TextRedirectContainer;
 
-    // Define excluded facet codes
+    // Only include facets with these codes
     const includedFacetCodes = ['terrain', 'rider-level'];
 
-    // Filter out excluded facets
-    const facets = variant.product.facetValues
-        ?.filter(facet => includedFacetCodes.includes(facet.code))
-        .slice(0, 3); // Limit to 3 facets
+    // Filter and deduplicate facets
+    const facets: FacetValue[] =
+        variant.product.facetValues
+            ?.filter((facet) => includedFacetCodes.includes(facet.facet.code))
+            .reduce<FacetValue[]>((unique, facet) => {
+                if (!unique.some((item) => item.code === facet.code)) {
+                    unique.push(facet);
+                }
+                return unique;
+            }, [])
+            .slice(0, 3) || [];
+
+    console.log(facets);
 
     useEffect(() => {
         if (!withoutRatings) {
-            // Initialize rating on client-side only
-            const generatedRating = Math.floor(Math.random() * 5) + 1; // Example: 1 to 5
+            // Example: generate a random rating between 1 and 5
+            const generatedRating = Math.floor(Math.random() * 5) + 1;
             setRating(generatedRating);
         }
     }, [withoutRatings]);
 
-    // Handle image loading (optional)
+    // Handle image load events (optional)
     const handleImageLoad = () => {
-        // Optional: Implement any additional logic post image load
+        // Additional logic post image load can go here
     };
 
-    // Handle image loading errors
+    // Handle image load errors
     const handleImageError = () => {
         if (imgRef.current) {
             imgRef.current.src = '/path/to/fallback-image.webp'; // Replace with your fallback image path
@@ -77,16 +92,18 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
 
     // Optional: Function to get optimized image src
     const getOptimizedSrc = (src: string | undefined) => {
-        // Replace with logic based on your image service
+        // Add any image optimization logic if needed
         return src;
-        // return src.replace(/\.(jpg|jpeg|png)$/, '.webp');
     };
 
     return (
         <TileContainer>
-            <ProductImageWrapper src={getOptimizedSrc(src) as string}>
-                <ImageLink href={`/snowboards/${variant.product.slug}?variant=${variant.id}`} />
-            </ProductImageWrapper>
+            <Link href={`/snowboards/${variant.product.slug}?variant=${variant.id}`}>
+                <ProductImageWrapper src={getOptimizedSrc(src) as string}>
+                        <ImageLink href={`/snowboards/${variant.product.slug}?variant=${variant.id}`} />
+                </ProductImageWrapper>
+            </Link>
+
             <ContentWrapper>
                 <TextWrapper href={`/snowboards/${variant.product.slug}?variant=${variant.id}`}>
                     <Stack gap="7px">
@@ -100,16 +117,20 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
                         </ProductName>
                     </Stack>
                     <Stack column gap="10px">
-                        {/* Render facets here */}
-                        {facets && facets.length > 0 && (
-                            <FacetsWrapper>
-                                {facets.map(facet => (
-                                    <Facet key={facet.id}>
-                                        <b>{facet.facet.name}</b>&nbsp;{facet.name}
-                                    </Facet>
-                                ))}
-                            </FacetsWrapper>
-                        )}
+                        {/* Render facets */}
+                        <FacetsWrapper>
+                            {facets.map((facet) => (
+                                <Facet key={facet.code}>
+                                    <b>{facet.facet.name}:</b>&nbsp;{facet.name || 'N/A'}
+                                </Facet>
+                            ))}
+                            {/* Explicitly handle the 'rider-level' if not present */}
+                            {!facets.some((facet) => facet.facet.code === 'rider-level') && (
+                                <Facet>
+                                    <b>Rider Level:</b>&nbsp;N/A
+                                </Facet>
+                            )}
+                        </FacetsWrapper>
                         {!withoutRatings && rating !== null && <Ratings rating={rating} />}
                     </Stack>
                     <PriceTag size="20px" price={variant.priceWithTax} currencyCode={variant.currencyCode} />
@@ -142,26 +163,29 @@ const ProductImageWrapper = styled.div<{ src: string }>`
     width: 100%;
     height: 100%;
     min-height: 370px;
-    //max-height: 370px;
     border-radius: 15px;
     overflow: hidden;
     background-image: url(${({ src }) => src});
-    background-size: contain; /* Ensure the image fits within the container */
-    background-position: center; /* Center the image */
-    background-repeat: no-repeat; /* Prevent tiling */
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
 
     @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-        height: 300px; /* Adjust for smaller screens */
+        height: 300px;
         padding: 8px;
+    }
+
+    &:hover {
+        transform: scale(1.05);
     }
 `;
 
 const ContentWrapper = styled(Stack)`
     flex: 1;
-    flex-direction: column; /* Changed to column for vertical alignment */
+    flex-direction: column;
     gap: 1rem;
 `;
 
@@ -201,18 +225,23 @@ const TextRedirectContainer = styled(Link)`
 
 const ImageContainer = styled(Stack)`
     position: relative;
-    //max-height: 100%;
 
+    &:hover {
+        transform: scale(1.05);
+    }
 `;
 
-const LinkContainer = styled(Link)`
+const LinkContainer = styled.a`
     display: flex;
     align-items: center;
     justify-content: center;
-    max-height: 370px; /* Ensure height matches the wrapper */
-    width: 100%; /* Ensure width matches the wrapper */
-`;
+    max-height: 370px;
+    width: 100%;
 
+    &:hover {
+        transform: scale(1.05);
+    }
+`;
 
 const BrandName = styled(TH1)`
     color: ${({ theme }) => theme.text.main};
@@ -236,5 +265,6 @@ const AddToCartButton = styled(Button)`
     cursor: pointer;
 
     &:focus {
+        /* Focus styles can be added here */
     }
 `;

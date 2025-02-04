@@ -3,22 +3,22 @@ import {
     HomePageSlidersType,
     ProductDetailType,
     ProductSearchType as OriginalProductSearchType,
-    ProductTileSelector, ProductVariantTileType,
+    ProductTileSelector,
+    ProductVariantTileType,
 } from '@/src/graphql/selectors';
 import { TH2, TP } from '@/src/components/atoms/TypoGraphy';
 import { Slider } from '@/src/components/organisms/Slider';
 import styled from '@emotion/styled';
 import { Link, Stack } from '@/src/components/atoms';
 import { ProductTile } from '@/src/components/molecules/ProductTile';
-import { ProductVariantTile } from '@/src/components/molecules/ProductVariantTile'; // Updated import
-
+import { ProductVariantTile } from '@/src/components/molecules/ProductVariantTile';
 
 type ProductSearchType = OriginalProductSearchType & {
     customFields?: {
-        brand?: string; // Extend to include brand
+        brand?: string;
     };
     facetValues?: Array<{
-        code: string; // Move 'code' and 'name' directly here
+        code: string;
         name: string;
         value: string;
         facet?: {
@@ -28,74 +28,72 @@ type ProductSearchType = OriginalProductSearchType & {
     }>;
 };
 
-
-type SliderType = Partial<HomePageSlidersType> & {
+// Override productVariants and collection from the parent type so that
+// items and totalItems can be optional.
+type SliderType = Omit<Partial<HomePageSlidersType>, 'productVariants'> & {
     name?: string;
     id?: string;
-    assets?: any; // Adjust `any` to the appropriate type if known
-    productVariants?: ProductVariantTileType; // Adjust `any` to the appropriate type if known
+    slug?: string;
+    assets?: any;
+    productVariants?: {
+        items?: ProductVariantTileType[];
+        totalItems?: number;
+    };
     products?: ProductSearchType[];
-}
+    // Define collection as a nested SliderType so it can be used in variant mode.
+    collection?: SliderType;
+};
+
 interface BestOfI {
-    sliders: SliderType[];
     seeAllText: string;
-    useVariants?: boolean; // Optional prop to toggle variant usage
+    sliders: SliderType[];
+    useVariants?: boolean;
 }
 
-export const HomePageSliders: React.FC<BestOfI> = ({ sliders, seeAllText, useVariants = false }) => {
+export const HomePageSliders: React.FC<BestOfI> = ({
+                                                       sliders,
+                                                       seeAllText,
+                                                       useVariants = false,
+                                                   }) => {
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
     }, []);
 
-    if (!isMounted || !sliders?.length) return null;
+    if (useVariants) {
+        // Get the collection from the first slider object.
+        const collection = sliders[0]?.collection;
+        if (!isMounted || !collection?.productVariants?.totalItems) return null;
+        // Now we can safely reassign sliders to be an array with this collection.
+        sliders = [collection];
+        console.log(sliders);
+    } else if (!isMounted || !sliders?.length) {
+        return null;
+    }
 
     return (
-        <Stack w100 column gap="6rem">
-            {sliders.map(slider => {
-                // console.error(slider);
-                const { slug, parent, name, productVariants, products, id } = slider; // Assuming 'id' exists for unique keys
-
+        <Stack w100 column gap="8rem">
+            {sliders.map((slider) => {
+                const { slug, parent, name, productVariants, products, id } = slider;
                 let slides;
 
                 if (useVariants && productVariants?.items?.length) {
-                    // **Render Product Variants**
+                    // Render Product Variants
                     slides = productVariants.items.map((variant, index) => (
                         <ProductVariantTile key={variant.id || index} variant={variant} lazy={index > 0} />
                     ));
-                } else if(products?.length) {
+                } else if (products?.length) {
                     slides = products.map((product, index) => (
                         <ProductTile product={product} key={id || slug} lazy={index > 0} />
                     ));
-                }
-                else {
+                } else {
                     return null;
-                    // **Render Product Directly**
-                    // slides = [<ProductTile product={slider} key={id || slug} lazy={false} />];
                 }
-
-                // if (!slides.length) return null;
-
-                // const href =
-                //     parent?.slug !== '__root_collection__'
-                //         ? `/collections/${parent.slug}/${slug}`
-                //         : `/collections/${slug}`;
 
                 return (
                     <StyledSection key={slug}>
-                        {/*<Header>*/}
-                        {/*    <TH2>*/}
-                        {/*        {`${name} (${useVariants ? productVariants?.totalItems : 1})`}*/}
-                        {/*    </TH2>*/}
-                        {/*    /!* Uncomment and adjust if needed*/}
-                        {/*    <StyledLink href={href}>*/}
-                        {/*        <TP upperCase color="contrast" weight={500} style={{ letterSpacing: '0.5px' }}>*/}
-                        {/*            {seeAllText}*/}
-                        {/*        </TP>*/}
-                        {/*    </StyledLink>*/}
-                        {/*    *!/*/}
-                        {/*</Header>*/}
+                        {/* Header code can be added here if needed */}
                         <Slider height="680" slides={slides} />
                     </StyledSection>
                 );
