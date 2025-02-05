@@ -220,6 +220,8 @@ const BottomStackWrapper = styled.div`
     padding: 0 1rem;
     box-sizing: border-box;
 
+    z-index: 99;
+    
     @media (max-width: 1023px) and (min-width: 769px) {
         margin: 2rem auto;
     }
@@ -293,6 +295,7 @@ const ProductTitle = styled.h3`
 `;
 
 const ProductDetails = styled.div`
+    z-index: 10;
     display: flex;
     justify-content: center;
     font-size: 15px;
