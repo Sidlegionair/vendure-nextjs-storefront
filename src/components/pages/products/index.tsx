@@ -499,6 +499,10 @@ const StyledFullWidthButton = styled(FullWidthButton)`
     svg {
         flex-shrink: 0;
     }
+    
+    :hover {
+        border: 1px solid ${({ theme }) => theme.background.accentGreen};
+    }
 `;
 
 const StockDisplay = styled(Stack)`
