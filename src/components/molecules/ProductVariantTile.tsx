@@ -122,17 +122,18 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
                     <Stack column gap="10px">
                         {/* Render facets */}
                         <FacetsWrapper>
-                            {facets.map((facet) => (
-                                <Facet key={facet.code}>
-                                    <b>{facet.facet.name}:</b>&nbsp;{facet.name || 'N/A'}
-                                </Facet>
-                            ))}
                             {/* Explicitly handle the 'rider-level' if not present */}
                             {!facets.some((facet) => facet.facet.code === 'rider-level') && (
                                 <Facet>
                                     <b>Rider Level:</b>&nbsp;N/A
                                 </Facet>
                             )}
+                            {facets.map((facet) => (
+                                <Facet key={facet.code}>
+                                    <b>{facet.facet.name}:</b>&nbsp;{facet.name || 'N/A'}
+                                </Facet>
+                            ))}
+
                         </FacetsWrapper>
                         {!withoutRatings && rating !== null && <Ratings rating={rating} />}
                     </Stack>
