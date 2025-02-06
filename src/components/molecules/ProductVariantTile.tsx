@@ -114,7 +114,7 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
                         {typeof variant.product.customFields?.brand === 'string' && (
                             <BrandName>{variant.product.customFields.brand}</BrandName>
                         )}
-                        <ProductName>{variant.name}</ProductName>
+                        <ProductName>{variant.name.toLowerCase()}</ProductName>
                     </Stack>
                     <Stack column gap="10px">
                         <FacetsWrapper>
