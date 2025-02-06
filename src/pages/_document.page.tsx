@@ -1,43 +1,29 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-import { SpeedInsights } from "@vercel/speed-insights/next"
-
-// commented things are for google analytics
-
-// import { GA_TRACKING_ID } from "@/lib/gtag";
-
-// const isProduction = process.env.NODE_ENV === "production";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default class MyDocument extends Document {
     render(): JSX.Element {
         const lang = this?.props?.__NEXT_DATA__?.props?.pageProps?._nextI18Next?.initialLocale || 'en';
+
         return (
             <Html lang={lang}>
                 <Head>
                     <meta name="robots" content="noindex" />
+
+                    {/* Preconnect to the font provider */}
+                    <link rel="preconnect" href="https://fonts.cdnfonts.com" crossOrigin="anonymous" />
+
+                    {/* Load Calibri font with optimization */}
                     <link
                         href="https://fonts.cdnfonts.com/css/calibri"
                         rel="stylesheet"
+                        media="print"
+                        onLoad="this.onload=null;this.removeAttribute('media');"
                     />
 
-                    {/* enable analytics script only for production */}
-                    {/* {isProduction && (
-                        <>
-                            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`} />
-                            <script
-                                // eslint-disable-next-line react/no-danger
-                                dangerouslySetInnerHTML={{
-                                    __html: `
-                                        window.dataLayer = window.dataLayer || [];
-                                        function gtag(){dataLayer.push(arguments);}
-                                        gtag('js', new Date());
-                                        gtag('config', '${GA_TRACKING_ID}', {
-                                          page_path: window.location.pathname,
-                                        });
-                                      `,
-                                }}
-                            />
-                        </>
-                    )} */}
+                    <noscript>
+                        <link href="https://fonts.cdnfonts.com/css/calibri" rel="stylesheet" />
+                    </noscript>
                 </Head>
                 <body>
                 <Main />
