@@ -37,12 +37,12 @@ export const FacetGroupDropdown: React.FC<FacetGroupDropdownProps> = ({
         .filter((v) => selected.includes(v.id))
         .map((v) => v.name);
     const displayText =
-        selectedNames.length > 0 ? selectedNames.join(', ') : facetGroup.name;
+        selectedNames.length > 0 ? selectedNames.join(', ') : '';
 
     return (
         <DropdownContainer ref={ref}>
             <DropdownHeader onClick={() => setOpen(!open)}>
-                <TP weight={400} size="1.5rem">
+                <TP weight={600} size="14px">
                     {facetGroup.name}
                 </TP>
                 <SelectedText>{displayText}</SelectedText>
@@ -98,6 +98,8 @@ const DropdownHeader = styled.div`
 
 const SelectedText = styled.div`
     flex-grow: 1;
+    font-size: 14px;
+    font-weight: 300;
     margin: 0 0.5rem;
     text-align: left;
 `;

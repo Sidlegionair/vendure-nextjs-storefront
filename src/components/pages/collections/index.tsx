@@ -82,7 +82,9 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
 
     // Define which facet groups (by their code) should be shown in the top bar.
     // For example: "rider-level" corresponds to the Rider level facet.
-    const displayFacetCodes = ['rider-level', 'rider-length', 'rider-weight', 'shoe-size', 'terrain'];
+    const displayFacetCodes = ['rider-level', 'terrain', 'rider-length-maxcm', 'riderweight-maxkg', 'boot-length-maxcm'];
+
+    console.log(filters);
 
     // Toggle filter logic (mirrors your sidebar logic).
     const toggleFilter = (group: FacetGroup, value: FacetValue) => {
