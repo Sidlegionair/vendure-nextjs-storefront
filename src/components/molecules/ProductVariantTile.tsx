@@ -151,17 +151,35 @@ const TileContainer = styled(Stack)`
     width: 100%;
 `;
 
-const ProductImageWrapper = styled.div`
+const ProductImageWrapper = styled.div<{ src: string }>`
     position: relative;
     width: 100%;
     min-height: 370px;
     border-radius: 15px;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
+    overflow: hidden;
+
+    /* Use the 'src' prop to set a background image */
+    background-image: url(${({ src }) => src});
+    background-size: contain;     /* Keeps the entire image visible */
+    background-position: center;  /* Centers the image within the container */
+    background-repeat: no-repeat; /* Prevents tiling */
+
+    /* Just for alignment; optional if you’re placing other content inside */
     display: flex;
     align-items: center;
     justify-content: center;
+
+    /* If you want a subtle zoom-on-hover effect */
+    transition: transform 0.3s ease;
+    &:hover {
+        transform: scale(1.05);
+    }
+
+    /* For responsive adjustments */
+    @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+        height: 300px;
+        padding: 8px;
+    }
 `;
 
 const ContentWrapper = styled(Stack)`
