@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Divider, Stack } from '@/src/components';
 import useIsMobile from '@/src/util/hooks/useIsMobile';
-import { Rotate3DIcon, RotateCw } from 'lucide-react';
 import { optimizeImage } from '@/src/util/optimizeImage';
 
 // ---------- Styled Components ----------
@@ -16,24 +16,8 @@ const CarouselContainer = styled.div`
     width: 100%;
     overflow: hidden;
     background: #f0f0f0;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
     user-select: none;
     cursor: grab;
-
-    &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: url('/images/bg/homecarousel.jpeg') no-repeat center center;
-        background-size: cover;
-        opacity: 0.2;
-        z-index: -1;
-    }
 
     &:active {
         cursor: grabbing;
@@ -53,6 +37,15 @@ const CarouselContainer = styled.div`
         perspective: 1000px;
         min-height: 613px;
     }
+`;
+
+const CarouselBackground = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
 `;
 
 const SlidesWrapper = styled.div`
@@ -220,9 +213,8 @@ const BottomStackWrapper = styled.div`
     max-width: 700px;
     padding: 0 1rem;
     box-sizing: border-box;
-
     z-index: 99;
-    
+
     @media (max-width: 1023px) and (min-width: 769px) {
         margin: 2rem auto;
     }
@@ -353,7 +345,6 @@ const StockButton = styled.button<{ inStock: boolean }>`
         transform: scale(1.03);
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
-
 `;
 
 const Quote = styled(Stack)`
@@ -384,8 +375,6 @@ const RotateIconWrapper = styled.div`
     border-radius: 50%;
 `;
 
-// The flip button container no longer uses a fixed top value.
-// We will pass its top position dynamically via inline styles.
 const FlipButtonContainer = styled.div`
     position: absolute;
     left: 50%;
@@ -442,14 +431,12 @@ export const CircularProductCarousel: React.FC<{
     const [flattened, setFlattened] = useState(false);
 
     // Only the active board can be flipped.
-    // For desktop, it's based on hovered index; for mobile, we use a button to force flip.
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [forceFlipActive, setForceFlipActive] = useState<boolean>(false);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const activeSlideRef = useRef<HTMLDivElement>(null);
 
-    // Dynamically adjust the carousel shape on resize
     useEffect(() => {
         const handleResize = () => {
             const width = window.innerWidth;
@@ -624,6 +611,17 @@ export const CircularProductCarousel: React.FC<{
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
         >
+            {/* Critical Background Image */}
+            <CarouselBackground>
+                <Image
+                    src="/images/bg/homecarousel.jpeg"
+                    alt="Carousel Background"
+                    fill
+                    style={{ objectFit: 'cover', opacity: 0.2 }}
+                    priority
+                />
+            </CarouselBackground>
+
             <SlidesWrapper>
                 <CenterAnchor>
                     {duplicatedProducts.map((product, index) => {
@@ -645,7 +643,6 @@ export const CircularProductCarousel: React.FC<{
                         const backPhoto =
                             product?.customFields?.variants?.[0]?.backPhoto?.source;
 
-                        // Only the active board can flip.
                         const isHoveredOrFlipped =
                             isActive &&
                             ((!isMobile && index === hoveredIndex) || (isMobile && forceFlipActive));
@@ -657,14 +654,12 @@ export const CircularProductCarousel: React.FC<{
                                         <div
                                             className="flip-card-inner"
                                             style={{
-                                                transform: isHoveredOrFlipped
-                                                    ? 'rotateY(180deg)'
-                                                    : 'rotateY(0deg)',
+                                                transform: isHoveredOrFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
                                             }}
                                         >
                                             <img
                                                 className="flip-card-front"
-                                                src={optimizeImage({'size':'noresize', src: frontPhoto})}
+                                                src={optimizeImage({ size: 'noresize', src: frontPhoto })}
                                                 alt={product.productName}
                                                 draggable={false}
                                                 loading="lazy"
@@ -677,7 +672,7 @@ export const CircularProductCarousel: React.FC<{
                                             />
                                             <img
                                                 className="flip-card-back"
-                                                src={optimizeImage({'size':'noresize', src: backPhoto})}
+                                                src={optimizeImage({ size: 'noresize', src: backPhoto })}
                                                 alt={`${product.productName} Back`}
                                                 draggable={false}
                                                 loading="lazy"
@@ -693,7 +688,7 @@ export const CircularProductCarousel: React.FC<{
                                     </ImageFlipContainer>
                                 ) : (
                                     <img
-                                        src={optimizeImage({'size':'noresize', src: frontPhoto})}
+                                        src={optimizeImage({ size: 'noresize', src: frontPhoto })}
                                         alt={product.productName}
                                         draggable={false}
                                         loading="lazy"
@@ -763,7 +758,6 @@ export const CircularProductCarousel: React.FC<{
                 </CenterAnchor>
             </SlidesWrapper>
 
-            {/* Flip button: only visible on mobile */}
             {isMobile && (
                 <FlipButtonContainer style={{ top: flipButtonTop }}>
                     <button onClick={() => setForceFlipActive((prev) => !prev)}>
@@ -784,8 +778,7 @@ export const CircularProductCarousel: React.FC<{
                                     }}
                                 />
                                 <path
-                                    d="M18.5,14.9c-1.7,0.9-4,1.4-6.5,1.4-5.2,0-9.3-2.2-9.3-5
-       s4.2-5,9.3-5,8.3,1.7,9.2,4"
+                                    d="M18.5,14.9c-1.7,0.9-4,1.4-6.5,1.4-5.2,0-9.3-2.2-9.3-5s4.2-5,9.3-5,8.3,1.7,9.2,4"
                                     style={{
                                         fill: 'none',
                                         stroke: '#000',
