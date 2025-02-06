@@ -3,10 +3,39 @@ import { Stack, Link, TP, ProductImage } from '@/src/components/atoms/';
 import { priceFormatter } from '@/src/util/priceFormatter';
 import styled from '@emotion/styled';
 import { Ratings } from './Ratings';
+import {
+    CollectionTileType,
+    ProductDetailType,
+    ProductSearchType as OriginalProductSearchType,
+} from '@/src/graphql/selectors';
 import { CurrencyCode } from '@/src/zeus';
 
-export const ProductTile = ({ product, lazy }) => {
+type ProductSearchType = OriginalProductSearchType & {
+    customFields?: {
+        brand?: string; // Extend to include brand
+    };
+    facetValues?: Array<{
+        code: string; // Move 'code' and 'name' directly here
+        name: string;
+        value: string;
+        facet?: {
+            code: string;
+            name: string;
+        };
+    }>;
+};
+
+export const ProductTile: React.FC<{
+    product: ProductSearchType;
+    lazy?: boolean;
+}> = ({ product, lazy }) => {
+
+
+
+
     const includedFacetCodes = ['terrain', 'rider-level'];
+
+// Define the desired order for facets
     const facetOrder = ['rider-level', 'terrain'];
 
     const facets = product.facetValues
@@ -16,19 +45,31 @@ export const ProductTile = ({ product, lazy }) => {
                 unique.push(facet);
             }
             return unique;
-        }, [])
+        }, [] as Array<{ code: string; name: string; value: string }>)
+        // Sort facets based on the predefined order
         .sort((a, b) => facetOrder.indexOf(a.code) - facetOrder.indexOf(b.code))
         .slice(0, 3) || [];
 
+
+    function isSinglePrice(priceWithTax: any): priceWithTax is { value: number } {
+        return priceWithTax && 'value' in priceWithTax;
+    }
+
+    function isPriceRange(priceWithTax: any): priceWithTax is { min: number; max: number } {
+        return priceWithTax && 'min' in priceWithTax && 'max' in priceWithTax;
+    }
+
     const priceValue = product.priceWithTax
-        ? product.priceWithTax.value
+        ? isSinglePrice(product.priceWithTax)
             ? priceFormatter(product.priceWithTax.value, product.currencyCode as CurrencyCode)
-            : product.priceWithTax.min === product.priceWithTax.max
-                ? priceFormatter(product.priceWithTax.min, product.currencyCode as CurrencyCode)
-                : `${priceFormatter(product.priceWithTax.min, product.currencyCode as CurrencyCode)} - ${priceFormatter(
-                    product.priceWithTax.max,
-                    product.currencyCode as CurrencyCode
-                )}`
+            : isPriceRange(product.priceWithTax)
+                ? product.priceWithTax.min === product.priceWithTax.max
+                    ? priceFormatter(product.priceWithTax.min, product.currencyCode as CurrencyCode)
+                    : `${priceFormatter(product.priceWithTax.min, product.currencyCode as CurrencyCode)} - ${priceFormatter(
+                        product.priceWithTax.max,
+                        product.currencyCode as CurrencyCode
+                    )}`
+                : 'Price not available'
         : 'Price not available';
 
     const src = product.productAsset?.preview;

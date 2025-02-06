@@ -13,7 +13,7 @@ import { Button } from '@/src/components/molecules/Button';
 import { Input } from '@/src/components/forms';
 import { useTranslation } from 'next-i18next';
 import { OrderBox } from './components/OrderBox';
-import { CustomerWrap } from '../../components/shared';
+import { CustomerWrap, FormContainer, FormWrapper } from '../../components/shared';
 import { getServerSideProps } from './props';
 import { useChannels } from '@/src/state/channels';
 
@@ -97,12 +97,14 @@ export const HistoryPage: React.FC<InferGetServerSidePropsType<typeof getServerS
 
     return (
         <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation} pageTitle={t('ordersPage.title')}>
-            <ContentContainer>
-                <Stack w100 justifyEnd>
+            <StyledContentContainer>
+                <Stack w100 justifyCenter>
                     <CustomerNavigation />
                 </Stack>
-                <CustomerWrap w100 itemsStart gap="1.75rem">
-                    <Stack column w100 gap="1rem">
+                <FormContainer>
+                    <FormWrapper>
+                        <CustomerWrap w100 itemsStart gap="1.75rem">
+                            <Stack column w100 gap="1rem">
                         <TP size="2.5rem" weight={600}>
                             {t('ordersPage.title')}
                         </TP>
@@ -129,12 +131,20 @@ export const HistoryPage: React.FC<InferGetServerSidePropsType<typeof getServerS
                         </Main>
                     </Stack>
                 </CustomerWrap>
-            </ContentContainer>
+                    </FormWrapper>
+                </FormContainer>
+
+            </StyledContentContainer>
         </Layout>
     );
 };
 
-const Main = styled(Stack)``;
+const Main = styled(Stack)`
+
+    @media(min-width: 767px) {
+        min-width: 600px;
+    }
+`;
 
 const ButtonWrap = styled(Stack)`
     padding: 1rem;
@@ -166,5 +176,52 @@ const Wrap = styled(Stack)`
 
     ::-webkit-scrollbar-thumb:hover {
         background: ${p => p.theme.gray(400)};
+    }
+`;
+
+const StyledContentContainer = styled(ContentContainer)`
+    padding: 50px;
+    justify-content: start;
+    align-items: center;
+    z-index: 0;
+    @media (max-width: ${({ theme }) => theme.breakpoints['3xl']}) {
+        width: 100%;
+        padding: 0 4rem;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints['2xl']}) {
+        width: 100%;
+        padding: 0 3rem;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.xl}) {
+        width: 100%;
+        padding: 0 2rem;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+        width: 100%;
+        padding: 0 1.5rem;
+    }
+
+
+
+
+    position: relative;
+    height: 100%;
+    min-height: 100vh;
+    width: 100%;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('/images/bg/authbg.jpeg') no-repeat center center;
+        background-size: cover;
+        opacity: 0.2;
+        z-index: -1; /* Set the background behind the content */
     }
 `;

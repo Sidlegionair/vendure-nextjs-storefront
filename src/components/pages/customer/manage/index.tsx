@@ -5,22 +5,74 @@ import { CustomerNavigation } from './components/CustomerNavigation';
 import { CustomerForm } from './components/CustomerForm';
 import { ContentContainer } from '@/src/components/atoms/ContentContainer';
 import { useTranslation } from 'next-i18next';
-import { CustomerWrap } from '../components/shared';
+import { CustomerWrap, FormContainer, FormWrapper } from '../components/shared';
 import { getServerSideProps } from './props';
 import { Stack } from '@/src/components/atoms';
+import styled from '@emotion/styled';
 
 export const ManageAccountPage: React.FC<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
     const { t } = useTranslation('customer');
     return (
         <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation} pageTitle={t('accountPage.title')}>
-            <ContentContainer>
-                <Stack w100 justifyEnd>
+            <StyledContentContainer>
+                <Stack w100 justifyCenter>
                     <CustomerNavigation />
                 </Stack>
-                <CustomerWrap itemsStart w100 gap="3rem">
-                    <CustomerForm initialCustomer={props.activeCustomer} />
-                </CustomerWrap>
-            </ContentContainer>
+                <FormContainer>
+                    <FormWrapper>
+                        <CustomerWrap itemsCenter gap="3rem">
+                            <CustomerForm initialCustomer={props.activeCustomer} />
+                        </CustomerWrap>
+                    </FormWrapper>
+                </FormContainer>
+            </StyledContentContainer>
         </Layout>
     );
 };
+
+
+const StyledContentContainer = styled(ContentContainer)`
+    padding: 50px;
+    justify-content: start;
+    z-index: 0;
+    @media (max-width: ${({ theme }) => theme.breakpoints['3xl']}) {
+        width: 100%;
+        padding: 0 4rem;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints['2xl']}) {
+        width: 100%;
+        padding: 0 3rem;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.xl}) {
+        width: 100%;
+        padding: 0 2rem;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+        width: 100%;
+        padding: 0 1.5rem;
+    }
+
+
+
+
+    position: relative;
+    height: 100%;
+    min-height: 100vh;
+    width: 100%;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('/images/bg/authbg.jpeg') no-repeat center center;
+        background-size: cover;
+        opacity: 0.2;
+        z-index: -1; /* Set the background behind the content */
+    }
+`;

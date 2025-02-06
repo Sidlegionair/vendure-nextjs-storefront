@@ -151,7 +151,7 @@ const TileContainer = styled(Stack)`
     width: 100%;
 `;
 
-const ProductImageWrapper = styled.div<{ src: string }>`
+const ProductImageWrapper = styled.div<{ src?: string }>`
     position: relative;
     width: 100%;
     min-height: 370px;

@@ -19,6 +19,8 @@ export const FormWrapper = styled(Stack)`
     padding: 90px 65px;
     border-radius: ${({ theme }) => theme.borderRadius};
     border: 1px solid #4D4D4D;
+    align-items: center;
+    width: fit-content;
 `;
 
 export const Form = styled.form`
@@ -46,7 +48,7 @@ export const FormContent = styled(Stack)`
 `;
 
 export const CustomerWrap = styled(Stack)`
-    min-height: calc(100vh - 10rem);
+    //min-height: calc(100vh - 10rem);
     padding: 2rem 0;
 
     @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {

@@ -10,7 +10,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { AddressForm } from './components/AddressForm';
 import { useAddresses } from './hooks';
 import { useTranslation } from 'next-i18next';
-import { CustomerWrap } from '../../components/shared';
+import { CustomerWrap, FormContainer, FormWrapper } from '../../components/shared';
 import { baseCountryFromLanguage } from '@/src/util/baseCountryFromLanguage';
 import { getServerSideProps } from './props';
 import { useChannels } from '@/src/state/channels';
@@ -46,11 +46,13 @@ export const AddressesPage: React.FC<InferGetServerSidePropsType<typeof getServe
                     </Modal>
                 )}
             </AnimatePresence>
-            <ContentContainer>
-                <Stack w100 justifyEnd>
+            <StyledContentContainer>
+                <Stack w100 justifyCenter>
                     <CustomerNavigation />
                 </Stack>
-                <CustomerWrap w100 itemsStart gap="1.75rem">
+                <FormContainer>
+                    <FormWrapper>
+                    <CustomerWrap w100 itemsStart gap="1.75rem">
                     <Wrapper w100 gap="1.5rem">
                         <Stack w100>
                             <AddressForm
@@ -72,7 +74,9 @@ export const AddressesPage: React.FC<InferGetServerSidePropsType<typeof getServe
                         </Wrap>
                     </Wrapper>
                 </CustomerWrap>
-            </ContentContainer>
+                    </FormWrapper>
+                </FormContainer>
+            </StyledContentContainer>
         </Layout>
     );
 };
@@ -132,4 +136,52 @@ const Modal = styled(motion.div)`
     align-items: center;
 
     background-color: ${p => p.theme.background.modal};
+`;
+
+
+const StyledContentContainer = styled(ContentContainer)`
+    padding: 50px;
+    justify-content: start;
+    align-items: center;
+    z-index: 0;
+    @media (max-width: ${({ theme }) => theme.breakpoints['3xl']}) {
+        width: 100%;
+        padding: 0 4rem;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints['2xl']}) {
+        width: 100%;
+        padding: 0 3rem;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.xl}) {
+        width: 100%;
+        padding: 0 2rem;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+        width: 100%;
+        padding: 0 1.5rem;
+    }
+
+
+
+
+    position: relative;
+    height: 100%;
+    min-height: 100vh;
+    width: 100%;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('/images/bg/authbg.jpeg') no-repeat center center;
+        background-size: cover;
+        opacity: 0.2;
+        z-index: -1; /* Set the background behind the content */
+    }
 `;
