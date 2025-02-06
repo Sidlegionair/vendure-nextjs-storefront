@@ -345,6 +345,14 @@ const StockButton = styled.button<{ inStock: boolean }>`
         font-size: 12px;
         padding: 5px 10px;
     }
+
+    &:hover {
+        color: white;
+        background: ${({ theme }) => theme.background.accentGreenHover || theme.background.accentGreen};
+        transform: scale(1.03);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
 `;
 
 const Quote = styled(Stack)`

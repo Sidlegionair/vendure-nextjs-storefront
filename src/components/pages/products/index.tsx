@@ -495,13 +495,22 @@ const StyledFullWidthButton = styled(FullWidthButton)`
     text-transform: uppercase;
     padding: 1.5rem;
     justify-content: center;
+    transition: background 250ms ease-in-out, transform 200ms ease-in-out, box-shadow 250ms ease-in-out;
 
     svg {
         flex-shrink: 0;
     }
-    
-    :hover {
-        border: 1px solid ${({ theme }) => theme.background.accentGreen};
+
+    &:hover {
+        color: white;
+        background: ${({ theme }) => theme.background.accentGreenHover || theme.background.accentGreen};
+        transform: scale(1.03);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+        transform: scale(0.98);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
     }
 `;
 

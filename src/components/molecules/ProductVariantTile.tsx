@@ -6,42 +6,99 @@ import { Ratings } from './Ratings';
 import { CurrencyCode } from '@/src/zeus';
 import { useTheme } from '@emotion/react';
 
-export const ProductVariantTile = ({
-                                       variant,
-                                       addToCart,
-                                       lazy,
-                                       withoutRatings = false,
-                                       withoutRedirect = false,
-                                       displayAllCategories,
-                                   }) => {
+// Define a type matching the facet structure
+interface FacetValue {
+    code: string;
+    id: string;
+    name: string;
+    facet: {
+        name: string;
+        code: string;
+    };
+}
+
+interface ProductVariantTileProps {
+    variant: {
+        id: string;
+        name: string;
+        product: {
+            slug: string;
+            featuredAsset?: { preview: string };
+            customFields?: { brand?: string | unknown };
+            facetValues?: FacetValue[];
+        };
+        featuredAsset?: { preview: string };
+        priceWithTax: number;
+        currencyCode: CurrencyCode;
+    };
+    addToCart?: { text: string; action: (id: string) => Promise<void> };
+    lazy?: boolean;
+    withoutRatings?: boolean;
+    withoutRedirect?: boolean;
+    displayAllCategories?: boolean;
+}
+
+export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
+                                                                          variant,
+                                                                          addToCart,
+                                                                          lazy,
+                                                                          withoutRatings = false,
+                                                                          withoutRedirect = false,
+                                                                          displayAllCategories,
+                                                                      }) => {
     const theme = useTheme();
-    const [rating, setRating] = useState(null);
-    const imgRef = useRef(null);
+    const [rating, setRating] = useState<number | null>(null);
+    const imgRef = useRef<HTMLImageElement>(null);
     const src = variant?.featuredAsset?.preview ?? variant?.product?.featuredAsset?.preview;
     const ImageLink = withoutRedirect ? ImageContainer : LinkContainer;
     const TextWrapper = withoutRedirect ? TextContainer : TextRedirectContainer;
 
+    // Only include facets with these codes
     const includedFacetCodes = ['terrain', 'rider-level'];
+
+// Define the desired order for facets
     const facetOrder = ['terrain', 'rider-level'];
 
-    const facets = (variant.product.facetValues
+    const facets: FacetValue[] = (variant.product.facetValues
         ?.filter((facet) => includedFacetCodes.includes(facet.facet.code))
-        .reduce((unique, facet) => {
+        .reduce<FacetValue[]>((unique, facet) => {
             if (!unique.some((item) => item.code === facet.code)) {
                 unique.push(facet);
             }
             return unique;
         }, []) || [])
+        // Sort facets based on the predefined order
         .sort((a, b) => facetOrder.indexOf(a.facet.code) - facetOrder.indexOf(b.facet.code))
         .slice(0, 3);
 
+    console.log(facets);
+
     useEffect(() => {
         if (!withoutRatings) {
-            setRating(Math.floor(Math.random() * 5) + 1);
+            // Example: generate a random rating between 1 and 5
+            const generatedRating = Math.floor(Math.random() * 5) + 1;
+            setRating(generatedRating);
         }
     }, [withoutRatings]);
 
-    const getOptimizedSrc = (src) => src;
+    // Handle image load events (optional)
+    const handleImageLoad = () => {
+        // Additional logic post image load can go here
+    };
+
+    // Handle image load errors
+    const handleImageError = () => {
+        if (imgRef.current) {
+            imgRef.current.src = '/path/to/fallback-image.webp'; // Replace with your fallback image path
+        }
+    };
+
+    // Optional: Function to get optimized image src
+    const getOptimizedSrc = (src: string | undefined) => {
+        // Add any image optimization logic if needed
+        return src;
+    };
+
 
     return (
         <TileContainer>
@@ -171,4 +228,17 @@ const AddToCartButton = styled(Button)`
     max-width: 200px;
     align-self: center;
     cursor: pointer;
+`;
+const ImageContainer = styled(Stack)`
+    position: relative;
+    //max-height: 100%;
+
+`;
+
+const LinkContainer = styled(Link)`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 370px; /* Ensure height matches the wrapper */
+    width: 100%; /* Ensure width matches the wrapper */
 `;
