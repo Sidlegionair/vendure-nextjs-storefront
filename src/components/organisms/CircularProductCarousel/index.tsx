@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Divider, Stack } from '@/src/components';
 import useIsMobile from '@/src/util/hooks/useIsMobile';
 import { Rotate3DIcon, RotateCw } from 'lucide-react';
+import { optimizeImage } from '@/src/util/optimizeImage';
 
 // ---------- Styled Components ----------
 
@@ -663,7 +664,7 @@ export const CircularProductCarousel: React.FC<{
                                         >
                                             <img
                                                 className="flip-card-front"
-                                                src={frontPhoto}
+                                                src={optimizeImage({'size':'noresize', src: frontPhoto})}
                                                 alt={product.productName}
                                                 draggable={false}
                                                 loading="lazy"
@@ -676,7 +677,7 @@ export const CircularProductCarousel: React.FC<{
                                             />
                                             <img
                                                 className="flip-card-back"
-                                                src={backPhoto}
+                                                src={optimizeImage({'size':'noresize', src: backPhoto})}
                                                 alt={`${product.productName} Back`}
                                                 draggable={false}
                                                 loading="lazy"
@@ -692,7 +693,7 @@ export const CircularProductCarousel: React.FC<{
                                     </ImageFlipContainer>
                                 ) : (
                                     <img
-                                        src={frontPhoto}
+                                        src={optimizeImage({'size':'noresize', src: frontPhoto})}
                                         alt={product.productName}
                                         draggable={false}
                                         loading="lazy"

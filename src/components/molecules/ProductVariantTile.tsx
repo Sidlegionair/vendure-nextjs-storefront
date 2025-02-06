@@ -5,6 +5,7 @@ import { Button } from './Button';
 import { Ratings } from './Ratings';
 import { CurrencyCode } from '@/src/zeus';
 import { useTheme } from '@emotion/react';
+import { optimizeImage } from '@/src/util/optimizeImage';
 
 // Define a type matching the facet structure
 interface FacetValue {
@@ -159,7 +160,7 @@ const ProductImageWrapper = styled.div<{ src?: string }>`
     overflow: hidden;
 
     /* Use the 'src' prop to set a background image */
-    background-image: url(${({ src }) => src});
+    background-image: url(${({ src }) => optimizeImage({size: 'noresize', src: src})});
     background-size: contain;     /* Keeps the entire image visible */
     background-position: center;  /* Centers the image within the container */
     background-repeat: no-repeat; /* Prevents tiling */

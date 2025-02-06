@@ -18,6 +18,7 @@ export const optimizeImage = ({ size, src }: OptimizeImage) => {
         return `${src}?w=${width}&h=${height}&mode=${mode}&format=${format}`;
     }
 
+
     switch (size) {
         case 'thumbnail':
             src += '?w=200&h=200&mode=crop&format=webp';
@@ -38,6 +39,7 @@ export const optimizeImage = ({ size, src }: OptimizeImage) => {
             src += '?w=1200&h=1200&mode=resize&format=webp';
             break;
         default:
+            src += '?format=webp';
             break;
     }
 
