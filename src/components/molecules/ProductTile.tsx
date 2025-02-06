@@ -3,38 +3,10 @@ import { Stack, Link, TP, ProductImage } from '@/src/components/atoms/';
 import { priceFormatter } from '@/src/util/priceFormatter';
 import styled from '@emotion/styled';
 import { Ratings } from './Ratings';
-import {
-    CollectionTileType,
-    ProductDetailType,
-    ProductSearchType as OriginalProductSearchType,
-} from '@/src/graphql/selectors';
 import { CurrencyCode } from '@/src/zeus';
 
-type ProductSearchType = OriginalProductSearchType & {
-    customFields?: {
-        brand?: string; // Extend to include brand
-    };
-    facetValues?: Array<{
-        code: string; // Move 'code' and 'name' directly here
-        name: string;
-        value: string;
-        facet?: {
-            code: string;
-            name: string;
-        };
-    }>;
-};
-
-export const ProductTile: React.FC<{
-    product: ProductSearchType;
-    lazy?: boolean;
-}> = ({ product, lazy }) => {
-
-
-
+export const ProductTile = ({ product, lazy }) => {
     const includedFacetCodes = ['terrain', 'rider-level'];
-
-// Define the desired order for facets
     const facetOrder = ['rider-level', 'terrain'];
 
     const facets = product.facetValues
@@ -44,46 +16,27 @@ export const ProductTile: React.FC<{
                 unique.push(facet);
             }
             return unique;
-        }, [] as Array<{ code: string; name: string; value: string }>)
-        // Sort facets based on the predefined order
+        }, [])
         .sort((a, b) => facetOrder.indexOf(a.code) - facetOrder.indexOf(b.code))
         .slice(0, 3) || [];
 
+    const priceValue = product.priceWithTax
+        ? product.priceWithTax.value
+            ? priceFormatter(product.priceWithTax.value, product.currencyCode as CurrencyCode)
+            : product.priceWithTax.min === product.priceWithTax.max
+                ? priceFormatter(product.priceWithTax.min, product.currencyCode as CurrencyCode)
+                : `${priceFormatter(product.priceWithTax.min, product.currencyCode as CurrencyCode)} - ${priceFormatter(
+                    product.priceWithTax.max,
+                    product.currencyCode as CurrencyCode
+                )}`
+        : 'Price not available';
 
-    function isSinglePrice(priceWithTax: any): priceWithTax is { value: number } {
-        return priceWithTax && 'value' in priceWithTax;
-    }
-
-    function isPriceRange(priceWithTax: any): priceWithTax is { min: number; max: number } {
-        return priceWithTax && 'min' in priceWithTax && 'max' in priceWithTax;
-    }
-
-        const priceValue = product.priceWithTax
-            ? isSinglePrice(product.priceWithTax)
-                ? priceFormatter(product.priceWithTax.value, product.currencyCode as CurrencyCode)
-                : isPriceRange(product.priceWithTax)
-                    ? product.priceWithTax.min === product.priceWithTax.max
-                        ? priceFormatter(product.priceWithTax.min, product.currencyCode as CurrencyCode)
-                        : `${priceFormatter(product.priceWithTax.min, product.currencyCode as CurrencyCode)} - ${priceFormatter(
-                            product.priceWithTax.max,
-                            product.currencyCode as CurrencyCode
-                        )}`
-                    : 'Price not available'
-            : 'Price not available';
-
-        // return <div>{priceValue}</div>;
-
-
-
-    // return <div>{priceValue}</div>;
-
-    // Get product image and brand
     const src = product.productAsset?.preview;
     const brand = product.customFields?.brand || undefined;
 
     return (
         <Main column gap="1rem">
-            <Stack style={{ position: 'relative', maxWidth: '32rem' }}>
+            <Stack style={{ position: 'relative', maxWidth: '50rem' }}>
                 <Link href={`/snowboards/${product.slug}/`}>
                     <ProductImage
                         loading={lazy ? 'lazy' : undefined}
@@ -101,21 +54,20 @@ export const ProductTile: React.FC<{
                                 {brand}
                             </Brand>
                         )}
-                        <ProductName>{product.productName}</ProductName>
+                        <ProductName>{product.productName.toLowerCase()}</ProductName>
                     </Stack>
                     <Stack column gap={10}>
                         <FacetsWrapper>
-                            {/* Explicitly handle the 'rider-level' if not present */}
                             {!facets.some((facet) => facet.code === 'rider-level') && (
                                 <Facet>
-                                    <b>Rider Level:</b>&nbsp;N/A
+                                    <FacetTitle>rider level</FacetTitle>
+                                    <FacetValue>N/A</FacetValue>
                                 </Facet>
                             )}
-
-                            {/* Dynamically render facets */}
                             {facets.map((facet) => (
                                 <Facet key={facet?.code}>
-                                    <b>{facet?.name}:</b>&nbsp;{facet?.value || 'N/A'}
+                                    <FacetTitle>{facet?.name.toLowerCase()}</FacetTitle>
+                                    <FacetValue>{facet?.value.toLowerCase() || 'N/A'}</FacetValue>
                                 </Facet>
                             ))}
                         </FacetsWrapper>
@@ -130,9 +82,7 @@ export const ProductTile: React.FC<{
     );
 };
 
-// Styled Components
 const Brand = styled(TP)`
-    font-size: 20px;
     font-size: 20px;
     font-weight: 700;
     color: ${({ theme }) => theme.text.main};
@@ -140,7 +90,6 @@ const Brand = styled(TP)`
 
 const ProductName = styled(TP)`
     font-weight: 300;
-    font-size: 20px;
     font-size: 20px;
     color: ${({ theme }) => theme.text.main};
 `;
@@ -160,19 +109,24 @@ const ProductPriceValue = styled(TP)`
 const FacetsWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
     gap: 0.5rem;
 `;
 
-const Facet = styled.span`
-    font-style: normal;
+const Facet = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+`;
+
+const FacetTitle = styled.span`
+    font-weight: 700;
+    text-transform: lowercase;
+    color: ${({ theme }) => theme.text.main};
+`;
+
+const FacetValue = styled.span`
     font-weight: 300;
     font-size: 18px;
-    line-height: 18px;
-    /* identical to box height */
-
-    color: #000000;
-
     color: ${({ theme }) => theme.text.main};
 `;
 
@@ -189,6 +143,6 @@ const Main = styled(Stack)`
     font-weight: 500;
 
     @media (min-width: ${({ theme }) => theme.breakpoints.xl}) {
-        max-width: 35.5rem;
+        //max-width: 35.5rem;
     }
 `;
