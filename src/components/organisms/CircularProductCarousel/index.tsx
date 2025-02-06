@@ -625,8 +625,18 @@ export const CircularProductCarousel: React.FC<{
             <SlidesWrapper>
                 <CenterAnchor>
                     {duplicatedProducts.map((product, index) => {
-                        const angle = rotationAngle * ((index % productCount) - modActiveIndex);
-                        const isActive = (index % productCount) === modActiveIndex;
+                        const effectiveIndex = index % productCount;
+                        // Only apply lazy rendering on mobile
+                        if (isMobile) {
+                            const diff = Math.min(
+                                Math.abs(effectiveIndex - modActiveIndex),
+                                productCount - Math.abs(effectiveIndex - modActiveIndex)
+                            );
+                            if (diff > 2) return null;
+                        }
+
+                        const angle = rotationAngle * (effectiveIndex - modActiveIndex);
+                        const isActive = effectiveIndex === modActiveIndex;
                         const cosAngle = Math.cos((angle * Math.PI) / 180);
                         const translateY = flattened ? 0 : cosAngle * maxLiftAmount;
                         const zIndex = flattened ? 1 : Math.round(cosAngle * 1000);
@@ -810,21 +820,21 @@ export const CircularProductCarousel: React.FC<{
                         <Divider marginBlock="1.5rem" />
                         <Stack gap={26}>
                             <ProductDetails>
-                <span>
-                  Price:{' '}
-                    <span className="amount">
-                    &euro;{(currentProduct?.priceWithTax?.min / 100).toFixed(2)}
-                  </span>
-                </span>
+                                <span>
+                                  Price:{' '}
+                                    <span className="amount">
+                                    &euro;{(currentProduct?.priceWithTax?.min / 100).toFixed(2)}
+                                  </span>
+                                </span>
                                 {currentProduct?.terrain && (
                                     <span>
-                    Terrain: <span>{currentProduct?.terrain}</span>
-                  </span>
+                                        Terrain: <span>{currentProduct?.terrain}</span>
+                                    </span>
                                 )}
                                 {currentProduct?.level && (
                                     <span>
-                    Rider Level: <span>{currentProduct?.level}</span>
-                  </span>
+                                        Rider Level: <span>{currentProduct?.level}</span>
+                                    </span>
                                 )}
                             </ProductDetails>
                         </Stack>
