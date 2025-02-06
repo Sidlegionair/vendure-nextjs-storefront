@@ -767,7 +767,33 @@ export const CircularProductCarousel: React.FC<{
                 <FlipButtonContainer style={{ top: flipButtonTop }}>
                     <button onClick={() => setForceFlipActive((prev) => !prev)}>
                         <RotateIconWrapper>
-                            <Rotate3DIcon />
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                style={{ width: '24px', height: '24px' }}
+                            >
+                                <path
+                                    d="M14.9,12.6l5.2,2-2.5,4.1"
+                                    style={{
+                                        fill: 'none',
+                                        stroke: '#000',
+                                        strokeLinecap: 'round',
+                                        strokeLinejoin: 'round',
+                                        strokeWidth: '2px',
+                                    }}
+                                />
+                                <path
+                                    d="M18.5,14.9c-1.7,0.9-4,1.4-6.5,1.4-5.2,0-9.3-2.2-9.3-5
+       s4.2-5,9.3-5,8.3,1.7,9.2,4"
+                                    style={{
+                                        fill: 'none',
+                                        stroke: '#000',
+                                        strokeLinecap: 'round',
+                                        strokeLinejoin: 'round',
+                                        strokeWidth: '2px',
+                                    }}
+                                />
+                            </svg>
                         </RotateIconWrapper>
                     </button>
                 </FlipButtonContainer>
