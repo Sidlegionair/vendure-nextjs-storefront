@@ -86,7 +86,7 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                             {/* Mobile: show logo on left */}
                             <MobileWrapper>
                                 <Link ariaLabel="Home" href="/">
-                                    <LogoAexol width={165} />
+                                    <LogoAexol width={200} />
                                 </Link>
                             </MobileWrapper>
                         </LeftStack>
