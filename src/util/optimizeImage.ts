@@ -1,4 +1,4 @@
-type ImageSize = 'thumbnail' | 'tile' | 'popup' | 'detail' | 'full' | 'thumbnail-big';
+type ImageSize = 'thumbnail' | 'tile' | 'popup' | 'detail' | 'full' | 'thumbnail-big' | 'noresize';
 
 type CustomImageSize = {
     width: number;

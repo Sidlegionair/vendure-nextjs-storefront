@@ -18,7 +18,6 @@ export default class MyDocument extends Document {
                         href="https://fonts.cdnfonts.com/css/calibri"
                         rel="stylesheet"
                         media="print"
-                        onLoad="this.onload=null;this.removeAttribute('media');"
                     />
 
                     <noscript>
