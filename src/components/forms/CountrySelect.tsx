@@ -54,9 +54,8 @@ const Error = styled.div`
 `;
 
 const Wrapper = styled(Stack)`
-    border: 1px solid ${p => p.theme.border.lightgray};
+    border: 1px solid ${p => p.theme.border.main};
     border-radius: 8px;
-    background: #ffffff;
     height: 100%;
 `;
 
@@ -64,6 +63,7 @@ const SelectWrapper = styled(Stack)`
     position: relative;
     padding: 25px;
     border: none;
+    
 `;
 
 export const StyledSelect = styled.select<{ error?: boolean }>`
@@ -73,13 +73,12 @@ export const StyledSelect = styled.select<{ error?: boolean }>`
     outline: none;
     //margin-top: 0.6rem;
     padding: 15px 0px;
-    color: ${p => p.theme.background.main};
-    border-bottom: 1px solid ${p => p.theme.border.lightgray};
+    color: ${p => p.theme.text.main};
+    border-bottom: 1px solid #BBBBBB;
     font-size: 16px;
     line-height: 16px;
     //background: #ffff;
 
-    color: ${p => p.theme.background.main};
         // border: 1px solid ${p => p.theme.gray(600)};
     :focus {
         border-color: ${p => p.theme.gray(400)};

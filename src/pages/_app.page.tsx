@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/global.css';
 import 'keen-slider/keen-slider.min.css';
 import { AppProps } from 'next/app';
@@ -80,58 +80,53 @@ const components = {
 };
 
 
-// Initialize Storyblok with the apiPlugin
+// Storyblok initialization
 storyblokInit({
     accessToken: process.env.NEXT_PUBLIC_STORYBLOK_ACCESS_TOKEN,
     use: [apiPlugin],
-    components
-
+    components,
 });
 
-
-// Global CSS styles applied for the font family
-const customFontStyle = `
-
-`;
-
 const App = ({ Component, pageProps }: AppProps) => {
-    return (
-        <ReactCookieFirst url="https://consent.cookiefirst.com/sites/demo.boardrush.com-e0a83e47-ae65-43a0-915c-89dc0a764efc/consent.js">
+    const [showCookieBanner, setShowCookieBanner] = useState(false);
 
-        <ThemeProvider theme={LightTheme}>
-            <ChannelsProvider initialState={{ channel: pageProps.channel, locale: pageProps.locale }}>
-                {/* Apply the custom font globally */}
-                <Global styles={customFontStyle} />
-                {/* Checkout provider logic */}
-                {'checkout' in pageProps ? (
-                    <CheckoutProvider initialState={{ checkout: pageProps.checkout }}>
-                        <Component {...pageProps} />
-                    </CheckoutProvider>
-                ) : (
-                    <CartProvider>
-                        <ProductProvider
-                            initialState={{
-                                product: 'product' in pageProps ? pageProps.product : undefined,
-                            }}>
-                            <CollectionProvider
-                                initialState={{
-                                    collection: 'collection' in pageProps ? pageProps.collection : undefined,
-                                    products: 'products' in pageProps ? pageProps.products : undefined,
-                                    facets: 'facets' in pageProps ? pageProps.facets : undefined,
-                                    totalProducts: 'totalProducts' in pageProps ? pageProps.totalProducts : undefined,
-                                    filters: 'filters' in pageProps ? pageProps.filters : undefined,
-                                    searchQuery: 'searchQuery' in pageProps ? pageProps.searchQuery : undefined,
-                                    page: 'page' in pageProps ? pageProps.page : undefined,
-                                    sort: 'sort' in pageProps ? pageProps.sort : undefined,
-                                }}>
-                                <Component {...pageProps} />
-                            </CollectionProvider>
-                        </ProductProvider>
-                    </CartProvider>
-                )}
-            </ChannelsProvider>
-        </ThemeProvider>
-        </ReactCookieFirst>
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    setShowCookieBanner(true);
+                    observer.disconnect();
+                }
+            });
+        });
+        observer.observe(document.body); // Observer for lazy loading
+    }, []);
+
+    return (
+        <>
+            {showCookieBanner && (
+                <ReactCookieFirst url="https://consent.cookiefirst.com/sites/demo.boardrush.com-e0a83e47-ae65-43a0-915c-89dc0a764efc/consent.js" />
+            )}
+
+            <ThemeProvider theme={LightTheme}>
+                <ChannelsProvider initialState={{ channel: pageProps.channel, locale: pageProps.locale }}>
+                    <Global styles={``} />
+                    {'checkout' in pageProps ? (
+                        <CheckoutProvider initialState={{ checkout: pageProps.checkout }}>
+                            <Component {...pageProps} />
+                        </CheckoutProvider>
+                    ) : (
+                        <CartProvider>
+                            <ProductProvider initialState={{ product: pageProps.product }}>
+                                <CollectionProvider initialState={pageProps}>
+                                    <Component {...pageProps} />
+                                </CollectionProvider>
+                            </ProductProvider>
+                        </CartProvider>
+                    )}
+                </ChannelsProvider>
+            </ThemeProvider>
+        </>
     );
 };
 
