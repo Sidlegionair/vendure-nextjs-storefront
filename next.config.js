@@ -10,6 +10,12 @@ const nextConfig = {
     images: {
         domains: ['a.storyblok.com'], // Allows images from Storyblok CDN
     },
+    experimental: {
+        useDeploymentId: true,
+        // Optionally, use with Server Actions
+        useDeploymentIdServerActions: true,
+    },
+
     // i18n: {
     //     locales: ['en', 'nl'], // Supported content locales
     //     defaultLocale: 'nl', // Default locale
