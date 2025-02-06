@@ -13,7 +13,6 @@ import {
     MARK_ITALIC,
     MARK_LINK,
 } from 'storyblok-rich-text-react-renderer';
-import Link from 'next/link';
 import { StoryblokComponent } from '@storyblok/react';
 import DOMPurify from 'dompurify';
 
@@ -26,20 +25,18 @@ const RichTextEditor = ({ blok }) => {
 
         // Select all <code> blocks, regardless of their parent
         const codeBlocks = container.querySelectorAll('code');
-        console.log(`Found ${codeBlocks.length} code blocks.`); // Debugging
+        console.log(`Found ${codeBlocks.length} code blocks.`);
 
         codeBlocks.forEach((block) => {
-            const codeContent = block.innerHTML; // Use innerHTML to preserve tags
-            console.log(`Processing code block content: ${codeContent}`); // Debugging
+            const codeContent = block.innerHTML;
+            console.log(`Processing code block content: ${codeContent}`);
 
-            // Use DOMPurify to sanitize and allow only <script> tags with specific attributes
             const cleanContent = DOMPurify.sanitize(codeContent, {
                 ALLOWED_TAGS: ['script'],
                 ALLOWED_ATTR: ['src', 'type', 'charset', 'async', 'defer'],
             });
 
             if (cleanContent.includes('<script')) {
-                // Create a temporary div to parse the clean HTML
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = cleanContent;
 
@@ -47,21 +44,13 @@ const RichTextEditor = ({ blok }) => {
                 scripts.forEach((scriptTag) => {
                     try {
                         const script = document.createElement('script');
-
-                        // Copy all attributes from the original script tag
                         Array.from(scriptTag.attributes).forEach((attr) => {
                             script.setAttribute(attr.name, attr.value);
                         });
-
-                        // Copy the script content (for inline scripts)
                         script.textContent = scriptTag.textContent;
-
-                        // Append the script to the body to execute it
                         document.body.appendChild(script);
-
-                        // Remove the script after execution to clean up
                         document.body.removeChild(script);
-                        console.log('Executed a script successfully.'); // Debugging
+                        console.log('Executed a script successfully.');
                     } catch (error) {
                         console.error('Error executing script:', error);
                     }
@@ -69,23 +58,67 @@ const RichTextEditor = ({ blok }) => {
 
                 // Hide the original code block to prevent displaying as text
                 block.parentElement.style.display = 'none';
-                console.log('Hid the code block after executing scripts.'); // Debugging
+                console.log('Hid the code block after executing scripts.');
             }
         });
     };
 
+    // Run our executeScripts function when the content updates
     useEffect(() => {
         if (contentRef.current) {
             executeScripts(contentRef.current);
         }
     }, [blok.content]);
 
-    // Define rendering options with custom resolvers for <pre> and <code> blocks
+    // This effect handles manual scroll adjustments when the URL hash changes.
+    useEffect(() => {
+        const adjustScroll = () => {
+            // Allow the browser to finish its default jump
+            setTimeout(() => {
+                if (window.location.hash) {
+                    const id = window.location.hash.replace('#', '');
+                    const element = document.getElementById(id);
+                    if (element) {
+                        const headerOffset = 220; // Adjust this value to match your fixed header height
+                        const elementPosition = element.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth',
+                        });
+                    }
+                }
+            }, 0);
+        };
+
+        // Adjust on mount (in case a hash is already in the URL)
+        adjustScroll();
+
+        // Listen for future hash changes
+        window.addEventListener('hashchange', adjustScroll, false);
+
+        return () => {
+            window.removeEventListener('hashchange', adjustScroll, false);
+        };
+    }, []);
+
+    // Helper to generate an id from heading text if one isn't provided
+    const generateIdFromText = (children) => {
+        const text = children
+            .map((child) => (typeof child === 'string' ? child : ''))
+            .join('');
+        return text
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\-]+/g, '');
+    };
+
     const options = {
         nodeResolvers: {
             [NODE_PARAGRAPH]: (children) => <p>{children}</p>,
             [NODE_HEADING]: (children, { level, ...rest }) => {
-                const anchorId = rest.id || '';
+                const anchorId = rest.id || generateIdFromText(children);
                 return React.createElement(`h${level}`, { id: anchorId }, children);
             },
             [NODE_UL]: (children) => <ul className="list-disc list-inside mb-4 pl-4">{children}</ul>,
@@ -96,24 +129,14 @@ const RichTextEditor = ({ blok }) => {
                 </li>
             ),
             [NODE_QUOTE]: (children) => <blockquote>{children}</blockquote>,
-            [NODE_PRE]: (children, props) => {
-                // Custom resolver for <pre> blocks
-                return (
-                    <pre>
-                        <code className={props.node?.attrs?.class || ''}>
-                            {children}
-                        </code>
-                    </pre>
-                );
-            },
-            [NODE_CODE]: (children, props) => {
-                // Custom resolver for <code> blocks inside other elements like <p>
-                return (
-                    <code className={props.node?.attrs?.class || ''}>
-                        {children}
-                    </code>
-                );
-            },
+            [NODE_PRE]: (children, props) => (
+                <pre>
+                    <code className={props.node?.attrs?.class || ''}>{children}</code>
+                </pre>
+            ),
+            [NODE_CODE]: (children, props) => (
+                <code className={props.node?.attrs?.class || ''}>{children}</code>
+            ),
         },
         markResolvers: {
             [MARK_BOLD]: (children) => <strong>{children}</strong>,
@@ -121,8 +144,9 @@ const RichTextEditor = ({ blok }) => {
             [MARK_LINK]: (children, { href, target, rel, title }) => {
                 console.log(href, target, rel, title);
                 if (href.startsWith('#')) {
+                    // Simply link to the target; scrolling is handled by our effect above.
                     return (
-                        <a id={href.substring(1)} href={href} title={title}>
+                        <a href={href} title={title}>
                             {children}
                         </a>
                     );
@@ -141,7 +165,6 @@ const RichTextEditor = ({ blok }) => {
     };
 
     let renderedContent;
-
     try {
         renderedContent = render(blok.content, options);
     } catch (error) {
@@ -158,86 +181,85 @@ const RichTextEditor = ({ blok }) => {
     return (
         <div ref={contentRef} className="rich-text-editor" style={dynamicStyles}>
             {renderedContent}
-                <style jsx>{`
-                    .rich-text-editor {
-                        font-family: 'Calibri', sans-serif;
-                        color: #4d4d4d;
-                        line-height: 1.6;
-                        ${blok.backgroundColor ? `background-color: ${blok.backgroundColor};` : ''}
-                        border: ${blok.border || 'none'};
-                        border-radius: ${blok.borderRadius || '0'};
-                        box-shadow: ${blok.boxShadow || 'none'};
-                        overflow: hidden;
+            <style jsx>{`
+                .rich-text-editor {
+                    font-family: 'Calibri', sans-serif;
+                    color: #4d4d4d;
+                    line-height: 1.6;
+                    ${blok.backgroundColor ? `background-color: ${blok.backgroundColor};` : ''}
+                    border: ${blok.border || 'none'};
+                    border-radius: ${blok.borderRadius || '0'};
+                    box-shadow: ${blok.boxShadow || 'none'};
+                    overflow: hidden;
 
-                        h1 {
-                            font-size: 5rem;
-                        }
-                        h2 {
-                            font-size: 3.8rem;
-                        }
-                        h3 {
-                            font-size: 3rem;
-                        }
-                        h4 {
-                            font-size: 2.2rem;
-                        }
-                        
-                        b {
-                            font-weight: bold;
-                        }
-
-                        
-                        h1,
-                        h2,
-                        h3 {
-                            font-family: 'Suisse BP Int\'l', sans-serif;
-                            font-weight: 600;
-                            color: #000;
-                        }
-
-                        p {
-                            font-family: 'Calibri', sans-serif;
-                            font-size: 20px;
-                            font-weight: 400;
-                            line-height: 26px;
-                            margin-bottom: 1.25rem;
-                            color: #4d4d4d;
-                        }
-
-                        a,
-                        a * {
-                            font-size: inherit;
-                            font-family: 'Calibri', sans-serif;
-                            color: #9E2E3A !important;
-                            font-weight: bold;
-                            text-decoration: none;
-                        }
-
-                        a:hover {
-                            text-decoration: underline;
-                        }
-
-                        blockquote {
-                            font-family: 'Calibri', sans-serif;
-                            font-style: italic;
-                            margin-left: 1em;
-                            border-left: 4px solid #ddd;
-                            padding-left: 1em;
-                            color: #555;
-                        }
-
-                        ul,
-                        ol {
-                            margin: 1rem 0;
-                        }
-
-                        img {
-                            max-width: 100%;
-                            height: auto;
-                            margin: 1rem 0;
-                        }
+                    h1 {
+                        font-size: 5rem;
                     }
-                `}</style>
+                    h2 {
+                        font-size: 3.8rem;
+                    }
+                    h3 {
+                        font-size: 3rem;
+                    }
+                    h4 {
+                        font-size: 2.2rem;
+                    }
+
+                    b {
+                        font-weight: bold;
+                    }
+
+                    h1,
+                    h2,
+                    h3 {
+                        font-family: 'Suisse BP Int\'l', sans-serif;
+                        font-weight: 600;
+                        color: #000;
+                    }
+
+                    p {
+                        font-family: 'Calibri', sans-serif;
+                        font-size: 20px;
+                        font-weight: 400;
+                        line-height: 26px;
+                        margin-bottom: 1.25rem;
+                        color: #4d4d4d;
+                    }
+
+                    a,
+                    a * {
+                        font-size: inherit;
+                        font-family: 'Calibri', sans-serif;
+                        color: #9E2E3A !important;
+                        font-weight: bold;
+                        text-decoration: none;
+                    }
+
+                    a:hover {
+                        text-decoration: underline;
+                    }
+
+                    blockquote {
+                        font-family: 'Calibri', sans-serif;
+                        font-style: italic;
+                        margin-left: 1em;
+                        border-left: 4px solid #ddd;
+                        padding-left: 1em;
+                        color: #555;
+                    }
+
+                    ul,
+                    ol {
+                        margin: 1rem 0;
+                    }
+
+                    img {
+                        max-width: 100%;
+                        height: auto;
+                        margin: 1rem 0;
+                    }
+                }
+            `}</style>
         </div>
     );
 };
