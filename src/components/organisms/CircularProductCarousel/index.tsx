@@ -6,6 +6,10 @@ import { Divider, Stack } from '@/src/components';
 import useIsMobile from '@/src/util/hooks/useIsMobile';
 import { optimizeImage } from '@/src/util/optimizeImage';
 
+
+const useIsomorphicLayoutEffect =
+    typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
 // ---------- Styled Components ----------
 
 const CarouselContainer = styled.div`
@@ -582,12 +586,11 @@ export const CircularProductCarousel: React.FC<{
     }, [activeIndex, productCount, duplicatedProducts]);
 
     // Dynamically calculate the flip button’s top position relative to the carousel container.
-    useLayoutEffect(() => {
+    useIsomorphicLayoutEffect(() => {
         const updateFlipButtonPosition = () => {
             if (activeSlideRef.current && containerRef.current) {
                 const activeRect = activeSlideRef.current.getBoundingClientRect();
                 const containerRect = containerRef.current.getBoundingClientRect();
-                // Place the button 10px below the active board’s bottom edge
                 setFlipButtonTop(activeRect.bottom - containerRect.top + 10);
             }
         };
