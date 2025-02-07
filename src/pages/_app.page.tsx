@@ -43,6 +43,7 @@ import TwoColGrid from '@/src/components/storyblok/TwoColGrid';
 import MultiColGrid from '@/src/components/storyblok/MultiColGrid';
 import CollectionSlider from '@/src/components/storyblok/DynamicSlider';
 import HubspotFormBlock from '@/src/components/storyblok/HubspotFormBlock';
+import GorgiasFormBlock from '@/src/components/storyblok/GorgiasFormBlock';
 // import { VendureCollectionSlider } from '@/src/components/molecules/VendureCollectionSlider';
 
 // Register your components
@@ -76,6 +77,7 @@ const components = {
     'profile-grid': ProfileGrid,
     'collection-slider': CollectionSlider,
     'hubspot-form-block': HubspotFormBlock,
+    'gorgias-form-block': GorgiasFormBlock,
     // 'vendure-collection-slider': VendureCollectionSlider,
 };
 

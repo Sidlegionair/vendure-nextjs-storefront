@@ -6,7 +6,7 @@ type ImageType = ImgHTMLAttributes<HTMLImageElement>;
 
 export const ProductImage = forwardRef<HTMLImageElement, ImageType>((props, ref) => {
     const { src, ...rest } = props;
-    const better_src = src ? optimizeImage({ size: 'noresize', src }) : undefined; // Ensure `src` is defined before optimizing
+    const better_src = src ? optimizeImage({ size: 'thumbnail-big', src }) : undefined; // Ensure `src` is defined before optimizing
     return <StyledProductImage {...rest} src={better_src} ref={ref} />;
 });
 
