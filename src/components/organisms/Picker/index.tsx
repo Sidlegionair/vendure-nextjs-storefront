@@ -14,7 +14,7 @@ import { getFlagByCode } from '@/src/util/i18Helpers';
 import { useOutsideClick } from '@/src/util/hooks/useOutsideClick';
 import { Button } from '../../molecules/Button';
 import { getStoryblokApi } from '@storyblok/react';
-
+import DOMPurify from 'dompurify';
 type FormValues = {
     channel: string;
     locale: string;
@@ -106,7 +106,7 @@ export const Picker: React.FC<{
             document.cookie = `channel=${channelAsLocale.channel}; path=/`;
         }
 
-        const correctSlug = Array.isArray(query.slug) ? query.slug.join('/') : query.slug || '';
+        const correctSlug = Array.isArray(query.slug) ? DOMPurify.sanitize(query.slug.join('/')) : DOMPurify.sanitize(query.slug || '');
         const preparedPathname = pathname
             .replace('[slug]', correctSlug)
             .replace('[...slug]', correctSlug)
