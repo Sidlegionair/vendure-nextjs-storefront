@@ -213,7 +213,7 @@ const BottomStackWrapper = styled.div`
     justify-content: center;
     align-items: center;
     margin: 2rem auto;
-    width: 100%;
+    width: fit-content;
     max-width: 700px;
     padding: 0 1rem;
     box-sizing: border-box;
