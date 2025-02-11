@@ -1,4 +1,4 @@
-export const DEFAULT_CHANNEL = 'default-channel';
+export const DEFAULT_CHANNEL = 'gx9ktntebrqot7t8ua';
 export const DEFAULT_CHANNEL_SLUG = 'en';
 
 export const DEFAULT_LOCALE = 'en';

@@ -8,7 +8,12 @@ const nextConfig = {
     swcMinify: true,
     reactStrictMode: true,
     images: {
-        domains: ['a.storyblok.com'], // Allows images from Storyblok CDN
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'a.storyblok.com'
+            },
+        ]
     },
     experimental: {
         useDeploymentId: true,

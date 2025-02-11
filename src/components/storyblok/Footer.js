@@ -122,6 +122,17 @@ const Footer = ({ blok }) => {
                     box-sizing: border-box;
                     overflow: hidden; /* Ensures no overflow */
                     margin-top: 100px;
+                    * {
+                        font-family: 'Suisse BP Int\'l' !important;
+
+                    }
+                    
+                    .rich-text-editor {
+                        * {
+                            font-family: 'Suisse BP Int\' l ' !important;
+
+                        }
+                    }
                 }
 
                 .footer::before {
@@ -223,15 +234,15 @@ const Footer = ({ blok }) => {
                     margin: 0;
                 }
 
-                .link-item {
-                    margin-bottom: 8px;
-                }
+                //.link-item {
+                //    margin-bottom: 8px;
+                //}
 
                 .link {
                     color: #fff;
                     font-weight: 400;
                     font-size: 16px;
-                    line-height: 24px;
+                    line-height: 40px;
                     text-decoration: none;
                 }
 

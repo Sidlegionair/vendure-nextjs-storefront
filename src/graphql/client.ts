@@ -1,7 +1,6 @@
-import { GraphQLError, GraphQLResponse, Thunder, ZeusScalars, chainOptions, fetchOptions } from '@/src/zeus';
+import { GraphQLError, GraphQLResponse, Thunder, ZeusScalars, chainOptions, fetchOptions, HEADERS } from '@/src/zeus';
 import { GetServerSidePropsContext } from 'next';
 import { getContext } from '@/src/lib/utils';
-
 let token: string | null = typeof window !== 'undefined' ? window.localStorage.getItem('token') : null;
 
 export const scalars = ZeusScalars({
@@ -55,6 +54,10 @@ const apiFetchVendure =
             }
             const additionalHeaders: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
 
+
+            console.log(HEADERS);
+            console.log(additionalHeaders);
+            console.log(fetchOptions);
             const credentialsPolicy = 'include';
 
 
@@ -128,9 +131,15 @@ export const SSRQuery = (context: GetServerSidePropsContext) => {
         'session.sig': context.req.cookies['session.sig'],
     };
 
+
+
     const ctx = getContext(context);
     const properChannel = ctx?.params?.channel as string;
     const locale = ctx?.params?.locale as string;
+
+    console.log('AuthCookies', context.req);
+
+
 
     const HOST = `${VENDURE_HOST}?languageCode=${locale}`;
     return VendureChain(HOST, {
@@ -147,6 +156,7 @@ export const SSRMutation = (context: GetServerSidePropsContext) => {
         session: context.req.cookies['session'],
         'session.sig': context.req.cookies['session.sig'],
     };
+    console.log('AuthCookies', context.req);
 
     const ctx = getContext(context);
     const properChannel = ctx?.params?.channel as string;

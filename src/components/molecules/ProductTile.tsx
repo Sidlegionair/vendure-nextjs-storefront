@@ -29,27 +29,23 @@ export const ProductTile: React.FC<{
     product: ProductSearchType;
     lazy?: boolean;
 }> = ({ product, lazy }) => {
-
-
-
-
     const includedFacetCodes = ['terrain', 'rider-level'];
 
-// Define the desired order for facets
+    // Define the desired order for facets
     const facetOrder = ['rider-level', 'terrain'];
 
-    const facets = product.facetValues
-        ?.filter((facet) => includedFacetCodes.includes(facet.code))
-        .reduce((unique, facet) => {
-            if (!unique.some((item) => item.code === facet.code)) {
-                unique.push(facet);
-            }
-            return unique;
-        }, [] as Array<{ code: string; name: string; value: string }>)
-        // Sort facets based on the predefined order
-        .sort((a, b) => facetOrder.indexOf(a.code) - facetOrder.indexOf(b.code))
-        .slice(0, 3) || [];
-
+    const facets =
+        product.facetValues
+            ?.filter((facet) => includedFacetCodes.includes(facet.code))
+            .reduce((unique, facet) => {
+                if (!unique.some((item) => item.code === facet.code)) {
+                    unique.push(facet);
+                }
+                return unique;
+            }, [] as Array<{ code: string; name: string; value: string }>)
+            // Sort facets based on the predefined order
+            .sort((a, b) => facetOrder.indexOf(a.code) - facetOrder.indexOf(b.code))
+            .slice(0, 3) || [];
 
     function isSinglePrice(priceWithTax: any): priceWithTax is { value: number } {
         return priceWithTax && 'value' in priceWithTax;
@@ -65,10 +61,10 @@ export const ProductTile: React.FC<{
             : isPriceRange(product.priceWithTax)
                 ? product.priceWithTax.min === product.priceWithTax.max
                     ? priceFormatter(product.priceWithTax.min, product.currencyCode as CurrencyCode)
-                    : `${priceFormatter(product.priceWithTax.min, product.currencyCode as CurrencyCode)} - ${priceFormatter(
-                        product.priceWithTax.max,
+                    : `${priceFormatter(
+                        product.priceWithTax.min,
                         product.currencyCode as CurrencyCode
-                    )}`
+                    )} - ${priceFormatter(product.priceWithTax.max, product.currencyCode as CurrencyCode)}`
                 : 'Price not available'
         : 'Price not available';
 
@@ -77,7 +73,7 @@ export const ProductTile: React.FC<{
 
     return (
         <Main column gap="1rem">
-            <Stack style={{ position: 'relative', maxWidth: '50rem' }}>
+            <ImageContainer>
                 <Link href={`/snowboards/${product.slug}/`}>
                     <ProductImage
                         loading={lazy ? 'lazy' : undefined}
@@ -86,32 +82,36 @@ export const ProductTile: React.FC<{
                         title={product.productName}
                     />
                 </Link>
-            </Stack>
+            </ImageContainer>
             <Stack column gap="0.75rem">
                 <TextWrapper href={`/snowboards/${product.slug}/`}>
-                    <Stack column gap="0.5rem">
-                        {brand && (
-                            <Brand size="20px" weight={700} noWrap>
-                                {brand}
-                            </Brand>
-                        )}
-                        <ProductName>{product.productName.toLowerCase()}</ProductName>
-                    </Stack>
+                    {/* Title and Brand container */}
+                    <TitleContainer>
+                        <Stack column>
+                            {brand && (
+                                <Brand size="18px" weight={700} noWrap>
+                                    {brand}
+                                </Brand>
+                            )}
+                            <ProductName>{product.productName.toLowerCase()}</ProductName>
+                        </Stack>
+                    </TitleContainer>
+                    {/* Facets and Ratings container */}
                     <Stack column gap={10}>
-                        <FacetsWrapper>
+                        <FacetsContainer>
                             {!facets.some((facet) => facet.code === 'rider-level') && (
                                 <Facet>
                                     <FacetTitle>rider level</FacetTitle>
-                                    <FacetValue>N/A</FacetValue>
+                                    <FacetValue>n/a</FacetValue>
                                 </Facet>
                             )}
                             {facets.map((facet) => (
-                                <Facet key={facet?.code}>
-                                    <FacetTitle>{facet?.name.toLowerCase()}</FacetTitle>
-                                    <FacetValue>{facet?.value.toLowerCase() || 'N/A'}</FacetValue>
+                                <Facet key={facet.code}>
+                                    <FacetTitle>{facet.name.toLowerCase()}</FacetTitle>
+                                    <FacetValue>{facet.value.toLowerCase() || 'n/a'}</FacetValue>
                                 </Facet>
                             ))}
-                        </FacetsWrapper>
+                        </FacetsContainer>
                         <Ratings rating={Math.random() * 5} />
                     </Stack>
                     <ProductPrice>
@@ -123,31 +123,53 @@ export const ProductTile: React.FC<{
     );
 };
 
+const ImageContainer = styled.div`
+    position: relative;
+    max-width: 50rem;
+    min-height: 280px; /* adjust this value to suit your design */
+
+    @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
+        min-height: 230px;
+    }
+
+    @media (min-width: ${({ theme }) => theme.breakpoints.xl}) {
+        min-height: 260px;
+    }
+    
+    @media (min-width: ${({ theme }) => theme.breakpoints['2xl']}) {
+        min-height: 280px;
+    }
+
+    @media (min-width: ${({ theme }) => theme.breakpoints['3xl']}) {
+        min-height: 240px;
+    }
+`;
+
 const Brand = styled(TP)`
-    font-size: 20px;
+    line-height: normal;
     font-weight: 700;
     color: ${({ theme }) => theme.text.main};
 `;
 
 const ProductName = styled(TP)`
     font-weight: 300;
-    font-size: 20px;
+    font-size: 18px;
     color: ${({ theme }) => theme.text.main};
 `;
 
 const ProductPrice = styled(Stack)`
-    font-size: 1.25rem;
+    font-size: 18px;
     font-weight: 500;
 `;
 
 const ProductPriceValue = styled(TP)`
     font-weight: 700;
-    font-size: 24px;
-    line-height: 24px;
     color: ${({ theme }) => theme.text.main};
 `;
 
-const FacetsWrapper = styled.div`
+const FacetsContainer = styled.div`
+    /* Reserve space so that every tile has the same space for facets regardless of text wrapping */
+    min-height: 40px; /* adjust this value as needed */
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -161,6 +183,7 @@ const Facet = styled.div`
 
 const FacetTitle = styled.span`
     font-weight: 700;
+    font-size: 18px;
     text-transform: lowercase;
     color: ${({ theme }) => theme.text.main};
 `;
@@ -171,11 +194,24 @@ const FacetValue = styled.span`
     color: ${({ theme }) => theme.text.main};
 `;
 
-const TextWrapper = styled(Link)`
-    margin-top: 0.75rem;
-    display: flex;
+const TitleContainer = styled.div`
+    /* Reserve space so that the title (brand + product name) always occupies the same height */
+    min-height: 50px; /* adjust this value based on your design */
+
+    @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
+        min-height: 70px;
+
+    }
+        display: flex;
     flex-direction: column;
-    gap: 1rem;
+    justify-content: flex-start;
+`;
+
+const TextWrapper = styled(Link)`
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `;
 
 const Main = styled(Stack)`
@@ -184,6 +220,6 @@ const Main = styled(Stack)`
     font-weight: 500;
 
     @media (min-width: ${({ theme }) => theme.breakpoints.xl}) {
-        //max-width: 35.5rem;
+        /* max-width: 35.5rem; */
     }
 `;

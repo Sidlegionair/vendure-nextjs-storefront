@@ -50,27 +50,31 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
     const theme = useTheme();
     const [rating, setRating] = useState<number | null>(null);
     const imgRef = useRef<HTMLImageElement>(null);
-    const src = variant?.featuredAsset?.preview ?? variant?.product?.featuredAsset?.preview;
+    const src =
+        variant?.featuredAsset?.preview ?? variant?.product?.featuredAsset?.preview;
     const ImageLink = withoutRedirect ? ImageContainer : LinkContainer;
     const TextWrapper = withoutRedirect ? TextContainer : TextRedirectContainer;
 
     // Only include facets with these codes
     const includedFacetCodes = ['terrain', 'rider-level'];
 
-// Define the desired order for facets
+    // Define the desired order for facets
     const facetOrder = ['terrain', 'rider-level'];
 
-    const facets: FacetValue[] = (variant.product.facetValues
-        ?.filter((facet) => includedFacetCodes.includes(facet.facet.code))
-        .reduce<FacetValue[]>((unique, facet) => {
-            if (!unique.some((item) => item.code === facet.code)) {
-                unique.push(facet);
-            }
-            return unique;
-        }, []) || [])
-        // Sort facets based on the predefined order
-        .sort((a, b) => facetOrder.indexOf(a.facet.code) - facetOrder.indexOf(b.facet.code))
-        .slice(0, 3);
+    const facets: FacetValue[] =
+        (variant.product.facetValues
+            ?.filter((facet) => includedFacetCodes.includes(facet.facet.code))
+            .reduce<FacetValue[]>((unique, facet) => {
+                if (!unique.some((item) => item.code === facet.code)) {
+                    unique.push(facet);
+                }
+                return unique;
+            }, []) || [])
+            // Sort facets based on the predefined order
+            .sort(
+                (a, b) => facetOrder.indexOf(a.facet.code) - facetOrder.indexOf(b.facet.code)
+            )
+            .slice(0, 3);
 
     console.log(facets);
 
@@ -100,7 +104,6 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
         return src;
     };
 
-
     return (
         <TileContainer>
             <Link href={`/snowboards/${variant.product.slug}?variant=${variant.id}`}>
@@ -111,29 +114,34 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
 
             <ContentWrapper>
                 <TextWrapper href={`/snowboards/${variant.product.slug}?variant=${variant.id}`}>
-                    <Stack column gap="7px">
-                        {typeof variant.product.customFields?.brand === 'string' && (
-                            <BrandName>{variant.product.customFields.brand}</BrandName>
-                        )}
-                        <ProductName>{variant.name.toLowerCase()}</ProductName>
-                    </Stack>
-                    <Stack column gap="10px">
+                    {/* Title & Brand Container */}
+                    <TitleContainer>
+                        <Stack column>
+                            {typeof variant.product.customFields?.brand === 'string' && (
+                                <BrandName>{variant.product.customFields.brand}</BrandName>
+                            )}
+                            <ProductName>{variant.name.toLowerCase()}</ProductName>
+                        </Stack>
+                    </TitleContainer>
+
+                    {/* Facets & Ratings Container */}
+                    <FacetsContainer>
                         <FacetsWrapper>
                             {!facets.some((facet) => facet.facet.code === 'rider-level') && (
                                 <Facet>
                                     <FacetTitle>rider level</FacetTitle>
-                                    <FacetValue>N/A</FacetValue>
+                                    <FacetValue>n/a</FacetValue>
                                 </Facet>
                             )}
                             {facets.map((facet) => (
                                 <Facet key={facet.code}>
                                     <FacetTitle>{facet.facet.name.toLowerCase()}</FacetTitle>
-                                    <FacetValue>{facet.name || 'N/A'}</FacetValue>
+                                    <FacetValue>{facet.name || 'n/a'}</FacetValue>
                                 </Facet>
                             ))}
                         </FacetsWrapper>
                         {!withoutRatings && rating !== null && <Ratings rating={rating} />}
-                    </Stack>
+                    </FacetsContainer>
                     <PriceTag price={variant.priceWithTax} currencyCode={variant.currencyCode} />
                 </TextWrapper>
                 {addToCart && (
@@ -148,38 +156,50 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
 
 const TileContainer = styled(Stack)`
     flex-direction: column;
-    gap: 0.5rem;
+    //gap: 0.5rem;
     width: 100%;
 `;
 
 const ProductImageWrapper = styled.div<{ src?: string }>`
     position: relative;
     width: 100%;
-    min-height: 370px;
+    //min-height: 370px;
     border-radius: 15px;
     overflow: hidden;
-
-    /* Use the 'src' prop to set a background image */
-    background-image: url(${({ src }) => optimizeImage({size: 'noresize', src: src})});
-    background-size: contain;     /* Keeps the entire image visible */
-    background-position: center;  /* Centers the image within the container */
-    background-repeat: no-repeat; /* Prevents tiling */
-
-    /* Just for alignment; optional if you’re placing other content inside */
+    background-image: url(${({ src }) => optimizeImage({ size: 'noresize', src: src })});
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    /* If you want a subtle zoom-on-hover effect */
     transition: transform 0.3s ease;
     &:hover {
         transform: scale(1.05);
     }
 
-    /* For responsive adjustments */
+
+    //min-height: 280px; /* adjust this value to suit your design */
+
+    @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
+        min-height: 230px;
+    }
+
+    @media (min-width: ${({ theme }) => theme.breakpoints.xl}) {
+        min-height: 260px;
+    }
+
+    @media (min-width: ${({ theme }) => theme.breakpoints['2xl']}) {
+        min-height: 280px;
+    }
+
+    @media (min-width: ${({ theme }) => theme.breakpoints['3xl']}) {
+        min-height: 240px;
+    }
+    
     @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-        height: 300px;
-        padding: 8px;
+        //height: 300px;
+        //padding: 8px;
     }
 `;
 
@@ -187,6 +207,28 @@ const ContentWrapper = styled(Stack)`
     flex: 1;
     flex-direction: column;
     gap: 1rem;
+`;
+
+const TitleContainer = styled.div`
+    /* Reserve space so that the title (brand + product name) always occupies the same height */
+    min-height: 50px; /* adjust this value based on your design */
+
+    @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
+        min-height: 70px;
+
+    }
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+`;
+
+
+const FacetsContainer = styled.div`
+    /* Reserve space for facets and ratings */
+    min-height: 40px; /* Adjust as needed */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 `;
 
 const FacetsWrapper = styled.div`
@@ -248,16 +290,16 @@ const AddToCartButton = styled(Button)`
     align-self: center;
     cursor: pointer;
 `;
-const ImageContainer = styled(Stack)`
-    position: relative;
-    //max-height: 100%;
 
+const ImageContainer = styled(Stack)`
+  position: relative;
+  /* Additional styling if needed */
 `;
 
 const LinkContainer = styled(Link)`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-height: 370px; /* Ensure height matches the wrapper */
-    width: 100%; /* Ensure width matches the wrapper */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 370px; /* Ensures height matches the image wrapper */
+  width: 100%;
 `;
