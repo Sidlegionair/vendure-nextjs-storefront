@@ -173,6 +173,16 @@ const FacetsContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.md}) and (min-width: ${({ theme }) => theme.breakpoints.sm}) {
+        min-height: 100px;
+    }
+
+
+    @media (min-width: ${({ theme }) => theme.breakpoints.lg}) and (max-width: ${({ theme }) => theme.breakpoints.xl}) {
+        min-height: 150px;
+    }
+
 `;
 
 const Facet = styled.div`
@@ -197,6 +207,12 @@ const FacetValue = styled.span`
 const TitleContainer = styled.div`
     /* Reserve space so that the title (brand + product name) always occupies the same height */
     min-height: 50px; /* adjust this value based on your design */
+
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.md}) and (min-width: ${({ theme }) => theme.breakpoints.sm}) {
+        min-height: 80px;
+    }
+
 
     @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
         min-height: 70px;

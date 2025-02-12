@@ -6,7 +6,6 @@ import { Divider, Stack } from '@/src/components';
 import useIsMobile from '@/src/util/hooks/useIsMobile';
 import { optimizeImage } from '@/src/util/optimizeImage';
 
-
 const useIsomorphicLayoutEffect =
     typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
@@ -220,7 +219,7 @@ const BottomStackWrapper = styled.div`
     z-index: 99;
 
     @media (max-width: 1023px) and (min-width: 769px) {
-        margin: 2rem auto;
+        margin: 7.5rem auto;
     }
 
     @media (max-width: 768px) {
@@ -254,7 +253,7 @@ const InfoBlock = styled.div`
 
     @media (max-width: 768px) {
         padding: 15px 20px;
-        margin: 0px 60px;
+        //margin: 0px 60px;
     }
 `;
 
@@ -299,7 +298,7 @@ const ProductDetails = styled.div`
     font-weight: 600;
     gap: 20px;
     line-height: 15px;
-    text-align: center;
+    text-align: left;
 
     & > span > span {
         font-size: 15px;
@@ -373,17 +372,25 @@ const Quote = styled(Stack)`
     }
 `;
 
-const RotateIconWrapper = styled.div`
-    background: #cccccc;
-    padding: 5px;
-    border-radius: 50%;
-`;
-
+// ---------------------------------------------------------
+// Make sure the flip icon shows on mobile/tablet by using
+// a media query. (Hidden on desktops.)
 const FlipButtonContainer = styled.div`
+    display: none;
+    @media (max-width: 1023px) {
+        display: block;
+    }
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     z-index: 999;
+`;
+// ---------------------------------------------------------
+
+const RotateIconWrapper = styled.div`
+    background: #9e2e3a;
+    padding: 5px;
+    border-radius: 50%;
 `;
 
 const ImageFlipContainer = styled.div`
@@ -440,6 +447,8 @@ export const CircularProductCarousel: React.FC<{
 
     const containerRef = useRef<HTMLDivElement>(null);
     const activeSlideRef = useRef<HTMLDivElement>(null);
+    // NEW: a ref for the slides wrapper so we can position the flip button relative to it.
+    const slidesWrapperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleResize = () => {
@@ -470,7 +479,7 @@ export const CircularProductCarousel: React.FC<{
                 newRotationAngle = 360 / newDisplayCount;
                 newCarouselDistance = 300;
                 newFlattened = false;
-                newMaxLiftAmount = 180;
+                newMaxLiftAmount = 150;
                 newExtraLiftFlattened = 0;
             } else {
                 newDisplayCount = Math.min(productCount, 16);
@@ -585,13 +594,15 @@ export const CircularProductCarousel: React.FC<{
         setActiveIndex((current) => wrappedIndex(current));
     }, [activeIndex, productCount, duplicatedProducts]);
 
-    // Dynamically calculate the flip button’s top position relative to the carousel container.
+    // -------------------------------
+    // NEW: Recalculate the flip button’s top position
+    // relative to the bottom of the slides container.
     useIsomorphicLayoutEffect(() => {
         const updateFlipButtonPosition = () => {
-            if (activeSlideRef.current && containerRef.current) {
-                const activeRect = activeSlideRef.current.getBoundingClientRect();
+            if (slidesWrapperRef.current && containerRef.current) {
+                const slidesRect = slidesWrapperRef.current.getBoundingClientRect();
                 const containerRect = containerRef.current.getBoundingClientRect();
-                setFlipButtonTop(activeRect.bottom - containerRect.top + 10);
+                setFlipButtonTop(slidesRect.bottom - containerRect.top + 10);
             }
         };
 
@@ -599,6 +610,7 @@ export const CircularProductCarousel: React.FC<{
         window.addEventListener('resize', updateFlipButtonPosition);
         return () => window.removeEventListener('resize', updateFlipButtonPosition);
     }, [activeIndex, isMobile, flattened, carouselDistance, maxLiftAmount, extraLiftFlattened]);
+    // -------------------------------
 
     const modActiveIndex = activeIndex % productCount;
     const currentProduct = products[modActiveIndex];
@@ -625,7 +637,8 @@ export const CircularProductCarousel: React.FC<{
                 />
             </CarouselBackground>
 
-            <SlidesWrapper>
+            {/* Attach the ref here so we can measure the slides’ bottom */}
+            <SlidesWrapper ref={slidesWrapperRef}>
                 <CenterAnchor>
                     {duplicatedProducts.map((product, index) => {
                         const effectiveIndex = index % productCount;
@@ -771,40 +784,43 @@ export const CircularProductCarousel: React.FC<{
                 </CenterAnchor>
             </SlidesWrapper>
 
-            {isMobile && (
-                <FlipButtonContainer style={{ top: flipButtonTop }}>
-                    <button onClick={() => setForceFlipActive((prev) => !prev)}>
-                        <RotateIconWrapper>
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                style={{ width: '24px', height: '24px' }}
-                            >
-                                <path
-                                    d="M14.9,12.6l5.2,2-2.5,4.1"
-                                    style={{
-                                        fill: 'none',
-                                        stroke: '#000',
-                                        strokeLinecap: 'round',
-                                        strokeLinejoin: 'round',
-                                        strokeWidth: '2px',
-                                    }}
-                                />
-                                <path
-                                    d="M18.5,14.9c-1.7,0.9-4,1.4-6.5,1.4-5.2,0-9.3-2.2-9.3-5s4.2-5,9.3-5,8.3,1.7,9.2,4"
-                                    style={{
-                                        fill: 'none',
-                                        stroke: '#000',
-                                        strokeLinecap: 'round',
-                                        strokeLinejoin: 'round',
-                                        strokeWidth: '2px',
-                                    }}
-                                />
-                            </svg>
-                        </RotateIconWrapper>
-                    </button>
-                </FlipButtonContainer>
-            )}
+            {/* -------------------------------
+                Now, the flip button is always rendered
+                (but only visible via CSS on mobile/tablet)
+                and its position is set from flipButtonTop.
+            ------------------------------- */}
+            <FlipButtonContainer style={{ top: flipButtonTop }}>
+                <button onClick={() => setForceFlipActive((prev) => !prev)}>
+                    <RotateIconWrapper>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            style={{ width: '24px', height: '24px' }}
+                        >
+                            <path
+                                d="M14.9,12.6l5.2,2-2.5,4.1"
+                                style={{
+                                    fill: 'none',
+                                    stroke: '#fff',
+                                    strokeLinecap: 'round',
+                                    strokeLinejoin: 'round',
+                                    strokeWidth: '2px',
+                                }}
+                            />
+                            <path
+                                d="M18.5,14.9c-1.7,0.9-4,1.4-6.5,1.4-5.2,0-9.3-2.2-9.3-5s4.2-5,9.3-5,8.3,1.7,9.2,4"
+                                style={{
+                                    fill: 'none',
+                                    stroke: '#fff',
+                                    strokeLinecap: 'round',
+                                    strokeLinejoin: 'round',
+                                    strokeWidth: '2px',
+                                }}
+                            />
+                        </svg>
+                    </RotateIconWrapper>
+                </button>
+            </FlipButtonContainer>
 
             <BottomStackWrapper>
                 <BottomStack column>

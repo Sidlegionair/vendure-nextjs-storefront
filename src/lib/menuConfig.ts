@@ -52,7 +52,7 @@ const navItemsConfig: { [key: string]: NavItemConfig } = {
         slug: { en: 'content/brands', nl: 'content/snowboardmerken/' },
     },
     stores: {
-        title: { en: 'Stores', nl: 'Winkels' },
+        title: { en: 'Shops', nl: 'Winkels' },
         slug: { en: 'content/boardshops', nl: 'content/boardshops/' },
     },
 

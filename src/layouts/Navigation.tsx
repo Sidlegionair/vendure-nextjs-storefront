@@ -173,7 +173,7 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
             </StickyContainer>
 
             <DesktopWrapper>
-                {categories?.length > 0 ? <CategoryBar collections={categories} /> : null}
+                {/*{categories?.length > 0 ? <CategoryBar collections={categories} /> : null}*/}
             </DesktopWrapper>
             {/* Mobile Slide-Out Menu */}
             <AnimatePresence>
