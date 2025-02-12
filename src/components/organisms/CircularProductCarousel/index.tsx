@@ -762,6 +762,7 @@ export const CircularProductCarousel: React.FC<{
                                         </SlideLink>
                                     ) : (
                                         <SlideLink
+                                            href={`/snowboards/${product.slug}`}
                                             aria-label={`View details for ${product.productName}`}
                                             isHovered={isHoveredOrFlipped}
                                             onDragStart={(e) => e.preventDefault()}
