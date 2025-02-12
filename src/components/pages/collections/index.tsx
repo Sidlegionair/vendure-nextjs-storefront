@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useCollection } from '@/src/state/collection';
 import styled from '@emotion/styled';
 import { AnimatePresence, motion } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Filter } from 'lucide-react';
 import { InferGetStaticPropsType } from 'next';
 import { useTranslation } from 'next-i18next';
 import { ContentContainer, Stack, TP, TH1, MainGrid } from '@/src/components/atoms';
@@ -81,12 +81,15 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
     ].filter((b) => b.name !== '__root_collection__');
 
     // Define which facet groups (by their code) should be shown in the top bar.
-    // For example: "rider-level" corresponds to the Rider level facet.
-    const displayFacetCodes = ['rider-level', 'terrain', 'rider-length-maxcm', 'riderweight-maxkg', 'boot-length-maxcm'];
+    const displayFacetCodes = [
+        'rider-level',
+        'terrain',
+        'rider-length-maxcm',
+        'riderweight-maxkg',
+        'boot-length-maxcm',
+    ];
 
-    console.log(filters);
-
-    // Toggle filter logic (mirrors your sidebar logic).
+    // Toggle filter logic.
     const toggleFilter = (group: FacetGroup, value: FacetValue) => {
         const isSelected = filters[group.id]?.includes(value.id);
         const updatedQuery = { ...router.query };
@@ -125,144 +128,173 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
                     <Stack>
                         {/* --- TOP BAR WITH FACET DROPDOWNS & SORTBY --- */}
                         <TopFilters>
-                            {/* Empty left cell */}
-                            <div></div>
-                            {/* Center cell: Topbar facet dropdowns */}
-                            <FacetDropdownsWrapper>
-                                {displayFacetCodes.map((code) => {
-                                    const facetGroup = facetValues?.find(
-                                        (f) => f.code?.toLowerCase() === code.toLowerCase()
-                                    );
-                                    if (!facetGroup) return null;
-                                    return (
-                                        <FacetGroupDropdown
-                                            key={facetGroup.id}
-                                            facetGroup={facetGroup}
-                                            selected={filters[facetGroup.id] || []}
-                                            onToggleFilter={toggleFilter}
-                                        />
-                                    );
-                                })}
-                            </FacetDropdownsWrapper>
-                            {/* Right cell: SortBy control */}
+                            {/* Mobile filter button – visible only on mobile (left cell) */}
+                            <MobileFiltersButton onClick={() => setFiltersOpen(true)}>
+                                <IconButton >
+                                    <Filter />
+                                </IconButton>
+
+                                Filters
+                            </MobileFiltersButton>
+
+                            {/* Empty cell placeholder on mobile; on desktop, this cell will show desktop filters */}
+                            <EmptyCell>
+                                <DesktopFilters>
+                                    <FacetDropdownsWrapper>
+                                        {displayFacetCodes.map((code) => {
+                                            const facetGroup = facetValues?.find(
+                                                (f) => f.code?.toLowerCase() === code.toLowerCase()
+                                            );
+                                            if (!facetGroup) return null;
+                                            return (
+                                                <FacetGroupDropdown
+                                                    key={facetGroup.id}
+                                                    facetGroup={facetGroup}
+                                                    selected={filters[facetGroup.id] || []}
+                                                    onToggleFilter={toggleFilter}
+                                                />
+                                            );
+                                        })}
+                                    </FacetDropdownsWrapper>
+                                </DesktopFilters>
+                            </EmptyCell>
+
+                            {/* SortBy control – always on the right */}
                             <SortByWrapper>
                                 <SortBy sort={sort} handleSort={handleSort} />
                             </SortByWrapper>
                         </TopFilters>
                     </Stack>
-                    {/* --- SIDEBAR: Only display facet groups NOT in top bar --- */}
+
                     <Stack>
-                    <DesktopFacets>
-                        <Stack column flexWrap>
-                            {facetValues
-                                ?.filter(
-                                    (f) => !displayFacetCodes.includes(f.code?.toLowerCase() || '')
-                                )
-                                .map((f) => (
-                                    <FacetFilterCheckbox
-                                        key={f.id}
-                                        facet={f}
-                                        selected={filters[f.id]}
-                                        onClick={(group, value) => {
-                                            const isSelected = filters[group.id]?.includes(value.id);
-                                            const updatedQuery = { ...router.query };
+                        {/* --- SIDEBAR: Only display facet groups NOT in top bar --- */}
+                        <DesktopFacets>
+                            <Stack column flexWrap>
+                                {facetValues
+                                    ?.filter((f) => !displayFacetCodes.includes(f.code?.toLowerCase() || ''))
+                                    .map((f) => (
+                                        <FacetFilterCheckbox
+                                            key={f.id}
+                                            facet={f}
+                                            selected={filters[f.id]}
+                                            onClick={(group, value) => {
+                                                const isSelected = filters[group.id]?.includes(value.id);
+                                                const updatedQuery = { ...router.query };
 
-                                            if (isSelected) {
-                                                delete updatedQuery[group.id];
-                                                router
-                                                    .replace({ query: updatedQuery }, undefined, { shallow: true })
-                                                    .then(() => {
-                                                        removeFilter(group, value);
-                                                    });
-                                            } else {
-                                                updatedQuery[group.id] = value.id;
-                                                router
-                                                    .replace({ query: updatedQuery }, undefined, { shallow: true })
-                                                    .then(() => {
-                                                        applyFilter(group, value);
-                                                    });
-                                            }
-                                        }}
-                                    />
-                                ))}
-                        </Stack>
-                    </DesktopFacets>
+                                                if (isSelected) {
+                                                    delete updatedQuery[group.id];
+                                                    router
+                                                        .replace({ query: updatedQuery }, undefined, { shallow: true })
+                                                        .then(() => {
+                                                            removeFilter(group, value);
+                                                        });
+                                                } else {
+                                                    updatedQuery[group.id] = value.id;
+                                                    router
+                                                        .replace({ query: updatedQuery }, undefined, { shallow: true })
+                                                        .then(() => {
+                                                            applyFilter(group, value);
+                                                        });
+                                                }
+                                            }}
+                                        />
+                                    ))}
+                            </Stack>
+                        </DesktopFacets>
 
-                    {/* --- MOBILE OVERLAY (Filter out topbar facets here too) --- */}
-                    <AnimatePresence>
-                        {filtersOpen && (
-                            <FacetsOverlay
-                                onClick={() => setFiltersOpen(false)}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.2, ease: 'easeInOut' }}
-                            >
-                                <FacetsFilters
-                                    onClick={(e) => e.stopPropagation()}
-                                    initial={{ x: '-100%' }}
-                                    animate={{ x: 0 }}
-                                    exit={{ x: '-100%' }}
-                                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        {/* --- MOBILE OVERLAY --- */}
+                        <AnimatePresence>
+                            {filtersOpen && (
+                                <FacetsOverlay
+                                    onClick={() => setFiltersOpen(false)}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.2, ease: 'easeInOut' }}
                                 >
-                                    <Stack justifyBetween itemsCenter>
-                                        <TP weight={400} upperCase>
-                                            {t('filters')}
-                                        </TP>
-                                        <IconButton onClick={() => setFiltersOpen(false)}>
-                                            <X />
-                                        </IconButton>
-                                    </Stack>
-                                    <Stack column flexWrap>
-                                        {facetValues
-                                            ?.filter(
-                                                (f) => !displayFacetCodes.includes(f.code?.toLowerCase() || '')
-                                            )
-                                            .map((f) => (
-                                                <FacetFilterCheckbox
-                                                    key={f.id}
-                                                    facet={f}
-                                                    selected={filters[f.id]}
-                                                    onClick={(group, value) => {
-                                                        const isSelected = filters[group.id]?.includes(value.id);
-                                                        const updatedQuery = { ...router.query };
+                                    <FacetsFilters
+                                        onClick={(e) => e.stopPropagation()}
+                                        initial={{ x: '-100%' }}
+                                        animate={{ x: 0 }}
+                                        exit={{ x: '-100%' }}
+                                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                    >
+                                        <Stack justifyBetween itemsCenter>
+                                            <TP weight={400} upperCase>
+                                                {t('filters')}
+                                            </TP>
+                                            <IconButton onClick={() => setFiltersOpen(false)}>
+                                                <X />
+                                            </IconButton>
+                                        </Stack>
 
-                                                        if (isSelected) {
-                                                            delete updatedQuery[group.id];
-                                                            router
-                                                                .replace({ query: updatedQuery }, undefined, { shallow: true })
-                                                                .then(() => {
-                                                                    removeFilter(group, value);
-                                                                });
-                                                        } else {
-                                                            updatedQuery[group.id] = value.id;
-                                                            router
-                                                                .replace({ query: updatedQuery }, undefined, { shallow: true })
-                                                                .then(() => {
-                                                                    applyFilter(group, value);
-                                                                });
-                                                        }
-                                                    }}
-                                                />
-                                            ))}
-                                    </Stack>
-                                </FacetsFilters>
-                            </FacetsOverlay>
-                        )}
-                    </AnimatePresence>
+                                        {/* --- Top filters for mobile overlay --- */}
+                                        <Stack column gap="1rem">
+                                            {facetValues
+                                                ?.filter((f) => displayFacetCodes.includes(f.code?.toLowerCase() || ''))
+                                                .map((f) => (
+                                                    <FacetGroupDropdown
+                                                        key={f.id}
+                                                        facetGroup={f}
+                                                        selected={filters[f.id] || []}
+                                                        onToggleFilter={toggleFilter}
+                                                    />
+                                                ))}
+                                        </Stack>
 
-                    <Stack w100 column>
-                        <MainGrid>
-                            {products?.map((p) => (
-                                <ProductTile product={p} key={p.slug} />
-                            ))}
-                        </MainGrid>
-                        <Pagination
-                            page={paginationInfo.currentPage}
-                            changePage={changePage}
-                            totalPages={paginationInfo.totalPages}
-                        />
-                    </Stack>
+                                        {/* --- Remaining filters --- */}
+                                        <Stack column flexWrap>
+                                            {facetValues
+                                                ?.filter((f) => !displayFacetCodes.includes(f.code?.toLowerCase() || ''))
+                                                .map((f) => (
+                                                    <FacetFilterCheckbox
+                                                        key={f.id}
+                                                        facet={f}
+                                                        selected={filters[f.id]}
+                                                        onClick={(group, value) => {
+                                                            const isSelected = filters[group.id]?.includes(value.id);
+                                                            const updatedQuery = { ...router.query };
+
+                                                            if (isSelected) {
+                                                                delete updatedQuery[group.id];
+                                                                router
+                                                                    .replace({ query: updatedQuery }, undefined, {
+                                                                        shallow: true,
+                                                                    })
+                                                                    .then(() => {
+                                                                        removeFilter(group, value);
+                                                                    });
+                                                            } else {
+                                                                updatedQuery[group.id] = value.id;
+                                                                router
+                                                                    .replace({ query: updatedQuery }, undefined, {
+                                                                        shallow: true,
+                                                                    })
+                                                                    .then(() => {
+                                                                        applyFilter(group, value);
+                                                                    });
+                                                            }
+                                                        }}
+                                                    />
+                                                ))}
+                                        </Stack>
+                                    </FacetsFilters>
+                                </FacetsOverlay>
+                            )}
+                        </AnimatePresence>
+
+                        <Stack w100 column>
+                            <MainGrid>
+                                {products?.map((p) => (
+                                    <ProductTile product={p} key={p.slug} />
+                                ))}
+                            </MainGrid>
+                            <Pagination
+                                page={paginationInfo.currentPage}
+                                changePage={changePage}
+                                totalPages={paginationInfo.totalPages}
+                            />
+                        </Stack>
                     </Stack>
                 </RelativeStack>
             </ContentContainer>
@@ -312,7 +344,6 @@ const StyledTH1 = styled(TH1)`
 
 const RelativeStack = styled(Stack)`
     position: relative;
-    
 `;
 
 const ScrollPoint = styled.div`
@@ -321,13 +352,55 @@ const ScrollPoint = styled.div`
     left: 0;
 `;
 
-/* TOP BAR – a grid with three columns: left empty, center for facet dropdowns, right for SortBy */
+/* TOP BAR – grid with three columns:
+   On mobile: left cell for filter icon, center empty, right cell for SortBy.
+   On desktop: left empty, center for facet dropdowns, right for SortBy.
+*/
 const TopFilters = styled.div`
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     margin: 2rem 0;
+
+    /* Mobile: Three columns – filter icon (col 1), empty (col 2), sort (col 3) */
+    @media (max-width: 767px) {
+        grid-template-columns: auto auto auto;
+    }
+
+    /* Desktop: empty (col 1), facet dropdowns (col 2), sort (col 3) */
+    @media (min-width: 768px) {
+        grid-template-columns: 1fr auto 1fr;
+    }
+`;
+
+const EmptyCell = styled.div`
+    /* On mobile, place the empty cell in the center */
+    @media (max-width: 767px) {
+        grid-column: 2;
+    }
+`;
+
+const MobileFiltersButton = styled.div`
+    display: none;
+    border: 1px solid #4d4d4d;
+    border-radius: 8px;
+    padding: 1.8rem 2.4rem;
+
+    /* Only show on mobile, and place it in the left cell */
+    @media (max-width: 767px) {
+        display: flex;
+        //justify-content: center;
+        gap: 10px;
+        align-items: center;
+        grid-column: 1;
+        width: fit-content;
+    }
+`;
+
+const DesktopFilters = styled.div`
+    @media (max-width: 767px) {
+        display: none;
+    }
 `;
 
 const FacetDropdownsWrapper = styled.div`
@@ -339,19 +412,20 @@ const FacetDropdownsWrapper = styled.div`
 `;
 
 const SortByWrapper = styled.div`
+    /* Ensure the sort control is always on the right */
     grid-column: 3;
     justify-self: end;
 `;
 
 const DesktopFacets = styled.div`
-    display: none;
+  display: none;
 
-    @media (min-width: ${(p) => p.theme.breakpoints.xl}) {
-        display: block;
-        max-width: 287px;
-        width: 100%;
-        padding-right: 2rem;
-    }
+  @media (min-width: ${(p) => p.theme.breakpoints.xl}) {
+    display: block;
+    max-width: 287px;
+    width: 100%;
+    padding-right: 2rem;
+  }
 `;
 
 const FacetsOverlay = styled(motion.div)`

@@ -44,6 +44,7 @@ import MultiColGrid from '@/src/components/storyblok/MultiColGrid';
 import CollectionSlider from '@/src/components/storyblok/DynamicSlider';
 import HubspotFormBlock from '@/src/components/storyblok/HubspotFormBlock';
 import GorgiasFormBlock from '@/src/components/storyblok/GorgiasFormBlock';
+import CookieFirstComponent from '@/src/components/storyblok/CookieFirstComponent';
 // import { VendureCollectionSlider } from '@/src/components/molecules/VendureCollectionSlider';
 
 // Register your components
@@ -78,6 +79,7 @@ const components = {
     'collection-slider': CollectionSlider,
     'hubspot-form-block': HubspotFormBlock,
     'gorgias-form-block': GorgiasFormBlock,
+    'CookieFirstComponent': CookieFirstComponent,
     // 'vendure-collection-slider': VendureCollectionSlider,
 };
 
