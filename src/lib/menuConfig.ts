@@ -20,100 +20,84 @@ type RootNode<T> = {
     children: T[];
 };
 
-// Default empty productVariants structure
 const emptyProductVariants = {
     totalItems: 0,
     items: [] as CollectionTileProductVariantType[],
 };
 
-// Language-specific slug mappings
-const languageSlugMapping: { [key: string]: { [key: string]: string } } = {
+type NavItemConfig = {
+    title: { [locale: string]: string };
+    slug: { [locale: string]: string };
+};
+
+const navItemsConfig: { [key: string]: NavItemConfig } = {
     home: {
-        en: '',
+        title: { en: 'Home', nl: 'Home' },
+        slug: { en: '', nl: '' },
     },
     powder: {
-        en: 'collections/snowboards/?terrain=powder&page=1',
-        nl: 'collections/snowboards/?terrain=powder&page=1',
+        title: { en: 'Powder', nl: 'Powder' },
+        slug: { en: 'collections/snowboards/?terrain=powder&page=1', nl: 'collections/snowboards/?terrain=powder&page=1' },
     },
     allMountain: {
-        en: 'collections/snowboards/?page=1&terrain=all+mountain',
-        nl: 'collections/snowboards/?page=1&terrain=all+mountain',
+        title: { en: 'All mountain', nl: 'All mountain' },
+        slug: { en: 'collections/snowboards/?page=1&terrain=all+mountain', nl: 'collections/snowboards/?page=1&terrain=all+mountain' },
     },
     freestyle: {
-        en: 'collections/snowboards/?6=143&terrain=freestyle&page=1',
-        nl: 'collections/snowboards/?6=143&terrain=freestyle&page=1',
+        title: { en: 'Freestyle', nl: 'Freestyle' },
+        slug: { en: 'collections/snowboards/?6=143&terrain=freestyle&page=1', nl: 'collections/snowboards/?6=143&terrain=freestyle&page=1' },
     },
     brands: {
-        en: 'content/brands',
-        nl: 'content/snowboardmerken/',
+        title: { en: 'Brands', nl: 'Merken' },
+        slug: { en: 'content/brands', nl: 'content/snowboardmerken/' },
     },
+    stores: {
+        title: { en: 'Stores', nl: 'Winkels' },
+        slug: { en: 'content/boardshops', nl: 'content/boardshops/' },
+    },
+
 };
 
-// Resolve slug based on language and key
-const resolveSlug = (key: string, language: string): string => {
-    return languageSlugMapping[key]?.[language] || languageSlugMapping[key]?.['en'] || '';
+// Helper that returns a single string value based on the current locale
+const resolveTranslatable = (value: { [locale: string]: string }, locale: string): string => {
+    return value[locale] || value['en'] || '';
 };
 
-// Build main and sub-navigation based on language
+const createNavItem = (
+    key: string,
+    locale: string,
+    id: string,
+    parentId: string = ''
+): NavigationItemType => {
+    const config = navItemsConfig[key];
+    return {
+        name: resolveTranslatable(config.title, locale),
+        id,
+        parentId,
+        slug: resolveTranslatable(config.slug, locale),
+        description: '',
+        productVariants: emptyProductVariants,
+        children: [],
+    };
+};
+
 const buildNavigation = (locale: string): {
     mainNavigation: NavigationItemType[];
     subNavigation: NavigationItemType[];
 } => {
-    const mainNavigation: NavigationItemType[] = [
-        {
-            name: 'Home',
-            id: 'none',
-            parentId: '',
-            slug: resolveSlug('home', locale),
-            description: '',
-            productVariants: emptyProductVariants,
-            children: [],
-        },
-    ];
+    const mainNavigation: NavigationItemType[] = [createNavItem('home', locale, 'none')];
 
     const subNavigation: NavigationItemType[] = [
-        {
-            name: 'Powder',
-            id: 'none',
-            parentId: '1',
-            slug: resolveSlug('powder', locale),
-            description: '',
-            productVariants: emptyProductVariants,
-            children: [],
-        },
-        {
-            name: 'All mountain',
-            id: 'none',
-            parentId: '1',
-            slug: resolveSlug('allMountain', locale),
-            description: '',
-            productVariants: emptyProductVariants,
-            children: [],
-        },
-        {
-            name: 'Freestyle',
-            id: 'none',
-            parentId: '1',
-            slug: resolveSlug('freestyle', locale),
-            description: '',
-            productVariants: emptyProductVariants,
-            children: [],
-        },
-        {
-            name: 'Brands',
-            id: 'none',
-            parentId: '1',
-            slug: resolveSlug('brands', locale),
-            description: '',
-            productVariants: emptyProductVariants,
-            children: [],
-        },
+        createNavItem('powder', locale, 'none', '1'),
+        createNavItem('allMountain', locale, 'none', '1'),
+        createNavItem('freestyle', locale, 'none', '1'),
+        createNavItem('brands', locale, 'none', '1'),
+        createNavItem('stores', locale, 'none', '1'),
     ];
 
     return { mainNavigation, subNavigation };
 };
 
-// Main function to get the navigation tree
 export const getNavigationTree = async (
     params: { locale: string; channel: string },
     collections?: any[]
@@ -134,11 +118,7 @@ export const getNavigationTree = async (
     // Build main and sub-navigation based on the detected locale
     const { mainNavigation, subNavigation } = buildNavigation(locale);
 
-    if (Array.isArray(mainNavigation)) {
-        navigation.children.unshift(...mainNavigation);
-    } else {
-        console.error("mainNavigation is not iterable:", mainNavigation);
-    }
+    navigation.children.unshift(...mainNavigation);
 
     const subnavigation = {
         children: Array.isArray(subNavigation) ? subNavigation : [],
