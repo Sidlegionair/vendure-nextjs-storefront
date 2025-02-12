@@ -168,7 +168,7 @@ const ProductImageWrapper = styled.div<{ src?: string }>`
     overflow: hidden;
     background-image: url(${({ src }) => optimizeImage({ size: 'noresize', src: src })});
     background-size: contain;
-    background-position: center;
+    //background-position: center;
     background-repeat: no-repeat;
     display: flex;
     align-items: center;
