@@ -45,6 +45,7 @@ import CollectionSlider from '@/src/components/storyblok/DynamicSlider';
 import HubspotFormBlock from '@/src/components/storyblok/HubspotFormBlock';
 import GorgiasFormBlock from '@/src/components/storyblok/GorgiasFormBlock';
 import CookieFirstComponent from '@/src/components/storyblok/CookieFirstComponent';
+import GorgiasHelpCenterBlock from '@/src/components/storyblok/GorgiasHelpCenterBlock';
 // import { VendureCollectionSlider } from '@/src/components/molecules/VendureCollectionSlider';
 
 // Register your components
@@ -79,6 +80,7 @@ const components = {
     'collection-slider': CollectionSlider,
     'hubspot-form-block': HubspotFormBlock,
     'gorgias-form-block': GorgiasFormBlock,
+    'gorgias-help-center-block': GorgiasHelpCenterBlock,
     'CookieFirstComponent': CookieFirstComponent,
     // 'vendure-collection-slider': VendureCollectionSlider,
 };

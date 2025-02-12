@@ -1,18 +1,18 @@
 import React, { useEffect, useRef } from 'react';
 import { storyblokEditable } from '@storyblok/react';
 
-const GorgiasFormBlock = ({ blok }) => {
+const GorgiasHelpCenterBlock = ({ blok }) => {
     const {
-        formUid = "n923oe7z",
-        scriptSrc = "https://contact.gorgias.help/api/contact-forms/loader.js?v=3",
+        helpCenterUid = "d7ztxq8n",
+        scriptSrc = "https://help-center.gorgias.help/api/help-centers/loader.js?v=2",
     } = blok;
 
     const containerRef = useRef(null);
 
     useEffect(() => {
         if (containerRef.current) {
-            // Remove any existing script to prevent duplication
-            const existingScript = containerRef.current.querySelector("script[data-gorgias-loader-contact-form]");
+            // Remove any existing help center script to prevent duplication
+            const existingScript = containerRef.current.querySelector("script[data-gorgias-loader-help-center]");
             if (existingScript) {
                 existingScript.remove();
             }
@@ -20,25 +20,25 @@ const GorgiasFormBlock = ({ blok }) => {
             const script = document.createElement("script");
             script.src = scriptSrc;
             script.defer = true;
-            script.setAttribute("data-gorgias-loader-contact-form", "");
-            script.setAttribute("data-gorgias-contact-form-uid", formUid);
+            script.setAttribute("data-gorgias-loader-help-center", "");
+            script.setAttribute("data-gorgias-help-center-uid", helpCenterUid);
             containerRef.current.appendChild(script);
         }
-    }, [scriptSrc, formUid]);
+    }, [scriptSrc, helpCenterUid]);
 
     return (
-        <section className="gorgias-form-section" {...storyblokEditable(blok)}>
-            <div className="gorgias-form-container" data-gorgias-contact-form="container" ref={containerRef}>
-                <div data-gorgias-contact-form-uid={formUid}></div>
+        <section className="gorgias-helpcenter-section" {...storyblokEditable(blok)}>
+            <div className="gorgias-helpcenter-container" data-gorgias-help-center="container" ref={containerRef}>
+                <div data-gorgias-help-center-uid={helpCenterUid}></div>
             </div>
 
             <style jsx>{`
-                .gorgias-form-section {
+                .gorgias-helpcenter-section {
                     width: 100%;
                     display: flex;
                     justify-content: center;
                 }
-                .gorgias-form-container {
+                .gorgias-helpcenter-container {
                     width: 100%;
                 }
             `}</style>
@@ -46,4 +46,4 @@ const GorgiasFormBlock = ({ blok }) => {
     );
 };
 
-export default GorgiasFormBlock;
+export default GorgiasHelpCenterBlock;
