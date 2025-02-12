@@ -37,15 +37,17 @@ const Footer = ({ blok }) => {
             <div className="content-layer">
                 {/* Brand Section */}
                 <div className="brand-section">
-                    <div className="logo">
-                        {logo?.filename && (
+                    {logo?.filename && (
+
+                        <div className="logo">
                             <img
                                 src={logo.filename}
                                 alt={name || 'Logo'}
                                 className="logo-image"
                             />
-                        )}
                     </div>
+                    )}
+
                     {description && (
                         <RichTextEditor blok={{ content: description, textColor: '#fff' }} />
                     )}
@@ -127,9 +129,27 @@ const Footer = ({ blok }) => {
 
                     }
                     
-                    .rich-text-editor {
+                    .brand-section {
+                        p {
+                            font-family: 'Suisse BP Int\'l' !important;
+                            font-style: normal;
+                            font-weight: 400;
+                            font-size: 18px;
+                            line-height: 26px;
+                            /* or 144% */
+                        }
+                        
+                        span {
+                            font-family: 'Suisse BP Int\'l' !important;
+                            font-style: normal;
+                            //font-weight: 400;
+                            //font-size: 18px;
+                            //line-height: 26px;
+                            /* or 144% */
+                        }
+                        
                         * {
-                            font-family: 'Suisse BP Int\' l ' !important;
+                            font-family: 'Suisse BP Int\'l' !important;
 
                         }
                     }
