@@ -179,7 +179,7 @@ const ProductImageWrapper = styled.div<{ src?: string }>`
     }
 
 
-    //min-height: 280px; /* adjust this value to suit your design */
+    min-height: 280px; /* adjust this value to suit your design */
 
     @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
         min-height: 230px;
