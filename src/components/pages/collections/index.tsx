@@ -126,19 +126,18 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
                 <RelativeStack column gap="60px">
                     <ScrollPoint id="collection-scroll" />
                     <Stack>
-                        {/* --- TOP BAR WITH FACET DROPDOWNS & SORTBY --- */}
+                        {/* --- TOP BAR: Grid with three cells --- */}
                         <TopFilters>
-                            {/* Mobile filter button – visible only on mobile (left cell) */}
-                            <MobileFiltersButton onClick={() => setFiltersOpen(true)}>
-                                <IconButton >
-                                    <Filter />
-                                </IconButton>
+                            <LeftCell>
+                                <MobileFiltersButton onClick={() => setFiltersOpen(true)}>
+                                    <IconButton>
+                                        <Filter />
+                                    </IconButton>
+                                    Filters
+                                </MobileFiltersButton>
+                            </LeftCell>
 
-                                Filters
-                            </MobileFiltersButton>
-
-                            {/* Empty cell placeholder on mobile; on desktop, this cell will show desktop filters */}
-                            <EmptyCell>
+                            <CenterCell>
                                 <DesktopFilters>
                                     <FacetDropdownsWrapper>
                                         {displayFacetCodes.map((code) => {
@@ -157,15 +156,17 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
                                         })}
                                     </FacetDropdownsWrapper>
                                 </DesktopFilters>
-                            </EmptyCell>
+                            </CenterCell>
 
-                            {/* SortBy control – always on the right */}
-                            <SortByWrapper>
-                                <SortBy sort={sort} handleSort={handleSort} />
-                            </SortByWrapper>
+                            <RightCell>
+                                <SortByWrapper>
+                                    <SortBy sort={sort} handleSort={handleSort} />
+                                </SortByWrapper>
+                            </RightCell>
                         </TopFilters>
                     </Stack>
 
+                    {/* ... rest of your component ... */}
                     <Stack>
                         {/* --- SIDEBAR: Only display facet groups NOT in top bar --- */}
                         <DesktopFacets>
@@ -307,7 +308,7 @@ const HeadingStack = styled(Stack)`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 100px 0px;
+    padding: 100px 0;
     gap: 60px;
     position: relative;
     z-index: 1;
@@ -315,7 +316,7 @@ const HeadingStack = styled(Stack)`
     @media (max-width: 767px) {
         min-height: 200px;
         gap: 36px;
-        padding: 70px 0px;
+        padding: 70px 0;
     }
 
     ::before {
@@ -352,80 +353,69 @@ const ScrollPoint = styled.div`
     left: 0;
 `;
 
-/* TOP BAR – grid with three columns:
-   On mobile: left cell for filter icon, center empty, right cell for SortBy.
-   On desktop: left empty, center for facet dropdowns, right for SortBy.
-*/
+/* --- TOP BAR GRID STRUCTURE --- */
 const TopFilters = styled.div`
     width: 100%;
     display: grid;
     align-items: center;
     margin: 2rem 0;
-
-    /* Mobile: Three columns – filter icon (col 1), empty (col 2), sort (col 3) */
-    @media (max-width: 767px) {
-        grid-template-columns: auto auto auto;
-    }
-
-    /* Desktop: empty (col 1), facet dropdowns (col 2), sort (col 3) */
-    @media (min-width: 768px) {
+    /* Default (mobile & tablet) layout */
+    grid-template-columns: auto 1fr auto;
+    /* Only on large desktop screens, center the top-5 filters */
+    @media (min-width: 1024px) {
         grid-template-columns: 1fr auto 1fr;
     }
 `;
 
-const EmptyCell = styled.div`
-    /* On mobile, place the empty cell in the center */
-    @media (max-width: 767px) {
-        grid-column: 2;
-    }
+const LeftCell = styled.div``;
+
+const CenterCell = styled.div`
+    text-align: center;
 `;
 
+const RightCell = styled.div`
+    text-align: right;
+`;
+
+/* Only show the mobile filter button on mobile & tablet */
 const MobileFiltersButton = styled.div`
     display: none;
     border: 1px solid #4d4d4d;
     border-radius: 8px;
     padding: 1.8rem 2.4rem;
-
-    /* Only show on mobile, and place it in the left cell */
-    @media (max-width: 767px) {
+    gap: 10px;
+    align-items: center;
+    width: fit-content;
+    @media (max-width: 1023px) {
         display: flex;
-        //justify-content: center;
-        gap: 10px;
-        align-items: center;
-        grid-column: 1;
-        width: fit-content;
     }
 `;
 
+/* Only show the desktop top‑5 filters on desktop */
 const DesktopFilters = styled.div`
-    @media (max-width: 767px) {
+    @media (max-width: 1023px) {
         display: none;
     }
 `;
 
 const FacetDropdownsWrapper = styled.div`
-    grid-column: 2;
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 1rem;
 `;
 
-const SortByWrapper = styled.div`
-    /* Ensure the sort control is always on the right */
-    grid-column: 3;
-    justify-self: end;
-`;
+const SortByWrapper = styled.div``;
 
 const DesktopFacets = styled.div`
-  display: none;
-
-  @media (min-width: ${(p) => p.theme.breakpoints.xl}) {
-    display: block;
-    max-width: 287px;
-    width: 100%;
-    padding-right: 2rem;
-  }
+    display: none;
+    @media (min-width: ${(p) => p.theme.breakpoints.xl}) {
+        display: block;
+        max-width: 287px;
+        width: 100%;
+        padding-right: 2rem;
+    }
 `;
 
 const FacetsOverlay = styled(motion.div)`
@@ -436,7 +426,6 @@ const FacetsOverlay = styled(motion.div)`
     display: flex;
     justify-content: flex-start;
     align-items: stretch;
-
     @media (min-width: ${(p) => p.theme.breakpoints.xl}) {
         display: none;
     }
