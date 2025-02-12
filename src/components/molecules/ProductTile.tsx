@@ -143,6 +143,10 @@ const ImageContainer = styled.div`
     @media (min-width: ${({ theme }) => theme.breakpoints['3xl']}) {
         min-height: 240px;
     }
+
+    @media (min-width: ${({ theme }) => theme.breakpoints.lg}) and (max-width: ${({ theme }) => theme.breakpoints.xl}) {
+        min-height: 260px;
+    }
 `;
 
 const Brand = styled(TP)`
