@@ -24,7 +24,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     if (!token) return homePageRedirect;
 
     try {
-        const { verifyCustomerAccount } = await SSRMutation(context)({
+        const { verifyCustomerAccount } = await (await SSRMutation(context))({
             verifyCustomerAccount: [
                 { token },
                 {
@@ -66,7 +66,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                 collections,
                 status: { verifyCustomerAccount },
                 navigation,
-            subnavigation,
+                subnavigation,
 
             },
         };

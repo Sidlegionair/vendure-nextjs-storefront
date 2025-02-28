@@ -54,6 +54,11 @@ const useCartContainer = createContainer(() => {
                             errorCode: true,
                             message: true,
                         },
+                        '...on OrderInterceptorError': {
+                            message: true,
+                            errorCode: true
+                        },
+
                     },
                 ],
             });
@@ -79,6 +84,10 @@ const useCartContainer = createContainer(() => {
                         '...on OrderModificationError': {
                             errorCode: true,
                             message: true,
+                        },
+                        '...on OrderInterceptorError': {
+                            message: true,
+                            errorCode: true
                         },
                     },
                 ],
@@ -122,6 +131,11 @@ const useCartContainer = createContainer(() => {
                             errorCode: true,
                             message: true,
                         },
+                        '...on OrderInterceptorError': {
+                            message: true,
+                            errorCode: true
+                        },
+
                     },
                 ],
             });

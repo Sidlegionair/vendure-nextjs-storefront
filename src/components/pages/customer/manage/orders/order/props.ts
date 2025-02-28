@@ -22,7 +22,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     const code = context.params?.code as string;
 
     try {
-        const { activeCustomer } = await SSRQuery(context)({
+        const { activeCustomer } = await (await SSRQuery(context))({
             activeCustomer: {
                 ...ActiveCustomerSelector,
                 orders: [

@@ -183,7 +183,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
             });
 
             if (setOrderBillingAddress?.__typename !== 'Order') {
-                setError('root', { message: tErrors(`errors.backend.${setOrderBillingAddress.errorCode}`) });
+                setError('root', { message: (tErrors as unknown as (key: string) => string)(`errors.backend.${setOrderBillingAddress.errorCode}`) });
                 return;
             }
 
