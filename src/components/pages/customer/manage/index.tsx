@@ -21,7 +21,7 @@ export const ManageAccountPage: React.FC<InferGetServerSidePropsType<typeof getS
                 <FormContainer>
                     <FormWrapper>
                         <CustomerWrap itemsCenter gap="3rem">
-                            <CustomerForm initialCustomer={props.activeCustomer} />
+                            <CustomerForm initialCustomer={props.activeCustomer} channels={props.channels} />
                         </CustomerWrap>
                     </FormWrapper>
                 </FormContainer>

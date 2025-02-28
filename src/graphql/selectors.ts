@@ -493,6 +493,11 @@ export const ActiveCustomerSelector = Selector('Customer')({
     phoneNumber: true,
     addresses: ActiveAddressSelector,
     user: CurrentUserSelector,
+    customFields: {
+        preferredSeller: {
+            id: true
+        }
+    }
 });
 
 export type ActiveCustomerType = FromSelector<typeof ActiveCustomerSelector, 'Customer', typeof scalars>;
