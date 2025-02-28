@@ -87,7 +87,7 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
 
                 return (
                     <RelativeStack w100 key={collection.name}>
-                        <StyledLink href={href} isSubMenu={isSubMenu} isActive={isActive}>
+                        <StyledLink href={href} skipLocaleHandling isSubMenu={isSubMenu} isActive={isActive}>
                             {collection.name}
                         </StyledLink>
                         {/*<AbsoluteStack w100>*/}
