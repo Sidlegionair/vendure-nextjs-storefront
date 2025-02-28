@@ -22,7 +22,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     const homePageRedirect = prepareSSRRedirect('/')(context);
 
     try {
-        const { activeCustomer } = await SSRQuery(context)({
+        const { activeCustomer } = await (await SSRQuery(context))({
             activeCustomer: {
                 ...ActiveCustomerSelector,
                 orders: [

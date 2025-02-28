@@ -3,12 +3,40 @@ import { GetServerSidePropsContext } from 'next';
 import { getContext } from '@/src/lib/utils';
 let token: string | null = typeof window !== 'undefined' ? window.localStorage.getItem('token') : null;
 
+
+/**
+ * Convert a JS object/array/primitive into a string that
+ * looks like valid GraphQL inline syntax.
+ */
+function encodeGraphQL(value: unknown): string {
+    if (value === null) {
+        return 'null';
+    }
+    // Arrays → "[item1, item2, ...]"
+    if (Array.isArray(value)) {
+        return '[' + value.map(item => encodeGraphQL(item)).join(', ') + ']';
+    }
+    // Objects → "{key: val, key2: val2, ...}"
+    if (typeof value === 'object') {
+        const entries = Object.entries(value).map(([k, v]) => {
+            return `${k}: ${encodeGraphQL(v)}`;
+        });
+        return '{' + entries.join(', ') + '}';
+    }
+    // Strings → double-quoted, with internal quotes escaped
+    if (typeof value === 'string') {
+        return `"${value.replace(/"/g, '\\"')}"`;
+    }
+    // Numbers, booleans, etc → as-is
+    return String(value);
+}
+
 export const scalars = ZeusScalars({
     Money: {
         decode: e => e as number,
     },
     JSON: {
-        encode: (e: unknown) => JSON.stringify(e), // Always encode as a JSON string
+        encode: (value) => encodeGraphQL(value),
         decode: (e: unknown) => {
             if (typeof e === 'string') {
                 try {
@@ -55,7 +83,7 @@ const apiFetchVendure =
             const additionalHeaders: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
 
 
-            console.log(HEADERS);
+            // console.log(HEADERS);
             console.log(additionalHeaders);
             console.log(fetchOptions);
             const credentialsPolicy = 'include';
@@ -125,20 +153,18 @@ export const SSGQuery = (params: { locale: string; channel: string }) => {
     })('query', { scalars });
 };
 
-export const SSRQuery = (context: GetServerSidePropsContext) => {
+export const SSRQuery = async (context: GetServerSidePropsContext) => {
     const authCookies = {
         session: context.req.cookies['session'],
         'session.sig': context.req.cookies['session.sig'],
     };
 
 
-
-    const ctx = getContext(context);
+    const ctx = await getContext(context);
     const properChannel = ctx?.params?.channel as string;
     const locale = ctx?.params?.locale as string;
 
-    console.log('AuthCookies', context.req);
-
+    // console.log('AuthCookies', context.req);
 
 
     const HOST = `${VENDURE_HOST}?languageCode=${locale}`;
@@ -151,14 +177,14 @@ export const SSRQuery = (context: GetServerSidePropsContext) => {
     })('query', { scalars });
 };
 
-export const SSRMutation = (context: GetServerSidePropsContext) => {
+export const SSRMutation = async (context: GetServerSidePropsContext) => {
     const authCookies = {
         session: context.req.cookies['session'],
         'session.sig': context.req.cookies['session.sig'],
     };
-    console.log('AuthCookies', context.req);
+    // console.log('AuthCookies', context.req);
 
-    const ctx = getContext(context);
+    const ctx = await getContext(context);
     const properChannel = ctx?.params?.channel as string;
     const locale = ctx?.params?.locale as string;
 

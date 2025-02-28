@@ -5,6 +5,7 @@ import {
     CollectionTileProductVariantSelector,
 } from '@/src/graphql/selectors';
 import { SortOrder } from '@/src/zeus';
+import { DEFAULT_CHANNEL, DEFAULT_CHANNEL_SLUG } from '@/src/lib/consts';
 
 
 export const GetMainNavigation = (params: { locale: string; channel: string }) => {
@@ -17,6 +18,8 @@ export const GetSubNavigation = () => {
 
 export const getCollections = async (params: { locale: string; channel: string }) => {
     const excludedSlugs = ['carousel-snowboards', 'home-slider-snowboards']; // Replace with slugs you want to exclude
+
+    params.channel = DEFAULT_CHANNEL;
 
     const _collections = await SSGQuery(params)({
         collections: [
