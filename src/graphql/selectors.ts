@@ -673,6 +673,9 @@ export const CreateAddressSelector = Selector('CreateAddressInput')({
     phoneNumber: true,
     defaultShippingAddress: true,
     defaultBillingAddress: true,
+    customFields: {
+        vatNumber: true
+    }
 });
 
 export type CreateAddressType = FromSelector<typeof CreateAddressSelector, 'CreateAddressInput', typeof scalars>;
