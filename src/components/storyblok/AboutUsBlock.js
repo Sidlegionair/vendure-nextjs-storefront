@@ -1,16 +1,16 @@
 import React from 'react';
 import { storyblokEditable, renderRichText } from '@storyblok/react';
 import sanitizeHtml from 'sanitize-html';
-import Image from 'next/image';
-import Link from 'next/link';
 
 const AboutUsBlock = ({ blok }) => {
     const getButtonLink = (link) => {
-        if (!link) return '#'; // Default fallback link
-        if (link.linktype === 'url') return link.url; // External URL
-        if (link.linktype === 'story') return `/${link.cached_url || ''}`; // Internal Storyblok story
-        return '#'; // Fallback for unknown link types
+        if (!link || !link.linktype) return null;
+        if (link.linktype === 'url') return link.url;
+        if (link.linktype === 'story') return `/${link.cached_url || ''}`;
+        return null;
     };
+
+    const buttonLink = getButtonLink(blok.buttonLink);
 
     return (
         <section className="about-us-section">
@@ -41,14 +41,14 @@ const AboutUsBlock = ({ blok }) => {
                             }),
                         }}
                     />
-                    {blok.buttonLink && (
+                    {buttonLink && blok.buttonText && (
                         <a
                             className="learn-more-button"
-                            href={getButtonLink(blok.buttonLink)}
+                            href={buttonLink}
                             target={blok.buttonLink.target || '_self'}
                             rel={blok.buttonLink.target === '_blank' ? 'noopener noreferrer' : undefined}
                         >
-                            {blok.buttonText || 'Learn More'} →
+                            {blok.buttonText} →
                         </a>
                     )}
                 </div>
@@ -59,13 +59,11 @@ const AboutUsBlock = ({ blok }) => {
                     position: relative;
                     width: 100%;
                     max-width: 100vw;
-                    //height: auto;
                     color: #fff;
                     overflow: hidden;
                 }
 
                 .about-us-container {
-                    position: relative;
                     display: flex;
                     align-items: center;
                     margin-left: 103px;
@@ -76,7 +74,6 @@ const AboutUsBlock = ({ blok }) => {
                     margin-left: -103px;
                     width: 50vw;
                     display: flex;
-                    //height: 100%;
                 }
 
                 .about-us-image img {
@@ -92,9 +89,6 @@ const AboutUsBlock = ({ blok }) => {
                     flex-direction: column;
                     align-items: flex-start;
                     justify-content: space-between;
-                    //height: 409px;
-
-                    position: relative;
                     width: 50vw;
                     padding: 82px 192px 82px 82px;
                     margin-left: auto;
@@ -133,17 +127,13 @@ const AboutUsBlock = ({ blok }) => {
                 }
 
                 @media (max-width: 768px) {
-                    
                     .about-us-section {
-                        //position: unset;
                         overflow: unset;
                         margin-top: 200px;
                     }
-                    
-                    
+
                     .about-us-container {
                         display: flex;
-                        //position: unset;
                         flex-direction: column;
                         gap: 0;
                         margin-left: 0;
@@ -151,16 +141,8 @@ const AboutUsBlock = ({ blok }) => {
 
                     .about-us-image {
                         width: 95%;
-                        left: 0;
-                        //margin: 0 auto;
-                        //position: relative;
                         height: 400px;
-                        //overflow: hidden;
-                        //position: absolute;
                         margin-top: -50%;
-                        //padding-bottom: 50%;
-                        //top: -50%; /* Overlapping the red square */
-
                     }
 
                     .about-us-image img {
@@ -172,11 +154,8 @@ const AboutUsBlock = ({ blok }) => {
 
                     .about-us-text {
                         margin-top: 100px;
-                        //padding-bottom: 100px;
                         width: 100%;
-                        //margin: 0 0;
                         padding: 30px;
-                        //padding-bottom: 500px;
                         gap: 20px;
                         text-align: left;
                     }
@@ -186,13 +165,11 @@ const AboutUsBlock = ({ blok }) => {
                         line-height: 50px;
                     }
 
-                    .rich-text-content {
-                        p {
-                            font-family: 'Calibri', sans-serif;
-                            font-weight: 400;
-                            font-size: 18px;
-                            line-height: 26px;
-                        }
+                    .rich-text-content p {
+                        font-family: 'Calibri', sans-serif;
+                        font-weight: 400;
+                        font-size: 18px;
+                        line-height: 26px;
                     }
 
                     .learn-more-button {
