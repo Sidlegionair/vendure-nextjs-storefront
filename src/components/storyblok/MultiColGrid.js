@@ -8,8 +8,10 @@ const MultiColGrid = ({ blok }) => {
     // Ensure a valid column count (at least 1 column per row)
     const validColumnsPerRow = Math.max(1, columnsPerRow);
 
-    // Extract top margin from Storyblok field or set a default
+    // Extract top margin and flex alignment from Storyblok fields or set defaults
     const topMargin = blok.topMargin || 0;
+    const flexDirection = blok.flexDirection || "row"; // Default to row
+    const justifyContent = blok.justifyContent || "start"; // Default alignment
 
     // Divide columns into rows
     const rows = [];
@@ -24,7 +26,14 @@ const MultiColGrid = ({ blok }) => {
             {...storyblokEditable(blok)}
         >
             {rows.map((row, rowIndex) => (
-                <div key={rowIndex} className="flex w-full gap-6">
+                <div
+                    key={rowIndex}
+                    className="flex w-full gap-6"
+                    style={{
+                        flexDirection: flexDirection, // Apply flex direction
+                        justifyContent: justifyContent, // Apply justify content
+                    }}
+                >
                     {row.map((nestedBlok, colIndex) => (
                         <div
                             key={nestedBlok._uid || colIndex}
