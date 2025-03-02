@@ -20,7 +20,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         collections
     );
 
-    const api = SSRQuery(context);
+    const api = await SSRQuery(context);
 
     let page = 1;
     let q = '';

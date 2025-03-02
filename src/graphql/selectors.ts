@@ -493,6 +493,11 @@ export const ActiveCustomerSelector = Selector('Customer')({
     phoneNumber: true,
     addresses: ActiveAddressSelector,
     user: CurrentUserSelector,
+    customFields: {
+        preferredSeller: {
+            id: true
+        }
+    }
 });
 
 export type ActiveCustomerType = FromSelector<typeof ActiveCustomerSelector, 'Customer', typeof scalars>;
@@ -668,6 +673,9 @@ export const CreateAddressSelector = Selector('CreateAddressInput')({
     phoneNumber: true,
     defaultShippingAddress: true,
     defaultBillingAddress: true,
+    customFields: {
+        vatNumber: true
+    }
 });
 
 export type CreateAddressType = FromSelector<typeof CreateAddressSelector, 'CreateAddressInput', typeof scalars>;

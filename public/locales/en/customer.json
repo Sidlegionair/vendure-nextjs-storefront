@@ -49,7 +49,10 @@
             "firstName": "First name",
             "lastName": "Last name",
             "phoneNumber": "Phone number",
-            "successMessage": "Your account details have been updated successfully"
+            "successMessage": "Your account details have been updated successfully",
+            "customFields": {
+                "preferredSeller": "Preferred seller"
+            }
         },
         "passwordForm": {
             "title": "Change Password",

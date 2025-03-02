@@ -7,6 +7,7 @@ import { prepareSSRRedirect, redirectFromDefaultChannelSSR } from '@/src/lib/red
 import { arrayToTree } from '@/src/util/arrayToTree';
 import { SortOrder } from '@/src/zeus';
 import { GetServerSidePropsContext } from 'next';
+import { fetchChannels } from '@/src/lib/channels';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
     const r = await makeServerSideProps(['common', 'customer'])(context);
@@ -19,10 +20,13 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
         collections
     );
 
+
+    const channels = await fetchChannels();
+
     const homePageRedirect = prepareSSRRedirect('/')(context);
 
     try {
-        const { activeCustomer } = await SSRQuery(context)({
+        const { activeCustomer } = await (await SSRQuery(context))({
             activeCustomer: {
                 ...ActiveCustomerSelector,
                 orders: [
@@ -43,6 +47,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
             lastOrder: orders.items && orders.items.length > 0 ? orders.items[0] : null,
             navigation,
             subnavigation,
+            channels
 
         };
 

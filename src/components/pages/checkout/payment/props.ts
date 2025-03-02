@@ -9,7 +9,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     const translationRedirect = redirectFromDefaultChannelSSR(context);
     if (translationRedirect) return translationRedirect;
     const homePageRedirect = prepareSSRRedirect('/')(context);
-    const api = SSRQuery(context);
+    const api = await SSRQuery(context);
 
     try {
         const [{ activeOrder: checkout }, { eligiblePaymentMethods }] = await Promise.all([

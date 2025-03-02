@@ -4,7 +4,8 @@ import { DEFAULT_CHANNEL, channels } from '@/src/lib/consts';
 import { getAllPossibleWithChannels } from '@/src/lib/getStatic';
 
 export const getStaticPaths = async () => {
-    const allPaths = getAllPossibleWithChannels();
+    // Await the dynamic channels paths
+    const allPaths = await getAllPossibleWithChannels();
     const resp = await Promise.all(
         allPaths.map(async path => {
             const channel = channels.find(c => c.slug === path.params.channel)?.channel ?? DEFAULT_CHANNEL;

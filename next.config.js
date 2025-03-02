@@ -1,5 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const DEFAULT_CHANNEL = process.env.DEFAULT_CHANNEL_SLUG || 'default-channel';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -19,6 +20,20 @@ const nextConfig = {
         useDeploymentId: true,
         // Optionally, use with Server Actions
         useDeploymentIdServerActions: true,
+    },
+    async rewrites() {
+        return [
+            {
+                // Matches duplicate locale segments (like /nl/nl) plus any additional path segments.
+                source: '/:channel(nl|en)/:locale(nl|en)/:path*',
+                destination: `/${DEFAULT_CHANNEL}/:locale/:path*`,
+            },
+            {
+                // Matches single-segment locale (like /nl) plus any additional path segments.
+                source: '/:locale(nl|en)/:path*',
+                destination: `/${DEFAULT_CHANNEL}/:locale/:path*`,
+            },
+        ];
     },
 
     // i18n: {

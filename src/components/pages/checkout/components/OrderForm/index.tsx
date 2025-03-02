@@ -61,6 +61,36 @@ const isAddressesEqual = (a: object, b?: object) => {
     }
 };
 
+
+// -----------------------------------------------------------------
+// VAT-check function using the proxy endpoint and NEXT_PUBLIC_HOST
+// -----------------------------------------------------------------
+const checkVAT = async (
+    vatNumber: string,
+    countryCode: string
+): Promise<{ valid: boolean; name: string }> => {
+    try {
+        const vatWithoutPrefix = vatNumber.startsWith(countryCode)
+            ? vatNumber.slice(countryCode.length)
+            : vatNumber;
+        const host = process.env.NEXT_PUBLIC_HOST; // Vendure server host
+        const url = `${host}/vies-proxy?countryCode=${countryCode}&vatNumber=${vatWithoutPrefix}`;
+        console.log('Checking VAT via proxy at URL:', url);
+        const response = await fetch(url);
+        if (!response.ok) {
+            console.error('VIES proxy response not OK', response.status);
+            return { valid: false, name: '' };
+        }
+        const data = await response.json();
+        console.log('VIES proxy response data:', data);
+        return { valid: data.isValid, name: data.name };
+    } catch (error) {
+        console.error('VIES check failed:', error);
+        return { valid: false, name: '' };
+    }
+};
+
+
 export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, activeCustomer, shippingMethods }) => {
     const ctx = useChannels();
     const { activeOrder, changeShippingMethod } = useCheckout();
@@ -137,6 +167,14 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
         setValue('createAccount', false);  // Set the default value as false
     }, [setValue]);
 
+    // Register the vatNumber field (still part of customFields)
+    const vatRegister = register('billing.customFields.vatNumber', {
+        onChange: (e) => {
+            console.log('VAT input changed:', e.target.value);
+            setValue('billing.customFields.vatNumber', e.target.value, { shouldValidate: true });
+        },
+    });
+
 
     // Automatically enforce account creation if activeCustomer.id is missing
     const enforceCreateAccount = !activeCustomer?.id;
@@ -163,6 +201,31 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                 setError('root', { message: tErrors(`errors.backend.UNKNOWN_ERROR`) });
                 return;
             }
+
+            console.log('Billing before VAT check:', billing);
+            // Extract vat value from the nested customFields
+            const vatValue = billing.customFields?.vatNumber || '';
+            if (billing.company) {
+                if (!vatValue.trim()) {
+                    console.log('VAT value is empty:', vatValue);
+                    setError('billing.customFields.vatNumber', { message: t('orderForm.errors.vatNumber.required') });
+                    return;
+                }
+                const vatResult = await checkVAT(vatValue, billing.countryCode);
+                console.log('VAT result:', vatResult);
+                if (!vatResult.valid) {
+                    setError('billing.customFields.vatNumber', { message: t('orderForm.errors.vatNumber.invalid') });
+                    return;
+                }
+                if (billing.company.trim() !== vatResult.name.trim()) {
+                    console.log('Company name mismatch. Updating company name to:', vatResult.name);
+                    setValue('billing.company', vatResult.name);
+                    billing.company = vatResult.name;
+                }
+            }
+
+
+
             // Set the billing address for the order
             const { setOrderBillingAddress } = await storefrontApiMutation(ctx)({
                 setOrderBillingAddress: [
@@ -183,7 +246,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
             });
 
             if (setOrderBillingAddress?.__typename !== 'Order') {
-                setError('root', { message: tErrors(`errors.backend.${setOrderBillingAddress.errorCode}`) });
+                setError('root', { message: (tErrors as unknown as (key: string) => string)(`errors.backend.${setOrderBillingAddress.errorCode}`) });
                 return;
             }
 
@@ -518,6 +581,22 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                             />
                                         )}
                                     </Stack>
+                                    {/* Always render the VAT field. Its visibility is controlled via CSS */}
+                                    <Stack
+                                        style={{
+                                            visibility: watch('billing.company') ? 'visible' : 'hidden',
+                                            height: watch('billing.company') ? 'auto' : '0px',
+                                        }}
+                                    >
+                                        <Input
+                                            {...vatRegister}
+                                            placeholder={t('orderForm.placeholders.customFields.vatNumber')}
+                                            label={t('orderForm.customFields.vatNumber')}
+                                            error={errors.billing?.customFields?.vatNumber}
+                                            required={Boolean(watch('billing.company'))}
+                                        />
+                                    </Stack>
+
                                 </Stack>
                             </BillingWrapper>
                         </Stack>
