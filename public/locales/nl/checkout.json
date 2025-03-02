@@ -1,160 +1,170 @@
 {
     "seoTitles": {
-        "checkout": "Checkout",
-        "payment": "Payment",
-        "confirmation": "Confirmation"
+        "checkout": "Afrekenen",
+        "payment": "Betaling",
+        "confirmation": "Bevestiging"
     },
     "steps": {
-        "shipping": "Shipping",
-        "payment": "Payment",
-        "confirmation": "Confirmation"
+        "shipping": "Verzending",
+        "payment": "Betaling",
+        "confirmation": "Bevestiging"
     },
     "orderForm": {
-        "emptyCart": "Your cart is empty",
-        "emptyCartDescription": "You have no items in your shopping cart. Click <1>here</1> to continue shopping.",
-        "whatAccountGives": "Account gives you access to your order history and status. It also allows you to make changes to your personal data and addresses.",
-        "createAccount": "Create an account?",
-        "password": "Password",
-        "confirmPassword": "Confirm Password",
-        "shippingDifferentThanBilling": "Is shipping address different than billing address?",
-        "userNeedInvoice": "Do you need an invoice?",
-        "orderSummary": "Order Summary",
-        "contactInfo": "Account Information",
-        "emailAddress": "Email Address",
-        "firstName": "First Name",
-        "lastName": "Last Name",
-        "phone": "Phone",
-        "shippingInfo": "Shipping Information",
-        "billingInfo": "Billing Information",
+        "emptyCart": "Je winkelwagen is leeg",
+        "emptyCartDescription": "Je hebt geen items in je winkelwagen. Klik <1>hier</1> om verder te winkelen.",
+        "whatAccountGives": "Een account geeft je toegang tot je bestelgeschiedenis en status. Het stelt je ook in staat om je persoonlijke gegevens en adressen te wijzigen.",
+        "createAccount": "Account aanmaken?",
+        "password": "Wachtwoord",
+        "confirmPassword": "Bevestig wachtwoord",
+        "shippingDifferentThanBilling": "Is het verzendadres anders dan het factuuradres?",
+        "userNeedInvoice": "Heb je een factuur nodig?",
+        "orderSummary": "Besteloverzicht",
+        "contactInfo": "Accountinformatie",
+        "emailAddress": "E-mailadres",
+        "firstName": "Voornaam",
+        "lastName": "Achternaam",
+        "phone": "Telefoon",
+        "shippingInfo": "Verzendinformatie",
+        "billingInfo": "Factuurinformatie",
         "NIP": "NIP",
-        "fullName": "Full Name",
-        "company": "Company",
-        "individual": "Individual",
-        "streetLine1": "Address",
-        "streetLine2": "Apartment, suite, etc.",
-        "city": "City",
-        "countryCode": "Country",
-        "province": "State / Province",
-        "postalCode": "Postal Code",
-        "continueToPayment": "Continue to Payment",
-        "continueShopping": "Continue Shopping",
-        "regulations": "I accept the <1>regulations</1>.",
-        "terms": "I accept the <1>terms and conditions</1>.",
+        "fullName": "Volledige naam",
+        "company": "Bedrijf",
+        "individual": "Particulier",
+        "streetLine1": "Adres",
+        "streetLine2": "Appartement, suite, etc.",
+        "customFields": {
+            "vatNumber": "BTW-nummer"
+        },
+        "city": "Stad",
+        "countryCode": "Land",
+        "province": "Provincie / Staat",
+        "postalCode": "Postcode",
+        "continueToPayment": "Ga verder naar betaling",
+        "continueShopping": "Verder winkelen",
+        "regulations": "Ik accepteer de <1>regels</1>.",
+        "terms": "Ik ga akkoord met de <1>algemene voorwaarden</1> en heb mijn bestelling en gegevens gecontroleerd.",
         "placeholders": {
-            "emailAddress": "Email Address",
-            "firstName": "First Name",
-            "lastName": "Last Name",
-            "phoneNumber": "Phone Number",
-            "phone": "Phone",
-            "fullName": "Full Name",
-            "company": "Company",
-            "streetLine1": "Address",
-            "streetLine2": "Apartment, suite, etc.",
-            "city": "City",
-            "countryCode": "Country",
-            "province": "State / Province",
-            "postalCode": "Postal Code",
+            "emailAddress": "E-mailadres",
+            "firstName": "Voornaam",
+            "lastName": "Achternaam",
+            "phoneNumber": "Telefoonnummer",
+            "phone": "Telefoon",
+            "fullName": "Volledige naam",
+            "company": "Bedrijf",
+            "streetLine1": "Adres",
+            "streetLine2": "Appartement, suite, etc.",
+            "city": "Stad",
+            "countryCode": "Land",
+            "province": "Provincie / Staat",
+            "postalCode": "Postcode",
             "NIP": "NIP",
-            "password": "Password",
-            "confirmPassword": "Confirm Password"
+            "password": "Wachtwoord",
+            "confirmPassword": "Bevestig wachtwoord",
+            "customFields": {
+                "vatNumber": "BTW-nummer"
+            }
         },
         "errors": {
             "root": {
-                "invalid": "An errors occurred while sending the form. Please correct the errors below",
-                "closeButton": "Close"
+                "invalid": "Er is een fout opgetreden bij het verzenden van het formulier. Corrigeer de onderstaande fouten",
+                "closeButton": "Sluiten"
             },
             "emailAddress": {
-                "required": "Email address is required",
-                "email": "Email address is invalid"
+                "required": "E-mailadres is verplicht",
+                "email": "Ongeldig e-mailadres"
+            },
+            "vatNumber": {
+                "required": "BTW-nummer is verplicht.",
+                "invalid": "Je BTW-nummer is ongeldig."
             },
             "firstName": {
-                "required": "First name is required"
+                "required": "Voornaam is verplicht"
             },
             "lastName": {
-                "required": "Last name is required"
+                "required": "Achternaam is verplicht"
             },
             "phone": {
-                "required": "Phone is required"
+                "required": "Telefoonnummer is verplicht"
             },
             "fullName": {
-                "required": "Full name is required"
+                "required": "Volledige naam is verplicht"
             },
             "company": {
-                "required": "Company is required"
+                "required": "Bedrijf is verplicht"
             },
             "streetLine1": {
-                "required": "Address is required"
+                "required": "Adres is verplicht"
             },
             "streetLine2": {
-                "required": "Apartment, suite, etc. is required"
+                "required": "Appartement, suite, etc. is verplicht"
             },
             "city": {
-                "required": "City is required"
+                "required": "Stad is verplicht"
             },
             "countryCode": {
-                "required": "Country is required"
+                "required": "Land is verplicht"
             },
             "province": {
-                "required": "State / Province is required"
+                "required": "Provincie / Staat is verplicht"
             },
             "postalCode": {
-                "required": "Postal code is required"
+                "required": "Postcode is verplicht"
             },
             "terms": {
-                "required": "Terms and conditions are required"
+                "required": "Algemene voorwaarden zijn verplicht"
             },
             "regulations": {
-                "required": "Regulations are required"
+                "required": "Regels zijn verplicht"
             },
             "NIP": {
-                "required": "NIP is required"
+                "required": "NIP is verplicht"
             },
             "password": {
-                "required": "Password is required"
+                "required": "Wachtwoord is verplicht"
             },
             "confirmPassword": {
-                "required": "Confirm password is required",
-                "notMatch": "Passwords do not match"
+                "required": "Bevestig wachtwoord is verplicht",
+                "notMatch": "Wachtwoorden komen niet overeen"
             }
         }
     },
     "orderSummary": {
-        "title": "Order Summary",
-        "subtotal": "Subtotal",
-        "discount": "Discount",
-        "shipping": "Shipping",
-        "total": "Total",
-        "quantity": "Quantity",
-        "remove": "Remove",
+        "title": "Besteloverzicht",
+        "subtotal": "Subtotaal",
+        "discount": "Korting",
+        "shipping": "Verzending",
+        "total": "Totaal",
+        "quantity": "Aantal",
+        "remove": "Verwijderen",
         "customerAlsoBought": {
-            "title": "Clients also bought",
-            "addToOrder": "Add to order"
+            "title": "Klanten kochten ook",
+            "addToOrder": "Toevoegen aan bestelling"
         }
     },
     "deliveryMethod": {
-        "title": "Delivery Method",
-        "required": "*(One of delivery method is required)",
+        "title": "Bezorgmethode",
+        "required": "*(Een bezorgmethode is vereist)",
         "errors": {
-            "required": "Delivery method is required"
+            "required": "Bezorgmethode is vereist"
         }
     },
     "paymentMethod": {
-        "title": "This is a dummy payment for demonstration purposes only",
-        "submit": "Submit payment",
-        "notAvailable": "Default payment method is not available",
-        "success": "Return success",
-        "error": "Return error",
-        "selectToContinue": "Select payment method to continue",
-        "decline": "Return declined",
+        "title": "Dit is een testbetaling alleen voor demonstratiedoeleinden",
+        "submit": "Betaling verzenden",
+        "notAvailable": "Standaard betaalmethode is niet beschikbaar",
+        "success": "Succesvolle terugkeer",
+        "error": "Fout bij terugkeer",
+        "selectToContinue": "Selecteer een betaalmethode om door te gaan",
+        "decline": "Terugkeer geweigerd",
         "dummyMethods": {
-            "success": "Dummy payment success",
-            "error": "Dummy payment error",
-            "decline": "Dummy payment decline"
+            "success": "Testbetaling geslaagd",
+            "error": "Testbetaling mislukt",
+            "decline": "Testbetaling geweigerd"
         }
     },
     "confirmation": {
-        "orderReceived": "Your order <1>{{code}}</1> has been received",
-        "orderCancelled": "Your order <1>{{code}}</1> has been cancelled",
-        "orderNotFound": "Order not found"
+        "orderReceived": "Je bestelling <1>{{code}}</1> is ontvangen",
+        "orderCancelled": "Je bestelling <1>{{code}}</1> is geannuleerd",
+        "orderNotFound": "Bestelling niet gevonden"
     }
 }
