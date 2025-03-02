@@ -33,7 +33,6 @@ const TwoColGrid = ({ blok }) => {
     const topMargin = typeof blok.topMargin === "number" ? blok.topMargin : 0;
 
     // Scale down widths if sum(width1 + width2 + gap) exceeds 100.
-    // This preserves the percentage-based relationship of the two columns.
     const totalDesired = initialWidth1 + initialWidth2 + columnGap;
     let width1 = initialWidth1;
     let width2 = initialWidth2;
@@ -49,10 +48,25 @@ const TwoColGrid = ({ blok }) => {
     const firstColumn = columns[0] || {};
     const secondColumn = columns[1] || {};
 
+    // Background Image Support (ensuring /m/ is appended)
+    const backgroundImageUrl = blok.backgroundImage?.filename
+        ? `${blok.backgroundImage.filename}/m/`
+        : "";
+
+    const backgroundSize = blok.backgroundSize || "cover";
+    const backgroundPosition = blok.backgroundPosition || "center";
+    const backgroundRepeat = blok.backgroundRepeat || "no-repeat";
+
     const gridContent = (
         <div
             className="two-col-grid"
-            style={{ marginTop: `${topMargin}px` }}
+            style={{
+                marginTop: `${topMargin}px`,
+                backgroundImage: backgroundImageUrl ? `url(${backgroundImageUrl})` : "none",
+                backgroundSize: backgroundSize,
+                backgroundPosition: backgroundPosition,
+                backgroundRepeat: backgroundRepeat,
+            }}
             {...storyblokEditable(blok)}
         >
             <div className="column first-column">
@@ -67,25 +81,20 @@ const TwoColGrid = ({ blok }) => {
                     display: grid;
                     width: 100%;
                     box-sizing: border-box;
-
-                    /* Create two columns, each a given percentage of the available width.
-                       Gap is applied strictly as a "column-gap". */
                     grid-template-columns: ${width1}% ${width2}%;
                     column-gap: ${columnGap}%;
                 }
 
                 .column {
-                    /* Ensures text wraps properly in each column */
                     box-sizing: border-box;
                     white-space: normal;
                     word-wrap: break-word;
                     word-break: break-word;
-                    hyphens: auto; /* Optional: helps hyphenate long words in supporting browsers */
+                    hyphens: auto;
                 }
 
                 @media (max-width: 768px) {
                     .two-col-grid {
-                        /* On mobile, stack columns vertically: 1 column layout with row-gap. */
                         grid-template-columns: 1fr;
                         row-gap: 16px;
                     }

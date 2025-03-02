@@ -4,15 +4,30 @@ import { ContentContainer } from '@/src/components';
 const Grid = ({ blok }) => {
     // Determine the number of columns dynamically
     const columnCount = blok.columns.length;
-    const gridColsClass = `grid-cols-${columnCount}`;
+    const gridColsClass = `grid grid-cols-${columnCount} gap-6`;
 
     // Extract top margin from Storyblok field or set a default
     const topMargin = blok.topMargin || 0;
 
+    // Background Image Support (ensuring /m/ is appended)
+    const backgroundImageUrl = blok.backgroundImage?.filename
+        ? `${blok.backgroundImage.filename}/m/`
+        : "";
+
+    const backgroundSize = blok.backgroundSize || "cover";
+    const backgroundPosition = blok.backgroundPosition || "center";
+    const backgroundRepeat = blok.backgroundRepeat || "no-repeat";
+
     // Define the grid content
     const gridContent = (
         <div
-            className={`flex flex-col w-full gap-6 mx-auto ${gridColsClass}`}
+            className={`flex flex-col w-full mx-auto ${gridColsClass}`}
+            style={{
+                backgroundImage: backgroundImageUrl ? `url(${backgroundImageUrl})` : "none",
+                backgroundSize: backgroundSize,
+                backgroundPosition: backgroundPosition,
+                backgroundRepeat: backgroundRepeat,
+            }}
             {...storyblokEditable(blok)}
         >
             {blok.columns.map((nestedBlok) => (

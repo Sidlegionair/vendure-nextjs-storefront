@@ -13,6 +13,15 @@ const MultiColGrid = ({ blok }) => {
     const flexDirection = blok.flexDirection || "row"; // Default to row
     const justifyContent = blok.justifyContent || "start"; // Default alignment
 
+    // Background Image Support (ensuring /m/ is appended)
+    const backgroundImageUrl = blok.backgroundImage?.filename
+        ? `${blok.backgroundImage.filename}/m/`
+        : "";
+
+    const backgroundSize = blok.backgroundSize || "cover";
+    const backgroundPosition = blok.backgroundPosition || "center";
+    const backgroundRepeat = blok.backgroundRepeat || "no-repeat";
+
     // Divide columns into rows
     const rows = [];
     for (let i = 0; i < blok.columns.length; i += validColumnsPerRow) {
@@ -23,6 +32,12 @@ const MultiColGrid = ({ blok }) => {
     const gridContent = (
         <div
             className="flex flex-col w-full gap-6 mx-auto"
+            style={{
+                backgroundImage: backgroundImageUrl ? `url(${backgroundImageUrl})` : "none",
+                backgroundSize: backgroundSize,
+                backgroundPosition: backgroundPosition,
+                backgroundRepeat: backgroundRepeat,
+            }}
             {...storyblokEditable(blok)}
         >
             {rows.map((row, rowIndex) => (
