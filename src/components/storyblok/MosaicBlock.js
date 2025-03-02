@@ -167,7 +167,7 @@ const MosaicBlock = ({ blok }) => {
                     .mosaic {
                         overflow-y: visible !important;
                         height: 100% !important;
-                        padding-bottom: 200px;
+                        //padding-bottom: 200px;
                     }
 
                     .mosaic__text {
