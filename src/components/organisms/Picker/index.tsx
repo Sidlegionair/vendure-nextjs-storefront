@@ -341,7 +341,7 @@ const CurrentLocale = styled.button`
     border: none;
     border-radius: 50%;
     overflow: hidden; /* Ensures the circle shape */
-    background-color: transparent;
+    background-color: #e5e7eb;
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -361,7 +361,7 @@ const CurrentLocale = styled.button`
         left: 0;
         width: 100%;
         height: 100%;
-        border: 1px solid black;
+        border: 1px solid #e5e7eb;
         border-radius: 50%;
         pointer-events: none;
     }
