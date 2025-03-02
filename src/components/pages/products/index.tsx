@@ -65,6 +65,8 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
 
                 // Check if the current URL does not contain the vendor's slug
                 if (selectVendorForVariation && !router.asPath.includes(selectVendorForVariation.slug)) {
+                    ctx.channel = selectVendorForVariation.slug;
+
                     // Append variant query param if variant.id exists
                     const variantQuery = variant.id ? `?variant=${variant.id}` : '';
                     router.replace(

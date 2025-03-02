@@ -14,7 +14,7 @@ export const getContext = async (
 
     // Fetch dynamic channels from your backend
     const dynamicChannels = await fetchChannels();
-    console.log("dynamicChannels:", dynamicChannels);
+    // console.log("dynamicChannels:", dynamicChannels);
 
     // If the provided channelSlug does not exist in the dynamic channels, fallback
     const matchedChannel = dynamicChannels.find((c: any) => c.slug === channelSlug);

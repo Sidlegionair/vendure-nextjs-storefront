@@ -29,22 +29,19 @@ export const AllTypesProps: Record<string,any> = {
 		search:{
 			input:"SearchInput"
 		},
-		searchAllChannels:{
-			input:"SearchInput"
-		},
 		selectVendorForVariation:{
 
 		}
 	},
 	Mutation:{
 		addItemToOrder:{
-
+			customFields:"OrderLineCustomFieldsInput"
 		},
 		removeOrderLine:{
 
 		},
 		adjustOrderLine:{
-
+			customFields:"OrderLineCustomFieldsInput"
 		},
 		applyCouponCode:{
 
@@ -821,6 +818,9 @@ export const AllTypesProps: Record<string,any> = {
 	CreateSellerCustomFieldsInput:{
 
 	},
+	OrderLineCustomFieldsInput:{
+
+	},
 	NativeAuthInput:{
 
 	},
@@ -848,7 +848,6 @@ export const ReturnTypes: Record<string,any> = {
 		product:"Product",
 		products:"ProductList",
 		search:"SearchResponse",
-		searchAllChannels:"SearchResponse",
 		selectVendorForVariation:"VendorSelectionResult"
 	},
 	Mutation:{
@@ -1694,7 +1693,7 @@ export const ReturnTypes: Record<string,any> = {
 		taxLines:"TaxLine",
 		order:"Order",
 		fulfillmentLines:"FulfillmentLine",
-		customFields:"JSON"
+		customFields:"OrderLineCustomFields"
 	},
 	Payment:{
 		id:"ID",
@@ -2324,6 +2323,9 @@ export const ReturnTypes: Record<string,any> = {
 	},
 	CustomerCustomFields:{
 		preferredSeller:"Seller"
+	},
+	OrderLineCustomFields:{
+		requestedSellerChannel:"String"
 	},
 	ProductCustomFields:{
 		reviewRating:"Float",

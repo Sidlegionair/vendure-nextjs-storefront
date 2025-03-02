@@ -34,7 +34,9 @@ const useCartContainer = createContainer(() => {
         try {
             const { addItemToOrder } = await storefrontApiMutation(ctx)({
                 addItemToOrder: [
-                    { productVariantId: id, quantity: q },
+                    { productVariantId: id, quantity: q, customFields: {
+                            requestedSellerChannel: ctx.channel
+                        } },
                     {
                         __typename: true,
                         '...on Order': ActiveOrderSelector,
