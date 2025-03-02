@@ -21,12 +21,12 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     const homePageRedirect = prepareSSRRedirect('/')(context);
 
     try {
-        const { activeCustomer } = await SSRQuery(context)({
+        const { activeCustomer } = await (await SSRQuery(context))({
             activeCustomer: ActiveCustomerSelector,
         });
         if (!activeCustomer) throw new Error('No active customer');
 
-        const { availableCountries } = await SSRQuery(context)({
+        const { availableCountries } = await (await SSRQuery(context))({
             availableCountries: AvailableCountriesSelector,
         });
 

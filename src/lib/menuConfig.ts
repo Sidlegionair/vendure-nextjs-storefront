@@ -2,6 +2,7 @@ import { GetServerSidePropsContext } from 'next';
 import { CollectionTileProductVariantType } from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
 import { arrayToTree } from '@/src/util/arrayToTree';
+import { DEFAULT_CHANNEL } from '@/src/lib/consts';
 
 type NavigationItemType = {
     name: string;
@@ -95,6 +96,7 @@ const buildNavigation = (locale: string): {
         createNavItem('stores', locale, 'none', '1'),
     ];
 
+
     return { mainNavigation, subNavigation };
 };
 
@@ -102,7 +104,9 @@ export const getNavigationTree = async (
     params: { locale: string; channel: string },
     collections?: any[]
 ): Promise<{ navigation: RootNode<NavigationItemType>; subnavigation: RootNode<NavigationItemType> }> => {
-    const { locale = 'en', channel } = params;
+    const { locale = 'en' } = params;
+
+    const channel = DEFAULT_CHANNEL;
 
     // Use provided collections or fetch them dynamically
     const fetchedCollections = collections || (await getCollections({ locale, channel }));

@@ -32,6 +32,9 @@
         "individual": "Individual",
         "streetLine1": "Address",
         "streetLine2": "Apartment, suite, etc.",
+        "customFields": {
+            "vatNumber": "VAT Number"
+        },
         "city": "City",
         "countryCode": "Country",
         "province": "State / Province",
@@ -56,7 +59,10 @@
             "postalCode": "Postal Code",
             "NIP": "NIP",
             "password": "Password",
-            "confirmPassword": "Confirm Password"
+            "confirmPassword": "Confirm Password",
+            "customFields": {
+                "vatNumber": "VAT Number"
+            }
         },
         "errors": {
             "root": {
@@ -66,6 +72,10 @@
             "emailAddress": {
                 "required": "Email address is required",
                 "email": "Email address is invalid"
+            },
+            "vatNumber": {
+                "required": "VAT Number is required.",
+                "invalid": "Your VAT Number is invalid."
             },
             "firstName": {
                 "required": "First name is required"

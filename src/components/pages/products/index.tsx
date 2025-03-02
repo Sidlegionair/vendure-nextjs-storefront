@@ -1,6 +1,5 @@
-// ./src/components/pages/products/index.tsx
-
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { TH1, TP, ContentContainer, Stack, Price, Link, Divider, TH2 } from '@/src/components/atoms';
 import { FullWidthButton } from '@/src/components/molecules/Button';
 import { NotifyMeForm } from '@/src/components/molecules/NotifyMeForm';
@@ -24,7 +23,7 @@ import { OptionTabContent } from '@/src/components/organisms/OptionTabContent';
 import { ProductOptionTabs } from '@/src/components/molecules/ProductOptionTabs';
 import { ProductStory } from '@/src/components/organisms/ProductStory';
 import { Ratings } from '@/src/components/molecules/Ratings';
-import { ProductSpecsTable } from '@/src/components/molecules/ProductSpecsTable'; // Import the new component
+import { ProductSpecsTable } from '@/src/components/molecules/ProductSpecsTable';
 import { storefrontApiQuery } from '@/src/graphql/client';
 import { useChannels } from '@/src/state/channels';
 import { ProductSizingTable } from '@/src/components/molecules/ProductSizingTable';
@@ -34,6 +33,8 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
     const { t } = useTranslation('products');
     const { t: breadcrumb } = useTranslation('common');
     const ctx = useChannels();
+    const router = useRouter();
+
     const {
         product,
         variant,
@@ -46,18 +47,50 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
         handleSetItemQuantityInCart
     } = useProduct();
 
+    useEffect(() => {
+        if (!variant || !ctx?.channel) return;
+
+        const checkVendorChannel = async () => {
+            try {
+                const { selectVendorForVariation } = await storefrontApiQuery(ctx)({
+                    selectVendorForVariation: [
+                        { productId: variant.id },
+                        { slug: true, channel: true }
+                    ]
+                });
+
+                console.log('hi');
+                console.log('VENDOR:', selectVendorForVariation);
+                console.log('CUR CHANNEL:', ctx.channel);
+
+                // Check if the current URL does not contain the vendor's slug
+                if (selectVendorForVariation && !router.asPath.includes(selectVendorForVariation.slug)) {
+                    ctx.channel = selectVendorForVariation.slug;
+
+                    // Append variant query param if variant.id exists
+                    const variantQuery = variant.id ? `?variant=${variant.id}` : '';
+                    router.replace(
+                        `/${selectVendorForVariation.slug}/${ctx.locale}/snowboards/${product?.slug}${variantQuery}`
+                    );
+                }
+            } catch (error) {
+                console.error('Error checking vendor channel', error);
+            }
+        };
+
+        checkVendorChannel();
+    }, [variant, ctx.channel, product?.slug, router]);
+
     // **1. Add a Conditional Check for Both `props.product` and `product`**
     if (!props.product || !product) {
-        // You can customize this fallback UI as needed
         return (
             <Layout categories={props.collections ?? []} navigation={props.navigation ?? []} subnavigation={props.subnavigation ?? []}>
                 <ContentContainer>
                     <Wrapper column>
                         <Stack w100 column gap={20}>
-                            {/*<StyledBoughtHeading>{t('product-not-found')}</StyledBoughtHeading>*/}
-                            {/*<StyledBoughtContent>{t('the-product-you-are looking for does not exist or has been removed.')}</StyledBoughtContent>*/}
+                            {/* Fallback UI */}
                         </Stack>
-                    </Wrapper> {/* Added missing closing tag here */}
+                    </Wrapper>
                 </ContentContainer>
             </Layout>
         );
@@ -94,10 +127,10 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
             }
         };
         fetchData();
-    }, [product.id, ctx]); // Removed optional chaining
+    }, [product.id, ctx]);
 
     // **2. Use `specs` from Props**
-    const specs = props.specs; // Now using specs from props
+    const specs = props.specs;
 
     return (
         <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation}>
@@ -180,24 +213,16 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                     </StockDisplay>
                                 </StockInfo>
                                 {(() => {
-                                    // Attempt to get variant-level short description
-                                    console.log(variant);
-                                    // Safely convert to string
                                     const shortDescription = String(
                                         variant?.customFields?.shortdescription || product.description || ''
                                     );
-
                                     return shortDescription ? (
                                         <StyledDescription
-                                            dangerouslySetInnerHTML={{ __html: shortDescription }} // now always a string
+                                            dangerouslySetInnerHTML={{ __html: shortDescription }}
                                             color="main"
-                                            // size="1rem"
-                                            // lineHeight="1.5rem"
-                                            // style={{ marginTop: '1rem' }}
                                         />
                                     ) : null;
                                 })()}
-
                             </Stack>
 
                             <Stack w100 column>
@@ -245,9 +270,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                         v={quantity}
                                         onChange={v => handleSetItemQuantityInCart(v)}
                                     />
-                                    <StyledFullWidthButton
-                                        onClick={handleAddToCart}
-                                    >
+                                    <StyledFullWidthButton onClick={handleAddToCart}>
                                         <ShoppingBasket />
                                         {t('add-to-cart')}
                                         <ArrowRightIcon />
@@ -261,7 +284,6 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                         <ProductTabs
                             defaultOpenIndex={0}
                             data={[
-                                // Existing Description Tabs
                                 ...(variant?.customFields
                                     ? Array.from({ length: 3 }, (_, i) => i + 1)
                                         .filter(tabIndex => (variant?.customFields as Record<string, any>)[`descriptionTab${tabIndex}Visible`])
@@ -276,15 +298,10 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                             ),
                                         }))
                                     : []),
-                                // {
-                                //     title: 'Specifications',
-                                //     children: <ProductSpecsTable specs={specs} />,
-                                // },
                                 {
                                     title: 'Specifications',
                                     children: <ProductSizingTable product={product} fields={fields} />,
                                 },
-
                                 {
                                     title: 'Reviews',
                                     children: (
@@ -293,11 +310,9 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                         </Stack>
                                     ),
                                 },
-                                // Add Specifications Tab
                             ]}
                         />
                     </Stack>
-
                 </Wrapper>
                 <Stack w100 column gap={20}>
                     <StyledBoughtHeading>{t('clients-also-bought')}</StyledBoughtHeading>
@@ -306,12 +321,11 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                     </StyledBoughtContent>
                 </Stack>
             </ContentContainer>
-            <HomePageSliders useVariants={true}   sliders={props.clientsAlsoBought} seeAllText={'test'}></HomePageSliders>
-
-            {/*<ProductPageProductsSlider*/}
-            {/*    title={t('recently-viewed')}*/}
-            {/*    products={props.clientsAlsoBought?.collection?.productVariants?.items ?? []}*/}
-            {/*/>*/}
+            <HomePageSliders useVariants={true} sliders={props.clientsAlsoBought} seeAllText={'test'}></HomePageSliders>
+            {/*<ProductPageProductsSlider
+                title={t('recently-viewed')}
+                products={props.clientsAlsoBought?.collection?.productVariants?.items ?? []}
+            />*/}
             {/*<ProductPageProductsSlider title={t('recently-viewed')} products={recentlyProducts ?? []} />*/}
             <ProductStory slug={props.product.slug} />
         </Layout>
@@ -324,7 +338,7 @@ const fields = [
     { key: 'riderLengthMin', label: 'Rider Length Min (cm)' },
     { key: 'riderLengthMax', label: 'Rider Length Max (cm)' },
     { key: 'riderWeightMin', label: 'Rider Weight Min (kg)' },
-    { key: 'riderWeightMax', label: 'Rider Weight Max (kg)' },
+    { key: 'riderWeightMax', label: 'Rider Weight Max (cm)' },
     { key: 'bootLengthMax', label: 'Boot Length Max (cm)' },
     { key: 'flex', label: 'Flex' },
     { key: 'noseWidth', label: 'Nose Width (cm)' },
@@ -340,18 +354,16 @@ const fields = [
     { key: 'bindingSizeVariant', label: 'Binding Size' },
 ];
 
-
 // Styled Components (unchanged)
 const StyledBoughtHeading = styled(TH2)`
     margin-top: 60px;
     font-size: 38px;
     line-height: 38px;
     font-weight: 600;
-    
+
     @media(max-width: ${p => p.theme.breakpoints.md}) {
         font-size: 30px;
         line-height: 30px;
-        
     }
 `;
 
@@ -398,7 +410,7 @@ const StyledBrand = styled(TH1)`
     line-height: 24px;
 
     @media (min-width: 768px) {
-        font-size: 35px; // fallback for larger screens
+        font-size: 35px;
         line-height: normal;
     }
 `;
@@ -409,7 +421,7 @@ const StyledProductTitle = styled(TH1)`
     line-height: 24px;
 
     @media (min-width: 768px) {
-        font-size: 35px; // fallback for larger screens
+        font-size: 35px;
         line-height: normal;
     }
 `;
@@ -455,7 +467,6 @@ const ResponsiveRightColumn = styled(Stack)`
 const ProductInfoStack = styled(Stack)`
     border-bottom: 2px solid ${({ theme }) => theme.gray(100)};
     width: 100%;
-    //padding-bottom: 1rem;
 `;
 
 const MakeItQuick = styled(TP)`
@@ -472,7 +483,6 @@ const StockInfo = styled(Stack)<{ outOfStock?: boolean; comingSoon?: boolean }>`
 const StyledDividerTop = styled(Divider)`
     background-color: ${p => p.theme.border.thin};
     height: 1px;
-    //margin: 1.5rem 0;
     width: 100%;
 `;
 
@@ -515,10 +525,9 @@ const StyledFullWidthButton = styled(FullWidthButton)`
 `;
 
 const StockDisplay = styled(Stack)`
-    font-size: 1.125rem; // 18px
+    font-size: 1.125rem;
     font-weight: 400;
     gap: 3px;
-    //margin-top: 20px;
 
     b {
         color: ${({ theme }) => theme.text.accentGreen};

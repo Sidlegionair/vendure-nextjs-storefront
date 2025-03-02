@@ -34,7 +34,9 @@ const useCartContainer = createContainer(() => {
         try {
             const { addItemToOrder } = await storefrontApiMutation(ctx)({
                 addItemToOrder: [
-                    { productVariantId: id, quantity: q },
+                    { productVariantId: id, quantity: q, customFields: {
+                            requestedSellerChannel: ctx.channel
+                        } },
                     {
                         __typename: true,
                         '...on Order': ActiveOrderSelector,
@@ -54,6 +56,11 @@ const useCartContainer = createContainer(() => {
                             errorCode: true,
                             message: true,
                         },
+                        '...on OrderInterceptorError': {
+                            message: true,
+                            errorCode: true
+                        },
+
                     },
                 ],
             });
@@ -79,6 +86,10 @@ const useCartContainer = createContainer(() => {
                         '...on OrderModificationError': {
                             errorCode: true,
                             message: true,
+                        },
+                        '...on OrderInterceptorError': {
+                            message: true,
+                            errorCode: true
                         },
                     },
                 ],
@@ -122,6 +133,11 @@ const useCartContainer = createContainer(() => {
                             errorCode: true,
                             message: true,
                         },
+                        '...on OrderInterceptorError': {
+                            message: true,
+                            errorCode: true
+                        },
+
                     },
                 ],
             });

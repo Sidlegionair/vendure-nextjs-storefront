@@ -16,7 +16,7 @@ const slugsOfBestOf = ['home-slider-snowboards'];
 export const getStaticProps = async (ctx: ContextModel) => {
     try {
         const r = await makeStaticProps(['common', 'homepage'])(ctx);
-        const api = SSGQuery(r.context);
+        const api = await SSGQuery(r.context);
 
         const mainProductCollectionSlug = process.env.MAIN_PRODUCTS_COLLECTION_SLUG || 'default-carousel';
         const mainProductsQuery = {

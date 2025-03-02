@@ -28,17 +28,20 @@ export const AllTypesProps: Record<string,any> = {
 		},
 		search:{
 			input:"SearchInput"
+		},
+		selectVendorForVariation:{
+
 		}
 	},
 	Mutation:{
 		addItemToOrder:{
-
+			customFields:"OrderLineCustomFieldsInput"
 		},
 		removeOrderLine:{
 
 		},
 		adjustOrderLine:{
-
+			customFields:"OrderLineCustomFieldsInput"
 		},
 		applyCouponCode:{
 
@@ -108,6 +111,15 @@ export const AllTypesProps: Record<string,any> = {
 		},
 		resetPassword:{
 
+		},
+		submitProductReview:{
+			input:"SubmitProductReviewInput"
+		},
+		voteOnReview:{
+
+		},
+		registerNewSeller:{
+			input:"RegisterSellerInput"
 		}
 	},
 	AssetType: "enum" as const,
@@ -185,13 +197,13 @@ export const AllTypesProps: Record<string,any> = {
 		price:"SortOrder"
 	},
 	CreateCustomerInput:{
-		customFields:"JSON"
+		customFields:"CreateCustomerCustomFieldsInput"
 	},
 	CreateAddressInput:{
-		customFields:"JSON"
+		customFields:"CreateAddressCustomFieldsInput"
 	},
 	UpdateAddressInput:{
-		customFields:"JSON"
+		customFields:"UpdateAddressCustomFieldsInput"
 	},
 	CurrencyCode: "enum" as const,
 	CustomerGroup:{
@@ -235,16 +247,19 @@ export const AllTypesProps: Record<string,any> = {
 	Product:{
 		variantList:{
 			options:"ProductVariantListOptions"
+		},
+		reviews:{
+			options:"ProductReviewListOptions"
 		}
 	},
 	AuthenticationInput:{
 		native:"NativeAuthInput"
 	},
 	RegisterCustomerInput:{
-
+		customFields:"RegisterCustomerCustomFieldsInput"
 	},
 	UpdateCustomerInput:{
-		customFields:"JSON"
+		customFields:"UpdateCustomerCustomFieldsInput"
 	},
 	UpdateOrderInput:{
 		customFields:"JSON"
@@ -277,6 +292,20 @@ export const AllTypesProps: Record<string,any> = {
 		filter:"ProductVariantFilterParameter",
 		filterOperator:"LogicalOperator"
 	},
+	ProductReviewListOptions:{
+		sort:"ProductReviewSortParameter",
+		filter:"ProductReviewFilterParameter",
+		filterOperator:"LogicalOperator"
+	},
+	SubmitProductReviewInput:{
+
+	},
+	CreateSellerInput:{
+		customFields:"CreateSellerCustomFieldsInput"
+	},
+	RegisterSellerInput:{
+		seller:"CreateSellerInput"
+	},
 	ProductVariantFilterParameter:{
 		id:"IDOperators",
 		productId:"IDOperators",
@@ -288,7 +317,128 @@ export const AllTypesProps: Record<string,any> = {
 		price:"NumberOperators",
 		currencyCode:"StringOperators",
 		priceWithTax:"NumberOperators",
-		stockLevel:"StringOperators"
+		stockLevel:"StringOperators",
+		_and:"ProductVariantFilterParameter",
+		_or:"ProductVariantFilterParameter",
+		lengthCm:"NumberOperators",
+		riderLengthMin:"NumberOperators",
+		riderLengthMax:"NumberOperators",
+		riderWeightMin:"NumberOperators",
+		flex:"NumberOperators",
+		riderWeightMax:"NumberOperators",
+		noseWidth:"NumberOperators",
+		waistWidth:"NumberOperators",
+		tailWidth:"NumberOperators",
+		taper:"NumberOperators",
+		boardWidth:"StringOperators",
+		bootLengthMax:"NumberOperators",
+		effectiveEdge:"NumberOperators",
+		averageSidecutRadius:"StringOperators",
+		setback:"NumberOperators",
+		stanceMin:"NumberOperators",
+		stanceMax:"NumberOperators",
+		weightKg:"NumberOperators",
+		bindingSizeVariant:"StringOperators",
+		descriptionTab1Label:"StringOperators",
+		descriptionTab1Visible:"BooleanOperators",
+		descriptionTab1Content:"StringOperators",
+		descriptionTab2Label:"StringOperators",
+		descriptionTab2Visible:"BooleanOperators",
+		descriptionTab2Content:"StringOperators",
+		descriptionTab3Label:"StringOperators",
+		descriptionTab3Visible:"BooleanOperators",
+		descriptionTab3Content:"StringOperators",
+		shortdescription:"StringOperators",
+		optionTab1Label:"StringOperators",
+		optionTab1Visible:"BooleanOperators",
+		optionTab1Bar1Name:"StringOperators",
+		optionTab1Bar1Visible:"BooleanOperators",
+		optionTab1Bar1Min:"NumberOperators",
+		optionTab1Bar1Max:"NumberOperators",
+		optionTab1Bar1MinLabel:"StringOperators",
+		optionTab1Bar1MaxLabel:"StringOperators",
+		optionTab1Bar1Rating:"NumberOperators",
+		optionTab1Bar2Name:"StringOperators",
+		optionTab1Bar2Visible:"BooleanOperators",
+		optionTab1Bar2Min:"NumberOperators",
+		optionTab1Bar2Max:"NumberOperators",
+		optionTab1Bar2MinLabel:"StringOperators",
+		optionTab1Bar2MaxLabel:"StringOperators",
+		optionTab1Bar2Rating:"NumberOperators",
+		optionTab1Bar3Name:"StringOperators",
+		optionTab1Bar3Visible:"BooleanOperators",
+		optionTab1Bar3Min:"NumberOperators",
+		optionTab1Bar3Max:"NumberOperators",
+		optionTab1Bar3MinLabel:"StringOperators",
+		optionTab1Bar3MaxLabel:"StringOperators",
+		optionTab1Bar3Rating:"NumberOperators",
+		optionTab1Bar4Name:"StringOperators",
+		optionTab1Bar4Visible:"BooleanOperators",
+		optionTab1Bar4Min:"NumberOperators",
+		optionTab1Bar4Max:"NumberOperators",
+		optionTab1Bar4MinLabel:"StringOperators",
+		optionTab1Bar4MaxLabel:"StringOperators",
+		optionTab1Bar4Rating:"NumberOperators",
+		optionTab2Label:"StringOperators",
+		optionTab2Visible:"BooleanOperators",
+		optionTab2Bar1Name:"StringOperators",
+		optionTab2Bar1Visible:"BooleanOperators",
+		optionTab2Bar1Min:"NumberOperators",
+		optionTab2Bar1Max:"NumberOperators",
+		optionTab2Bar1MinLabel:"StringOperators",
+		optionTab2Bar1MaxLabel:"StringOperators",
+		optionTab2Bar1Rating:"NumberOperators",
+		optionTab2Bar2Name:"StringOperators",
+		optionTab2Bar2Visible:"BooleanOperators",
+		optionTab2Bar2Min:"NumberOperators",
+		optionTab2Bar2Max:"NumberOperators",
+		optionTab2Bar2MinLabel:"StringOperators",
+		optionTab2Bar2MaxLabel:"StringOperators",
+		optionTab2Bar2Rating:"NumberOperators",
+		optionTab2Bar3Name:"StringOperators",
+		optionTab2Bar3Visible:"BooleanOperators",
+		optionTab2Bar3Min:"NumberOperators",
+		optionTab2Bar3Max:"NumberOperators",
+		optionTab2Bar3MinLabel:"StringOperators",
+		optionTab2Bar3MaxLabel:"StringOperators",
+		optionTab2Bar3Rating:"NumberOperators",
+		optionTab2Bar4Name:"StringOperators",
+		optionTab2Bar4Visible:"BooleanOperators",
+		optionTab2Bar4Min:"NumberOperators",
+		optionTab2Bar4Max:"NumberOperators",
+		optionTab2Bar4MinLabel:"StringOperators",
+		optionTab2Bar4MaxLabel:"StringOperators",
+		optionTab2Bar4Rating:"NumberOperators",
+		optionTab3Label:"StringOperators",
+		optionTab3Visible:"BooleanOperators",
+		optionTab3Bar1Name:"StringOperators",
+		optionTab3Bar1Visible:"BooleanOperators",
+		optionTab3Bar1Min:"NumberOperators",
+		optionTab3Bar1Max:"NumberOperators",
+		optionTab3Bar1MinLabel:"StringOperators",
+		optionTab3Bar1MaxLabel:"StringOperators",
+		optionTab3Bar1Rating:"NumberOperators",
+		optionTab3Bar2Name:"StringOperators",
+		optionTab3Bar2Visible:"BooleanOperators",
+		optionTab3Bar2Min:"NumberOperators",
+		optionTab3Bar2Max:"NumberOperators",
+		optionTab3Bar2MinLabel:"StringOperators",
+		optionTab3Bar2MaxLabel:"StringOperators",
+		optionTab3Bar2Rating:"NumberOperators",
+		optionTab3Bar3Name:"StringOperators",
+		optionTab3Bar3Visible:"BooleanOperators",
+		optionTab3Bar3Min:"NumberOperators",
+		optionTab3Bar3Max:"NumberOperators",
+		optionTab3Bar3MinLabel:"StringOperators",
+		optionTab3Bar3MaxLabel:"StringOperators",
+		optionTab3Bar3Rating:"NumberOperators",
+		optionTab3Bar4Name:"StringOperators",
+		optionTab3Bar4Visible:"BooleanOperators",
+		optionTab3Bar4Min:"NumberOperators",
+		optionTab3Bar4Max:"NumberOperators",
+		optionTab3Bar4MinLabel:"StringOperators",
+		optionTab3Bar4MaxLabel:"StringOperators",
+		optionTab3Bar4Rating:"NumberOperators"
 	},
 	ProductVariantSortParameter:{
 		id:"SortOrder",
@@ -299,7 +449,128 @@ export const AllTypesProps: Record<string,any> = {
 		name:"SortOrder",
 		price:"SortOrder",
 		priceWithTax:"SortOrder",
-		stockLevel:"SortOrder"
+		stockLevel:"SortOrder",
+		lengthCm:"SortOrder",
+		riderLengthMin:"SortOrder",
+		riderLengthMax:"SortOrder",
+		riderWeightMin:"SortOrder",
+		flex:"SortOrder",
+		riderWeightMax:"SortOrder",
+		noseWidth:"SortOrder",
+		waistWidth:"SortOrder",
+		tailWidth:"SortOrder",
+		taper:"SortOrder",
+		boardWidth:"SortOrder",
+		bootLengthMax:"SortOrder",
+		effectiveEdge:"SortOrder",
+		averageSidecutRadius:"SortOrder",
+		setback:"SortOrder",
+		stanceMin:"SortOrder",
+		stanceMax:"SortOrder",
+		weightKg:"SortOrder",
+		bindingSizeVariant:"SortOrder",
+		descriptionTab1Label:"SortOrder",
+		descriptionTab1Visible:"SortOrder",
+		descriptionTab1Content:"SortOrder",
+		descriptionTab2Label:"SortOrder",
+		descriptionTab2Visible:"SortOrder",
+		descriptionTab2Content:"SortOrder",
+		descriptionTab3Label:"SortOrder",
+		descriptionTab3Visible:"SortOrder",
+		descriptionTab3Content:"SortOrder",
+		shortdescription:"SortOrder",
+		frontPhoto:"SortOrder",
+		backPhoto:"SortOrder",
+		optionTab1Label:"SortOrder",
+		optionTab1Visible:"SortOrder",
+		optionTab1Bar1Name:"SortOrder",
+		optionTab1Bar1Visible:"SortOrder",
+		optionTab1Bar1Min:"SortOrder",
+		optionTab1Bar1Max:"SortOrder",
+		optionTab1Bar1MinLabel:"SortOrder",
+		optionTab1Bar1MaxLabel:"SortOrder",
+		optionTab1Bar1Rating:"SortOrder",
+		optionTab1Bar2Name:"SortOrder",
+		optionTab1Bar2Visible:"SortOrder",
+		optionTab1Bar2Min:"SortOrder",
+		optionTab1Bar2Max:"SortOrder",
+		optionTab1Bar2MinLabel:"SortOrder",
+		optionTab1Bar2MaxLabel:"SortOrder",
+		optionTab1Bar2Rating:"SortOrder",
+		optionTab1Bar3Name:"SortOrder",
+		optionTab1Bar3Visible:"SortOrder",
+		optionTab1Bar3Min:"SortOrder",
+		optionTab1Bar3Max:"SortOrder",
+		optionTab1Bar3MinLabel:"SortOrder",
+		optionTab1Bar3MaxLabel:"SortOrder",
+		optionTab1Bar3Rating:"SortOrder",
+		optionTab1Bar4Name:"SortOrder",
+		optionTab1Bar4Visible:"SortOrder",
+		optionTab1Bar4Min:"SortOrder",
+		optionTab1Bar4Max:"SortOrder",
+		optionTab1Bar4MinLabel:"SortOrder",
+		optionTab1Bar4MaxLabel:"SortOrder",
+		optionTab1Bar4Rating:"SortOrder",
+		optionTab2Label:"SortOrder",
+		optionTab2Visible:"SortOrder",
+		optionTab2Bar1Name:"SortOrder",
+		optionTab2Bar1Visible:"SortOrder",
+		optionTab2Bar1Min:"SortOrder",
+		optionTab2Bar1Max:"SortOrder",
+		optionTab2Bar1MinLabel:"SortOrder",
+		optionTab2Bar1MaxLabel:"SortOrder",
+		optionTab2Bar1Rating:"SortOrder",
+		optionTab2Bar2Name:"SortOrder",
+		optionTab2Bar2Visible:"SortOrder",
+		optionTab2Bar2Min:"SortOrder",
+		optionTab2Bar2Max:"SortOrder",
+		optionTab2Bar2MinLabel:"SortOrder",
+		optionTab2Bar2MaxLabel:"SortOrder",
+		optionTab2Bar2Rating:"SortOrder",
+		optionTab2Bar3Name:"SortOrder",
+		optionTab2Bar3Visible:"SortOrder",
+		optionTab2Bar3Min:"SortOrder",
+		optionTab2Bar3Max:"SortOrder",
+		optionTab2Bar3MinLabel:"SortOrder",
+		optionTab2Bar3MaxLabel:"SortOrder",
+		optionTab2Bar3Rating:"SortOrder",
+		optionTab2Bar4Name:"SortOrder",
+		optionTab2Bar4Visible:"SortOrder",
+		optionTab2Bar4Min:"SortOrder",
+		optionTab2Bar4Max:"SortOrder",
+		optionTab2Bar4MinLabel:"SortOrder",
+		optionTab2Bar4MaxLabel:"SortOrder",
+		optionTab2Bar4Rating:"SortOrder",
+		optionTab3Label:"SortOrder",
+		optionTab3Visible:"SortOrder",
+		optionTab3Bar1Name:"SortOrder",
+		optionTab3Bar1Visible:"SortOrder",
+		optionTab3Bar1Min:"SortOrder",
+		optionTab3Bar1Max:"SortOrder",
+		optionTab3Bar1MinLabel:"SortOrder",
+		optionTab3Bar1MaxLabel:"SortOrder",
+		optionTab3Bar1Rating:"SortOrder",
+		optionTab3Bar2Name:"SortOrder",
+		optionTab3Bar2Visible:"SortOrder",
+		optionTab3Bar2Min:"SortOrder",
+		optionTab3Bar2Max:"SortOrder",
+		optionTab3Bar2MinLabel:"SortOrder",
+		optionTab3Bar2MaxLabel:"SortOrder",
+		optionTab3Bar2Rating:"SortOrder",
+		optionTab3Bar3Name:"SortOrder",
+		optionTab3Bar3Visible:"SortOrder",
+		optionTab3Bar3Min:"SortOrder",
+		optionTab3Bar3Max:"SortOrder",
+		optionTab3Bar3MinLabel:"SortOrder",
+		optionTab3Bar3MaxLabel:"SortOrder",
+		optionTab3Bar3Rating:"SortOrder",
+		optionTab3Bar4Name:"SortOrder",
+		optionTab3Bar4Visible:"SortOrder",
+		optionTab3Bar4Min:"SortOrder",
+		optionTab3Bar4Max:"SortOrder",
+		optionTab3Bar4MinLabel:"SortOrder",
+		optionTab3Bar4MaxLabel:"SortOrder",
+		optionTab3Bar4Rating:"SortOrder"
 	},
 	CustomerFilterParameter:{
 		id:"IDOperators",
@@ -309,7 +580,9 @@ export const AllTypesProps: Record<string,any> = {
 		firstName:"StringOperators",
 		lastName:"StringOperators",
 		phoneNumber:"StringOperators",
-		emailAddress:"StringOperators"
+		emailAddress:"StringOperators",
+		_and:"CustomerFilterParameter",
+		_or:"CustomerFilterParameter"
 	},
 	CustomerSortParameter:{
 		id:"SortOrder",
@@ -319,7 +592,8 @@ export const AllTypesProps: Record<string,any> = {
 		firstName:"SortOrder",
 		lastName:"SortOrder",
 		phoneNumber:"SortOrder",
-		emailAddress:"SortOrder"
+		emailAddress:"SortOrder",
+		preferredSeller:"SortOrder"
 	},
 	OrderFilterParameter:{
 		id:"IDOperators",
@@ -337,7 +611,9 @@ export const AllTypesProps: Record<string,any> = {
 		shipping:"NumberOperators",
 		shippingWithTax:"NumberOperators",
 		total:"NumberOperators",
-		totalWithTax:"NumberOperators"
+		totalWithTax:"NumberOperators",
+		_and:"OrderFilterParameter",
+		_or:"OrderFilterParameter"
 	},
 	OrderSortParameter:{
 		id:"SortOrder",
@@ -361,7 +637,9 @@ export const AllTypesProps: Record<string,any> = {
 		languageCode:"StringOperators",
 		facetId:"IDOperators",
 		name:"StringOperators",
-		code:"StringOperators"
+		code:"StringOperators",
+		_and:"FacetValueFilterParameter",
+		_or:"FacetValueFilterParameter"
 	},
 	FacetValueSortParameter:{
 		id:"SortOrder",
@@ -375,12 +653,46 @@ export const AllTypesProps: Record<string,any> = {
 		id:"IDOperators",
 		createdAt:"DateOperators",
 		updatedAt:"DateOperators",
-		type:"StringOperators"
+		type:"StringOperators",
+		_and:"HistoryEntryFilterParameter",
+		_or:"HistoryEntryFilterParameter"
 	},
 	HistoryEntrySortParameter:{
 		id:"SortOrder",
 		createdAt:"SortOrder",
 		updatedAt:"SortOrder"
+	},
+	ProductReviewFilterParameter:{
+		id:"IDOperators",
+		createdAt:"DateOperators",
+		updatedAt:"DateOperators",
+		summary:"StringOperators",
+		body:"StringOperators",
+		rating:"NumberOperators",
+		authorName:"StringOperators",
+		authorLocation:"StringOperators",
+		upvotes:"NumberOperators",
+		downvotes:"NumberOperators",
+		state:"StringOperators",
+		response:"StringOperators",
+		responseCreatedAt:"DateOperators",
+		_and:"ProductReviewFilterParameter",
+		_or:"ProductReviewFilterParameter"
+	},
+	ProductReviewSortParameter:{
+		id:"SortOrder",
+		createdAt:"SortOrder",
+		updatedAt:"SortOrder",
+		summary:"SortOrder",
+		body:"SortOrder",
+		rating:"SortOrder",
+		authorName:"SortOrder",
+		authorLocation:"SortOrder",
+		upvotes:"SortOrder",
+		downvotes:"SortOrder",
+		state:"SortOrder",
+		response:"SortOrder",
+		responseCreatedAt:"SortOrder"
 	},
 	CollectionFilterParameter:{
 		id:"IDOperators",
@@ -391,7 +703,9 @@ export const AllTypesProps: Record<string,any> = {
 		slug:"StringOperators",
 		position:"NumberOperators",
 		description:"StringOperators",
-		parentId:"IDOperators"
+		parentId:"IDOperators",
+		_and:"CollectionFilterParameter",
+		_or:"CollectionFilterParameter"
 	},
 	CollectionSortParameter:{
 		id:"SortOrder",
@@ -409,7 +723,9 @@ export const AllTypesProps: Record<string,any> = {
 		updatedAt:"DateOperators",
 		languageCode:"StringOperators",
 		name:"StringOperators",
-		code:"StringOperators"
+		code:"StringOperators",
+		_and:"FacetFilterParameter",
+		_or:"FacetFilterParameter"
 	},
 	FacetSortParameter:{
 		id:"SortOrder",
@@ -425,7 +741,34 @@ export const AllTypesProps: Record<string,any> = {
 		languageCode:"StringOperators",
 		name:"StringOperators",
 		slug:"StringOperators",
-		description:"StringOperators"
+		description:"StringOperators",
+		enabled:"BooleanOperators",
+		_and:"ProductFilterParameter",
+		_or:"ProductFilterParameter",
+		reviewRating:"NumberOperators",
+		reviewCount:"NumberOperators",
+		warranty:"StringOperators",
+		eanCode:"StringOperators",
+		quote:"StringOperators",
+		quoteOwner:"StringOperators",
+		boardCategory:"StringOperators",
+		terrain:"StringOperators",
+		camberProfile:"StringOperators",
+		profile:"StringOperators",
+		baseProfile:"StringOperators",
+		rider:"StringOperators",
+		taperProfile:"StringOperators",
+		bindingSize:"StringOperators",
+		bindingMount:"StringOperators",
+		edges:"StringOperators",
+		sidewall:"StringOperators",
+		core:"StringOperators",
+		layup1:"StringOperators",
+		layup2:"StringOperators",
+		layup3:"StringOperators",
+		boardbase:"StringOperators",
+		featured:"BooleanOperators",
+		brand:"StringOperators"
 	},
 	ProductSortParameter:{
 		id:"SortOrder",
@@ -433,9 +776,55 @@ export const AllTypesProps: Record<string,any> = {
 		updatedAt:"SortOrder",
 		name:"SortOrder",
 		slug:"SortOrder",
-		description:"SortOrder"
+		description:"SortOrder",
+		reviewRating:"SortOrder",
+		reviewCount:"SortOrder",
+		featuredReview:"SortOrder",
+		warranty:"SortOrder",
+		eanCode:"SortOrder",
+		quote:"SortOrder",
+		quoteOwner:"SortOrder",
+		boardCategory:"SortOrder",
+		terrain:"SortOrder",
+		camberProfile:"SortOrder",
+		profile:"SortOrder",
+		baseProfile:"SortOrder",
+		rider:"SortOrder",
+		taperProfile:"SortOrder",
+		bindingSize:"SortOrder",
+		bindingMount:"SortOrder",
+		edges:"SortOrder",
+		sidewall:"SortOrder",
+		core:"SortOrder",
+		layup1:"SortOrder",
+		layup2:"SortOrder",
+		layup3:"SortOrder",
+		boardbase:"SortOrder",
+		featured:"SortOrder",
+		brand:"SortOrder"
+	},
+	CreateAddressCustomFieldsInput:{
+
+	},
+	UpdateAddressCustomFieldsInput:{
+
+	},
+	CreateCustomerCustomFieldsInput:{
+
+	},
+	UpdateCustomerCustomFieldsInput:{
+
+	},
+	CreateSellerCustomFieldsInput:{
+
+	},
+	OrderLineCustomFieldsInput:{
+
 	},
 	NativeAuthInput:{
+
+	},
+	RegisterCustomerCustomFieldsInput:{
 
 	}
 }
@@ -458,7 +847,8 @@ export const ReturnTypes: Record<string,any> = {
 		orderByCode:"Order",
 		product:"Product",
 		products:"ProductList",
-		search:"SearchResponse"
+		search:"SearchResponse",
+		selectVendorForVariation:"VendorSelectionResult"
 	},
 	Mutation:{
 		addItemToOrder:"UpdateOrderItemsResult",
@@ -470,6 +860,8 @@ export const ReturnTypes: Record<string,any> = {
 		transitionOrderToState:"TransitionOrderToStateResult",
 		setOrderShippingAddress:"ActiveOrderResult",
 		setOrderBillingAddress:"ActiveOrderResult",
+		unsetOrderShippingAddress:"ActiveOrderResult",
+		unsetOrderBillingAddress:"ActiveOrderResult",
 		setOrderCustomFields:"ActiveOrderResult",
 		setOrderShippingMethod:"SetOrderShippingMethodResult",
 		addPaymentToOrder:"AddPaymentToOrderResult",
@@ -488,7 +880,10 @@ export const ReturnTypes: Record<string,any> = {
 		requestUpdateCustomerEmailAddress:"RequestUpdateCustomerEmailAddressResult",
 		updateCustomerEmailAddress:"UpdateCustomerEmailAddressResult",
 		requestPasswordReset:"RequestPasswordResetResult",
-		resetPassword:"ResetPasswordResult"
+		resetPassword:"ResetPasswordResult",
+		submitProductReview:"ProductReview",
+		voteOnReview:"ProductReview",
+		registerNewSeller:"Channel"
 	},
 	Address:{
 		id:"ID",
@@ -505,7 +900,7 @@ export const ReturnTypes: Record<string,any> = {
 		phoneNumber:"String",
 		defaultShippingAddress:"Boolean",
 		defaultBillingAddress:"Boolean",
-		customFields:"JSON"
+		customFields:"AddressCustomFields"
 	},
 	Asset:{
 		id:"ID",
@@ -578,7 +973,7 @@ export const ReturnTypes: Record<string,any> = {
 		children:"Collection",
 		filters:"ConfigurableOperation",
 		translations:"CollectionTranslation",
-		Variants:"ProductVariantList",
+		productVariants:"ProductVariantList",
 		customFields:"JSON"
 	},
 	CollectionBreadcrumb:{
@@ -667,6 +1062,11 @@ export const ReturnTypes: Record<string,any> = {
 		errorCode:"ErrorCode",
 		message:"String"
 	},
+	OrderInterceptorError:{
+		errorCode:"ErrorCode",
+		message:"String",
+		interceptorError:"String"
+	},
 	JSON: `scalar.JSON` as const,
 	DateTime: `scalar.DateTime` as const,
 	Upload: `scalar.Upload` as const,
@@ -688,6 +1088,7 @@ export const ReturnTypes: Record<string,any> = {
 		"...on ShippingMethodList": "ShippingMethodList",
 		"...on TagList": "TagList",
 		"...on TaxRateList": "TaxRateList",
+		"...on ProductReviewList": "ProductReviewList",
 		items:"Node",
 		totalItems:"Int"
 	},
@@ -725,6 +1126,7 @@ export const ReturnTypes: Record<string,any> = {
 		"...on User": "User",
 		"...on AuthenticationMethod": "AuthenticationMethod",
 		"...on Zone": "Zone",
+		"...on ProductReview": "ProductReview",
 		id:"ID"
 	},
 	ErrorResult:{
@@ -742,6 +1144,7 @@ export const ReturnTypes: Record<string,any> = {
 		"...on OrderModificationError": "OrderModificationError",
 		"...on IneligibleShippingMethodError": "IneligibleShippingMethodError",
 		"...on NoActiveOrderError": "NoActiveOrderError",
+		"...on OrderInterceptorError": "OrderInterceptorError",
 		"...on OrderPaymentStateError": "OrderPaymentStateError",
 		"...on IneligiblePaymentMethodError": "IneligiblePaymentMethodError",
 		"...on PaymentFailedError": "PaymentFailedError",
@@ -825,11 +1228,13 @@ export const ReturnTypes: Record<string,any> = {
 		"...on OrderModificationError":"OrderModificationError",
 		"...on OrderLimitError":"OrderLimitError",
 		"...on NegativeQuantityError":"NegativeQuantityError",
-		"...on InsufficientStockError":"InsufficientStockError"
+		"...on InsufficientStockError":"InsufficientStockError",
+		"...on OrderInterceptorError":"OrderInterceptorError"
 	},
 	RemoveOrderItemsResult:{
 		"...on Order":"Order",
-		"...on OrderModificationError":"OrderModificationError"
+		"...on OrderModificationError":"OrderModificationError",
+		"...on OrderInterceptorError":"OrderInterceptorError"
 	},
 	SetOrderShippingMethodResult:{
 		"...on Order":"Order",
@@ -853,6 +1258,7 @@ export const ReturnTypes: Record<string,any> = {
 		"...on RelationCustomFieldConfig": "RelationCustomFieldConfig",
 		"...on TextCustomFieldConfig": "TextCustomFieldConfig",
 		"...on LocaleTextCustomFieldConfig": "LocaleTextCustomFieldConfig",
+		"...on StructCustomFieldConfig": "StructCustomFieldConfig",
 		name:"String",
 		type:"String",
 		list:"Boolean",
@@ -861,6 +1267,7 @@ export const ReturnTypes: Record<string,any> = {
 		readonly:"Boolean",
 		internal:"Boolean",
 		nullable:"Boolean",
+		requiresPermission:"Permission",
 		ui:"JSON"
 	},
 	StringCustomFieldConfig:{
@@ -873,6 +1280,7 @@ export const ReturnTypes: Record<string,any> = {
 		readonly:"Boolean",
 		internal:"Boolean",
 		nullable:"Boolean",
+		requiresPermission:"Permission",
 		pattern:"String",
 		options:"StringFieldOption",
 		ui:"JSON"
@@ -891,6 +1299,7 @@ export const ReturnTypes: Record<string,any> = {
 		readonly:"Boolean",
 		internal:"Boolean",
 		nullable:"Boolean",
+		requiresPermission:"Permission",
 		pattern:"String",
 		ui:"JSON"
 	},
@@ -903,6 +1312,7 @@ export const ReturnTypes: Record<string,any> = {
 		readonly:"Boolean",
 		internal:"Boolean",
 		nullable:"Boolean",
+		requiresPermission:"Permission",
 		min:"Int",
 		max:"Int",
 		step:"Int",
@@ -917,6 +1327,7 @@ export const ReturnTypes: Record<string,any> = {
 		readonly:"Boolean",
 		internal:"Boolean",
 		nullable:"Boolean",
+		requiresPermission:"Permission",
 		min:"Float",
 		max:"Float",
 		step:"Float",
@@ -931,6 +1342,7 @@ export const ReturnTypes: Record<string,any> = {
 		readonly:"Boolean",
 		internal:"Boolean",
 		nullable:"Boolean",
+		requiresPermission:"Permission",
 		ui:"JSON"
 	},
 	DateTimeCustomFieldConfig:{
@@ -942,6 +1354,7 @@ export const ReturnTypes: Record<string,any> = {
 		readonly:"Boolean",
 		internal:"Boolean",
 		nullable:"Boolean",
+		requiresPermission:"Permission",
 		min:"String",
 		max:"String",
 		step:"Int",
@@ -956,6 +1369,7 @@ export const ReturnTypes: Record<string,any> = {
 		readonly:"Boolean",
 		internal:"Boolean",
 		nullable:"Boolean",
+		requiresPermission:"Permission",
 		entity:"String",
 		scalarFields:"String",
 		ui:"JSON"
@@ -969,6 +1383,7 @@ export const ReturnTypes: Record<string,any> = {
 		readonly:"Boolean",
 		internal:"Boolean",
 		nullable:"Boolean",
+		requiresPermission:"Permission",
 		ui:"JSON"
 	},
 	LocaleTextCustomFieldConfig:{
@@ -980,6 +1395,102 @@ export const ReturnTypes: Record<string,any> = {
 		readonly:"Boolean",
 		internal:"Boolean",
 		nullable:"Boolean",
+		requiresPermission:"Permission",
+		ui:"JSON"
+	},
+	StructField:{
+		"...on StringStructFieldConfig": "StringStructFieldConfig",
+		"...on IntStructFieldConfig": "IntStructFieldConfig",
+		"...on FloatStructFieldConfig": "FloatStructFieldConfig",
+		"...on BooleanStructFieldConfig": "BooleanStructFieldConfig",
+		"...on DateTimeStructFieldConfig": "DateTimeStructFieldConfig",
+		"...on TextStructFieldConfig": "TextStructFieldConfig",
+		name:"String",
+		type:"String",
+		list:"Boolean",
+		label:"LocalizedString",
+		description:"LocalizedString",
+		ui:"JSON"
+	},
+	StringStructFieldConfig:{
+		name:"String",
+		type:"String",
+		list:"Boolean",
+		label:"LocalizedString",
+		description:"LocalizedString",
+		length:"Int",
+		pattern:"String",
+		options:"StringFieldOption",
+		ui:"JSON"
+	},
+	IntStructFieldConfig:{
+		name:"String",
+		type:"String",
+		list:"Boolean",
+		label:"LocalizedString",
+		description:"LocalizedString",
+		min:"Int",
+		max:"Int",
+		step:"Int",
+		ui:"JSON"
+	},
+	FloatStructFieldConfig:{
+		name:"String",
+		type:"String",
+		list:"Boolean",
+		label:"LocalizedString",
+		description:"LocalizedString",
+		min:"Float",
+		max:"Float",
+		step:"Float",
+		ui:"JSON"
+	},
+	BooleanStructFieldConfig:{
+		name:"String",
+		type:"String",
+		list:"Boolean",
+		label:"LocalizedString",
+		description:"LocalizedString",
+		ui:"JSON"
+	},
+	DateTimeStructFieldConfig:{
+		name:"String",
+		type:"String",
+		list:"Boolean",
+		label:"LocalizedString",
+		description:"LocalizedString",
+		min:"String",
+		max:"String",
+		step:"Int",
+		ui:"JSON"
+	},
+	TextStructFieldConfig:{
+		name:"String",
+		type:"String",
+		list:"Boolean",
+		label:"LocalizedString",
+		description:"LocalizedString",
+		ui:"JSON"
+	},
+	StructFieldConfig:{
+		"...on StringStructFieldConfig":"StringStructFieldConfig",
+		"...on IntStructFieldConfig":"IntStructFieldConfig",
+		"...on FloatStructFieldConfig":"FloatStructFieldConfig",
+		"...on BooleanStructFieldConfig":"BooleanStructFieldConfig",
+		"...on DateTimeStructFieldConfig":"DateTimeStructFieldConfig",
+		"...on TextStructFieldConfig":"TextStructFieldConfig"
+	},
+	StructCustomFieldConfig:{
+		name:"String",
+		type:"String",
+		list:"Boolean",
+		fields:"StructFieldConfig",
+		label:"LocalizedString",
+		description:"LocalizedString",
+		readonly:"Boolean",
+		internal:"Boolean",
+		nullable:"Boolean",
+		requiresPermission:"Permission",
 		ui:"JSON"
 	},
 	LocalizedString:{
@@ -995,7 +1506,8 @@ export const ReturnTypes: Record<string,any> = {
 		"...on DateTimeCustomFieldConfig":"DateTimeCustomFieldConfig",
 		"...on RelationCustomFieldConfig":"RelationCustomFieldConfig",
 		"...on TextCustomFieldConfig":"TextCustomFieldConfig",
-		"...on LocaleTextCustomFieldConfig":"LocaleTextCustomFieldConfig"
+		"...on LocaleTextCustomFieldConfig":"LocaleTextCustomFieldConfig",
+		"...on StructCustomFieldConfig":"StructCustomFieldConfig"
 	},
 	CustomerGroup:{
 		id:"ID",
@@ -1017,7 +1529,7 @@ export const ReturnTypes: Record<string,any> = {
 		addresses:"Address",
 		orders:"OrderList",
 		user:"User",
-		customFields:"JSON"
+		customFields:"CustomerCustomFields"
 	},
 	CustomerList:{
 		items:"Customer",
@@ -1074,7 +1586,8 @@ export const ReturnTypes: Record<string,any> = {
 		createdAt:"DateTime",
 		updatedAt:"DateTime",
 		type:"HistoryEntryType",
-		data:"JSON"
+		data:"JSON",
+		customFields:"JSON"
 	},
 	HistoryEntryList:{
 		items:"HistoryEntry",
@@ -1129,7 +1642,7 @@ export const ReturnTypes: Record<string,any> = {
 		country:"String",
 		countryCode:"String",
 		phoneNumber:"String",
-		customFields:"JSON"
+		customFields:"AddressCustomFields"
 	},
 	OrderList:{
 		items:"Order",
@@ -1142,7 +1655,8 @@ export const ReturnTypes: Record<string,any> = {
 		priceWithTax:"Money",
 		discountedPrice:"Money",
 		discountedPriceWithTax:"Money",
-		discounts:"Discount"
+		discounts:"Discount",
+		customFields:"JSON"
 	},
 	Discount:{
 		adjustmentSource:"String",
@@ -1179,7 +1693,7 @@ export const ReturnTypes: Record<string,any> = {
 		taxLines:"TaxLine",
 		order:"Order",
 		fulfillmentLines:"FulfillmentLine",
-		customFields:"JSON"
+		customFields:"OrderLineCustomFields"
 	},
 	Payment:{
 		id:"ID",
@@ -1191,7 +1705,8 @@ export const ReturnTypes: Record<string,any> = {
 		transactionId:"String",
 		errorMessage:"String",
 		refunds:"Refund",
-		metadata:"JSON"
+		metadata:"JSON",
+		customFields:"JSON"
 	},
 	RefundLine:{
 		orderLine:"OrderLine",
@@ -1214,7 +1729,8 @@ export const ReturnTypes: Record<string,any> = {
 		reason:"String",
 		lines:"RefundLine",
 		paymentId:"ID",
-		metadata:"JSON"
+		metadata:"JSON",
+		customFields:"JSON"
 	},
 	FulfillmentLine:{
 		orderLine:"OrderLine",
@@ -1363,6 +1879,7 @@ export const ReturnTypes: Record<string,any> = {
 		name:"String",
 		slug:"String",
 		description:"String",
+		enabled:"Boolean",
 		featuredAsset:"Asset",
 		assets:"Asset",
 		variants:"ProductVariant",
@@ -1371,7 +1888,9 @@ export const ReturnTypes: Record<string,any> = {
 		facetValues:"FacetValue",
 		translations:"ProductTranslation",
 		collections:"Collection",
-		customFields:"JSON"
+		reviews:"ProductReviewList",
+		reviewsHistogram:"ProductReviewHistogramItem",
+		customFields:"ProductCustomFields"
 	},
 	ProductTranslation:{
 		id:"ID",
@@ -1410,7 +1929,7 @@ export const ReturnTypes: Record<string,any> = {
 		options:"ProductOption",
 		facetValues:"FacetValue",
 		translations:"ProductVariantTranslation",
-		customFields:"Object"
+		customFields:"ProductVariantCustomFields"
 	},
 	ProductVariantTranslation:{
 		id:"ID",
@@ -1524,7 +2043,7 @@ export const ReturnTypes: Record<string,any> = {
 		createdAt:"DateTime",
 		updatedAt:"DateTime",
 		name:"String",
-		customFields:"JSON"
+		customFields:"SellerCustomFields"
 	},
 	ShippingMethod:{
 		id:"ID",
@@ -1758,10 +2277,220 @@ export const ReturnTypes: Record<string,any> = {
 	ActiveOrderResult:{
 		"...on Order":"Order",
 		"...on NoActiveOrderError":"NoActiveOrderError"
+	},
+	ProductReview:{
+		id:"ID",
+		createdAt:"DateTime",
+		updatedAt:"DateTime",
+		product:"Product",
+		productVariant:"ProductVariant",
+		summary:"String",
+		body:"String",
+		rating:"Float",
+		authorName:"String",
+		authorLocation:"String",
+		upvotes:"Int",
+		downvotes:"Int",
+		state:"String",
+		response:"String",
+		responseCreatedAt:"DateTime"
+	},
+	ProductReviewList:{
+		items:"ProductReview",
+		totalItems:"Int"
+	},
+	ProductReviewHistogramItem:{
+		bin:"Int",
+		frequency:"Int"
+	},
+	VendorSelectionResult:{
+		sellerId:"ID",
+		name:"String",
+		firstName:"String",
+		lastName:"String",
+		emailAddress:"String",
+		address:"String",
+		postalCode:"String",
+		country:"String",
+		vendorType:"String",
+		slug:"String",
+		channel:"String",
+		locales:"String",
+		nationalLocale:"String"
+	},
+	AddressCustomFields:{
+		vatNumber:"String"
+	},
+	CustomerCustomFields:{
+		preferredSeller:"Seller"
+	},
+	OrderLineCustomFields:{
+		requestedSellerChannel:"String"
+	},
+	ProductCustomFields:{
+		reviewRating:"Float",
+		reviewCount:"Float",
+		featuredReview:"ProductReview",
+		warranty:"String",
+		eanCode:"String",
+		quote:"String",
+		quoteOwner:"String",
+		boardCategory:"String",
+		terrain:"String",
+		camberProfile:"String",
+		profile:"String",
+		baseProfile:"String",
+		rider:"String",
+		taperProfile:"String",
+		bindingSize:"String",
+		bindingMount:"String",
+		edges:"String",
+		sidewall:"String",
+		core:"String",
+		layup1:"String",
+		layup2:"String",
+		layup3:"String",
+		boardbase:"String",
+		featured:"Boolean",
+		brand:"String"
+	},
+	ProductVariantCustomFields:{
+		lengthCm:"Int",
+		riderLengthMin:"Float",
+		riderLengthMax:"Float",
+		riderWeightMin:"Float",
+		flex:"Float",
+		riderWeightMax:"Float",
+		noseWidth:"Float",
+		waistWidth:"Float",
+		tailWidth:"Float",
+		taper:"Float",
+		boardWidth:"String",
+		bootLengthMax:"Float",
+		effectiveEdge:"Float",
+		averageSidecutRadius:"String",
+		setback:"Float",
+		stanceMin:"Float",
+		stanceMax:"Float",
+		weightKg:"Float",
+		bindingSizeVariant:"String",
+		descriptionTab1Label:"String",
+		descriptionTab1Visible:"Boolean",
+		descriptionTab1Content:"String",
+		descriptionTab2Label:"String",
+		descriptionTab2Visible:"Boolean",
+		descriptionTab2Content:"String",
+		descriptionTab3Label:"String",
+		descriptionTab3Visible:"Boolean",
+		descriptionTab3Content:"String",
+		shortdescription:"String",
+		frontPhoto:"Asset",
+		backPhoto:"Asset",
+		optionTab1Label:"String",
+		optionTab1Visible:"Boolean",
+		optionTab1Bar1Name:"String",
+		optionTab1Bar1Visible:"Boolean",
+		optionTab1Bar1Min:"Float",
+		optionTab1Bar1Max:"Float",
+		optionTab1Bar1MinLabel:"String",
+		optionTab1Bar1MaxLabel:"String",
+		optionTab1Bar1Rating:"Float",
+		optionTab1Bar2Name:"String",
+		optionTab1Bar2Visible:"Boolean",
+		optionTab1Bar2Min:"Float",
+		optionTab1Bar2Max:"Float",
+		optionTab1Bar2MinLabel:"String",
+		optionTab1Bar2MaxLabel:"String",
+		optionTab1Bar2Rating:"Float",
+		optionTab1Bar3Name:"String",
+		optionTab1Bar3Visible:"Boolean",
+		optionTab1Bar3Min:"Float",
+		optionTab1Bar3Max:"Float",
+		optionTab1Bar3MinLabel:"String",
+		optionTab1Bar3MaxLabel:"String",
+		optionTab1Bar3Rating:"Float",
+		optionTab1Bar4Name:"String",
+		optionTab1Bar4Visible:"Boolean",
+		optionTab1Bar4Min:"Float",
+		optionTab1Bar4Max:"Float",
+		optionTab1Bar4MinLabel:"String",
+		optionTab1Bar4MaxLabel:"String",
+		optionTab1Bar4Rating:"Float",
+		optionTab2Label:"String",
+		optionTab2Visible:"Boolean",
+		optionTab2Bar1Name:"String",
+		optionTab2Bar1Visible:"Boolean",
+		optionTab2Bar1Min:"Float",
+		optionTab2Bar1Max:"Float",
+		optionTab2Bar1MinLabel:"String",
+		optionTab2Bar1MaxLabel:"String",
+		optionTab2Bar1Rating:"Float",
+		optionTab2Bar2Name:"String",
+		optionTab2Bar2Visible:"Boolean",
+		optionTab2Bar2Min:"Float",
+		optionTab2Bar2Max:"Float",
+		optionTab2Bar2MinLabel:"String",
+		optionTab2Bar2MaxLabel:"String",
+		optionTab2Bar2Rating:"Float",
+		optionTab2Bar3Name:"String",
+		optionTab2Bar3Visible:"Boolean",
+		optionTab2Bar3Min:"Float",
+		optionTab2Bar3Max:"Float",
+		optionTab2Bar3MinLabel:"String",
+		optionTab2Bar3MaxLabel:"String",
+		optionTab2Bar3Rating:"Float",
+		optionTab2Bar4Name:"String",
+		optionTab2Bar4Visible:"Boolean",
+		optionTab2Bar4Min:"Float",
+		optionTab2Bar4Max:"Float",
+		optionTab2Bar4MinLabel:"String",
+		optionTab2Bar4MaxLabel:"String",
+		optionTab2Bar4Rating:"Float",
+		optionTab3Label:"String",
+		optionTab3Visible:"Boolean",
+		optionTab3Bar1Name:"String",
+		optionTab3Bar1Visible:"Boolean",
+		optionTab3Bar1Min:"Float",
+		optionTab3Bar1Max:"Float",
+		optionTab3Bar1MinLabel:"String",
+		optionTab3Bar1MaxLabel:"String",
+		optionTab3Bar1Rating:"Float",
+		optionTab3Bar2Name:"String",
+		optionTab3Bar2Visible:"Boolean",
+		optionTab3Bar2Min:"Float",
+		optionTab3Bar2Max:"Float",
+		optionTab3Bar2MinLabel:"String",
+		optionTab3Bar2MaxLabel:"String",
+		optionTab3Bar2Rating:"Float",
+		optionTab3Bar3Name:"String",
+		optionTab3Bar3Visible:"Boolean",
+		optionTab3Bar3Min:"Float",
+		optionTab3Bar3Max:"Float",
+		optionTab3Bar3MinLabel:"String",
+		optionTab3Bar3MaxLabel:"String",
+		optionTab3Bar3Rating:"Float",
+		optionTab3Bar4Name:"String",
+		optionTab3Bar4Visible:"Boolean",
+		optionTab3Bar4Min:"Float",
+		optionTab3Bar4Max:"Float",
+		optionTab3Bar4MinLabel:"String",
+		optionTab3Bar4MaxLabel:"String",
+		optionTab3Bar4Rating:"Float"
+	},
+	SellerCustomFields:{
+		firstName:"String",
+		lastName:"String",
+		emailAddress:"String",
+		address:"String",
+		postalCode:"String",
+		country:"String",
+		vendorType:"String",
+		merkDealer:"Seller",
+		merkDistributeur:"Seller"
 	}
 }
 
 export const Ops = {
-	query: "Query" as const,
+query: "Query" as const,
 	mutation: "Mutation" as const
 }
