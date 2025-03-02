@@ -1,142 +1,145 @@
 {
     "home": "Home",
-    "signIn": "Sign in",
-    "signInTitle": "Sign in to your account",
-    "signUp": "Sign up",
-    "signUpTitle": "Create a new account",
-    "signOut": "Sign out",
-    "resetPasswordTitle": "Reset your password",
-    "addressesPageTitle": "Addresses",
-    "username": "Username",
-    "password": "Password",
-    "rememberMe": "Remember me",
-    "confirmPassword": "Confirm password",
-    "forgotPassword": "Forgot password?",
-    "forgotPasswordTitle": "Reset your password",
-    "email": "Email address",
-    "newPassword": "New password",
-    "confirmNewPassword": "Confirm new password",
-    "resetPassword": "Reset password",
-    "signUpSuccess": "You have successfully signed up, please check your email to verify your account",
-    "forgotPasswordSuccess": "We have sent you an email with instructions to reset your password",
+    "signIn": "Inloggen",
+    "signInTitle": "Log in op je account",
+    "signUp": "Registreren",
+    "signUpTitle": "Maak een nieuw account aan",
+    "signOut": "Uitloggen",
+    "resetPasswordTitle": "Reset je wachtwoord",
+    "addressesPageTitle": "Adressen",
+    "username": "Gebruikersnaam",
+    "password": "Wachtwoord",
+    "rememberMe": "Onthoud mij",
+    "confirmPassword": "Bevestig wachtwoord",
+    "forgotPassword": "Wachtwoord vergeten?",
+    "forgotPasswordTitle": "Reset je wachtwoord",
+    "email": "E-mailadres",
+    "newPassword": "Nieuw wachtwoord",
+    "confirmNewPassword": "Bevestig nieuw wachtwoord",
+    "resetPassword": "Wachtwoord resetten",
+    "signUpSuccess": "Je bent succesvol geregistreerd. Controleer je e-mail om je account te verifiëren",
+    "forgotPasswordSuccess": "We hebben je een e-mail gestuurd met instructies om je wachtwoord te resetten",
     "verify": {
-        "success": "Your account has been verified",
-        "fail": "Your account could not be verified",
-        "title": "Verify your account"
+        "success": "Je account is geverifieerd",
+        "fail": "Je account kon niet worden geverifieerd",
+        "title": "Verifieer je account"
     },
     "navigation": {
-        "manageAccount": "Manage account",
-        "manageAddresses": "Manage addresses",
-        "manageOrders": "Manage orders",
-        "logout": "Logout"
+        "manageAccount": "Beheer account",
+        "manageAddresses": "Beheer adressen",
+        "manageOrders": "Beheer bestellingen",
+        "logout": "Uitloggen"
     },
     "accountPage": {
-        "title": "My Account",
+        "title": "Mijn account",
         "lastOrder": {
-            "title": "Last Order",
-            "noOrders": "You have no orders yet",
-            "viewOrder": "View Order",
-            "totalQuantity": "Total Quantity",
-            "totalProducts": "Total Products",
-            "totalPrice": "Total Price",
-            "orderCode": "Order Code",
-            "orderDate": "Order Date"
+            "title": "Laatste bestelling",
+            "noOrders": "Je hebt nog geen bestellingen",
+            "viewOrder": "Bekijk bestelling",
+            "totalQuantity": "Totale hoeveelheid",
+            "totalProducts": "Totaal aantal producten",
+            "totalPrice": "Totale prijs",
+            "orderCode": "Bestelcode",
+            "orderDate": "Besteldatum"
         },
         "detailsForm": {
-            "title": "Account Details",
-            "changeDetails": "Change Details",
-            "addressEmail": "Address email",
-            "firstName": "First name",
-            "lastName": "Last name",
-            "phoneNumber": "Phone number",
-            "successMessage": "Your account details have been updated successfully"
+            "title": "Accountgegevens",
+            "changeDetails": "Gegevens wijzigen",
+            "addressEmail": "E-mailadres",
+            "firstName": "Voornaam",
+            "lastName": "Achternaam",
+            "phoneNumber": "Telefoonnummer",
+            "successMessage": "Je accountgegevens zijn succesvol bijgewerkt",
+            "customFields": {
+                "preferredSeller": "Voorkeursverkoper"
+            }
         },
         "passwordForm": {
-            "title": "Change Password",
-            "confirmPassword": "Confirm Password",
-            "oldPassword": "Old Password",
-            "newPassword": "New Password",
-            "newPasswordConfirm": "Confirm New Password"
+            "title": "Wachtwoord wijzigen",
+            "confirmPassword": "Bevestig wachtwoord",
+            "oldPassword": "Oud wachtwoord",
+            "newPassword": "Nieuw wachtwoord",
+            "newPasswordConfirm": "Bevestig nieuw wachtwoord"
         }
     },
     "orderPage": {
-        "title": "Order",
-        "backToOrders": "Go to My Orders",
-        "orderCode": "Order Code",
-        "items": "Items",
-        "shippingAddress": "Shipping Address",
-        "billingAddress": "Billing Address",
-        "shippingMethod": "Shipping Method",
-        "discounts": "Discounts",
-        "totalPrice": "Total Price",
-        "quantity": "Quantity",
-        "customerName": "Customer Name",
-        "email": "Email",
-        "phone": "Phone",
-        "orderStatus": "Order Status"
+        "title": "Bestelling",
+        "backToOrders": "Ga naar mijn bestellingen",
+        "orderCode": "Bestelcode",
+        "items": "Artikelen",
+        "shippingAddress": "Verzendadres",
+        "billingAddress": "Factuuradres",
+        "shippingMethod": "Verzendmethode",
+        "discounts": "Kortingen",
+        "totalPrice": "Totale prijs",
+        "quantity": "Hoeveelheid",
+        "customerName": "Naam klant",
+        "email": "E-mail",
+        "phone": "Telefoon",
+        "orderStatus": "Bestelstatus"
     },
     "ordersPage": {
-        "title": "My Orders",
-        "loading": "Loading orders...",
-        "orderDate": "Order Date",
-        "orderCode": "Order Code",
-        "totalQuantity": "Total Quantity",
-        "totalItems": "Total Items",
-        "totalPrice": "Total Price",
-        "loadMore": "Load More",
-        "viewOrder": "View Order",
-        "searchOrder": "Search Order",
-        "lookForOrder": "Look for an order by code"
+        "title": "Mijn bestellingen",
+        "loading": "Bestellingen laden...",
+        "orderDate": "Besteldatum",
+        "orderCode": "Bestelcode",
+        "totalQuantity": "Totale hoeveelheid",
+        "totalItems": "Totaal aantal artikelen",
+        "totalPrice": "Totale prijs",
+        "loadMore": "Meer laden",
+        "viewOrder": "Bekijk bestelling",
+        "searchOrder": "Zoek bestelling",
+        "lookForOrder": "Zoek een bestelling op code"
     },
     "addressForm": {
-        "title": "My Addresses",
-        "phone": "Phone",
-        "fullName": "Full Name",
-        "company": "Company",
-        "streetLine1": "Address",
-        "streetLine2": "Apartment, suite, etc.",
-        "city": "City",
-        "countryCode": "Country",
-        "province": "State / Province",
-        "postalCode": "Postal Code",
-        "defaultShippingAddress": "Default Shipping Address",
-        "defaultBillingAddress": "Default Billing Address",
-        "cancel": "Cancel",
-        "update": "Update Address",
-        "add": "Add Address",
-        "edit": "Edit Address",
-        "delete": "Delete Address",
+        "title": "Mijn adressen",
+        "phone": "Telefoon",
+        "fullName": "Volledige naam",
+        "company": "Bedrijf",
+        "streetLine1": "Adres",
+        "streetLine2": "Appartement, suite, etc.",
+        "city": "Stad",
+        "countryCode": "Land",
+        "province": "Provincie / Staat",
+        "postalCode": "Postcode",
+        "defaultShippingAddress": "Standaard verzendadres",
+        "defaultBillingAddress": "Standaard factuuradres",
+        "cancel": "Annuleren",
+        "update": "Adres bijwerken",
+        "add": "Adres toevoegen",
+        "edit": "Adres bewerken",
+        "delete": "Adres verwijderen",
         "errors": {
             "root": {
-                "invalid": "An errors occurred while sending the form. Please correct the errors below",
-                "closeButton": "Close"
+                "invalid": "Er is een fout opgetreden bij het verzenden van het formulier. Corrigeer de onderstaande fouten",
+                "closeButton": "Sluiten"
             },
             "phone": {
-                "required": "Phone is required"
+                "required": "Telefoonnummer is verplicht"
             },
             "fullName": {
-                "required": "Full name is required"
+                "required": "Volledige naam is verplicht"
             },
             "company": {
-                "required": "Company is required"
+                "required": "Bedrijf is verplicht"
             },
             "streetLine1": {
-                "required": "Address is required"
+                "required": "Adres is verplicht"
             },
             "streetLine2": {
-                "required": "Apartment, suite, etc. is required"
+                "required": "Appartement, suite, etc. is verplicht"
             },
             "city": {
-                "required": "City is required"
+                "required": "Stad is verplicht"
             },
             "countryCode": {
-                "required": "Country is required"
+                "required": "Land is verplicht"
             },
             "province": {
-                "required": "State / Province is required"
+                "required": "Provincie / Staat is verplicht"
             },
             "postalCode": {
-                "required": "Postal code is required"
+                "required": "Postcode is verplicht"
             }
         }
     }

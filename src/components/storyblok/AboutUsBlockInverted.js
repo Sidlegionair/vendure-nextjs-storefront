@@ -37,7 +37,7 @@ const AboutUsBlockInverted = ({ blok }) => {
                 >
                     <h2>{blok.title || 'About Us'}</h2>
                     <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
-                    {blok.buttonLink && (
+                    {blok.buttonLink && blok.buttonText && (
                         <a
                             style={{ color: blok.backgroundColor }}
                             className="learn-more-button"
@@ -45,7 +45,7 @@ const AboutUsBlockInverted = ({ blok }) => {
                             target={blok.buttonLink.target || '_self'}
                             rel={blok.buttonLink.target === '_blank' ? 'noopener noreferrer' : undefined}
                         >
-                            {blok.buttonText || 'Learn More'} →
+                            {blok.buttonText} →
                         </a>
                     )}
                 </div>

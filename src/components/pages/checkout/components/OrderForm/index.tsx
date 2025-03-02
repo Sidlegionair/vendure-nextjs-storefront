@@ -759,7 +759,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                             i18nKey="orderForm.terms"
                                             t={t}
                                             components={{
-                                                1: <StyledLink style={{ zIndex: 2, position: 'relative' }} href="/checkout" />,
+                                                1: <StyledLink style={{ zIndex: 2, position: 'relative' }} href="/content/terms-and-conditions/" />,
                                             }}
                                         />
                                     }

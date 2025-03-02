@@ -6,11 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="86c1ycmb1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/products/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/products/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/utils.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/state/cart.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/state/cart.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/zeus/const.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/zeus/const.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/zeus/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/zeus/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/locales/en/checkout.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/locales/en/checkout.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/locales/en/common.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/locales/en/common.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/locales/nl/checkout.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/locales/nl/checkout.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/locales/nl/common.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/locales/nl/common.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/locales/nl/customer.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/locales/nl/customer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/locales/nl/products.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/locales/nl/products.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderForm/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderForm/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +54,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "development",
+    "git-widget-placeholder": "staging",
     "last_opened_file_path": "/home/floris/PhpstormProjects/vendure-nextjs-storefront/src/components/storyblok",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",

@@ -42,7 +42,7 @@
         "continueToPayment": "Continue to Payment",
         "continueShopping": "Continue Shopping",
         "regulations": "I accept the <1>regulations</1>.",
-        "terms": "I accept the <1>terms and conditions</1>.",
+        "terms": "I agree to the <1>terms and conditions</1> and have reviewed my order and details.",
         "placeholders": {
             "emailAddress": "Email Address",
             "firstName": "First Name",
