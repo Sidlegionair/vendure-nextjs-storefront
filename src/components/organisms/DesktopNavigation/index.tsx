@@ -78,7 +78,7 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
                 if (!collection.children || collection.children.length === 0) {
                     return (
                         <RelativeStack w100 key={collection.name}>
-                            <StyledLink href={href} skipLocaleHandling isSubMenu={isSubMenu} isActive={isActive}>
+                            <StyledLink href={href} skipChannelHandling isSubMenu={isSubMenu} isActive={isActive}>
                                 {collection.name}
                             </StyledLink>
                         </RelativeStack>
@@ -87,7 +87,7 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
 
                 return (
                     <RelativeStack w100 key={collection.name}>
-                        <StyledLink href={href} skipLocaleHandling isSubMenu={isSubMenu} isActive={isActive}>
+                        <StyledLink href={href} skipChannelHandling isSubMenu={isSubMenu} isActive={isActive}>
                             {collection.name}
                         </StyledLink>
                         {/*<AbsoluteStack w100>*/}

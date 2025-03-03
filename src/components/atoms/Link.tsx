@@ -7,6 +7,7 @@ const notTranslatedLinks: string[] = [];
 
 interface LinkComponentProps extends LinkProps {
     skipLocaleHandling?: boolean;
+    skipChannelHandling?: boolean;
     external?: boolean;
     style?: React.CSSProperties;
     ariaLabel?: string;
@@ -15,6 +16,7 @@ interface LinkComponentProps extends LinkProps {
 export const Link: React.FC<PropsWithChildren<LinkComponentProps>> = ({
                                                                           children,
                                                                           skipLocaleHandling,
+                                                                          skipChannelHandling,
                                                                           external,
                                                                           ariaLabel,
                                                                           ...rest
@@ -24,15 +26,17 @@ export const Link: React.FC<PropsWithChildren<LinkComponentProps>> = ({
     const channel = (router.query.channel || '') as string;
     const { href, ...restProps } = rest;
     let linkHref = (href || router.asPath) as string;
+
     if (linkHref.indexOf('http') === 0) skipLocaleHandling = true;
     if (notTranslatedLinks.find(ntl => linkHref.startsWith(ntl))) skipLocaleHandling = true;
 
-    const _channel = channel
+    const _channel = channel && !skipChannelHandling
         ? channel === DEFAULT_CHANNEL_SLUG && !router.query.locale
-            ? ``
+            ? ''
             : `/${router.query.channel}`
         : '';
-    if (_channel && !skipLocaleHandling) {
+
+    if (!skipLocaleHandling) {
         linkHref = href
             ? `${_channel}${locale ? `/${locale}` : ''}${linkHref}`
             : router.pathname.replace('/[channel]', _channel).replace('/[locale]', `/${locale}`);
