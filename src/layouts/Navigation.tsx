@@ -94,7 +94,7 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                         {/* Desktop: show bigger logo in center */}
                         <CenterStack justifyCenter itemsCenter>
                             <DesktopWrapper>
-                                <Link ariaLabel="Home" href="/">
+                                <Link skipChannelHandling ariaLabel="Home" href="/">
                                     <LogoAexol width={256} />
                                 </Link>
                             </DesktopWrapper>

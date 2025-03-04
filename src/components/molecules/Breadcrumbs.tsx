@@ -16,7 +16,7 @@ export const Breadcrumbs: React.FC<{
                 const isLast = i === breadcrumbs.length - 1;
                 return (
                     <Stack itemsCenter gap="0.5rem" key={b.name}>
-                        <StyledLink href={b.href} blocked={isLast ? 1 : 0}>
+                        <StyledLink skipChannelHandling href={b.href} blocked={isLast ? 1 : 0}>
                             <Stack itemsCenter gap="0.5rem">
                                 {isHome && <Home size={16} />}
                                 <StyledTP isLast={isLast} size="1.25rem">
@@ -24,7 +24,7 @@ export const Breadcrumbs: React.FC<{
                                 </StyledTP>
                             </Stack>
                         </StyledLink>
-                        {!isLast && (
+                        {!isLast && (skipChannelHandling
                             <StyledTP size="1.25rem" isLast={isLast}>
                                 /&nbsp;
                             </StyledTP>
