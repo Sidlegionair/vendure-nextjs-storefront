@@ -80,7 +80,7 @@ const Quantity = styled(TP)`
 
 const CartComponentMain = styled(motion.div)`
     @media(max-width: 767px) {
-        width: 60%;
+        width: 80%;
     }
     
     height: 10%;

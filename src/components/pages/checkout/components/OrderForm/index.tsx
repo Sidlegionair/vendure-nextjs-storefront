@@ -399,7 +399,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                         {t('orderForm.continueToPayment')}
                                     </TP>
                                 </StyledButton>
-                                <LinkButton href="/">{t('orderForm.continueShopping')}</LinkButton>
+                                <LinkButton skipChannelHandling href="/">{t('orderForm.continueShopping')}</LinkButton>
                             </Stack>
                         }
                     />
@@ -669,7 +669,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                             i18nKey="orderForm.terms"
                                             t={t}
                                             components={{
-                                                1: <StyledLink style={{ zIndex: 2, position: 'relative' }} href="/content/terms-and-conditions/" />,
+                                                1: <StyledLink skipChannelHandling style={{ zIndex: 2, position: 'relative' }} href="/content/terms-and-conditions/" />,
                                             }}
                                         />
                                     }
