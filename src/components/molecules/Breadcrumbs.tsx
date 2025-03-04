@@ -24,7 +24,7 @@ export const Breadcrumbs: React.FC<{
                                 </StyledTP>
                             </Stack>
                         </StyledLink>
-                        {!isLast && (skipChannelHandling
+                        {!isLast && (
                             <StyledTP size="1.25rem" isLast={isLast}>
                                 /&nbsp;
                             </StyledTP>
