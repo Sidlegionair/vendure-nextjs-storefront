@@ -24,17 +24,24 @@ const nextConfig = {
     async rewrites() {
         return [
             {
-                // Matches duplicate locale segments (like /nl/nl) plus any additional path segments.
                 source: '/:channel(nl|en)/:locale(nl|en)/:path*',
                 destination: `/${DEFAULT_CHANNEL}/:locale/:path*`,
             },
             {
-                // Matches single-segment locale (like /nl) plus any additional path segments.
+                source: '/:channel(nl|en)/:locale(nl|en)',
+                destination: `/${DEFAULT_CHANNEL}/:locale`,
+            },
+            {
                 source: '/:locale(nl|en)/:path*',
                 destination: `/${DEFAULT_CHANNEL}/:locale/:path*`,
             },
+            {
+                source: '/:locale(nl|en)',
+                destination: `/${DEFAULT_CHANNEL}/:locale`,
+            },
         ];
-    },
+    }
+
 
     // i18n: {
     //     locales: ['en', 'nl'], // Supported content locales

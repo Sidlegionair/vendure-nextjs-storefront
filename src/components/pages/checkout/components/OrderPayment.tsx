@@ -1,16 +1,17 @@
-import { storefrontApiMutation } from '@/src/graphql/client';
-import { AvailablePaymentMethodsType } from '@/src/graphql/selectors';
-import React, { InputHTMLAttributes, forwardRef, useState } from 'react';
-import { Stack, TP } from '@/src/components/atoms';
-import { useCheckout } from '@/src/state/checkout';
-import { Banner } from '@/src/components/forms';
+import React, { useState, forwardRef } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'next-i18next';
 import styled from '@emotion/styled';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { storefrontApiMutation } from '@/src/graphql/client';
+import { AvailablePaymentMethodsType } from '@/src/graphql/selectors';
+import { Stack } from '@/src/components/atoms/Stack';
+import { TP } from '@/src/components/atoms/TypoGraphy';
+import { Banner } from '@/src/components/forms';
 import { Button } from '@/src/components/molecules/Button';
 import { CreditCard } from 'lucide-react';
+import { useCheckout } from '@/src/state/checkout';
 import { usePush } from '@/src/lib/redirect';
-import { AnimatePresence, motion } from 'framer-motion';
 import { useChannels } from '@/src/state/channels';
 
 interface OrderPaymentProps {
@@ -24,12 +25,15 @@ type FormValues = {
 
 const POSITIVE_DEFAULT_PAYMENT_STATUSES = ['PaymentAuthorized', 'PaymentSettled'];
 
-export const OrderPayment: React.FC<OrderPaymentProps> = ({ availablePaymentMethods, mollieData }) => {
-    const ctx = useChannels();
+export const OrderPayment: React.FC<OrderPaymentProps> = ({
+                                                              availablePaymentMethods,
+                                                              mollieData,
+                                                          }) => {
     const { t } = useTranslation('checkout');
     const { t: tError } = useTranslation('common');
     const { activeOrder } = useCheckout();
     const push = usePush();
+    const ctx = useChannels();
     const [error, setError] = useState<string | null>(null);
 
     const {
@@ -50,9 +54,7 @@ export const OrderPayment: React.FC<OrderPaymentProps> = ({ availablePaymentMeth
                         '...on Order': {
                             state: true,
                             code: true,
-                            payments: {
-                                metadata: true, // Metadata field now on payments
-                            },
+                            payments: { metadata: true },
                         },
                         '...on IneligiblePaymentMethodError': {
                             message: true,
@@ -89,23 +91,21 @@ export const OrderPayment: React.FC<OrderPaymentProps> = ({ availablePaymentMeth
             });
 
             if (addPaymentToOrder.__typename !== 'Order') {
-                // Handle non-Order result
                 setError(tError(`errors.backend.${addPaymentToOrder.errorCode}`));
             } else if (POSITIVE_DEFAULT_PAYMENT_STATUSES.includes(addPaymentToOrder.state)) {
-                // Check if the selected payment method is Mollie
                 if (paymentMethod === 'connected-payment-method') {
-                    const molliePayment = addPaymentToOrder.payments?.[0]; // Assuming the metadata is in the first payment
-
-                    const redirectUrl = molliePayment?.metadata?.public?.redirectUrl; // Assuming redirect URL is stored in the metadata
-
+                    const molliePayment = addPaymentToOrder.payments?.[0];
+                    const redirectUrl = molliePayment?.metadata?.public?.redirectUrl;
                     if (redirectUrl) {
-                        // Redirect to Mollie payment page
                         window.location.href = redirectUrl;
                     } else {
-                        setError(tError(['errors.backend.MOLLIE_REDIRECT_FAILED'], { defaultValue: 'Mollie redirect failed' }));
+                        setError(
+                            tError(['errors.backend.MOLLIE_REDIRECT_FAILED'], {
+                                defaultValue: 'Mollie redirect failed',
+                            })
+                        );
                     }
                 } else {
-                    // Redirect to the confirmation page for non-Mollie payments
                     push(`/checkout/confirmation/${addPaymentToOrder.code}`);
                 }
             }
@@ -115,22 +115,18 @@ export const OrderPayment: React.FC<OrderPaymentProps> = ({ availablePaymentMeth
         }
     };
 
-
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         await handlePayment(data.payment);
     };
 
-    return activeOrder ? (
+    if (!activeOrder) return null;
+
+    return (
         <Stack w100 column itemsCenter>
             <Banner error={{ message: error ?? undefined }} clearErrors={() => setError(null)} />
             <PaymentForm onSubmit={handleSubmit(onSubmit)} noValidate>
                 <Stack w100 column style={{ position: 'relative' }}>
-                    <CheckBox defaultChecked={true} type="checkbox" />
-                    <GridTitle>
-                        <TP size="1.5rem" weight={600}>
-                            {t('paymentMethod.title')}
-                        </TP>
-                    </GridTitle>
+                    <HiddenCheckBox defaultChecked type="checkbox" />
                     <Grid>
                         {availablePaymentMethods?.map((method) => (
                             <GridEntry key={method.code} column itemsCenter justifyCenter>
@@ -146,14 +142,13 @@ export const OrderPayment: React.FC<OrderPaymentProps> = ({ availablePaymentMeth
                         ))}
                     </Grid>
                 </Stack>
-
                 <AnimatePresence>
                     {isValid ? (
-                        <AnimationStack initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                        <MotionContainer initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                             <Button disabled={isSubmitting} type="submit">
                                 {t('paymentMethod.submit')}
                             </Button>
-                        </AnimationStack>
+                        </MotionContainer>
                     ) : (
                         <Stack w100 justifyCenter>
                             <TP size="1.5rem" weight={600}>
@@ -164,24 +159,21 @@ export const OrderPayment: React.FC<OrderPaymentProps> = ({ availablePaymentMeth
                 </AnimatePresence>
             </PaymentForm>
         </Stack>
-    ) : null;
+    );
 };
 
+// Styled Components
 
-const GridTitle = styled(Stack)`
-    padding: 1.5rem 3rem;
-    background-color: ${p => p.theme.gray(200)};
+const PaymentForm = styled.form`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 2rem;
+    height: 100%;
 `;
 
-const Grid = styled.div`
-    margin-top: 1.5rem;
-    display: grid;
-    grid-template-rows: 0fr;
-
-    transition: grid-template-rows 0.3s ease-in-out;
-`;
-
-const CheckBox = styled.input`
+const HiddenCheckBox = styled.input`
     position: absolute;
     opacity: 0;
     width: 100%;
@@ -193,24 +185,22 @@ const CheckBox = styled.input`
     }
 `;
 
+const Grid = styled.div`
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease-in-out;
+`;
+
 const GridEntry = styled(Stack)`
     overflow: hidden;
 `;
 
 const StyledCreditCard = styled(CreditCard)<{ method: string }>`
-    color: ${({ theme }) => theme.success};
+    color: ${({ theme }) => theme.background.accentGreen};
 `;
 
-const PaymentForm = styled.form`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    gap: 2rem;
-    height: 100%;
-`;
-
-const AnimationStack = styled(motion.div)`
+const MotionContainer = styled(motion.div)`
     position: relative;
     width: 100%;
     display: flex;
@@ -219,48 +209,50 @@ const AnimationStack = styled(motion.div)`
     gap: 2rem;
 `;
 
-type InputType = InputHTMLAttributes<HTMLInputElement> & {
+type PaymentButtonProps = React.InputHTMLAttributes<HTMLInputElement> & {
     label: string;
     icon?: React.ReactNode;
 };
 
-const PaymentButton = forwardRef((props: InputType, ref: React.ForwardedRef<HTMLInputElement>) => {
-    const { label, icon, ...rest } = props;
-    return (
-        <Stack w100 column itemsCenter gap="0.25rem">
-            <StyledButton style={{ width: '100%', justifyContent: 'start' }} active={rest.checked}>
-                {icon}
-                <AbsoluteRadio ref={ref} {...rest} type="radio" />
-                <label htmlFor={props.name}>{label}</label>
-            </StyledButton>
-        </Stack>
-    );
-});
+const PaymentButton = forwardRef<HTMLInputElement, PaymentButtonProps>(
+    ({ label, icon, ...rest }, ref) => {
+        return (
+            <Stack w100 column itemsCenter gap="0.25rem">
+                <StyledRadioButton active={rest.checked} style={{ width: '100%', justifyContent: 'start' }}>
+                    {icon}
+                    <AbsoluteRadio ref={ref} {...rest} type="radio" />
+                    <label htmlFor={rest.name}>{label}</label>
+                </StyledRadioButton>
+            </Stack>
+        );
+    }
+);
 
 const AbsoluteRadio = styled.input`
-    position: absolute;
-    opacity: 0;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    cursor: pointer;
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  cursor: pointer;
 `;
 
-const StyledButton = styled.button<{ active?: boolean }>`
+const StyledRadioButton = styled.button<{ active?: boolean }>`
     position: relative;
     display: flex;
     gap: 3.5rem;
     align-items: center;
     justify-content: center;
-    background-color: ${p => (p.active ? p.theme.background.ice : p.theme.gray(0))};
-    border: 1px solid ${p => p.theme.background.ice};
+    background-color: ${({ theme, active }) =>
+            active ? theme.background.white : null};
+    border: 1px solid ${({ theme }) => theme.background.ice};
     border-radius: 0.25rem;
     padding: 1.5rem 3rem;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 
     &:hover {
-        background-color: ${p => p.theme.background.ice};
+        background-color: ${({ theme }) => theme.background.ice};
     }
 `;

@@ -51,8 +51,6 @@ interface OrderFormProps {
     shippingMethods: ShippingMethodType[] | null;
 }
 
-
-
 const isAddressesEqual = (a: object, b?: object) => {
     try {
         return JSON.stringify(a) === JSON.stringify(b ?? {});
@@ -60,7 +58,6 @@ const isAddressesEqual = (a: object, b?: object) => {
         return false;
     }
 };
-
 
 // -----------------------------------------------------------------
 // VAT-check function using the proxy endpoint and NEXT_PUBLIC_HOST
@@ -90,7 +87,6 @@ const checkVAT = async (
     }
 };
 
-
 export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, activeCustomer, shippingMethods }) => {
     const ctx = useChannels();
     const { activeOrder, changeShippingMethod } = useCheckout();
@@ -119,7 +115,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
         clearErrors,
         watch,
         setFocus,
-        formState: { errors, isSubmitting }, // Access `errors` from `formState`
+        formState: { errors, isSubmitting },
     } = useForm<FormValues>({
         delayError: 100,
         defaultValues: {
@@ -157,17 +153,14 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
         resolver: zodResolver(schema),
     });
 
-    // Watch for errors and log them to the console whenever they change
     React.useEffect(() => {
         console.log('Form Errors:', errors);
-    }, [errors]); // Triggered anytime the `errors` object changes
+    }, [errors]);
 
-// Set createAccount value to `false` (or `true` if needed) without rendering an input
     React.useEffect(() => {
-        setValue('createAccount', false);  // Set the default value as false
+        setValue('createAccount', false);
     }, [setValue]);
 
-    // Register the vatNumber field (still part of customFields)
     const vatRegister = register('billing.customFields.vatNumber', {
         onChange: (e) => {
             console.log('VAT input changed:', e.target.value);
@@ -175,10 +168,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
         },
     });
 
-
-    // Automatically enforce account creation if activeCustomer.id is missing
     const enforceCreateAccount = !activeCustomer?.id;
-
 
     const onSubmit: SubmitHandler<FormValues> = async ({
                                                            emailAddress,
@@ -203,7 +193,6 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
             }
 
             console.log('Billing before VAT check:', billing);
-            // Extract vat value from the nested customFields
             const vatValue = billing.customFields?.vatNumber || '';
             if (billing.company) {
                 if (!vatValue.trim()) {
@@ -224,9 +213,6 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                 }
             }
 
-
-
-            // Set the billing address for the order
             const { setOrderBillingAddress } = await storefrontApiMutation(ctx)({
                 setOrderBillingAddress: [
                     {
@@ -246,13 +232,11 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
             });
 
             if (setOrderBillingAddress?.__typename !== 'Order') {
-                setError('root', { message: (tErrors as unknown as (key: string) => string)(`errors.backend.${setOrderBillingAddress.errorCode}`) });
+                setError('root', { message: tErrors(`errors.backend.${setOrderBillingAddress.errorCode}`) });
                 return;
             }
 
-            // Set the shipping address for the order
             if (shippingDifferentThanBilling) {
-                // Set the shipping address for the order if it is different than billing
                 const { setOrderShippingAddress } = await storefrontApiMutation(ctx)({
                     setOrderShippingAddress: [
                         { input: { ...shipping, defaultBillingAddress: false, defaultShippingAddress: false } },
@@ -269,7 +253,6 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                     return;
                 }
             } else {
-                // Set the billing address for the order if it is the same as shipping
                 const { setOrderShippingAddress } = await storefrontApiMutation(ctx)({
                     setOrderShippingAddress: [
                         { input: { ...billing, defaultBillingAddress: false, defaultShippingAddress: false } },
@@ -304,7 +287,6 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
 
                 if (setCustomerForOrder?.__typename !== 'Order') {
                     if (setCustomerForOrder.__typename === 'EmailAddressConflictError') {
-                        // TODO: IN THIS CASE WE SHOULD SHOW THE LOGIN FORM or ADD A LINK TO LOGIN
                         setError('emailAddress', {
                             message: tErrors(`errors.backend.${setCustomerForOrder.errorCode}`),
                         });
@@ -316,7 +298,6 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                 }
             }
 
-            // Set the order state to ArrangingPayment
             const { transitionOrderToState } = await storefrontApiMutation(ctx)({
                 transitionOrderToState: [
                     { state: 'ArrangingPayment' },
@@ -334,7 +315,6 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                 ],
             });
 
-            // After all create account if needed and password is provided
             if (enforceCreateAccount && password) {
                 await storefrontApiMutation(ctx)({
                     registerCustomerAccount: [
@@ -371,11 +351,9 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                 setError('root', { message: tErrors(`errors.backend.${transitionOrderToState.errorCode}`) });
                 return;
             }
-            // Redirect to payment page
             push('/checkout/payment');
         } catch (error) {
             console.error("Error during onSubmit:", error);
-
             setError('root', { message: tErrors(`errors.backend.UNKNOWN_ERROR`) });
         }
     };
@@ -443,7 +421,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                 </Stack>
 
                                 <Stack w100 column gap={20}>
-                                    <Stack w100 gap={20}>
+                                    <ResponsiveRow w100 gap={20}>
                                         <Input
                                             {...register('firstName')}
                                             placeholder={t('orderForm.placeholders.firstName')}
@@ -458,8 +436,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                             error={errors.lastName}
                                             required
                                         />
-                                    </Stack>
-                                    <Stack w100 gap={20}>
+                                    </ResponsiveRow>
+                                    <ResponsiveRow w100 gap={20}>
                                         <Input
                                             {...register('phoneNumber', {
                                                 onChange: e => (e.target.value = e.target.value.replace(/[^0-9]/g, '')),
@@ -477,12 +455,12 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                             required
                                             disabled={activeCustomer?.id ? true : false}
                                         />
-                                    </Stack>
-
+                                    </ResponsiveRow>
                                     {/* Password fields */}
                                     {!activeCustomer?.id && (
-                                        <Stack w100 gap={20}>
                                             <CreateAccountWrapper>
+                                                <ResponsiveRow w100 gap={20}>
+
                                                 <Input
                                                     {...register('password', { required: 'Password is required' })}
                                                     type="password"
@@ -503,19 +481,20 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                                     error={errors.confirmPassword}
                                                     required
                                                 />
+                                                </ResponsiveRow>
+
                                             </CreateAccountWrapper>
-                                        </Stack>
                                     )}
                                 </Stack>
                             </Stack>
 
-                            {/* Shipping Part */}
+                            {/* Billing Part */}
                             <BillingWrapper column>
                                 <TH2 size="30px" weight={600} style={{ marginBottom: '30px' }}>
                                     {t('orderForm.billingInfo')}
                                 </TH2>
                                 <Stack w100 column gap={20}>
-                                    <Stack w100 gap={20}>
+                                    <ResponsiveRow w100 gap={20}>
                                         <Input
                                             {...register('billing.fullName')}
                                             placeholder={t('orderForm.placeholders.fullName')}
@@ -530,8 +509,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                             error={errors.billing?.city}
                                             required
                                         />
-                                    </Stack>
-                                    <Stack w100 gap={20}>
+                                    </ResponsiveRow>
+                                    <ResponsiveRow w100 gap={20}>
                                         <Input
                                             {...register('billing.streetLine1')}
                                             placeholder={t('orderForm.placeholders.streetLine1')}
@@ -545,8 +524,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                             label={t('orderForm.streetLine2')}
                                             error={errors.billing?.streetLine2}
                                         />
-                                    </Stack>
-                                    <Stack w100 gap={20}>
+                                    </ResponsiveRow>
+                                    <ResponsiveRow w100 gap={20}>
                                         <Input
                                             {...register('billing.province')}
                                             placeholder={t('orderForm.placeholders.province')}
@@ -561,8 +540,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                             error={errors.billing?.postalCode}
                                             required
                                         />
-                                    </Stack>
-                                    <Stack w100 gap="1.5rem">
+                                    </ResponsiveRow>
+                                    <ResponsiveRow w100 gap="1.5rem">
                                         <Input
                                             {...register('billing.company')}
                                             placeholder={t('orderForm.placeholders.company')}
@@ -572,7 +551,6 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                         {availableCountries && (
                                             <CountrySelect
                                                 {...register('billing.countryCode')}
-                                                // placeholder={t('orderForm.placeholders.countryCode')}
                                                 label={t('orderForm.countryCode')}
                                                 defaultValue={countryCode}
                                                 options={availableCountries}
@@ -580,8 +558,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                                 required
                                             />
                                         )}
-                                    </Stack>
-                                    {/* Always render the VAT field. Its visibility is controlled via CSS */}
+                                    </ResponsiveRow>
                                     <Stack
                                         style={{
                                             visibility: watch('billing.company') ? 'visible' : 'hidden',
@@ -596,21 +573,11 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                             required={Boolean(watch('billing.company'))}
                                         />
                                     </Stack>
-
                                 </Stack>
                             </BillingWrapper>
                         </Stack>
                         <Stack column gap={20}>
                             <Stack justifyBetween itemsCenter>
-                                {/* <CheckBox
-                        {...register('userNeedInvoice', {
-                            onChange: e => {
-                                setValue('userNeedInvoice', e.target.checked);
-                                setValue('NIP', '');
-                            },
-                        })}
-                        label={t('orderForm.userNeedInvoice')}
-                    /> */}
                                 <CheckBox
                                     {...register('shippingDifferentThanBilling')}
                                     checked={watch('shippingDifferentThanBilling')}
@@ -618,38 +585,19 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                 />
                             </Stack>
 
-                            {/* NIP */}
-                            {/* <AnimatePresence>
-                    {watch('userNeedInvoice') && (
-                        <FVInputWrapper
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.2 }}>
-                            <Input
-                                {...register('NIP')}
-                                label={t('orderForm.NIP')}
-                                error={errors.NIP}
-                                placeholder="NIP"
-                                required
-                            />
-                        </FVInputWrapper>
-                    )}
-                </AnimatePresence> */}
-
-                            {/* Billing Part */}
                             <AnimatePresence>
                                 {watch('shippingDifferentThanBilling') && (
                                     <ShippingWrapper
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
-                                        transition={{ duration: 0.2 }}>
+                                        transition={{ duration: 0.2 }}
+                                    >
                                         <TH2 size="30px" weight={600} style={{ marginBottom: '30px' }}>
                                             {t('orderForm.shippingInfo')}
                                         </TH2>
                                         <Stack column gap={20}>
-                                            <Stack w100 gap={20}>
+                                            <ResponsiveRow w100 gap={20}>
                                                 <Input
                                                     {...register('shipping.fullName')}
                                                     label={t('orderForm.fullName')}
@@ -661,22 +609,22 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                                     label={t('orderForm.company')}
                                                     error={errors.shipping?.company}
                                                 />
-                                            </Stack>
-                                            <Stack w100 gap={20}>
+                                            </ResponsiveRow>
+                                            <ResponsiveRow w100 gap={20}>
                                                 <Input
                                                     {...register('shipping.streetLine1')}
                                                     label={t('orderForm.streetLine1')}
-                                                    error={errors.shipping?.province}
+                                                    error={errors.shipping?.streetLine1}
                                                     required
                                                 />
                                                 <Input
                                                     {...register('shipping.streetLine2')}
                                                     label={t('orderForm.streetLine2')}
-                                                    error={errors.shipping?.postalCode}
+                                                    error={errors.shipping?.streetLine2}
                                                     required
                                                 />
-                                            </Stack>
-                                            <Stack w100 gap={20}>
+                                            </ResponsiveRow>
+                                            <ResponsiveRow w100 gap={20}>
                                                 <Input
                                                     {...register('shipping.city')}
                                                     label={t('orderForm.city')}
@@ -693,8 +641,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                                         required
                                                     />
                                                 )}
-                                            </Stack>
-                                            <Stack gap={20}>
+                                            </ResponsiveRow>
+                                            <ResponsiveRow gap={20}>
                                                 <Input
                                                     {...register('shipping.province')}
                                                     label={t('orderForm.province')}
@@ -707,53 +655,15 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                                     error={errors.shipping?.postalCode}
                                                     required
                                                 />
-                                            </Stack>
+                                            </ResponsiveRow>
                                         </Stack>
                                     </ShippingWrapper>
                                 )}
                             </AnimatePresence>
 
-                            {/*/!* Create Account *!/*/}
-                            {/*{!activeCustomer?.id ? (*/}
-                            {/*    <Stack column gap="1.25rem">*/}
-                            {/*        <Stack itemsCenter gap="1rem">*/}
-                            {/*            <CheckBox {...register('createAccount')} label={t('orderForm.createAccount')} />*/}
-                            {/*            <Stack itemsCenter justifyCenter>*/}
-                            {/*                <Tooltip text={t('orderForm.whatAccountGives')}>*/}
-                            {/*                    <Info size={12} />*/}
-                            {/*                </Tooltip>*/}
-                            {/*            </Stack>*/}
-                            {/*        </Stack>*/}
-                            {/*        {watch('createAccount') && (*/}
-                            {/*            <CreateAccountWrapper*/}
-                            {/*                initial={{ opacity: 0 }}*/}
-                            {/*                animate={{ opacity: 1 }}*/}
-                            {/*                exit={{ opacity: 0 }}*/}
-                            {/*                transition={{ duration: 0.2 }}>*/}
-                            {/*                <Input*/}
-                            {/*                    {...register('password')}*/}
-                            {/*                    type="password"*/}
-                            {/*                    label={t('orderForm.password')}*/}
-                            {/*                    error={errors.password}*/}
-                            {/*                    required*/}
-                            {/*                />*/}
-                            {/*                <Input*/}
-                            {/*                    {...register('confirmPassword')}*/}
-                            {/*                    type="password"*/}
-                            {/*                    label={t('orderForm.confirmPassword')}*/}
-                            {/*                    error={errors.confirmPassword}*/}
-                            {/*                    required*/}
-                            {/*                />*/}
-                            {/*            </CreateAccountWrapper>*/}
-                            {/*        )}*/}
-                            {/*    </Stack>*/}
-                            {/*) : null}*/}
-
-                            {/* Submit */}
                             <Stack column justifyBetween gap="0.5rem">
                                 <CheckBox
                                     {...register('terms')}
-                                    // error={errors.terms}
                                     label={
                                         <Trans
                                             i18nKey="orderForm.terms"
@@ -771,14 +681,14 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
                                             exit={{ opacity: 0 }}
-                                            transition={{ duration: 0.2 }}>
+                                            transition={{ duration: 0.2 }}
+                                        >
                                             {errors.terms?.message}
                                         </FormError>
                                     )}
                                 </AnimatePresence>
                             </Stack>
                         </Stack>
-
                     </Stack>
                 </Container>
             </Form>
@@ -793,6 +703,7 @@ const Container = styled(Stack)`
         flex-direction: row-reverse;
     }
 `;
+
 const DeliveryMethodWrapper = styled(Stack)``;
 
 const LinkButton = styled(Link)`
@@ -803,12 +714,10 @@ const LinkButton = styled(Link)`
     font-weight: 600;
 `;
 
-
-
 const StyledButton = styled(Button)`
     appearance: none;
     border: none;
-    background: ${p => (p.theme.background.accentGreen)};
+    background: ${p => p.theme.background.accentGreen};
     text-transform: capitalize !important;
 
     width: 100%;
@@ -819,20 +728,18 @@ const StyledButton = styled(Button)`
     padding: 1.6rem 0.8rem;
     border-radius: 12px;
 
-    & > p {
+    p {
         text-transform: capitalize !important;
+        color: ${p => p.theme.background.white};
 
     }
     & > div {
-
-        color: #ffffff;
+        color: ${p => p.theme.background.white};
         text-align: center;
         font-weight: 600;
         font-size: 20px !important;
-
     }
 `;
-
 
 const BackButton = styled(Link)`
     background-color: transparent;
@@ -880,22 +787,25 @@ const ShippingWrapper = styled(motion.div)`
     margin-top: 1.75rem;
 `;
 
-// const FVInputWrapper = styled(motion.div)`
-//     margin-top: 1.75rem;
-//     position: relative;
-// `;
-
 const StyledLink = styled(Link)`
     color: ${p => p.theme.text.accentGreen};
-    text-decoration: none; /* Example of additional styling */
+    text-decoration: none;
 
     &:hover {
-        color: ${p => p.theme.text.accentGreen}; /* Add hover effect if needed */
+        color: ${p => p.theme.text.accentGreen};
     }
 `;
 
-
-
 const Form = styled.form`
     margin-top: 1.6rem;
+`;
+
+/**
+ * ResponsiveRow forces its children into a row on larger screens but stacks them vertically on mobile.
+ */
+const ResponsiveRow = styled(Stack)`
+    flex-direction: row;
+    @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+        flex-direction: column;
+    }
 `;
