@@ -52,7 +52,7 @@ export const getAllPossibleWithChannels = async () => {
 };
 
 const getStandardLocalePaths = async () => {
-    const paths = [];
+    const paths: { params: { channel: string; locale: string } }[] = [];
     channels.forEach(c => {
         paths.push({ params: { channel: c.slug, locale: c.nationalLocale } });
 
@@ -63,13 +63,9 @@ const getStandardLocalePaths = async () => {
             });
     });
 
-    // Explicitly ensure `/nl/` is included
-    // paths.push({ params: { channel: DEFAULT_CHANNEL_SLUG, locale: 'nl' } });
-
     console.log("Final paths:", paths);
     return paths;
 };
-
 
 /**
  * Get translation props ensuring a valid locale. Uses DEFAULT_LOCALE as fallback.

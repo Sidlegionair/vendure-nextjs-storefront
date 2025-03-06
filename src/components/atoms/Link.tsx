@@ -5,11 +5,12 @@ import { DEFAULT_CHANNEL_SLUG } from '@/src/lib/consts';
 
 const notTranslatedLinks: string[] = [];
 
-interface LinkComponentProps extends LinkProps {
+interface LinkComponentProps
+    extends LinkProps,
+        Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
     skipLocaleHandling?: boolean;
     skipChannelHandling?: boolean;
     external?: boolean;
-    style?: React.CSSProperties;
     ariaLabel?: string;
 }
 
@@ -19,12 +20,12 @@ export const Link: React.FC<PropsWithChildren<LinkComponentProps>> = ({
                                                                           skipChannelHandling,
                                                                           external,
                                                                           ariaLabel,
+                                                                          href,
                                                                           ...rest
                                                                       }) => {
     const router = useRouter();
     const locale = (rest.locale || router.query.locale || '') as string;
     const channel = (router.query.channel || '') as string;
-    const { href, ...restProps } = rest;
     let linkHref = (href || router.asPath) as string;
 
     if (linkHref.indexOf('http') === 0) skipLocaleHandling = true;
@@ -43,8 +44,10 @@ export const Link: React.FC<PropsWithChildren<LinkComponentProps>> = ({
     }
 
     return (
-        <NextLink aria-label={ariaLabel} href={linkHref} {...(external && { target: '_blank' })} {...restProps}>
-            {children}
+        <NextLink href={linkHref} passHref {...(external && { target: '_blank' })}>
+            <a aria-label={ariaLabel} {...rest}>
+                {children}
+            </a>
         </NextLink>
     );
 };

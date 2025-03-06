@@ -3,13 +3,14 @@ import { DEFAULT_CHANNEL, DEFAULT_CHANNEL_SLUG, DEFAULT_LOCALE } from '@/src/lib
 import { ContextModel } from '@/src/lib/getStatic';
 import { fetchChannels } from './channels';
 
+
 export const getContext = async (
     ctx: ContextModel | GetServerSidePropsContext
 ): Promise<ContextModel> => {
     // Grab the channel param and locale param from the route.
     // Note: channel param might actually be a locale if it's "nl" or "en"
     let channelSlug = ctx.params?.channel ?? DEFAULT_CHANNEL_SLUG;
-    let locale = ctx.params?.locale as string | undefined;
+    let locale = ctx.params?.locale as string | string[] | undefined;
 
     console.log("Initial channel param:", channelSlug);
     console.log("Initial locale param:", locale);
@@ -45,15 +46,23 @@ export const getContext = async (
     // If no locale is provided at this point, infer it from the dynamic channel.
     if (!locale) {
         const channelObj = dynamicChannels.find((c: any) => c.slug === channelSlug);
-        locale =
+        const inferredLocale: string =
             channelObj?.nationalLocale ||
-            (channelObj?.locales ? channelObj.locales[0] : DEFAULT_LOCALE);
+            (channelObj?.locales?.length ? channelObj.locales[0] : DEFAULT_LOCALE);
 
-        console.log('DEBUG (inferred):', { params: { channel: channelObj?.slug ?? DEFAULT_CHANNEL, locale } });
-        return { params: { channel: channelObj?.slug ?? DEFAULT_CHANNEL, locale } };
+        console.log('DEBUG (inferred):', {
+            params: { channel: channelObj?.slug ?? DEFAULT_CHANNEL, locale: inferredLocale },
+        });
+        return { params: { channel: channelObj?.slug ?? DEFAULT_CHANNEL, locale: inferredLocale } };
     }
 
+    // Ensure locale is a string. If it's an array, take the first element.
+    const finalLocale = Array.isArray(locale) ? locale[0] : locale;
+
     console.log("Resolved channel:", channelSlug);
-    console.log("Resolved locale:", locale);
-    return { params: { channel: channelSlug, locale } };
+    console.log("Resolved locale:", finalLocale);
+    const resolvedChannelSlug = Array.isArray(channelSlug) ? channelSlug[0] : channelSlug;
+    const resolvedFinalLocale = Array.isArray(finalLocale) ? finalLocale[0] : finalLocale;
+
+    return { params: { channel: resolvedChannelSlug, locale: resolvedFinalLocale } };
 };

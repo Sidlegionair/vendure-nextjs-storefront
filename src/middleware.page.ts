@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { DEFAULT_LOCALE } from '@/src/lib/consts';
 // import { DEFAULT_CHANNEL_SLUG, DEFAULT_LOCALE } from './lib/consts';
 const DEFAULT_CHANNEL_SLUG = process.env.DEFAULT_CHANNEL_SLUG || 'default-channel';
 
