@@ -24,7 +24,15 @@ const ScaleWrapper = ({ blok }) => {
             style={wrapperStyle}
         >
             <div className="hover:scale-110" style={hoverStyle}>
-                {blok.childComponent && <StoryblokComponent blok={blok.childComponent} />}
+                {blok.childComponent &&
+                    (Array.isArray(blok.childComponent) ? (
+                        blok.childComponent.map((child, index) => (
+                            <StoryblokComponent blok={child} key={child._uid || index} />
+                        ))
+                    ) : (
+                        <StoryblokComponent blok={blok.childComponent} />
+                    ))
+                }
             </div>
         </div>
     );
