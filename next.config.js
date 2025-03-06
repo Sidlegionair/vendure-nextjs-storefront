@@ -21,27 +21,14 @@ const nextConfig = {
         // Optionally, use with Server Actions
         useDeploymentIdServerActions: true,
     },
-    async rewrites() {
-        return [
-            {
-                source: '/:channel(nl|en)/:locale(nl|en)/:path*',
-                destination: `/${DEFAULT_CHANNEL}/:locale/:path*`,
-            },
-            {
-                source: '/:channel(nl|en)/:locale(nl|en)',
-                destination: `/${DEFAULT_CHANNEL}/:locale`,
-            },
-            {
-                source: '/:locale(nl|en)/:path*',
-                destination: `/${DEFAULT_CHANNEL}/:locale/:path*`,
-            },
-            {
-                source: '/:locale(nl|en)',
-                destination: `/${DEFAULT_CHANNEL}/:locale`,
-            },
-        ];
-    }
-
+    // async rewrites() {
+    //     return [
+    //         {
+    //             source: '/:locale(nl|en)',
+    //             destination: '/:locale/:locale',
+    //         },
+    //     ];
+    // },
 
     // i18n: {
     //     locales: ['en', 'nl'], // Supported content locales

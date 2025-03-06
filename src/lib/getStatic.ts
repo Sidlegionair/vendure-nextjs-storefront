@@ -52,21 +52,24 @@ export const getAllPossibleWithChannels = async () => {
 };
 
 const getStandardLocalePaths = async () => {
-    const paths: { params: { locale: string; channel: string } }[] = [];
+    const paths = [];
     channels.forEach(c => {
-        // Always include the national locale
         paths.push({ params: { channel: c.slug, locale: c.nationalLocale } });
 
-        // Include additional locales, if any
         c.locales
             .filter(l => l !== c.nationalLocale)
             .forEach(locale => {
                 paths.push({ params: { channel: c.slug, locale } });
             });
     });
-    console.log(paths);
+
+    // Explicitly ensure `/nl/` is included
+    // paths.push({ params: { channel: DEFAULT_CHANNEL_SLUG, locale: 'nl' } });
+
+    console.log("Final paths:", paths);
     return paths;
 };
+
 
 /**
  * Get translation props ensuring a valid locale. Uses DEFAULT_LOCALE as fallback.
@@ -103,6 +106,8 @@ export function makeStaticProps(ns: Array<keyof typeof resources>) {
 export function makeServerSideProps(ns: Array<keyof typeof resources>) {
     return async function getServerSideProps(ctx: GetServerSidePropsContext) {
         const context = await getContext(ctx);
+        console.log('CTX:', context);
+
         return {
             props: await getI18nProps(context, ns),
             context: context.params,
@@ -114,6 +119,6 @@ export function makeServerSideProps(ns: Array<keyof typeof resources>) {
  * Build static paths using dynamic channels.
  */
 export const getStaticPaths = async () => ({
-    fallback: false,
+    fallback: true,
     paths: await getStandardLocalePaths(),
 });

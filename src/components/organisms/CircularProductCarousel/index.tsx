@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import styled from '@emotion/styled';
-import Link from 'next/link';
+import { Link } from '@/src/components/atoms';
 import Image from 'next/image';
 import { Divider, Stack } from '@/src/components';
 import useIsMobile from '@/src/util/hooks/useIsMobile';
@@ -80,7 +80,7 @@ const CenterAnchor = styled.div`
     height: 0;
 `;
 
-const SlideLink = styled.a<{ isHovered: boolean }>`
+const SlideLink = styled(Link)<{ isHovered: boolean }>`
     display: block;
     width: 100%;
     height: 100%;
@@ -428,7 +428,9 @@ export const CircularProductCarousel: React.FC<{
     activeBoardScale?: number;
 }> = ({ products, activeBoardScale = 1.2 }) => {
     const isMobile = useIsMobile();
-    const productCount = products.length;
+
+
+    const productCount = products?.length || 0; // Prevents the crash
     const [displayCount, setDisplayCount] = useState<number>(Math.min(productCount, 11));
     const [activeIndex, setActiveIndex] = useState<number>(productCount);
     const [startX, setStartX] = useState(0);
@@ -831,7 +833,7 @@ export const CircularProductCarousel: React.FC<{
                                 <b>{currentProduct?.customFields?.brand}</b>
                                 {currentProduct?.productName}
                             </ProductTitle>
-                            <Link href={`/snowboards/${currentProduct?.slug}`} passHref>
+                            <Link href={`/snowboards/${currentProduct?.slug}`}>
                                 <StockButton as="a" inStock={currentProduct?.inStock}>
                                     {currentProduct?.inStock ? 'More info' : 'Read more'}
                                 </StockButton>
