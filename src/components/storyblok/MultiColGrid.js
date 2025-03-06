@@ -53,6 +53,7 @@ const MultiColGrid = ({ blok }) => {
                         <div
                             key={nestedBlok._uid || colIndex}
                             style={{
+                                justifyContent: justifyContent, // Apply justify content
                                 flex: `0 0 ${100 / validColumnsPerRow}%`, // Set column width
                                 maxWidth: `${100 / validColumnsPerRow}%`,
                             }}
