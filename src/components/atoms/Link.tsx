@@ -44,10 +44,8 @@ export const Link: React.FC<PropsWithChildren<LinkComponentProps>> = ({
     }
 
     return (
-        <NextLink href={linkHref} passHref {...(external && { target: '_blank' })}>
-            <a aria-label={ariaLabel} {...rest}>
+        <NextLink href={linkHref} passHref {...(external && { target: '_blank' })} aria-label={ariaLabel} {...rest}>
                 {children}
-            </a>
         </NextLink>
     );
 };
