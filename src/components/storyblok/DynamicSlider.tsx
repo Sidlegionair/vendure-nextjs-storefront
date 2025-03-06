@@ -25,7 +25,9 @@ const fetchSliderData = async (slug: string, take = 15): Promise<SliderType> => 
     const channel = Cookies.get('channel') || DEFAULT_CHANNEL_SLUG;
     const locale = Cookies.get('i18next') || DEFAULT_LOCALE;
 
-    const api = SSGQuery({ locale: channel, channel: locale });
+    console.log(channel, locale);
+
+    const api = SSGQuery({ locale: locale, channel: channel });
 
     try {
         const productsQuery = await api({

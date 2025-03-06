@@ -55,6 +55,7 @@ const MultiColGrid = ({ blok }) => {
                             style={{
                                 justifyContent: justifyContent, // Apply justify content
                                 flex: `0 0 ${100 / validColumnsPerRow}%`, // Set column width
+                                display: 'flex',
                                 maxWidth: `${100 / validColumnsPerRow}%`,
                             }}
                         >

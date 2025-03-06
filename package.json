@@ -8,7 +8,7 @@
         "url": "https://aexol.com"
     },
     "scripts": {
-        "dev": "next dev -p  3001",
+        "dev": "next dev --experimental-https -p 3001",
         "build": "next build",
         "postbuild": "next-sitemap",
         "start": "next start",
