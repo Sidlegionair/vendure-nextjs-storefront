@@ -5,6 +5,7 @@ import { ProductSearchType, SearchSelector } from '@/src/graphql/selectors';
 import { SortOrder } from '@/src/zeus';
 import { DEFAULT_LOCALE } from '@/src/lib/consts';
 import { DEFAULT_CHANNEL_SLUG } from '@/src/lib/consts';
+import Cookies from 'js-cookie';
 
 interface SliderType {
     slug: string;
@@ -20,7 +21,11 @@ interface CollectionSliderProps {
 
 // Function to fetch slider data for a single collection
 const fetchSliderData = async (slug: string, take = 15): Promise<SliderType> => {
-    const api = SSGQuery({ locale: DEFAULT_LOCALE, channel: DEFAULT_CHANNEL_SLUG });
+
+    const channel = Cookies.get('channel') || DEFAULT_CHANNEL_SLUG;
+    const locale = Cookies.get('i18next') || DEFAULT_LOCALE;
+
+    const api = SSGQuery({ locale: channel, channel: locale });
 
     try {
         const productsQuery = await api({
