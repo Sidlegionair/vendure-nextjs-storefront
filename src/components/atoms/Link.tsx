@@ -31,7 +31,7 @@ export const Link: React.FC<PropsWithChildren<LinkComponentProps>> = ({
     if (linkHref.indexOf('http') === 0) skipLocaleHandling = true;
     if (notTranslatedLinks.find(ntl => linkHref.startsWith(ntl))) skipLocaleHandling = true;
 
-    const _channel = channel
+    const _channel = channel && !skipChannelHandling
         ? channel === DEFAULT_CHANNEL_SLUG && !router.query.locale
             ? ''
             : `/${router.query.channel}`
