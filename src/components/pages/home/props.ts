@@ -29,6 +29,7 @@ export const getStaticProps = async (ctx: ContextModel) => {
         };
         const productsResponse = await api({ search: [mainProductsQuery, SearchResponseSelector] });
 
+
         if (!productsResponse?.search?.items) {
             throw new Error('Invalid products response structure.');
         }

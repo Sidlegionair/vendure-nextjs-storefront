@@ -16,44 +16,48 @@ const Main = styled(Stack)`
 
 export const Home: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = props => {
     const { i18n, t } = useTranslation('homepage');
-    const [storyblokSections, setStoryblokSections] = useState<any[]>([]);
+    const [storyblokSections, setStoryblokSections] = useState<any[] | null>(null);
 
     useEffect(() => {
         const fetchStory = async () => {
             const storyblokApi = getStoryblokApi();
-            const locale = i18n.language; // Current locale (e.g., 'nl', 'en')
-            const storySlug = locale === 'en' ? 'homepage-story' : `homepage-${locale}`; // Adjust based on locale
-            // const storySlug = locale === 'nl' ? 'homepage-story-nl' : 'homepage-story'; // Adjust based on locale
+            const locale = i18n.language;
+            const storySlug = locale === 'en' ? 'homepage-story' : `homepage-${locale}`;
             try {
                 const { data } = await storyblokApi.get(`cdn/stories/${storySlug}`);
+                // Set storyblokSections to an empty array if the body is null or undefined.
                 setStoryblokSections(data?.story?.content?.body || []);
             } catch (error) {
                 console.error(`Failed to fetch Storyblok content for slug: ${storySlug}`, error);
+                setStoryblokSections([]); // Prevent null from causing issues in the render.
             }
         };
 
         fetchStory();
-    }, [i18n.language]); // Re-fetch when the locale changes
+    }, [i18n.language]);
 
     return (
         <Layout navigation={props.navigation} subnavigation={props.subnavigation} categories={props.categories} pageTitle={t('seo.home')}>
             <Main w100 column gap="4rem">
+                {/* Render CircularProductCarousel only if products array exists and has items */}
+                {props.products && props.products.length > 0 && (
+                    <CircularProductCarousel products={props.products} />
+                )}
 
-                {/* Default Carousel */}
-                <CircularProductCarousel products={props.products} />
+                {/* Render the first Storyblok component only if storyblokSections exists and is not empty */}
+                {storyblokSections && storyblokSections.length > 0 && (
+                    <StoryblokComponent blok={storyblokSections[0]} />
+                )}
 
-                {/* Inject Storyblok Content if available */}
-                {storyblokSections[0] && <StoryblokComponent blok={storyblokSections[0]} />}
-
-                {/* Default Sliders */}
-                {/*<HomePageSliders sliders={props.sliders} seeAllText={t('see-all')} />*/}
-
-                {/* Additional Storyblok Content */}
-                {storyblokSections.slice(1).map((section, index) => (
-                    // <ContentContainer key={index}>
-                        <StoryblokComponent blok={section} />
-                    // </ContentContainer>
+                {/* Render additional Storyblok components if they exist */}
+                {storyblokSections && storyblokSections.length > 1 && storyblokSections.slice(1).map((section, index) => (
+                    <StoryblokComponent key={index} blok={section} />
                 ))}
+
+                {/* Uncomment and conditionally render HomePageSliders if needed */}
+                {/* {props.sliders && props.sliders.length > 0 && (
+                    <HomePageSliders sliders={props.sliders} seeAllText={t('see-all')} />
+                )} */}
             </Main>
         </Layout>
     );

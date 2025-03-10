@@ -57,6 +57,9 @@ export const getStaticProps = async (
     const { slug } = context.params || {};
     const api = SSGQuery(r.context);
 
+
+    console.log(context);
+
     // Base product fetch
     const response =
         typeof slug === 'string'
@@ -74,12 +77,12 @@ export const getStaticProps = async (
     );
 
     // Base queries for related products & clientsAlsoBought (using homePageSlidersSelector)
-    const relatedProducts = await api({
-        collection: [
-            { slug: response.product?.collections?.[0]?.slug || 'search' },
-            homePageSlidersSelector,
-        ],
-    });
+    // const relatedProducts = await api({
+    //     collection: [
+    //         { slug: response.product?.collections?.[0]?.slug || 'search' },
+    //         homePageSlidersSelector,
+    //     ],
+    // });
     const clientsAlsoBought = await api({
         collection: [
             { slug: response.product?.collections?.[0]?.slug || 'search' },
@@ -209,7 +212,7 @@ export const getStaticProps = async (
             optionGroups,
         },
         collections,
-        relatedProducts,
+        // relatedProducts,
         // Wrap the enriched object in an array so it aligns with SliderType[]
         clientsAlsoBought: enrichedClientsAlsoBought ? [enrichedClientsAlsoBought] : [],
         navigation,

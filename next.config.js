@@ -21,14 +21,14 @@ const nextConfig = {
         // Optionally, use with Server Actions
         useDeploymentIdServerActions: true,
     },
-    // async rewrites() {
-    //     return [
-    //         {
-    //             source: '/:locale(nl|en)',
-    //             destination: '/:locale/:locale',
-    //         },
-    //     ];
-    // },
+    async rewrites() {
+        return [
+            {
+                source: '/:locale(nl|en)/:path*',
+                destination: `/${DEFAULT_CHANNEL}/:locale/:path*`,
+            },
+        ];
+    },
 
     // i18n: {
     //     locales: ['en', 'nl'], // Supported content locales

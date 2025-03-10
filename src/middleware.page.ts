@@ -2,45 +2,56 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { DEFAULT_LOCALE } from '@/src/lib/consts';
 
-// Make sure your environment variable is set appropriately.
-const DEFAULT_CHANNEL_SLUG = process.env.DEFAULT_CHANNEL_SLUG || 'r5fw4nd3b8cd8lhz21o';
+const DEFAULT_CHANNEL_SLUG = process.env.DEFAULT_CHANNEL_SLUG || 'default-channel';
+
+// const getAllLocales = () => {
+//     return channels.map(i => i.locales).flat();
+// };
+
+// const getBrowserLanguage = (req: NextRequest) => {
+//     const data = req.headers
+//         .get('accept-language')
+//         ?.split(',')
+//         .map(i => i.split(';'))
+//         ?.reduce((acc: { code: string; priority: string }[], lang) => [...acc, { code: lang[0], priority: lang[1] }], [])
+//         ?.sort((a, b) => (a.priority > b.priority ? -1 : 1));
+//     const code = data ? data[0].code : undefined;
+//     const locales = getAllLocales();
+//     return code && locales.includes(code.substring(0, 2)) ? code.substring(0, 2) : undefined;
+// };
 
 export function middleware(request: NextRequest) {
     const url = new URL(request.url);
-    const pathSegments = url.pathname.split('/').filter(Boolean);
-    console.log('URL segments:', pathSegments);
+    const cachedLocale = request.cookies.get('i18next')?.value;
+    const cachedChannel = request.cookies.get('channel')?.value;
 
-    let channel = DEFAULT_CHANNEL_SLUG;
-    let locale = DEFAULT_LOCALE;
 
-    // If the first segment is a valid locale, use that (and assume default channel).
-    if (pathSegments.length > 0 && ['nl', 'en'].includes(pathSegments[0].toLowerCase())) {
-        locale = pathSegments[0].toLowerCase();
-        // channel remains the default channel.
-    } else if (pathSegments.length > 0) {
-        // Otherwise, assume the first segment is the channel slug.
-        channel = pathSegments[0];
-        if (pathSegments.length > 1 && ['nl', 'en'].includes(pathSegments[1].toLowerCase())) {
-            locale = pathSegments[1].toLowerCase();
+
+    const regex = new RegExp(`/[a-z]{2}(/[a-z]{2})?/`);
+    if (regex.test(url.pathname)) {
+        const split = url.pathname.split('/').filter(x => x !== '');
+        const channel = split[0];
+        const locale = split[1];
+        const replaced = url.href.replace(`/${channel}`, ``);
+        const response = NextResponse.redirect(new URL(replaced), { status: 308 });
+
+        if (channel === DEFAULT_CHANNEL_SLUG) {
+            if (!locale || (locale && locale?.length !== 2)) {
+                response.cookies.set('channel', channel, { path: '/' });
+                response.cookies.set('i18next', DEFAULT_LOCALE, { path: '/' });
+                return response;
+            }
         }
     }
 
-    // If the channel is the default channel and it's explicitly in the URL,
-    // remove it and redirect.
-    if (channel === DEFAULT_CHANNEL_SLUG && pathSegments[0] === DEFAULT_CHANNEL_SLUG) {
-        const newPathSegments = pathSegments.slice(1);
-        const newPath = '/' + newPathSegments.join('/');
-        console.log('Redirecting to:', newPath || '/');
-        return NextResponse.redirect(new URL(newPath || '/', url));
-    }
-
     const response = NextResponse.next();
+    const channel = cachedChannel || DEFAULT_CHANNEL_SLUG;
+    const locale = cachedLocale || DEFAULT_LOCALE;
     response.cookies.set('channel', channel, { path: '/' });
     response.cookies.set('i18next', locale, { path: '/' });
-    response.headers.set('x-channel', channel);
     return response;
 }
 
 export const config = {
-    matcher: `/((?!api|_next/static|_next/image|favicon.ico|fonts).*)`,
+    matcher: `/((?!api|_next/static|_next/image|favicon.ico).*)`,
 };

@@ -84,8 +84,8 @@ const apiFetchVendure =
 
 
             // console.log(HEADERS);
-            console.log(additionalHeaders);
-            console.log(fetchOptions);
+            // console.log(additionalHeaders);
+            // console.log(fetchOptions);
             const credentialsPolicy = 'include';
 
 

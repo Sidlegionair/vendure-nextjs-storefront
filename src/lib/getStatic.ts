@@ -47,7 +47,7 @@ export const getAllPossibleWithChannels = async () => {
         });
     }
 
-    console.log("Generated paths:", paths);
+    // console.log("Generated paths:", paths);
     return paths;
 };
 
