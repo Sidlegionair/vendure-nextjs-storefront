@@ -161,8 +161,8 @@ const AboutUsBlock = ({ blok }) => {
                     }
 
                     .learn-more-button {
-                        font-size: ${({ theme }) => theme.typography.fontSize.h6};
-                        line-height: ${({ theme }) => theme.typography.fontSize.h6};
+                        font-size: ${p => p.typography.fontSize.h6};
+                        line-height:${p => p.typography.fontSize.h6};
                     }
                 }
             `}</style>

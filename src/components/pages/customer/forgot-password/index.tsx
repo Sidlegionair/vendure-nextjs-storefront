@@ -206,6 +206,8 @@ const StyledButton = styled(Button)`
     color: ${({ theme }) => theme.background.main};
 
     &:hover, &:focus{
+        color: ${({ theme }) => theme.text.accent};
+
         border: 1px solid ${({ theme }) => theme.background.accent};
     }
 `

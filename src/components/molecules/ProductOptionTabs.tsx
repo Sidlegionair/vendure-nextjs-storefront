@@ -81,8 +81,9 @@ const TabHeader = styled.button<{ active: boolean }>`
     border: none;
     cursor: pointer;
     position: relative;
-    font-size: 18px;
-    font-weight: 600;
+    color: ${({ theme, active }) =>
+            active ? '400' : 'bold'};
+
     color: ${({ theme, active }) =>
             active ? theme.text.main : theme.text.subtitle};
     transition: color 0.3s ease-in-out;

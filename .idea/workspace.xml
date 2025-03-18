@@ -6,14 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="86c1ycmb1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/forms/CheckBox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forms/CheckBox.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/forms/Input.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forms/Input.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/forms/shared/Label.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forms/shared/Label.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/components/shared.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/components/shared.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/atoms/Price.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/atoms/Price.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/forms/Banner.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forms/Banner.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductOptionTabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductOptionTabs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/Ratings.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/Ratings.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/customer/forgot-password/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/forgot-password/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/customer/reset-password/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/reset-password/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/customer/sign-in/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/sign-in/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/customer/sign-up/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/sign-up/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/products/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/products/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,7 +192,7 @@
       <workItem from="1741706878388" duration="2521000" />
       <workItem from="1741787658962" duration="2534000" />
       <workItem from="1741794062545" duration="669000" />
-      <workItem from="1742222193349" duration="19526000" />
+      <workItem from="1742222193349" duration="23428000" />
     </task>
     <servers>
       <YouTrack url="https://modernmediahub.youtrack.cloud">

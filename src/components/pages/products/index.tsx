@@ -132,6 +132,8 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
     // **2. Use `specs` from Props**
     const specs = props.specs;
 
+    const rating = Math.random() * 5;
+
     return (
         <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation}>
             <ContentContainer>
@@ -172,14 +174,15 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                             <ProductInfoStack w100 column gap={15}>
                                 <Stack gap={15}>
                                     {typeof product.customFields?.brand === 'string' && (
-                                        <StyledBrand noWrap>
+                                        <StyledBrand>
                                             {product.customFields.brand}
                                         </StyledBrand>
                                     )}
                                     <StyledProductTitle>{product.name}</StyledProductTitle>
                                 </Stack>
-                                <Ratings rating={Math.random() * 5} />
-                                {variant && <Price size="40px" price={variant.priceWithTax} currencyCode={variant.currencyCode} />}
+
+                                <RatingStack itemsCenter gap={10}><Ratings rating={rating} /> <b>Reviews:</b> 4.9</RatingStack>
+                                {variant && <Price price={variant.priceWithTax} currencyCode={variant.currencyCode} />}
                             </ProductInfoStack>
                             <Stack w100 gap="10px" column>
                                 {variant && Number(variant?.stockLevel) > 0 && Number(variant?.stockLevel) <= 10 && (
@@ -354,6 +357,12 @@ const fields = [
     { key: 'bindingSizeVariant', label: 'Binding Size' },
 ];
 
+
+const RatingStack = styled(Stack)`
+    font-family: "Suisse BP Int'l light", sans-serif;
+    font-size: 18px;
+`
+
 // Styled Components (unchanged)
 const StyledBoughtHeading = styled(TH2)`
     margin-top: 60px;
@@ -379,10 +388,6 @@ const StyledBoughtContent = styled('p')`
 `;
 
 const StyledDescription = styled(Stack)`
-    font-family: 'Calibri', sans-serif;
-    font-size: 16px;
-    line-height: 24px;
-    font-weight: 400;
     flex-direction: column;
     gap: 15px;
 `;
@@ -404,26 +409,11 @@ const MobileHideWrapper = styled.div`
     }
 `;
 
-const StyledBrand = styled(TH1)`
-    font-weight: 700;
-    font-size: 24px;
-    line-height: 24px;
-
-    @media (min-width: 768px) {
-        font-size: 35px;
-        line-height: normal;
-    }
+const StyledBrand = styled.h4`
+    font-weight: bold;
 `;
 
-const StyledProductTitle = styled(TH1)`
-    font-weight: 300;
-    font-size: 24px;
-    line-height: 24px;
-
-    @media (min-width: 768px) {
-        font-size: 35px;
-        line-height: normal;
-    }
+const StyledProductTitle = styled.h4`
 `;
 
 const Main = styled(Stack)`
@@ -470,6 +460,7 @@ const ProductInfoStack = styled(Stack)`
 `;
 
 const MakeItQuick = styled(TP)`
+    font-size: 18px;
     color: ${({ theme }) => theme.error};
 `;
 

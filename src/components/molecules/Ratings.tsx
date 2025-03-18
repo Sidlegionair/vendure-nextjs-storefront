@@ -15,7 +15,7 @@ export const Ratings: React.FC<{ rating: number }> = ({ rating }) => {
     }, {});
 
     return (
-        <Stack w100>
+        <Stack>
             {stars.map((star) => (
                 <RatingsWrapper
                     key={star}
