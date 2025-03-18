@@ -71,6 +71,7 @@ type DetailTheme = {
         fontFamily: string;
         fontSize: {
             small: string;
+            h4: string;
             h6: string;
             medium: string;
             large: string;
@@ -249,6 +250,7 @@ export const LightTheme = createTheme(300, (t) => ({
         fontFamily: `'Suisse BP Int'l', sans-serif`,
         fontSize: {
             small: '14px',
+            h4: '30px',
             h6: '16px',
             medium: '20px',
             large: '24px',

@@ -36,7 +36,7 @@ export const Price: React.FC<PriceProps> = ({
 
 const StyledPrice = styled(TP)<{ discount?: boolean }>`
     color: ${p => (p.discount ? p.theme.text.accentGreen : p.theme.text.main)};
-    font-size: ${p => (p.discount ? p.theme.typography.fontSize.small : p.theme.typography.fontSize.h6)};
+    font-size: ${p => (p.discount ? p.theme.typography.fontSize.small : p.theme.typography.fontSize.h4)};
     font-weight: bold;
     ${p => (p.discount ? `text-decoration: line-through;` : '')}
 `;
