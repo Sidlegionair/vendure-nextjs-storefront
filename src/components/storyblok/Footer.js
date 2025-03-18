@@ -45,7 +45,7 @@ const Footer = ({ blok }) => {
                                 alt={name || 'Logo'}
                                 className="logo-image"
                             />
-                    </div>
+                        </div>
                     )}
 
                     {description && (
@@ -116,26 +116,26 @@ const Footer = ({ blok }) => {
                         font-family: 'Suisse BP Int\'l' !important;
 
                     }
-                    
+
                     .brand-section {
                         p {
                             font-family: 'Suisse BP Int\'l' !important;
-                            font-style: normal;
-                            font-weight: 400;
-                            font-size: 18px;
-                            line-height: 26px;
-                            /* or 144% */
-                        }
-                        
-                        span {
-                            font-family: 'Suisse BP Int\'l' !important;
-                            font-style: normal;
+                            //font-style: normal;
                             //font-weight: 400;
                             //font-size: 18px;
                             //line-height: 26px;
                             /* or 144% */
                         }
-                        
+
+                        span {
+                            font-family: 'Suisse BP Int\'l' !important;
+                            //font-style: normal;
+                            //font-weight: 400;
+                            //font-size: 18px;
+                            //line-height: 26px;
+                            /* or 144% */
+                        }
+
                         * {
                             font-family: 'Suisse BP Int\'l' !important;
 
@@ -230,10 +230,10 @@ const Footer = ({ blok }) => {
                 }
 
                 .column-title {
-                    font-size: 20px;
+                    //font-size: 20px;
                     font-weight: 500;
                     margin-bottom: 20px;
-                    text-transform: uppercase;
+                    //text-transform: uppercase;
                 }
 
                 .link-list {

@@ -51,7 +51,7 @@ const Carousel = ({ blok }) => {
                     >
                         <div className="slideOverlay">
                             <div className="slideContent">
-                                <h2>{slide.title}</h2>
+                                <h3>{slide.title}</h3>
                                 <a
                                     href={getSlideLink(slide.link)}
                                     // target="_blank"
@@ -123,32 +123,17 @@ const Carousel = ({ blok }) => {
                 }
 
                 .slideOverlay h2 {
-                    font-size: 35px;
-                    font-weight: 600;
-                    line-height: 35px;
                     text-align: left;
                     margin: 0;
-
-                    @media (max-width: 767px) {
-                        font-size: 24px;
-                        line-height: 24px;
-                    }
                 }
 
                 .slideOverlay a {
-                    font-size: 16px;
-                    font-weight: 400;
-                    line-height: 16px;
                     text-align: left;
                     text-decoration: underline;
                     text-transform: uppercase;
                     margin-top: 8px;
                     color: #fff;
                     transition: color 0.2s;
-                    @media (max-width: 767px) {
-                        font-size: 14px;
-                        line-height: 14px;
-                    }
                 }
 
                 .slideOverlay a:hover {

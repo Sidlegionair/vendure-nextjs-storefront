@@ -269,19 +269,16 @@ const TextRedirectContainer = styled(Link)`
     gap: 20px;
 `;
 
-const BrandName = styled(TH1)`
+const BrandName = styled.h4`
     color: ${({ theme }) => theme.text.main};
-    font-size: 18px;
 `;
 
 const ProductName = styled(TP)`
     color: ${({ theme }) => theme.text.main};
-    font-size: 16px;
 `;
 
 const PriceTag = styled(Price)`
     color: ${({ theme }) => theme.text.main};
-    font-size: 20px;
 `;
 
 const AddToCartButton = styled(Button)`

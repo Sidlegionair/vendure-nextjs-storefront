@@ -72,14 +72,9 @@ FacetCheckBox.displayName = 'CheckBox';
 const StyledLabel = styled(Label)`
     display: flex;
     align-items: space-between;
+    font-size: ${({ theme }) => theme.typography.fontSize.h6};
     justify-content: space-between;
     width: 100%;
-    /* Lorem Ipsum dolor */
-    font-family: 'Calibri', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 17px;
     /* identical to box height */
     display: flex;
     align-items: center;

@@ -6,7 +6,30 @@
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="86c1ycmb1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/products/paths.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/products/paths.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/forms/FacetCheckbox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forms/FacetCheckbox.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/Breadcrumbs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/Breadcrumbs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/FacetFilter.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/FacetFilter.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/FacetGroupDropdown.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/FacetGroupDropdown.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductTile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductTile.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductVariantTile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductVariantTile.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/Ratings.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/Ratings.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/SortBy.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/SortBy.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/DesktopNavigation/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/NavgationSearch/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/NavgationSearch/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/collections/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/collections/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlockInverted.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlockInverted.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/ArticleCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/ArticleCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/Carousel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/Carousel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/Footer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/Footer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/MosaicBlock.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/MosaicBlock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/PageHeading.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/PageHeading.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/ProfileGrid.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/ProfileGrid.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/RelatedArticles.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/RelatedArticles.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/global.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/global.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/theme/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/theme/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +53,7 @@
     <setting file="file://$PROJECT_DIR$/.env" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/node_modules/@types/react/index.d.ts" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/node_modules/lucide-react/dist/lucide-react.d.ts" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/node_modules/next/dist/client/link.d.ts" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/node_modules/swiper/swiper-react.d.ts" root0="SKIP_INSPECTION" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php" />
@@ -55,6 +79,28 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;timeTracker.activityTracker&quot;: &quot;null&quot;,
+    &quot;timeTracker.comment&quot;: &quot;&quot;,
+    &quot;timeTracker.inactivityPeriodInMills&quot;: &quot;600000&quot;,
+    &quot;timeTracker.isAutoTrackingEnable&quot;: &quot;true&quot;,
+    &quot;timeTracker.isAutoTrackingTemporaryDisabled&quot;: &quot;false&quot;,
+    &quot;timeTracker.isManualTrackingEnable&quot;: &quot;false&quot;,
+    &quot;timeTracker.isPaused&quot;: &quot;true&quot;,
+    &quot;timeTracker.isPostAfterCommitEnabled&quot;: &quot;true&quot;,
+    &quot;timeTracker.isPostedScheduled&quot;: &quot;true&quot;,
+    &quot;timeTracker.isRunning&quot;: &quot;false&quot;,
+    &quot;timeTracker.isScheduledEnabled&quot;: &quot;true&quot;,
+    &quot;timeTracker.isWhenProjectClosedEnabled&quot;: &quot;false&quot;,
+    &quot;timeTracker.issueId&quot;: &quot;Default&quot;,
+    &quot;timeTracker.issueIdReadable&quot;: &quot;Default&quot;,
+    &quot;timeTracker.pausedTime&quot;: &quot;0&quot;,
+    &quot;timeTracker.query&quot;: &quot;&quot;,
+    &quot;timeTracker.recordedTime&quot;: &quot;0&quot;,
+    &quot;timeTracker.scheduledPeriod&quot;: &quot;19:00:0&quot;,
+    &quot;timeTracker.startTime&quot;: &quot;0&quot;,
+    &quot;timeTracker.timeInMills&quot;: &quot;0&quot;,
+    &quot;timeTracker.type&quot;: &quot;Billable&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/home/floris/PhpstormProjects/vendure-nextjs-storefront/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
@@ -156,9 +202,17 @@
       <workItem from="1741250515282" duration="2585000" />
       <workItem from="1741254663836" duration="5224000" />
       <workItem from="1741265536874" duration="7186000" />
-      <workItem from="1741618889609" duration="2112000" />
+      <workItem from="1741618889609" duration="3173000" />
+      <workItem from="1741706878388" duration="2521000" />
+      <workItem from="1741787658962" duration="2534000" />
+      <workItem from="1741794062545" duration="669000" />
+      <workItem from="1742222193349" duration="17401000" />
     </task>
-    <servers />
+    <servers>
+      <YouTrack url="https://modernmediahub.youtrack.cloud">
+        <username>random</username>
+      </YouTrack>
+    </servers>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />

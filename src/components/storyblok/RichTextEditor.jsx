@@ -183,7 +183,6 @@ const RichTextEditor = ({ blok }) => {
             {renderedContent}
             <style jsx>{`
                 .rich-text-editor {
-                    font-family: 'Calibri', sans-serif;
                     color: #4d4d4d;
                     line-height: 1.6;
                     ${blok.backgroundColor ? `background-color: ${blok.backgroundColor};` : ''}
@@ -192,51 +191,25 @@ const RichTextEditor = ({ blok }) => {
                     box-shadow: ${blok.boxShadow || 'none'};
                     overflow: hidden;
 
-                    h1 {
-                        font-size: 5rem;
-                    }
-                    h2 {
-                        font-size: 3.8rem;
-                    }
-                    h3 {
-                        font-size: 3rem;
-                    }
-                    h4 {
-                        font-size: 2.2rem;
-                    }
-
-                    b {
-                        font-weight: bold;
-                    }
-
-                    h1,
-                    h2,
-                    h3 {
-                        font-family: 'Suisse BP Int\'l', sans-serif;
-                        font-weight: 600;
-                        color: #000;
-                    }
-
+                   
                     p {
-                        font-family: 'Calibri', sans-serif;
-                        font-size: 20px;
-                        font-weight: 400;
-                        line-height: 26px;
                         margin-bottom: 1.25rem;
-                        color: #4d4d4d;
+                        color: #4D4D4D;
                     }
 
                     a,
                     a * {
+                        font-family: "Suisse BP Int'l Antique", sans-serif;
                         font-size: inherit;
-                        font-family: 'Calibri', sans-serif;
-                        color: #9E2E3A !important;
+                        //color: #9E2E3A !important;
                         font-weight: bold;
-                        text-decoration: none;
+                        text-decoration: underline;
+
+
                     }
 
                     a:hover {
-                        text-decoration: underline;
+                        text-decoration: none;
                     }
 
                     blockquote {
@@ -245,7 +218,7 @@ const RichTextEditor = ({ blok }) => {
                         margin-left: 1em;
                         border-left: 4px solid #ddd;
                         padding-left: 1em;
-                        color: #555;
+                        color: #555;    
                     }
 
                     ul,

@@ -89,7 +89,7 @@ export const ProductTile: React.FC<{
                     <TitleContainer>
                         <Stack column>
                             {brand && (
-                                <Brand size="18px" weight={700} noWrap>
+                                <Brand>
                                     {brand}
                                 </Brand>
                             )}
@@ -124,8 +124,12 @@ export const ProductTile: React.FC<{
 };
 
 const ImageContainer = styled.div`
+    background:  ${({ theme }) => theme.tile.background};
+    padding: 23px 14px ;
+
     position: relative;
-    max-width: 50rem;
+    //max-width: 100%;
+    width: 100%;
     min-height: 280px; /* adjust this value to suit your design */
 
     @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
@@ -149,21 +153,17 @@ const ImageContainer = styled.div`
     }
 `;
 
-const Brand = styled(TP)`
-    line-height: normal;
-    font-weight: 700;
+const Brand = styled.h4`
     color: ${({ theme }) => theme.text.main};
 `;
 
-const ProductName = styled(TP)`
-    font-weight: 300;
-    font-size: 18px;
+const ProductName = styled.h5`
     color: ${({ theme }) => theme.text.main};
+    font-weight: 300;
 `;
 
 const ProductPrice = styled(Stack)`
-    font-size: 18px;
-    font-weight: 500;
+    font-weight: bold;
 `;
 
 const ProductPriceValue = styled(TP)`
@@ -195,10 +195,7 @@ const Facet = styled.div`
     align-items: flex-start;
 `;
 
-const FacetTitle = styled.span`
-    font-weight: 700;
-    font-size: 18px;
-    text-transform: lowercase;
+const FacetTitle = styled.h6`
     color: ${({ theme }) => theme.text.main};
 `;
 
@@ -228,15 +225,18 @@ const TitleContainer = styled.div`
 `;
 
 const TextWrapper = styled(Link)`
-  margin-top: 0.75rem;
-  display: flex;
+    padding: 23px 14px ;
+
+    margin-top: 0.75rem;
+    display: flex;
   flex-direction: column;
   gap: 1rem;
 `;
 
 const Main = styled(Stack)`
     position: relative;
-    width: fit-content;
+    width: 100%;
+
     font-weight: 500;
 
     @media (min-width: ${({ theme }) => theme.breakpoints.xl}) {

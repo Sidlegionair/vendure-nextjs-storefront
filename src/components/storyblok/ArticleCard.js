@@ -103,7 +103,7 @@ const ArticleCard = ({ blok }) => {
                     color: #fff;
                     padding: 4px 16px;
                     border-radius: 15.5px;
-                    font-size: 16px;
+                    font-size: ${({ theme }) => theme.typography.fontSize.h6};
                     font-weight: 400;
                     text-align: center;
                 }

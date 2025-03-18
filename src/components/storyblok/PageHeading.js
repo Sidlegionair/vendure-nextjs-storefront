@@ -58,58 +58,6 @@ const PageHeading = ({ blok }) => {
                     z-index: 1;
                     max-width: 100vw;
 
-                    h1 {
-                        font-size: 48px;
-                        font-weight: 600;
-                        line-height: 54px;
-                        text-align: left;
-                    }
-
-                    h2 {
-                        font-size: 38px;
-                        font-weight: 600;
-                        line-height: 42px;
-                        text-align: left;
-                    }
-
-                    h3 {
-                        font-size: 32px;
-                        font-weight: 600;
-                        line-height: 36px;
-                        text-align: left;
-                    }
-
-                    h4 {
-                        font-size: 28px;
-                        font-weight: 600;
-                        line-height: 32px;
-                        text-align: left;
-                    }
-
-                    h5 {
-                        font-size: 24px;
-                        font-weight: 600;
-                        line-height: 28px;
-                        text-align: left;
-                    }
-
-                    h6 {
-                        font-size: 20px;
-                        font-weight: 600;
-                        line-height: 24px;
-                        text-align: left;
-                    }
-
-                    p {
-                        font-family: 'Calibri', sans-serif;
-                        color: rgba(77, 77, 77, 1);
-                        font-size: 20px;
-                        font-weight: 400;
-                        line-height: 26px;
-                        margin-bottom: 1.5rem;
-                        text-align: left;
-                    }
-
                     ul,
                     ol {
                         font-size: 20px;

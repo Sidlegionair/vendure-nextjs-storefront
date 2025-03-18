@@ -20,16 +20,19 @@ const MosaicBlock = ({ blok }) => {
         return '#'; // Fallback for unknown types
     };
 
+    console.log('LINK:', );
+
     return (
         <section className="mosaic" {...storyblokEditable(blok)}>
             <div className="mosaic__text" style={{ backgroundColor: blok.backgroundColor || '#355047' }}>
-                <h2 className="mosaic__title">{blok.title || 'Our Story'}</h2>
+                <h1 className="mosaic__title">{blok.title || 'Our Story'}</h1>
                 <div className="mosaic__description" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
-                {blok.buttonLink && (
+                {blok.buttonLink && blok.buttonLink.url !== "" && (
                     <a
                         className="mosaic__button"
                         href={getButtonLink(blok.buttonLink)}
                         style={{
+                            fontWeight: 'bold',
                             color: blok.backgroundColor || '#355047',
                             backgroundColor: '#FFFFFF',
                         }}
@@ -94,9 +97,6 @@ const MosaicBlock = ({ blok }) => {
                 }
 
                 .mosaic__title {
-                    font-size: 65px;
-                    font-weight: 600;
-                    line-height: 1.2;
                     margin-bottom: 1.25rem;
                 }
 
@@ -112,9 +112,6 @@ const MosaicBlock = ({ blok }) => {
                     border-radius: 8px;
                     text-decoration: none;
                     margin-top: 1rem;
-                    font-size: 20px;
-                    font-weight: 600;
-                    line-height: 20px;
                 }
 
                 .mosaic__gallery {

@@ -124,12 +124,11 @@ const StyledLink = styled(Link)<{ isSubMenu?: boolean; isActive?: boolean }>`
 
     display: flex;
     align-items: start;
-    font-weight: ${p => (p.isSubMenu ? 400 : 600)};
-    font-size: ${p => (p.isSubMenu ? '18px' : '20px')};
-    line-height: ${p => (p.isSubMenu ? '18px' : '20px')};
+    font-weight: ${p => (p.isSubMenu ? 400 : 'bold')};
+    line-height: ${p => (p.isSubMenu ? '26px' : '26px')};
 
     @media (max-width: ${p => p.theme.breakpoints.md}) {
-        font-size: 16px;
+        font-size: ${({ theme }) => theme.typography.fontSize.h6};
     }
 
     @media (max-width: ${p => p.theme.breakpoints.sm}) {

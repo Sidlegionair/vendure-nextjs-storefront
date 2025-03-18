@@ -43,11 +43,11 @@ const StyledLink = styled(Link)<{ blocked?: number }>`
 `;
 
 const StyledTP = styled(TP)<{ isLast?: boolean }>`
-        font-family: 'Calibri', sans-serif; 
-        opacity: ${p => (p.isLast ? 1 : '0.4')};
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 20px;
+    font-family: 'Suisse BP Int\\'l Antique', sans-serif;
+    opacity: ${p => (p.isLast ? 1 : '0.4')};
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
     
         text-decoration: none;
         pointer-events: ${p => (p.isLast ? 'none' : 'auto')};

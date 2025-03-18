@@ -25,7 +25,7 @@ export const FacetFilterCheckbox: React.FC<FacetProps> = ({
         <GridWrapper w100 column>
             <StyledDivider />
             <GridTitle onClick={() => setOpen(!open)}>
-                <StyledTFacetHeading capitalize size="1.5rem">
+                <StyledTFacetHeading>
                     {name}
                 </StyledTFacetHeading>
                 <IconWrapper>
@@ -62,11 +62,9 @@ const StyledDivider = styled(Divider)`
     margin-bottom: 18px;
 `;
 
-const StyledTFacetHeading = styled(TFacetHeading)`
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 16px;
+const StyledTFacetHeading = styled.h6`
+    font-weight: bold;
+    font-family: "Suisse BP Int'l antique", sans-serif;
 `;
 
 const GridWrapper = styled(Stack)`

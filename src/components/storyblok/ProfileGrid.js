@@ -161,7 +161,7 @@ const ProfileGrid = ({ blok }) => {
 
                 .profile-description {
                     font-weight: 300;
-                    font-size: 16px;
+                    font-size: ${({ theme }) => theme.typography.fontSize.h6};
                     color: #2A2A2A;
                 }
             `}</style>

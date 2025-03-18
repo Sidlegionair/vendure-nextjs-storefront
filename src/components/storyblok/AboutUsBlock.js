@@ -27,7 +27,7 @@ const AboutUsBlock = ({ blok }) => {
 
                 {/* Text Content */}
                 <div className="about-us-text">
-                    <h2>{blok.title || 'About Us'}</h2>
+                    <h1>{blok.title || 'About Us'}</h1>
                     <div
                         className="rich-text-content"
                         dangerouslySetInnerHTML={{
@@ -41,7 +41,7 @@ const AboutUsBlock = ({ blok }) => {
                             }),
                         }}
                     />
-                    {buttonLink && blok.buttonText && (
+                    {blok.buttonLink && blok.buttonLink.url !== "" && blok.buttonText && (
                         <a
                             className="learn-more-button"
                             href={buttonLink}
@@ -96,23 +96,19 @@ const AboutUsBlock = ({ blok }) => {
                 }
 
                 .about-us-text h2 {
-                    font-size: 65px;
-                    font-weight: 600;
-                    line-height: 65px;
                     text-align: left;
                     margin-bottom: 1.25rem;
                 }
 
                 .rich-text-content p {
                     font-family: 'Calibri', sans-serif;
-                    font-size: 20px;
-                    font-weight: 400;
                     line-height: 26px;
                     text-align: left;
                     margin-bottom: 1.25rem;
                 }
 
                 .learn-more-button {
+                    font-weight: bold;
                     display: inline-block;
                     padding: 18px 30px;
                     background-color: #FFFFFF;
@@ -120,9 +116,6 @@ const AboutUsBlock = ({ blok }) => {
                     border-radius: 8px;
                     text-decoration: none;
                     margin-top: 1rem;
-                    font-size: 20px;
-                    font-weight: 600;
-                    line-height: 20px;
                     text-align: right;
                 }
 
@@ -159,12 +152,7 @@ const AboutUsBlock = ({ blok }) => {
                         gap: 20px;
                         text-align: left;
                     }
-
-                    .about-us-text h2 {
-                        font-size: 50px;
-                        line-height: 50px;
-                    }
-
+                    
                     .rich-text-content p {
                         font-family: 'Calibri', sans-serif;
                         font-weight: 400;
@@ -173,8 +161,8 @@ const AboutUsBlock = ({ blok }) => {
                     }
 
                     .learn-more-button {
-                        font-size: 16px;
-                        line-height: 16px;
+                        font-size: ${({ theme }) => theme.typography.fontSize.h6};
+                        line-height: ${({ theme }) => theme.typography.fontSize.h6};
                     }
                 }
             `}</style>

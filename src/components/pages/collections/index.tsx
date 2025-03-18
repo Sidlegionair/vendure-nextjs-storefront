@@ -119,7 +119,7 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
         >
             <HeadingStack>
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
-                <StyledTH1>{collection?.name}</StyledTH1>
+                <h1>{collection?.name}</h1>
             </HeadingStack>
 
             <ContentContainer>

@@ -257,23 +257,14 @@ const InfoBlock = styled.div`
     }
 `;
 
-const ProductTitle = styled.h3`
+const ProductTitle = styled.div`
     display: flex;
     align-items: start;
     justify-content: left;
     width: 100%;
-    font-size: 16px;
-    font-weight: 300;
-    line-height: 16px;
     text-align: left;
     gap: 20px;
 
-    & > b {
-        font-size: 18px;
-        font-weight: 700;
-        line-height: 18px;
-        text-align: center;
-    }
 
     @media (max-width: 768px) {
         font-size: 14px;
@@ -295,17 +286,20 @@ const ProductDetails = styled.div`
     display: flex;
     justify-content: center;
     font-size: 15px;
-    font-weight: 600;
+    //font-weight: 600;
     gap: 20px;
     line-height: 15px;
     text-align: left;
+    //font-family: 'Suisse BP Int\\' l Antique', 'sans-serif' !important;
+    font-family: "Suisse BP Int\\'l";
 
     & > span > span {
-        font-size: 15px;
-        font-weight: 300;
-        line-height: 15px;
+
+        font-size: ${({ theme }) => theme.typography.fontSize.h6};
+        line-height: 20px;
         text-align: center;
-    }
+
+}
 
     @media (max-width: 768px) {
         font-size: 14px;
@@ -322,7 +316,7 @@ const StockButton = styled.button<{ inStock: boolean }>`
     align-items: center;
     background-color: ${({ inStock, theme }) =>
             inStock ? theme.text.accentGreen : theme.text.accentGreen};
-    font-size: 16px;
+    font-size: ${({ theme }) => theme.typography.fontSize.h6};
     font-weight: 600;
     line-height: 16px;
     color: white;
@@ -828,7 +822,7 @@ export const CircularProductCarousel: React.FC<{
             <BottomStackWrapper>
                 <BottomStack column>
                     <InfoBlock>
-                        <Stack justifyBetween itemsCenter>
+                        <Stack justifyBetween itemsCenter gap={20}>
                             <ProductTitle>
                                 <b>{currentProduct?.customFields?.brand}</b>
                                 {currentProduct?.productName}
@@ -842,21 +836,21 @@ export const CircularProductCarousel: React.FC<{
                         <Divider marginBlock="1.5rem" />
                         <Stack gap={26}>
                             <ProductDetails>
-                                <span>
-                                  Price:{' '}
+                                <h6>
+                                    <b>Price:{' '}</b>
                                     <span className="amount">
                                     &euro;{(currentProduct?.priceWithTax?.min / 100).toFixed(2)}
                                   </span>
-                                </span>
+                                </h6>
                                 {currentProduct?.terrain && (
-                                    <span>
-                                        Terrain: <span>{currentProduct?.terrain}</span>
-                                    </span>
+                                    <h6>
+                                        <b>Terrain:</b> <span>{currentProduct?.terrain}</span>
+                                    </h6>
                                 )}
                                 {currentProduct?.level && (
-                                    <span>
-                                        Rider Level: <span>{currentProduct?.level}</span>
-                                    </span>
+                                    <h6>
+                                        <b>Rider Level:</b> <span>{currentProduct?.level}</span>
+                                    </h6>
                                 )}
                             </ProductDetails>
                         </Stack>

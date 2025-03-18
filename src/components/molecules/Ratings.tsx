@@ -21,8 +21,8 @@ export const Ratings: React.FC<{ rating: number }> = ({ rating }) => {
                     key={star}
                     style={{
                         position: 'relative',
-                        height: '1.5rem',
-                        width: '1.5rem',
+                        height: '15px',
+                        width: '15px',
                     }}
                 >
                     {/* EMPTY STAR as background */}
@@ -66,9 +66,9 @@ export const Ratings: React.FC<{ rating: number }> = ({ rating }) => {
 
 const RatingsWrapper = styled(Stack)`
     position: relative;
-    width: 1.5rem;
-    height: 1.5rem;
-    color: rgba(251, 200, 43, 1);
+    width: 15px;
+    height: 15px;
+    color: black;
     display: flex;
     gap: 1.17px;
 

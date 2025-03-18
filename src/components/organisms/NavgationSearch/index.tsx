@@ -357,7 +357,6 @@ const Input = styled.input`
     box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.15);
     border-radius: 37.5px;
     outline: none;
-    font-size: 1.5rem;
     color: ${p => p.theme.text.main};
     background: ${p => p.theme.background.main};
     transition: all 0.2s ease-in-out;

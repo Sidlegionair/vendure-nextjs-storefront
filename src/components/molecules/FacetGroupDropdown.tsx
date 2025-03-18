@@ -49,19 +49,24 @@ export const FacetGroupDropdown: React.FC<FacetGroupDropdownProps> = ({
     return (
         <DropdownContainer ref={ref}>
             <DropdownHeader onClick={() => setOpen(!open)}>
-                <TP weight={600} size="14px">
-                    {facetGroup.name}
-                </TP>
-                <SelectedText>{displayText}</SelectedText>
-                {/* Only show reset button if there are active selections */}
-                {selectedOptions.length > 0 && (
-                    <ResetIcon onClick={resetFilters}>
-                        <X size={16} />
-                    </ResetIcon>
-                )}
-                <ChevronIcon>
-                    <ChevronDown />
-                </ChevronIcon>
+                <Stack column>
+                    <small>
+                        <b>{facetGroup.name}</b>
+                    </small>
+                    <SelectedText>{displayText}</SelectedText>
+                </Stack>
+                <Stack itemsCenter justifyCenter>
+                    {/* Only show reset button if there are active selections, otherwise show the chevron */}
+                    {selectedOptions.length > 0 ? (
+                        <ResetIcon onClick={resetFilters}>
+                            <X size={16} />
+                        </ResetIcon>
+                    ) : (
+                        <ChevronIcon>
+                            <ChevronDown />
+                        </ChevronIcon>
+                    )}
+                </Stack>
             </DropdownHeader>
             <AnimatePresence>
                 {open && (
@@ -77,9 +82,9 @@ export const FacetGroupDropdown: React.FC<FacetGroupDropdownProps> = ({
                                 selected={selected.includes(value.id)}
                                 onClick={() => onToggleFilter(facetGroup, value)}
                             >
-                                <TP size="1.5rem" weight={400}>
+                                <small>
                                     {value.name}
-                                </TP>
+                                </small>
                                 {selected.includes(value.id) && (
                                     <CheckIcon>
                                         <Check />
@@ -94,39 +99,47 @@ export const FacetGroupDropdown: React.FC<FacetGroupDropdownProps> = ({
     );
 };
 
-const DropdownContainer = styled.div`
+const DropdownContainer = styled(Stack)`
     position: relative;
-    margin-right: 1rem;
+    //margin-right: 15px ;
 `;
 
-const DropdownHeader = styled.div`
-    display: flex;
-    align-items: center;
+const DropdownHeader = styled(Stack)`
+    align-items: start;
+    justify-content: space-between;
     cursor: pointer;
-    padding: 0.75rem 1rem;
+    padding: 23px 15px 5px 15px;
+    gap: 15px;
+    min-width: 188px;
     border: 1px solid #4d4d4d;
     border-radius: 8px;
     background-color: ${({ theme }) => theme.background.main};
 `;
 
-const SelectedText = styled.div`
+
+const SelectedText = styled.small`
     flex-grow: 1;
     font-size: 14px;
     font-weight: 300;
-    margin: 0 0.5rem;
     text-align: left;
 `;
+
 
 const ResetIcon = styled.div`
     display: flex;
     align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
     cursor: pointer;
-    margin-right: 0.5rem;
 `;
 
 const ChevronIcon = styled.div`
     display: flex;
     align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
 `;
 
 const CheckIcon = styled.div`

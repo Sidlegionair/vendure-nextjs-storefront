@@ -38,67 +38,69 @@ select {
     cursor: pointer;
 }
 
-/* OPTIONAL */
-/* this ensures that 1rem = 10px, makes responsiveness a lot easier with below settings */
-html {
-    font-size: 62.5%;
-    text-size-adjust: none;
-    font-smooth: always;
-    -webkit-text-size-adjust: 100%;
-    font-variant-ligatures: none;
-    -webkit-font-variant-ligatures: none;
-    text-rendering: optimizeLegibility;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
+/*!* OPTIONAL *!*/
+/*!* this ensures that 1rem = 10px, makes responsiveness a lot easier with below settings *!*/
+/*html {*/
+/*    font-size: 62.5%;*/
+/*    text-size-adjust: none;*/
+/*    font-smooth: always;*/
+/*    -webkit-text-size-adjust: 100%;*/
+/*    font-variant-ligatures: none;*/
+/*    -webkit-font-variant-ligatures: none;*/
+/*    text-rendering: optimizeLegibility;*/
+/*    -moz-osx-font-smoothing: grayscale;*/
+/*    -webkit-font-smoothing: antialiased;*/
 
-}
-@media (max-width: 1230px) {
-    html {
-        font-size: 50%;
-    }
-}
+/*}*/
+/*@media (max-width: 1230px) {*/
+/*    html {*/
+/*        font-size: 50%;*/
+/*    }*/
+/*}*/
 
-@media (max-width: 600px) {
-    html {
-        font-size: 40%;
-    }
-}
+/*@media (max-width: 600px) {*/
+/*    html {*/
+/*        font-size: 40%;*/
+/*    }*/
+/*}*/
 
-@media (max-width: 350px) {
-    html {
-        font-size: 33%;
-    }
-}
+/*@media (max-width: 350px) {*/
+/*    html {*/
+/*        font-size: 33%;*/
+/*    }*/
+/*}*/
 
-@media (min-width: 1700px) {
-    html {
-        font-size: 65%;
-    }
-}
+/*@media (min-width: 1700px) {*/
+/*    html {*/
+/*        font-size: 65%;*/
+/*    }*/
+/*}*/
 
-@media (min-width: 2000px) {
-    html {
-        font-size: 67.5%;
-    }
-}
+/*@media (min-width: 2000px) {*/
+/*    html {*/
+/*        font-size: 67.5%;*/
+/*    }*/
+/*}*/
 
-@media (min-width: 2500px) {
-    html {
-        font-size: 70%;
-    }
-}
+/*@media (min-width: 2500px) {*/
+/*    html {*/
+/*        font-size: 70%;*/
+/*    }*/
+/*}*/
 
-@media (min-width: 3800px) {
-    html {
-        font-size: 72.5%;
-    }
-}
+/*@media (min-width: 3800px) {*/
+/*    html {*/
+/*        font-size: 72.5%;*/
+/*    }*/
+/*}*/
 
 input,
 select {
     font-family: inherit;
-    font-size: 1.6rem;
+    /*font-size: 1.6rem;*/
     /* turn off highlighting */
+    font-size: 20px;
+    line-height: 26px;
     -webkit-background-clip: text;
     -webkit-text-fill-color: none;
     transition: background-color 5000s ease-in-out 0s;
@@ -110,25 +112,44 @@ ul {
 }
 
 h1 {
-    font-size: 5rem;
+    font-size: 65px;
+    line-height: normal;
+    font-weight: bold;
 }
 h2 {
-    font-size: 3.8rem;
+    font-size: 45px;
+    line-height: normal;
+    font-weight: bold;
 }
 h3 {
-    font-size: 3rem;
+    font-size: 35px;
+    line-height: normal;
+    font-weight: bold;
 }
 h4 {
-    font-size: 2.2rem;
+    font-size: 30px;
+    line-height: 36px;
+}
+h5 {
+    font-size: 25px;
+    line-height: 30px;
+}
+
+h6, small {
+    font-size: 16px;
+    line-height: 20px;
 }
 
 p {
-    font-size: 1.6rem;
+    font-size: 20px;
+    line-height: 26px;
 }
 
 a {
+    font-family: inherit;
     text-decoration: none;
-    font-size: 1.6rem;
+    font-size: 20px;
+    line-height: 26px;
 }
 
 .pswp__bg {
@@ -328,9 +349,9 @@ a {
 
 body {
     font-family: 'Suisse BP Int\'l', sans-serif;
-    font-size: 18px;
-    font-weight: 300;
-    line-height: 20px;
+    font-size: 20px;
+    /*font-weight: 400;*/
+    line-height: 26px;
     text-align: left;
 }
 

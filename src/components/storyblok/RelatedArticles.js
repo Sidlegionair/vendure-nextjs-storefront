@@ -16,14 +16,6 @@ const RelatedArticles = ({ blok }) => {
                     margin-top: 50px;
                 }
                 
-                h2 {
-                    //font-family: Suisse BP Int'l;
-                    font-size: 38px;
-                    font-weight: 600;
-                    line-height: 38px;
-                    text-align: left;
-
-                }
                 
                 .grid {
                     margin-top: 50px;

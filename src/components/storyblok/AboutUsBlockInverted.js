@@ -35,9 +35,9 @@ const AboutUsBlockInverted = ({ blok }) => {
                     className="about-us-text"
                     style={{ backgroundColor: blok.backgroundColor || '#9E2E3A' }}
                 >
-                    <h2>{blok.title || 'About Us'}</h2>
+                    <h1>{blok.title || 'About Us'}</h1>
                     <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
-                    {blok.buttonLink && blok.buttonText && (
+                    {blok.buttonLink && blok.buttonLink.url !== "" && blok.buttonText && (
                         <a
                             style={{ color: blok.backgroundColor }}
                             className="learn-more-button"
@@ -106,28 +106,14 @@ const AboutUsBlockInverted = ({ blok }) => {
                 }
 
                 .about-us-text h2 {
-                    font-size: 65px;
-                    font-weight: 600;
-                    line-height: 65px;
                     margin-bottom: 1.25rem;
 
-                    @media (max-width: 767px) {
-                        font-size: 50px;
-                        line-height: 50px;
-                    }
                 }
 
                 .rich-text-content p {
                     font-family: 'Calibri', sans-serif;
-                    font-size: 20px;
-                    font-weight: 400;
-                    line-height: 26px;
                     margin-bottom: 1.25rem;
 
-                    @media (max-width: 767px) {
-                        font-size: 18px;
-                        line-height: 26px;
-                    }
                 }
 
                 .learn-more-button {
@@ -138,9 +124,7 @@ const AboutUsBlockInverted = ({ blok }) => {
                     border-radius: 8px;
                     text-decoration: none;
                     margin-top: 1rem;
-                    font-size: 20px;
-                    font-weight: 600;
-                    line-height: 20px;
+                    font-weight: bold;
                 }
             `}</style>
         </section>
