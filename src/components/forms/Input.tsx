@@ -19,7 +19,7 @@ export const Input = forwardRef((props: InputType, ref: React.ForwardedRef<HTMLI
     return (
         <Stack w100 column gap="0.25rem">
             <InputWrapper w100 column>
-                <Label htmlFor={props.name} style={{ fontSize: 14, fontWeight: 400 }}>
+                <Label htmlFor={props.name}>
                     {label}
                     {props.required && <FormRequired>&nbsp;*</FormRequired>}
                 </Label>
@@ -92,11 +92,9 @@ export const StyledInput = styled.input<{ error?: boolean }>`
     border: 0;
     outline: none;
     margin-top: 0.6rem;
-    padding: 15px 0px;
+    //padding: 15px 0px;
     color: ${p => p.theme.text.main};
     border-bottom: 1px solid #BBBBBB;
-    font-size: 16px;
-    line-height: 16px;
 
     :focus {
         border-bottom: 1px solid #BBBBBB;

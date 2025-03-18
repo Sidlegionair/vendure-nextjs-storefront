@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 
 export const FormContainer = styled(Stack)`
     width: 100%;
-    min-height: calc(100vh - 6rem);
+    min-height: calc(100vh);
     flex-direction: column;
     gap: 3.5rem;
     justify-content: center;

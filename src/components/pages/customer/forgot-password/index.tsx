@@ -92,7 +92,7 @@ export const ForgotPasswordPage: React.FC<InferGetServerSidePropsType<typeof get
                                 }}
                             />
                         </Absolute>
-                        <StyledTP weight={600}>{t('forgotPasswordTitle')}</StyledTP>
+                        <StyledH3>{t('forgotPasswordTitle')}</StyledH3>
                         <FormContent w100 column itemsCenter gap="1.75rem">
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <StyledInput
@@ -102,7 +102,7 @@ export const ForgotPasswordPage: React.FC<InferGetServerSidePropsType<typeof get
                                     {...register('emailAddress')}
                                 />
                                 <StyledButton disabled={isSubmitting} type="submit">
-                                    {t('newPassword')}
+                                    {t('resetPassword')}
                                 </StyledButton>
                             </Form>
                             <Stack column itemsCenter gap="0.5rem">
@@ -118,10 +118,14 @@ export const ForgotPasswordPage: React.FC<InferGetServerSidePropsType<typeof get
 };
 
 const StyledLink = styled(Link)`
+    font-family: "Suisse BP Int'l antique", sans-serif;
     position: relative;
     color: ${({ theme }) => theme.text.main};
     display: block;
     transition: text-decoration 0.3s ease;
+    text-decoration: underline;
+    line-height: 24px;
+    font-weight: bold;
 
     &:hover {
         text-decoration: underline;
@@ -129,14 +133,16 @@ const StyledLink = styled(Link)`
 `;
 
 
-const StyledTP = styled(TP)`
-    font-size: 38px;
-    line-height: 38px;
-`
+const StyledH3 = styled.h3`
+    font-family: "Suisse BP Int'l antique", sans-serif;
+`;
 
 const StyledFormWrapper = styled(FormWrapper)`
     //background: white;
-`
+    opacity: 0.8;
+    background: ${({ theme }) => theme.background.main};
+
+`;
 
 
 const StyledAuthContainer = styled(ContentContainer)`
@@ -161,10 +167,10 @@ const StyledAuthContainer = styled(ContentContainer)`
         padding: 0 1.5rem;
     }
 
-    
-    
-    
-        position: relative;
+
+
+
+    position: relative;
     height: 100%;
     min-height: 100vh;
     width: 100%;
@@ -183,17 +189,23 @@ const StyledAuthContainer = styled(ContentContainer)`
     }
 `;
 
-const StyledButton = styled(Button)`
-    background-color: ${({ theme }) => theme.background.accent};
-    color: ${({ theme }) => theme.background.main};
-`
 
 const StyledInput = styled(Input)`
     width: 100%;
-    
+
     label {
-        font-size: 16px;
-        line-height: 16px;
-        font-weight: 300;
+        font-weight: bold;
+    }
+`
+
+const StyledButton = styled(Button)`
+    align-self: center;
+    padding: 18px 84px;
+    width: fit-content;
+    background-color: ${({ theme }) => theme.background.accent};
+    color: ${({ theme }) => theme.background.main};
+
+    &:hover, &:focus{
+        border: 1px solid ${({ theme }) => theme.background.accent};
     }
 `

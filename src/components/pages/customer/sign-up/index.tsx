@@ -106,7 +106,7 @@ export const SignUpPage: React.FC<InferGetServerSidePropsType<typeof getServerSi
                         <Absolute w100>
                             <Banner error={errors.root} clearErrors={() => setError('root', { message: undefined })} />
                         </Absolute>
-                        <TP weight={600}>{t('signUpTitle')}</TP>
+                        <StyledH3>{t('signUpTitle')}</StyledH3>
                         <FormContent w100 column itemsCenter gap="1.75rem">
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <StyledInput
@@ -133,8 +133,8 @@ export const SignUpPage: React.FC<InferGetServerSidePropsType<typeof getServerSi
                             </Form>
 
                             <Stack column itemsCenter gap="0.5rem">
-                                <Link href="/customer/forgot-password">{t('forgotPassword')}</Link>
-                                <Link href="/customer/sign-in">{t('signIn')}</Link>
+                                <StyledLink href="/customer/forgot-password">{t('forgotPassword')}</StyledLink>
+                                <StyledLink href="/customer/sign-in">{t('signIn')}</StyledLink>
                             </Stack>
                         </FormContent>
                     </StyledFormWrapper>
@@ -146,10 +146,14 @@ export const SignUpPage: React.FC<InferGetServerSidePropsType<typeof getServerSi
 
 
 const StyledLink = styled(Link)`
+    font-family: "Suisse BP Int'l antique", sans-serif;
     position: relative;
     color: ${({ theme }) => theme.text.main};
     display: block;
     transition: text-decoration 0.3s ease;
+    text-decoration: underline;
+    line-height: 24px;
+    font-weight: bold;
 
     &:hover {
         text-decoration: underline;
@@ -157,14 +161,16 @@ const StyledLink = styled(Link)`
 `;
 
 
-const StyledTP = styled(TP)`
-    font-size: 38px;
-    line-height: 38px;
-`
+const StyledH3 = styled.h3`
+    font-family: "Suisse BP Int'l antique", sans-serif;
+`;
 
 const StyledFormWrapper = styled(FormWrapper)`
     //background: white;
-`
+    opacity: 0.8;
+    background: ${({ theme }) => theme.background.main};
+
+`;
 
 
 const StyledAuthContainer = styled(ContentContainer)`
@@ -189,12 +195,12 @@ const StyledAuthContainer = styled(ContentContainer)`
         padding: 0 1.5rem;
     }
 
-    
-    
-    
-        position: relative;
+
+
+
+    position: relative;
     height: 100%;
-    min-height: 100vh;
+    min-height: 150%;
     width: 100%;
 
     &::before {
@@ -211,17 +217,23 @@ const StyledAuthContainer = styled(ContentContainer)`
     }
 `;
 
-const StyledButton = styled(Button)`
-    background-color: ${({ theme }) => theme.background.accent};
-    color: ${({ theme }) => theme.background.main};
-`
 
 const StyledInput = styled(Input)`
     width: 100%;
-    
+
     label {
-        font-size: 16px;
-        line-height: 16px;
-        font-weight: 300;
+        font-weight: bold;
+    }
+`
+
+const StyledButton = styled(Button)`
+    align-self: center;
+    padding: 18px 84px;
+    width: fit-content;
+    background-color: ${({ theme }) => theme.background.accent};
+    color: ${({ theme }) => theme.background.main};
+
+    &:hover, &:focus{
+        border: 1px solid ${({ theme }) => theme.background.accent};
     }
 `

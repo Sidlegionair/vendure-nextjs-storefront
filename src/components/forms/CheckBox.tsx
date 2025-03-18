@@ -39,10 +39,10 @@ export const CheckBox = forwardRef((props: InputType, ref: React.ForwardedRef<HT
                         onChange && onChange(e);
                     }}
                 />
-                <Label htmlFor={props.name}>
+                <StyledLabel htmlFor={props.name}>
                     {label}
                     {props.required && <FormRequired>&nbsp;*</FormRequired>}
-                </Label>
+                </StyledLabel>
             </CheckboxStack>
             {props.required && error ? (
                 <FormErrorWrapper>
@@ -105,6 +105,10 @@ const CheckboxStack = styled(Stack)`
     position: relative;
     width: fit-content;
 `;
+
+const StyledLabel = styled(Label)`
+    font-size: ${p => p.theme.typography.fontSize.h6};
+`
 
 const Checkbox = styled.input`
     appearance: none;

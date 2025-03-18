@@ -100,7 +100,7 @@ export const ResetPasswordPage: React.FC<InferGetServerSidePropsType<typeof getS
                     <Absolute w100>
                         <Banner error={errors.root} clearErrors={() => setError('root', { message: undefined })} />
                     </Absolute>
-                    <StyledTP weight={600}>{t('resetPasswordTitle')}</StyledTP>
+                    <StyledH3>{t('resetPasswordTitle')}</StyledH3>
                     <StyledFormWrapper column itemsCenter gap="1.75rem">
                         <FormContent w100 column itemsCenter gap="1.75rem">
                             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -130,14 +130,17 @@ export const ResetPasswordPage: React.FC<InferGetServerSidePropsType<typeof getS
 
 
 
-const StyledTP = styled(TP)`
-    font-size: 38px;
-    line-height: 38px;
-`
+
+const StyledH3 = styled.h3`
+    font-family: "Suisse BP Int'l antique", sans-serif;
+`;
 
 const StyledFormWrapper = styled(FormWrapper)`
     //background: white;
-`
+    opacity: 0.8;
+    background: ${({ theme }) => theme.background.main};
+
+`;
 
 
 const StyledAuthContainer = styled(ContentContainer)`
@@ -162,10 +165,10 @@ const StyledAuthContainer = styled(ContentContainer)`
         padding: 0 1.5rem;
     }
 
-    
-    
-    
-        position: relative;
+
+
+
+    position: relative;
     height: 100%;
     min-height: 100vh;
     width: 100%;
@@ -187,15 +190,20 @@ const StyledAuthContainer = styled(ContentContainer)`
 
 const StyledInput = styled(Input)`
     width: 100%;
-    
+
     label {
-        font-size: 16px;
-        line-height: 16px;
-        font-weight: 300;
+        font-weight: bold;
     }
 `
 
 const StyledButton = styled(Button)`
+    align-self: center;
+    padding: 18px 84px;
+    width: fit-content;
     background-color: ${({ theme }) => theme.background.accent};
     color: ${({ theme }) => theme.background.main};
+
+    &:hover, &:focus{
+        border: 1px solid ${({ theme }) => theme.background.accent};
+    }
 `
