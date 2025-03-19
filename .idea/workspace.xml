@@ -6,8 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="86c1ycmb1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/storyblok/Grid.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/Grid.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/atoms/TypoGraphy.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/atoms/TypoGraphy.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductImageWithInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductImageWithInfo.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/CartDrawer/CartBody.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/CartDrawer/CartBody.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/CartDrawer/CartHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/CartDrawer/CartHeader.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -185,7 +188,7 @@
       <workItem from="1741787658962" duration="2534000" />
       <workItem from="1741794062545" duration="669000" />
       <workItem from="1742222193349" duration="23574000" />
-      <workItem from="1742382076247" duration="7901000" />
+      <workItem from="1742382076247" duration="11697000" />
     </task>
     <servers>
       <YouTrack url="https://modernmediahub.youtrack.cloud">

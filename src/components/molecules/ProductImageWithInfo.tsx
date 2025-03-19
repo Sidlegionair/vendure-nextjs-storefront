@@ -33,6 +33,8 @@ export const ProductImageWithInfo: React.FC<ProductImageWithInfoProps> = ({
 
 const StyledLink = styled(Link)<{ hover?: number; size: string }>`
     position: relative;
+    max-width: 100px;
+    max-height: 125px;
     display: flex;
     flex-direction: column;
     gap: 1rem;

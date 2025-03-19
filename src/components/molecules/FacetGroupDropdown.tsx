@@ -121,8 +121,6 @@ const DropdownHeader = styled(Stack)<{ selected: boolean }>`
 `;
 
 const SelectedText = styled.small`
-    flex-grow: 1;
-    font-size: 14px;
     font-weight: 300;
     text-align: left;
 `;

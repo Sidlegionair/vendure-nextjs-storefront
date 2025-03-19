@@ -34,7 +34,7 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
                             <CartRow w100 justifyBetween key={id}>
                                 <Stack gap="2rem">
                                     <ProductImageWithInfo
-                                        size="thumbnail-big"
+                                        size="thumbnail"
                                         href={`/snowboards/${productVariant.product.slug}`}
                                         imageSrc={featuredAsset?.preview}
                                     />
@@ -46,16 +46,18 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
                                                         {customFields.brand}
                                                     </TP>
                                                 )}
-
+                                            </Stack>
+                                            <Stack gap="0.5rem">
                                                 <TP size="18px" weight={300} noWrap>
                                                     {productVariant.product.name}
                                                 </TP>
+
+                                                {optionInName && (
+                                                    <TP size="16px" weight={200}>
+                                                        {productVariant.name.replace(productVariant.product.name, '')}
+                                                    </TP>
+                                                )}
                                             </Stack>
-                                            {optionInName && (
-                                                <TP size="16px" weight={200}>
-                                                    {productVariant.name.replace(productVariant.product.name, '')}
-                                                </TP>
-                                            )}
                                         </Stack>
                                         <Stack column gap={18}>
                                             <QuantityCounter v={quantity} onChange={v => setItemQuantityInCart(id, v)} />

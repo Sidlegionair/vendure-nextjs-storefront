@@ -183,6 +183,11 @@ const RichTextEditor = ({ blok }) => {
             {renderedContent}
             <style jsx>{`
                 .rich-text-editor {
+                    /* Dynamic font-family and weight applied to the whole container */
+                    font-family: ${blok.useAntique
+                            ? `"Suisse BP Int'l Antique", sans-serif`
+                            : `"Suisse BP Int'l", sans-serif`};
+                    font-weight: ${blok.fontWeight || 'inherit'};
                     color: #4d4d4d;
                     line-height: 1.6;
                     ${blok.backgroundColor ? `background-color: ${blok.backgroundColor};` : ''}
@@ -190,58 +195,54 @@ const RichTextEditor = ({ blok }) => {
                     border-radius: ${blok.borderRadius || '0'};
                     box-shadow: ${blok.boxShadow || 'none'};
                     overflow: hidden;
+                }
 
-                   h1 {
-                       margin-bottom: 26px;
-                   }
-                    
-                    h2 {
-                        margin-bottom: 7px;
-                    }
-                    
-                    h3 {
-                        margin-bottom: 5px;
-                    }
-                    
-                    p {
-                        margin-bottom: 1.25rem;
-                        color: #4D4D4D;
-                    }
+                h1 {
+                    margin-bottom: 26px;
+                }
 
-                    a,
-                    a * {
-                        font-family: "Suisse BP Int'l Antique", sans-serif;
-                        font-size: inherit;
-                        //color: #9E2E3A !important;
-                        font-weight: bold;
-                        text-decoration: underline;
+                h2 {
+                    margin-bottom: 7px;
+                }
 
+                h3 {
+                    margin-bottom: 5px;
+                }
 
-                    }
+                p {
+                    margin-bottom: 1.25rem;
+                    color: #4D4D4D;
+                }
 
-                    a:hover {
-                        text-decoration: none;
-                    }
+                a,
+                a * {
+                    /* If you want anchors to have any specific overrides, add them here */
+                    font-size: inherit;
+                    text-decoration: underline;
+                }
 
-                    blockquote {
-                        font-family: 'Calibri', sans-serif;
-                        font-style: italic;
-                        margin-left: 1em;
-                        border-left: 4px solid #ddd;
-                        padding-left: 1em;
-                        color: #555;    
-                    }
+                a:hover {
+                    text-decoration: none;
+                }
 
-                    ul,
-                    ol {
-                        margin: 1rem 0;
-                    }
+                blockquote {
+                    font-family: 'Calibri', sans-serif;
+                    font-style: italic;
+                    margin-left: 1em;
+                    border-left: 4px solid #ddd;
+                    padding-left: 1em;
+                    color: #555;
+                }
 
-                    img {
-                        max-width: 100%;
-                        height: auto;
-                        margin: 1rem 0;
-                    }
+                ul,
+                ol {
+                    margin: 1rem 0;
+                }
+
+                img {
+                    max-width: 100%;
+                    height: auto;
+                    margin: 1rem 0;
                 }
             `}</style>
         </div>
