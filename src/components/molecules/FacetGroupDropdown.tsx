@@ -48,7 +48,10 @@ export const FacetGroupDropdown: React.FC<FacetGroupDropdownProps> = ({
 
     return (
         <DropdownContainer ref={ref}>
-            <DropdownHeader onClick={() => setOpen(!open)}>
+            <DropdownHeader
+                selected={selectedOptions.length > 0}
+                onClick={() => setOpen(!open)}
+            >
                 <Stack column>
                     <small>
                         <b>{facetGroup.name}</b>
@@ -82,9 +85,7 @@ export const FacetGroupDropdown: React.FC<FacetGroupDropdownProps> = ({
                                 selected={selected.includes(value.id)}
                                 onClick={() => onToggleFilter(facetGroup, value)}
                             >
-                                <small>
-                                    {value.name}
-                                </small>
+                                <small>{value.name}</small>
                                 {selected.includes(value.id) && (
                                     <CheckIcon>
                                         <Check />
@@ -101,21 +102,23 @@ export const FacetGroupDropdown: React.FC<FacetGroupDropdownProps> = ({
 
 const DropdownContainer = styled(Stack)`
     position: relative;
-    //margin-right: 15px ;
 `;
 
-const DropdownHeader = styled(Stack)`
+const DropdownHeader = styled(Stack)<{ selected: boolean }>`
     align-items: start;
     justify-content: space-between;
     cursor: pointer;
-    padding: 23px 15px 5px 15px;
+    padding: 15px 15px 5px 15px;
+    min-height: 65px;
     gap: 15px;
     min-width: 188px;
     border: 1px solid #4d4d4d;
     border-radius: 8px;
-    background-color: ${({ theme }) => theme.background.main};
+    background-color: ${({ theme, selected }) =>
+            selected ? theme.background.accent : theme.background.main};
+    color: ${({ theme, selected }) =>
+            selected ? theme.background.main : 'inherit'};
 `;
-
 
 const SelectedText = styled.small`
     flex-grow: 1;
@@ -123,7 +126,6 @@ const SelectedText = styled.small`
     font-weight: 300;
     text-align: left;
 `;
-
 
 const ResetIcon = styled.div`
     display: flex;
@@ -167,8 +169,13 @@ const DropdownItem = styled.div<{ selected: boolean }>`
     display: flex;
     align-items: center;
     background-color: ${({ theme, selected }) =>
-    selected ? theme.background.third : 'unset'};
+            selected ? theme.background.accent : 'unset'};
+    color: ${({ theme, selected }) =>
+            selected ? theme.background.main : 'inherit'};
     &:hover {
         background-color: ${({ theme }) => theme.background.third};
+        color: ${({ theme, selected }) =>
+                selected ? theme.text.main : 'inherit'};
+
     }
 `;

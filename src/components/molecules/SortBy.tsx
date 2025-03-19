@@ -75,7 +75,8 @@ const DropdownHeader = styled(Stack)`
     align-items: start;
     justify-content: space-between;
     cursor: pointer;
-    padding: 23px 15px 5px 15px;
+    padding: 15px 15px 5px 15px;
+    min-height: 65px;
     gap: 15px;
     min-width: 188px;
     border: 1px solid #4d4d4d;
