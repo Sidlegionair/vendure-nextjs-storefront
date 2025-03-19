@@ -191,7 +191,18 @@ const RichTextEditor = ({ blok }) => {
                     box-shadow: ${blok.boxShadow || 'none'};
                     overflow: hidden;
 
-                   
+                   h1 {
+                       margin-bottom: 26px;
+                   }
+                    
+                    h2 {
+                        margin-bottom: 7px;
+                    }
+                    
+                    h3 {
+                        margin-bottom: 5px;
+                    }
+                    
                     p {
                         margin-bottom: 1.25rem;
                         color: #4D4D4D;

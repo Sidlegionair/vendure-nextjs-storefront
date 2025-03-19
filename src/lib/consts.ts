@@ -1,4 +1,4 @@
-export const DEFAULT_CHANNEL = process.env.DEFAULT_CHANNEL_SLUG || 'default-channel';
+export const DEFAULT_CHANNEL = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL_SLUG || 'default-channel';
 export const DEFAULT_CHANNEL_SLUG = 'en';
 
 export const DEFAULT_LOCALE = 'en';

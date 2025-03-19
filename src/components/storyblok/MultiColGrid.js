@@ -31,7 +31,7 @@ const MultiColGrid = ({ blok }) => {
     // Define the grid content
     const gridContent = (
         <div
-            className="flex flex-col w-full gap-6 mx-auto"
+            className="flex flex-col w-full gap-6"
             style={{
                 backgroundImage: backgroundImageUrl ? `url(${backgroundImageUrl})` : "none",
                 backgroundSize: backgroundSize,

@@ -6,16 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="86c1ycmb1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/atoms/Price.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/atoms/Price.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/forms/Banner.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forms/Banner.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/ProductOptionTabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/ProductOptionTabs.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/Ratings.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/Ratings.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/forgot-password/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/forgot-password/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/reset-password/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/reset-password/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/sign-in/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/sign-in/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/customer/sign-up/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/customer/sign-up/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/products/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/products/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/AboutUsBlock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/next.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/ProductPageProductsSlider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/ProductPageProductsSlider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/Slider/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/Slider/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/DynamicSlider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/DynamicSlider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/Grid.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/Grid.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/MultiColGrid.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/MultiColGrid.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/storyblok/RichTextEditor.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/channels.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/channels.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/consts.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/consts.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middleware.page.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middleware.page.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,8 +115,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-76f8388c3a79-JavaScript-PS-243.24978.50" />
-        <option value="bundled-php-predefined-a98d8de5180a-fbeb0b58ac0f-com.jetbrains.php.sharedIndexes-PS-243.24978.50" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PS-243.26053.13" />
+        <option value="bundled-php-predefined-a98d8de5180a-1ec7b7818973-com.jetbrains.php.sharedIndexes-PS-243.26053.13" />
       </set>
     </attachedChunks>
   </component>
@@ -192,7 +193,8 @@
       <workItem from="1741706878388" duration="2521000" />
       <workItem from="1741787658962" duration="2534000" />
       <workItem from="1741794062545" duration="669000" />
-      <workItem from="1742222193349" duration="23428000" />
+      <workItem from="1742222193349" duration="23574000" />
+      <workItem from="1742382076247" duration="7779000" />
     </task>
     <servers>
       <YouTrack url="https://modernmediahub.youtrack.cloud">

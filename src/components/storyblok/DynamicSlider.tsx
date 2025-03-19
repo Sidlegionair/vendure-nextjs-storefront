@@ -22,8 +22,17 @@ interface CollectionSliderProps {
 // Function to fetch slider data for a single collection
 const fetchSliderData = async (slug: string, take = 15): Promise<SliderType> => {
 
-    const channel = Cookies.get('channel') || DEFAULT_CHANNEL_SLUG;
+    console.log('DEFAULT CHANNEL SLUG', process.env.NEXT_PUBLIC_DEFAULT_CHANNEL_SLUG)
+
+
+    const channel = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL_SLUG || Cookies.get('channel') ;
     const locale = Cookies.get('i18next') || DEFAULT_LOCALE;
+
+    if(!channel) {
+        throw new Error('No such channel');
+    }
+
+    console.log('COOKIE CHANNEL:', Cookies.get('channel'));
 
     console.log(channel, locale);
 

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { DEFAULT_LOCALE } from '@/src/lib/consts';
 
-const DEFAULT_CHANNEL_SLUG = process.env.DEFAULT_CHANNEL_SLUG || 'default-channel';
+const DEFAULT_CHANNEL_SLUG = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL_SLUG || 'default-channel';
 
 // const getAllLocales = () => {
 //     return channels.map(i => i.locales).flat();

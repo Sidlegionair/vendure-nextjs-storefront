@@ -21,7 +21,7 @@ const Grid = ({ blok }) => {
     // Define the grid content
     const gridContent = (
         <div
-            className={`flex flex-col w-full mx-auto ${gridColsClass}`}
+            className={`flex flex-col w-full ${gridColsClass}`}
             style={{
                 backgroundImage: backgroundImageUrl ? `url(${backgroundImageUrl})` : "none",
                 backgroundSize: backgroundSize,

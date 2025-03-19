@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const DEFAULT_CHANNEL = process.env.DEFAULT_CHANNEL_SLUG || 'default-channel';
+const DEFAULT_CHANNEL = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL_SLUG || 'default-channel';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
