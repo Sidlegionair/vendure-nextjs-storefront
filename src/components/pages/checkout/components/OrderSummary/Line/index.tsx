@@ -3,13 +3,13 @@ import styled from '@emotion/styled';
 import { TP, TypoGraphy } from '@/src/components/atoms/TypoGraphy';
 import { ProductImage } from '@/src/components/atoms/ProductImage';
 import { ActiveOrderType, OrderType } from '@/src/graphql/selectors';
-import { Divider } from '@/src/components/atoms/Divider';
-import { CurrencyCode } from '@/src/zeus';
-import { Minus, Plus, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { useTranslation } from 'next-i18next';
 import { Price } from '@/src/components/atoms/Price';
 import { useCheckout } from '@/src/state/checkout';
-import { Stack } from '@/src/components';
+import { Stack } from '@/src/components/atoms/Stack';
+import { QuantityCounter } from '@/src/components/molecules/QuantityCounter';
+import { CurrencyCode } from '@/src/zeus';
 
 interface LineProps {
     line: ActiveOrderType['lines'][number] | OrderType['lines'][number];
@@ -35,10 +35,12 @@ export const Line: React.FC<LineProps> = ({
 
     const customFields = productVariant.product.customFields as { brand?: string };
     const isPriceDiscounted = linePriceWithTax !== discountedLinePriceWithTax;
+    const optionInName =
+        productVariant.name.replace(productVariant.product.name, '') !== '';
 
     return (
-        <LineContainer>
-            <LeftSide>
+        <CartRow w100 justifyBetween>
+            <Stack gap="2rem">
                 <ProductImageWrapper>
                     <ProductImage
                         src={featuredAsset?.preview}
@@ -46,88 +48,66 @@ export const Line: React.FC<LineProps> = ({
                         title={productVariant.product.name}
                     />
                 </ProductImageWrapper>
-            </LeftSide>
-
-            <RightSide>
-                <TitleBlock>
-                    <Stack gap="1rem">
-                    {customFields?.brand && (
-                        <TypoGraphy size="18px" weight={700}>
-                            {customFields.brand}
-                        </TypoGraphy>
-                    )}
-                    <TypoGraphy size="18px" weight={300}>
-                        {productVariant.product.name}
-                    </TypoGraphy>
-                    </Stack>
-                    <TP size="16px" weight={400}>
-                        {t('orderSummary.quantity')}: {quantity}
-                    </TP>
-                </TitleBlock>
-
-                <PriceBlock>
-                    {isPriceDiscounted ? (
-                        <Price
-                            size="20px"
-                            weight={500}
-                            price={discountedLinePriceWithTax}
-                            currencyCode={currencyCode}
-                            quantity={1}
-                        />
-                    ) : (
-                        <Price
-                            size="20px"
-                            weight={500}
-                            price={unitPriceWithTax}
-                            currencyCode={currencyCode}
-                            quantity={1}
-                        />
-                    )}
-                </PriceBlock>
-
-                {isForm && (
-                    <ActionsBlock>
-                        <QuantityControls>
-                            {quantity > 1 && (
-                                <ActionButton onClick={() => changeQuantity(id, quantity - 1)}>
-                                    <Minus size={16} />
-                                </ActionButton>
+                <Stack column gap="18px">
+                    <Stack column gap="0.125rem">
+                        <Stack gap="0.5rem">
+                            {customFields?.brand && (
+                                <TP size="18px" weight={700}>
+                                    {customFields.brand}
+                                </TP>
                             )}
-                            <ActionButton onClick={() => changeQuantity(id, quantity + 1)}>
-                                <Plus size={16} />
-                            </ActionButton>
-                        </QuantityControls>
-                        <RemoveButton onClick={() => removeFromCheckout(id)}>
-                            <TP size="1rem">{t('orderSummary.remove')}</TP>
-                            <Trash2 size={16} />
-                        </RemoveButton>
-                    </ActionsBlock>
-                )}
-            </RightSide>
-
-            {/*<DividerStyled />*/}
-        </LineContainer>
+                        </Stack>
+                        <Stack gap="5px">
+                            <TP size="18px" weight={300} noWrap>
+                                {productVariant.product.name}
+                            </TP>
+                            {optionInName && (
+                                <TP size="18px" weight={300} noWrap>
+                                    {productVariant.name.replace(productVariant.product.name, '')}
+                                </TP>
+                            )}
+                        </Stack>
+                    </Stack>
+                    {isForm && (
+                        <Stack column gap="18px">
+                            <QuantityCounter
+                                v={quantity}
+                                onChange={(v: number) => changeQuantity(id, v)}
+                            />
+                            <Stack>
+                                <Remove onClick={() => removeFromCheckout(id)}>
+                                    <Trash2 size="16px" />
+                                    <RemoveText weight={400} size="16px">
+                                        {t('orderSummary.remove')}
+                                    </RemoveText>
+                                </Remove>
+                            </Stack>
+                        </Stack>
+                    )}
+                </Stack>
+            </Stack>
+            <Price
+                inCart={true}
+                weight={500}
+                currencyCode={currencyCode}
+                price={unitPriceWithTax}
+                discountPrice={
+                    isPriceDiscounted ? discountedLinePriceWithTax / quantity : undefined
+                }
+                quantity={quantity}
+            />
+        </CartRow>
     );
 };
 
 /* --- Styled Components --- */
-
-const LineContainer = styled.div`
-    display: flex;
-    gap: 2rem;
-    width: 100%;
-    padding-bottom: 2rem;
-    justify-content: space-between;
-    //align-items: flex-start; /* Keep the image aligned to top by default */
-`;
-
-const LeftSide = styled.div`
-    flex: 0 0 auto; /* Image side will not shrink */
+const CartRow = styled(Stack)`
+    padding: 2rem 0;
+    border-bottom: 1px solid ${p => p.theme.withOpacity(p.theme.border.main, 0.3)};
 `;
 
 const ProductImageWrapper = styled.div`
-    //width: 100px; /* Adjust as needed to make the image “big” */
-    height: 250px; /* Keep a square ratio or remove height for auto */
+    height: 250px;
     overflow: hidden;
     border-radius: 4px;
 
@@ -138,65 +118,22 @@ const ProductImageWrapper = styled.div`
     }
 `;
 
-const RightSide = styled.div`
-    flex: 1; /* Take the remaining space for details & price */
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    //align-items: end;
-    gap: 1rem;
-`;
-
-const TitleBlock = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-`;
-
-const PriceBlock = styled.div`
-    /* Price alone, can add margin-top if you want spacing from TitleBlock */
-`;
-
-const ActionsBlock = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    align-items: flex-start;
-`;
-
-const QuantityControls = styled.div`
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-`;
-
-const ActionButton = styled.button`
+const Remove = styled.button`
     appearance: none;
     border: none;
     background: transparent;
-    cursor: pointer;
     display: flex;
     align-items: center;
+    width: fit-content;
+    color: ${p => p.theme.text.accent};
+    gap: 0.4rem;
+    cursor: pointer;
 
     &:hover {
         opacity: 0.7;
     }
 `;
 
-const RemoveButton = styled.button`
-    appearance: none;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-
-    &:hover {
-        opacity: 0.7;
-    }
-`;
-
-const DividerStyled = styled(Divider)`
-    margin-top: 2rem;
+const RemoveText = styled(TP)`
+    color: ${p => p.theme.text.accent};
 `;

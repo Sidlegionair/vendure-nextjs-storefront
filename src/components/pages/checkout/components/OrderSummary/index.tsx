@@ -30,12 +30,14 @@ export const OrderSummary: React.FC<PropsWithChildren<OrderSummaryProps>> = ({ f
     if (!activeOrder) return null;
 
     return (
-        <SummaryContainer isForm={!!shipping}>
+        <Stack column>
+            <TH2 weight={600} size="2.5rem">
+                {t('orderSummary.title')}
+            </TH2>
+
+            <SummaryContainer isForm={!!shipping}>
             <SummaryContent column gap="2.5rem">
                 <Stack column gap="2.5rem">
-                    <TH2 weight={600} size="2.5rem">
-                        {t('orderSummary.title')}
-                    </TH2>
                     <Stack column gap="1rem">
                         {activeOrder.lines.map((line) => (
                             <Line key={line.id} line={line} currencyCode={currencyCode} isForm={!!shipping} />
@@ -91,6 +93,7 @@ export const OrderSummary: React.FC<PropsWithChildren<OrderSummaryProps>> = ({ f
                 </Stack>
             </SummaryContent>
         </SummaryContainer>
+        </Stack>
     );
 };
 
@@ -98,7 +101,9 @@ export const OrderSummary: React.FC<PropsWithChildren<OrderSummaryProps>> = ({ f
 
 const SummaryContainer = styled(Stack)<{ isForm?: boolean }>`
     //font-size: 18px;
-    background: ${({ theme }) => theme.text.white};
+    background: ${({ theme }) => theme.background.main};
+    opacity: 0.8;
+
     border-radius: 0.5rem;
     border: 1px solid ${({ theme }) => theme.border.lightgray};
     padding: 2.5rem;
