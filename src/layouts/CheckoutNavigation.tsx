@@ -12,7 +12,7 @@ export const CheckoutNavigation: React.FC = () => {
                 <CenterStack>
                     <LogoAexol width={256} />
                 </CenterStack>
-                <Divider />
+                {/*<Divider />*/}
             </CustomContentContainer>
         </StickyContainer>
     );
