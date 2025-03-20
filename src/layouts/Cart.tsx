@@ -239,7 +239,7 @@ const StyledButton = styled.button<{ dark?: boolean }>`
     appearance: none;
     border: none;
     background: ${p => (p.dark ? p.theme.gray(1000) : p.theme.gray(0))};
-
+    font-family: "Suisse BP Int'l antique", sans-serif;
     width: 100%;
     display: flex;
     align-items: center;
@@ -251,7 +251,11 @@ const StyledButton = styled.button<{ dark?: boolean }>`
     text-align: center;
     text-transform: uppercase;
     font-weight: 500;
-    font-size: 1.6rem;
+    
+    &:active, &:hover {
+        border: 1px solid ${p => p.theme.accent(50)};
+
+    }
 `;
 const StyledLink = styled(Link)`
     padding: 1.6rem 0.8rem;

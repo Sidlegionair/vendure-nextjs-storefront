@@ -11,6 +11,7 @@ import { useCart } from '@/src/state/cart';
 import { RootNode } from '@/src/util/arrayToTree';
 import { useChannels } from '@/src/state/channels';
 import { channels } from '@/src/lib/consts';
+import { CheckoutNavigation } from '@/src/layouts/CheckoutNavigation';
 
 export const siteTitle = 'Boardrush Network';
 
@@ -127,6 +128,7 @@ export const CheckoutLayout: React.FC<CheckoutLayoutProps> = ({ pageTitle, child
     return (
         <MainStackStyled>
             <CustomHelmet pageTitle={pageTitle ? `${pageTitle} | ${siteTitle}` : siteTitle} />
+            <CheckoutNavigation></CheckoutNavigation>
             <Stack w100 itemsCenter column>
                 {children}
             </Stack>

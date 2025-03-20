@@ -57,6 +57,9 @@ const Wrapper = styled(Stack)`
     border: 1px solid ${p => p.theme.border.main};
     border-radius: 8px;
     height: 100%;
+    background: #ffffff;
+    opacity: 0.8;
+
 `;
 
 const SelectWrapper = styled(Stack)`

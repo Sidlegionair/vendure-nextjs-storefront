@@ -120,4 +120,12 @@ const StyledButton = styled(Button)<{ dark?: boolean }>`
     font-size: 20px;
         // border: 1px solid ${p => p.theme.gray(1000)};
     border-radius: 12px;
+
+    &:active, &:hover {
+        color: ${p => p.theme.background.accentGreen};
+
+        border: 1px solid ${p => p.theme.background.accentGreen};
+
+    }
+
 `;

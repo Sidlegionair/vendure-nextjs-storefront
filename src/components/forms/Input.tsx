@@ -58,7 +58,7 @@ const Error = styled.div`
 
 export const FormError = styled(motion.span)`
     color: ${p => p.theme.error};
-    font-size: 1rem;
+    font-size: ${p => p.theme.typography.fontSize.h6};
     font-weight: 700;
     margin: 0.4rem 0 0.8rem 0;
 `;
@@ -67,8 +67,9 @@ const InputWrapper = styled(Stack)`
     position: relative;
     padding: 25px;
     border: 1px solid ${p => p.theme.border.main};
-    //background: #ffffff;
+    background: #ffffff;
     border-radius: 8px;
+    opacity: 0.8;
 
 `;
 
@@ -95,6 +96,7 @@ export const StyledInput = styled.input<{ error?: boolean }>`
     //padding: 15px 0px;
     color: ${p => p.theme.text.main};
     border-bottom: 1px solid #BBBBBB;
+    font-size: ${p => p.theme.typography.fontSize.h6};
 
     :focus {
         border-bottom: 1px solid #BBBBBB;

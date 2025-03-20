@@ -21,6 +21,8 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
     const { t } = useTranslation('common');
     const { setItemQuantityInCart, removeFromCart } = useCart();
 
+    console.log('LINES:');
+    console.log(activeOrder?.lines);
 
     return (
         <CartList w100 column>
@@ -42,18 +44,18 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
                                         <Stack column gap="0.125rem">
                                             <Stack gap="0.5rem">
                                                 {customFields?.brand && (
-                                                    <TP size="18px" weight={700} noWrap>
+                                                    <TP size="18px" weight={700}>
                                                         {customFields.brand}
                                                     </TP>
                                                 )}
                                             </Stack>
-                                            <Stack gap="0.5rem">
+                                            <Stack gap="5px">
                                                 <TP size="18px" weight={300} noWrap>
                                                     {productVariant.product.name}
                                                 </TP>
 
                                                 {optionInName && (
-                                                    <TP size="16px" weight={200}>
+                                                    <TP size="18px" weight={300} noWrap>
                                                         {productVariant.name.replace(productVariant.product.name, '')}
                                                     </TP>
                                                 )}
@@ -61,17 +63,19 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
                                         </Stack>
                                         <Stack column gap={18}>
                                             <QuantityCounter v={quantity} onChange={v => setItemQuantityInCart(id, v)} />
-                                            <Remove onClick={async () => await removeFromCart(id)}>
-                                                <Trash2 size={'16px'} />
-                                                <RemoveText weight={400} size="16px">
-                                                    {t('remove')}
-                                                </RemoveText>
-                                            </Remove>
+                                            <Stack>
+                                                <Remove onClick={async () => await removeFromCart(id)}>
+                                                    <Trash2 size={'16px'} />
+                                                    <RemoveText weight={400} size="16px">
+                                                        {t('remove')}
+                                                    </RemoveText>
+                                                </Remove>
+                                            </Stack>
                                         </Stack>
                                     </Stack>
                                 </Stack>
                                 <Price
-                                    size="20px"
+                                    inCart={true}
                                     weight={500}
                                     currencyCode={currencyCode}
                                     price={unitPriceWithTax}

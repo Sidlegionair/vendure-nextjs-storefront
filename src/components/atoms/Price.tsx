@@ -9,24 +9,26 @@ type PriceProps = {
     currencyCode: CurrencyCode;
     discountPrice?: number | null;
     quantity?: number;
+    inCart?: boolean;
 } & Partial<BaseProps>;
 
 export const Price: React.FC<PriceProps> = ({
-    price,
-    discountPrice,
-    currencyCode,
-    quantity = 1,
-    size = '1.5rem',
-    weight = 400,
-}) => {
+                                                price,
+                                                discountPrice,
+                                                currencyCode,
+                                                quantity = 1,
+                                                size = '1.5rem',
+                                                weight = 400,
+                                                inCart = false,
+                                            }) => {
     const differentPrices = !!(discountPrice && price * quantity !== discountPrice * quantity);
     return (
         <Stack gap="0.75rem">
-            <StyledPrice size={size} weight={weight} discount={differentPrices}>
+            <StyledPrice size={size} weight={weight} discount={differentPrices} inCart={inCart}>
                 {priceFormatter(price * quantity, currencyCode)}
             </StyledPrice>
             {differentPrices && (
-                <StyledDiscountPrice weight={weight} size={size}>
+                <StyledDiscountPrice weight={weight} size={size} inCart={inCart}>
                     {priceFormatter(discountPrice * quantity, currencyCode)}
                 </StyledDiscountPrice>
             )}
@@ -34,13 +36,19 @@ export const Price: React.FC<PriceProps> = ({
     );
 };
 
-const StyledPrice = styled(TP)<{ discount?: boolean }>`
+const StyledPrice = styled(TP)<{ discount?: boolean; inCart?: boolean }>`
     color: ${p => (p.discount ? p.theme.text.accentGreen : p.theme.text.main)};
-    font-size: ${p => (p.discount ? p.theme.typography.fontSize.small : p.theme.typography.fontSize.h4)};
+    font-size: ${p =>
+            p.inCart
+                    ? '20px'
+                    : p.discount
+                            ? p.theme.typography.fontSize.small
+                            : p.theme.typography.fontSize.h4};
     font-weight: bold;
     ${p => (p.discount ? `text-decoration: line-through;` : '')}
 `;
 
-const StyledDiscountPrice = styled(TP)`
+const StyledDiscountPrice = styled(TP)<{ inCart?: boolean }>`
     color: ${p => p.theme.text.accent};
+    font-size: ${p => (p.inCart ? '20px' : p.theme.typography.fontSize.h4)};
 `;
