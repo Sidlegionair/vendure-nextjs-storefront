@@ -107,16 +107,8 @@ const SummaryContainer = styled(Stack)<{ isForm?: boolean }>`
     position: ${({ isForm }) => (isForm ? 'sticky' : 'relative')};
     top: ${({ isForm }) => (isForm ? '1.5rem' : '0')};
 
-    @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
-        min-width: 52rem;
-        max-width: 52rem;
-    }
-
-    @media (max-width: 1024px) {
-        width: 100%;
-        position: relative;
-        top: 0;
-    }
+    position: relative;
+    top: 0;
 `;
 
 const SummaryContent = styled(Stack)`

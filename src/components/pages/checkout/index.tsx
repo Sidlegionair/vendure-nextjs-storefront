@@ -49,7 +49,7 @@ const CheckoutLayoutStyled = styled(CheckoutLayout)`
 
 const Content = styled(ContentContainer)`
     position: relative;
-    width: 1280px;
+    width: 1600px;
     padding: 119px 0 90px 0px;
 
     @media (max-width: 1560px) {

@@ -5,18 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="86c1ycmb1">
-      <change afterPath="$PROJECT_DIR$/src/components/molecules/StepsBar.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/layouts/CheckoutNavigation.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/atoms/Price.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/atoms/Price.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/forms/CountrySelect.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forms/CountrySelect.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/forms/Input.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forms/Input.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/forms/shared/Label.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/forms/shared/Label.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/Cart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Cart.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/CartDrawer/CartBody.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/CartDrawer/CartBody.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/CartDrawer/CartFooter.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/CartDrawer/CartFooter.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/layouts/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/locales/en/checkout.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/locales/en/checkout.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/molecules/StepsBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/StepsBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderForm/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderForm/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderSummary/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderSummary/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -195,7 +189,7 @@
       <workItem from="1741794062545" duration="669000" />
       <workItem from="1742222193349" duration="23574000" />
       <workItem from="1742382076247" duration="14740000" />
-      <workItem from="1742467673113" duration="5110000" />
+      <workItem from="1742467673113" duration="7545000" />
     </task>
     <servers>
       <YouTrack url="https://modernmediahub.youtrack.cloud">

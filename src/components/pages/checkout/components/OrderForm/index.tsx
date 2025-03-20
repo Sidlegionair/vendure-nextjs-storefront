@@ -1,44 +1,42 @@
 import React from 'react';
+import styled from '@emotion/styled';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Trans, useTranslation } from 'next-i18next';
+import { MoveLeft } from 'lucide-react';
 
 import { TH2, TP } from '@/src/components/atoms/TypoGraphy';
 import { Stack } from '@/src/components/atoms/Stack';
+import { Link } from '@/src/components/atoms/Link';
 import { Button } from '@/src/components/molecules/Button';
+import { StepsBar } from '@/src/components/molecules/StepsBar';
+import { Banner, CheckBox, CountrySelect, FormError, Input } from '@/src/components/forms';
+import { DeliveryMethod } from '../DeliveryMethod';
+import { OrderSummary } from '../OrderSummary';
+import { Tooltip } from '@/src/components/molecules/Tooltip';
 
 import { usePush } from '@/src/lib/redirect';
-
 import { storefrontApiMutation, storefrontApiQuery } from '@/src/graphql/client';
 import {
-    CreateAddressType,
-    ShippingMethodType,
-    AvailableCountriesType,
-    CreateCustomerType,
-    ActiveOrderSelector,
     ActiveCustomerType,
+    ActiveOrderSelector,
+    AvailableCountriesType,
+    CreateAddressType,
+    CreateCustomerType,
+    ShippingMethodType,
 } from '@/src/graphql/selectors';
 
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { Trans, useTranslation } from 'next-i18next';
-import styled from '@emotion/styled';
-import { AnimatePresence, motion } from 'framer-motion';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Input, FormError, Banner, CountrySelect, CheckBox } from '@/src/components/forms';
-import { DeliveryMethod } from '../DeliveryMethod';
-import { useValidationSchema } from './useValidationSchema';
-import { Link } from '@/src/components/atoms/Link';
 import { useCheckout } from '@/src/state/checkout';
-import { Info, MoveLeft } from 'lucide-react';
-import { baseCountryFromLanguage } from '@/src/util/baseCountryFromLanguage';
-import { OrderSummary } from '../OrderSummary';
 import { useChannels } from '@/src/state/channels';
-import { Tooltip } from '@/src/components/molecules/Tooltip';
+import { baseCountryFromLanguage } from '@/src/util/baseCountryFromLanguage';
+import { useValidationSchema } from './useValidationSchema';
 
 type FormValues = CreateCustomerType & {
     deliveryMethod?: string;
     shippingDifferentThanBilling?: boolean;
     shipping: CreateAddressType;
     billing: CreateAddressType;
-    // userNeedInvoice?: boolean;
-    // NIP?: string;
     createAccount?: boolean;
     password?: string;
     confirmPassword?: string;
@@ -87,7 +85,11 @@ const checkVAT = async (
     }
 };
 
-export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, activeCustomer, shippingMethods }) => {
+export const OrderForm: React.FC<OrderFormProps> = ({
+                                                        availableCountries,
+                                                        activeCustomer,
+                                                        shippingMethods,
+                                                    }) => {
     const ctx = useChannels();
     const { activeOrder, changeShippingMethod } = useCheckout();
 
@@ -98,13 +100,18 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
 
     const errorRef = React.useRef<HTMLDivElement>(null);
 
-    const defaultShippingAddress = activeCustomer?.addresses?.find(address => address.defaultShippingAddress);
-    const defaultBillingAddress = activeCustomer?.addresses?.find(address => address.defaultBillingAddress);
+    const defaultShippingAddress = activeCustomer?.addresses?.find(
+        (address) => address.defaultShippingAddress
+    );
+    const defaultBillingAddress = activeCustomer?.addresses?.find(
+        (address) => address.defaultBillingAddress
+    );
 
+    // Decide on default country code
     const countryCode =
         defaultBillingAddress?.country.code ??
         defaultShippingAddress?.country.code ??
-        availableCountries?.find(country => country.name === 'Poland')?.code ??
+        availableCountries?.find((country) => country.name === 'Poland')?.code ??
         baseCountryFromLanguage(ctx.locale);
 
     const {
@@ -123,8 +130,6 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                 ? !isAddressesEqual(defaultShippingAddress, defaultBillingAddress)
                 : false,
             billing: { countryCode },
-            // NIP: defaultBillingAddress?.customFields?.NIP ?? '',
-            // userNeedInvoice: defaultBillingAddress?.customFields?.NIP ? true : false,
         },
         values: activeCustomer
             ? {
@@ -133,8 +138,6 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                 firstName: activeCustomer.firstName,
                 lastName: activeCustomer.lastName,
                 phoneNumber: activeCustomer.phoneNumber,
-                //   NIP: defaultBillingAddress?.customFields?.NIP ?? '',
-                //   userNeedInvoice: defaultBillingAddress?.customFields?.NIP ? true : false,
                 shippingDifferentThanBilling: defaultShippingAddress
                     ? !isAddressesEqual(defaultShippingAddress, defaultBillingAddress)
                     : false,
@@ -154,22 +157,26 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
     });
 
     React.useEffect(() => {
-        console.log('Form Errors:', errors);
-    }, [errors]);
-
-    React.useEffect(() => {
         setValue('createAccount', false);
     }, [setValue]);
 
+    React.useEffect(() => {
+        console.log('Form Errors:', errors);
+    }, [errors]);
+
     const vatRegister = register('billing.customFields.vatNumber', {
         onChange: (e) => {
-            console.log('VAT input changed:', e.target.value);
-            setValue('billing.customFields.vatNumber', e.target.value, { shouldValidate: true });
+            setValue('billing.customFields.vatNumber', e.target.value, {
+                shouldValidate: true,
+            });
         },
     });
 
     const enforceCreateAccount = !activeCustomer?.id;
 
+    // -------------------------------
+    // Submit Handler
+    // -------------------------------
     const onSubmit: SubmitHandler<FormValues> = async ({
                                                            emailAddress,
                                                            firstName,
@@ -178,41 +185,51 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                                            billing,
                                                            shipping,
                                                            phoneNumber,
-                                                           // NIP,
                                                            shippingDifferentThanBilling,
                                                            password,
                                                        }) => {
         try {
-            if (deliveryMethod && activeOrder?.shippingLines[0]?.shippingMethod.id !== deliveryMethod) {
+            // If shipping method changed, update it
+            if (
+                deliveryMethod &&
+                activeOrder?.shippingLines[0]?.shippingMethod.id !== deliveryMethod
+            ) {
                 await changeShippingMethod(deliveryMethod);
             }
-            const { nextOrderStates } = await storefrontApiQuery(ctx)({ nextOrderStates: true });
+
+            // Check if we can move the order to "ArrangingPayment"
+            const { nextOrderStates } = await storefrontApiQuery(ctx)({
+                nextOrderStates: true,
+            });
             if (!nextOrderStates.includes('ArrangingPayment')) {
                 setError('root', { message: tErrors(`errors.backend.UNKNOWN_ERROR`) });
                 return;
             }
 
-            console.log('Billing before VAT check:', billing);
+            // If user entered a company, check VAT
             const vatValue = billing.customFields?.vatNumber || '';
             if (billing.company) {
                 if (!vatValue.trim()) {
-                    console.log('VAT value is empty:', vatValue);
-                    setError('billing.customFields.vatNumber', { message: t('orderForm.errors.vatNumber.required') });
+                    setError('billing.customFields.vatNumber', {
+                        message: t('orderForm.errors.vatNumber.required'),
+                    });
                     return;
                 }
                 const vatResult = await checkVAT(vatValue, billing.countryCode);
-                console.log('VAT result:', vatResult);
                 if (!vatResult.valid) {
-                    setError('billing.customFields.vatNumber', { message: t('orderForm.errors.vatNumber.invalid') });
+                    setError('billing.customFields.vatNumber', {
+                        message: t('orderForm.errors.vatNumber.invalid'),
+                    });
                     return;
                 }
+                // If VIES returns a different company name, update it
                 if (billing.company.trim() !== vatResult.name.trim()) {
-                    console.log('Company name mismatch. Updating company name to:', vatResult.name);
                     setValue('billing.company', vatResult.name);
                     billing.company = vatResult.name;
                 }
             }
 
+            // Set billing address
             const { setOrderBillingAddress } = await storefrontApiMutation(ctx)({
                 setOrderBillingAddress: [
                     {
@@ -220,7 +237,6 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                             ...billing,
                             defaultBillingAddress: false,
                             defaultShippingAddress: false,
-                            // customFields: { NIP }
                         },
                     },
                     {
@@ -230,16 +246,24 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                     },
                 ],
             });
-
             if (setOrderBillingAddress?.__typename !== 'Order') {
-                setError('root', { message: tErrors(`errors.backend.${setOrderBillingAddress.errorCode}`) });
+                setError('root', {
+                    message: tErrors(`errors.backend.${setOrderBillingAddress.errorCode}`),
+                });
                 return;
             }
 
+            // Set shipping address (same or different)
             if (shippingDifferentThanBilling) {
                 const { setOrderShippingAddress } = await storefrontApiMutation(ctx)({
                     setOrderShippingAddress: [
-                        { input: { ...shipping, defaultBillingAddress: false, defaultShippingAddress: false } },
+                        {
+                            input: {
+                                ...shipping,
+                                defaultBillingAddress: false,
+                                defaultShippingAddress: false,
+                            },
+                        },
                         {
                             __typename: true,
                             '...on Order': { id: true },
@@ -247,15 +271,22 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                         },
                     ],
                 });
-
                 if (setOrderShippingAddress?.__typename === 'NoActiveOrderError') {
-                    setError('root', { message: tErrors(`errors.backend.NO_ACTIVE_ORDER_ERROR`) });
+                    setError('root', {
+                        message: tErrors(`errors.backend.NO_ACTIVE_ORDER_ERROR`),
+                    });
                     return;
                 }
             } else {
                 const { setOrderShippingAddress } = await storefrontApiMutation(ctx)({
                     setOrderShippingAddress: [
-                        { input: { ...billing, defaultBillingAddress: false, defaultShippingAddress: false } },
+                        {
+                            input: {
+                                ...billing,
+                                defaultBillingAddress: false,
+                                defaultShippingAddress: false,
+                            },
+                        },
                         {
                             __typename: true,
                             '...on Order': { id: true },
@@ -263,13 +294,15 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                         },
                     ],
                 });
-
                 if (setOrderShippingAddress?.__typename === 'NoActiveOrderError') {
-                    setError('root', { message: tErrors(`errors.backend.NO_ACTIVE_ORDER_ERROR`) });
+                    setError('root', {
+                        message: tErrors(`errors.backend.NO_ACTIVE_ORDER_ERROR`),
+                    });
                     return;
                 }
             }
 
+            // If not logged in, create a new customer for the order
             if (enforceCreateAccount && !activeCustomer) {
                 const { setCustomerForOrder } = await storefrontApiMutation(ctx)({
                     setCustomerForOrder: [
@@ -288,16 +321,21 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                 if (setCustomerForOrder?.__typename !== 'Order') {
                     if (setCustomerForOrder.__typename === 'EmailAddressConflictError') {
                         setError('emailAddress', {
-                            message: tErrors(`errors.backend.${setCustomerForOrder.errorCode}`),
+                            message: tErrors(
+                                `errors.backend.${setCustomerForOrder.errorCode}`
+                            ),
                         });
                         setFocus('emailAddress');
                     } else {
-                        setError('root', { message: tErrors(`errors.backend.${setCustomerForOrder.errorCode}`) });
+                        setError('root', {
+                            message: tErrors(`errors.backend.${setCustomerForOrder.errorCode}`),
+                        });
                     }
                     return;
                 }
             }
 
+            // Move order to "ArrangingPayment"
             const { transitionOrderToState } = await storefrontApiMutation(ctx)({
                 transitionOrderToState: [
                     { state: 'ArrangingPayment' },
@@ -315,28 +353,21 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                 ],
             });
 
+            // Optionally register a full account (if password is provided)
             if (enforceCreateAccount && password) {
                 await storefrontApiMutation(ctx)({
                     registerCustomerAccount: [
                         { input: { emailAddress, firstName, lastName, phoneNumber, password } },
                         {
                             __typename: true,
-                            '...on MissingPasswordError': {
-                                message: true,
-                                errorCode: true,
-                            },
-                            '...on NativeAuthStrategyError': {
-                                message: true,
-                                errorCode: true,
-                            },
+                            '...on MissingPasswordError': { message: true, errorCode: true },
+                            '...on NativeAuthStrategyError': { message: true, errorCode: true },
                             '...on PasswordValidationError': {
                                 errorCode: true,
                                 message: true,
                                 validationErrorMessage: true,
                             },
-                            '...on Success': {
-                                success: true,
-                            },
+                            '...on Success': { success: true },
                         },
                     ],
                 });
@@ -346,74 +377,72 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                 setError('root', { message: tErrors(`errors.backend.UNKNOWN_ERROR`) });
                 return;
             }
-
-            if (transitionOrderToState?.__typename !== 'Order') {
-                setError('root', { message: tErrors(`errors.backend.${transitionOrderToState.errorCode}`) });
+            if (transitionOrderToState.__typename !== 'Order') {
+                setError('root', {
+                    message: tErrors(`errors.backend.${transitionOrderToState.errorCode}`),
+                });
                 return;
             }
+
+            // Success! Proceed to payment
             push('/checkout/payment');
         } catch (error) {
-            console.error("Error during onSubmit:", error);
+            console.error('Error during onSubmit:', error);
             setError('root', { message: tErrors(`errors.backend.UNKNOWN_ERROR`) });
         }
     };
 
-    return activeOrder?.totalQuantity === 0 ? (
-        <Stack w100 column>
-            <Stack column gap="2rem">
-                <TH2 size="2rem" weight={500}>
-                    {t('orderForm.emptyCart')}
-                </TH2>
-                <EmptyCartDescription>
-                    <Trans i18nKey="orderForm.emptyCartDescription" t={t} components={{ 1: <Link href="/"></Link> }} />
-                </EmptyCartDescription>
+    // If the cart is empty, show an empty cart message
+    if (activeOrder?.totalQuantity === 0) {
+        return (
+            <Stack w100 column>
+                <Stack column gap="2rem">
+                    <TH2 size="2rem" weight={500}>
+                        {t('orderForm.emptyCart')}
+                    </TH2>
+                    <EmptyCartDescription>
+                        <Trans
+                            i18nKey="orderForm.emptyCartDescription"
+                            t={t}
+                            components={{ 1: <Link href="/" /> }}
+                        />
+                    </EmptyCartDescription>
+                </Stack>
             </Stack>
-        </Stack>
-    ) : (
+        );
+    }
+
+    // Otherwise, render the normal checkout form
+    return (
         <Stack w100 column>
+            {/* STEPS BAR at the top */}
+            <StepsBar
+                currentStep={1}
+                steps={[
+                    t('orderForm.steps.accountInformation'),
+                    t('orderForm.steps.billingDetails'),
+                    t('orderForm.steps.reviewPayment'),
+                ]}
+            />
+
+            {/* Banner for any root-level errors */}
             <Banner ref={errorRef} clearErrors={() => clearErrors('root')} error={errors?.root} />
+
+            {/* The form */}
             <Form onSubmit={handleSubmit(onSubmit)} noValidate>
-                <Container w100 gap={80}>
-                    <OrderSummary
-                        shipping={
-                            shippingMethods ? (
-                                <DeliveryMethodWrapper>
-                                    <DeliveryMethod
-                                        selected={watch('deliveryMethod')}
-                                        error={errors.deliveryMethod?.message}
-                                        onChange={async id => {
-                                            await changeShippingMethod(id);
-                                            setValue('deliveryMethod', id);
-                                            clearErrors('deliveryMethod');
-                                        }}
-                                        shippingMethods={shippingMethods}
-                                        currencyCode={activeOrder?.currencyCode}
-                                    />
-                                </DeliveryMethodWrapper>
-                            ) : null
-                        }
-                        footer={
-                            <Stack column gap="2.5rem" justifyCenter itemsCenter>
-                                <StyledButton disabled={isSubmitting} type="submit">
-                                    <TP color="contrast">
-                                        {t('orderForm.continueToPayment')}
-                                    </TP>
-                                </StyledButton>
-                                <LinkButton skipChannelHandling href="/">{t('orderForm.continueShopping')}</LinkButton>
-                            </Stack>
-                        }
-                    />
-                    <Stack w100 column gap={50}>
+                <Container>
+                    {/* LEFT COLUMN: the main form */}
+                    <FormColumn>
+                        {/* Contact / Account Information */}
                         <Stack column gap={50}>
-                            {/* Customer Part */}
                             <Stack column gap="2rem">
                                 <Stack gap="0.75rem" itemsCenter style={{ height: '2.6rem' }}>
                                     <AnimatePresence>
-                                        {!isSubmitting ? (
+                                        {!isSubmitting && (
                                             <BackButton href="/">
                                                 <MoveLeft size={26} />
                                             </BackButton>
-                                        ) : null}
+                                        )}
                                     </AnimatePresence>
                                     <TH2 size="30px" weight={600}>
                                         {t('orderForm.contactInfo')}
@@ -440,7 +469,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                     <ResponsiveRow w100 gap={20}>
                                         <Input
                                             {...register('phoneNumber', {
-                                                onChange: e => (e.target.value = e.target.value.replace(/[^0-9]/g, '')),
+                                                onChange: (e) =>
+                                                    (e.target.value = e.target.value.replace(/[^0-9]/g, '')),
                                             })}
                                             placeholder={t('orderForm.placeholders.phoneNumber')}
                                             type="tel"
@@ -453,16 +483,18 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                             label={t('orderForm.emailAddress')}
                                             error={errors.emailAddress}
                                             required
-                                            disabled={activeCustomer?.id ? true : false}
+                                            disabled={!!activeCustomer?.id}
                                         />
                                     </ResponsiveRow>
-                                    {/* Password fields */}
-                                    {!activeCustomer?.id && (
-                                            <CreateAccountWrapper>
-                                                <ResponsiveRow w100 gap={20}>
 
+                                    {/* Password fields (only if user isn't logged in) */}
+                                    {!activeCustomer?.id && (
+                                        <CreateAccountWrapper>
+                                            <ResponsiveRow w100 gap={20}>
                                                 <Input
-                                                    {...register('password', { required: 'Password is required' })}
+                                                    {...register('password', {
+                                                        required: 'Password is required',
+                                                    })}
                                                     type="password"
                                                     placeholder={t('orderForm.placeholders.password')}
                                                     label={t('orderForm.password')}
@@ -472,7 +504,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                                 <Input
                                                     {...register('confirmPassword', {
                                                         required: 'Confirm password is required',
-                                                        validate: value =>
+                                                        validate: (value) =>
                                                             value === watch('password') || 'Passwords do not match',
                                                     })}
                                                     type="password"
@@ -481,14 +513,13 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                                     error={errors.confirmPassword}
                                                     required
                                                 />
-                                                </ResponsiveRow>
-
-                                            </CreateAccountWrapper>
+                                            </ResponsiveRow>
+                                        </CreateAccountWrapper>
                                     )}
                                 </Stack>
                             </Stack>
 
-                            {/* Billing Part */}
+                            {/* Billing Information */}
                             <BillingWrapper column>
                                 <TH2 size="30px" weight={600} style={{ marginBottom: '30px' }}>
                                     {t('orderForm.billingInfo')}
@@ -576,7 +607,9 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                 </Stack>
                             </BillingWrapper>
                         </Stack>
-                        <Stack column gap={20}>
+
+                        {/* Shipping Information */}
+                        <Stack column gap={20} style={{ marginTop: '2rem' }}>
                             <Stack justifyBetween itemsCenter>
                                 <CheckBox
                                     {...register('shippingDifferentThanBilling')}
@@ -669,7 +702,13 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                             i18nKey="orderForm.terms"
                                             t={t}
                                             components={{
-                                                1: <StyledLink skipChannelHandling style={{ zIndex: 2, position: 'relative' }} href="/content/terms-and-conditions/" />,
+                                                1: (
+                                                    <StyledLink
+                                                        skipChannelHandling
+                                                        style={{ zIndex: 2, position: 'relative' }}
+                                                        href="/content/terms-and-conditions/"
+                                                    />
+                                                ),
                                             }}
                                         />
                                     }
@@ -689,55 +728,88 @@ export const OrderForm: React.FC<OrderFormProps> = ({ availableCountries, active
                                 </AnimatePresence>
                             </Stack>
                         </Stack>
-                    </Stack>
+                    </FormColumn>
+
+                    {/* RIGHT COLUMN: Order Summary */}
+                    <SummaryColumn>
+                        <OrderSummary
+                            shipping={
+                                shippingMethods ? (
+                                    <DeliveryMethodWrapper>
+                                        <DeliveryMethod
+                                            selected={watch('deliveryMethod')}
+                                            error={errors.deliveryMethod?.message}
+                                            onChange={async (id) => {
+                                                await changeShippingMethod(id);
+                                                setValue('deliveryMethod', id);
+                                                clearErrors('deliveryMethod');
+                                            }}
+                                            shippingMethods={shippingMethods}
+                                            currencyCode={activeOrder?.currencyCode}
+                                        />
+                                    </DeliveryMethodWrapper>
+                                ) : null
+                            }
+                            footer={
+                                <Stack column gap="2.5rem" justifyCenter itemsCenter>
+                                    <StyledButton disabled={isSubmitting} type="submit">
+                                        <TP color="contrast">{t('orderForm.continueToPayment')}</TP>
+                                    </StyledButton>
+                                    <LinkButton skipChannelHandling href="/">
+                                        {t('orderForm.continueShopping')}
+                                    </LinkButton>
+                                </Stack>
+                            }
+                        />
+                    </SummaryColumn>
                 </Container>
             </Form>
         </Stack>
     );
 };
 
+/* -----------------------------------
+   Styled Components for Layout/Styling
+----------------------------------- */
+
+const Form = styled.form`
+    margin-top: 1.6rem;
+`;
+
 const Container = styled(Stack)`
-    flex-direction: column-reverse;
+  /* 
+    On mobile, stack in a column. 
+    On larger screens, place columns side-by-side. 
+  */
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
 
-    @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
-        flex-direction: row-reverse;
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+`;
+
+/** Left Column for the main form */
+const FormColumn = styled.div`
+    flex: 1; /* Grow to take available space */
+    margin-right: 2rem;
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+        margin-right: 0;
     }
 `;
 
-const DeliveryMethodWrapper = styled(Stack)``;
+/** Right Column for the summary */
+const SummaryColumn = styled.div`
+    width: 600px;
 
-const LinkButton = styled(Link)`
-    width: 100%;
-    text-align: center;
-    color: ${p => p.theme.text.main};
-    font-size: 1.5rem;
-    font-weight: 600;
-`;
-
-const StyledButton = styled(Button)`
-    appearance: none;
-    border: none;
-    background: ${p => p.theme.background.accentGreen};
-    text-transform: capitalize !important;
-
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 1.6rem 0.8rem;
-    border-radius: 12px;
-
-    p {
-        text-transform: capitalize !important;
-        color: ${p => p.theme.background.white};
-
-    }
-    & > div {
-        color: ${p => p.theme.background.white};
-        text-align: center;
-        font-weight: 600;
-        font-size: 20px !important;
+    @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+        width: 100%;
+        margin-top: 2rem;
     }
 `;
 
@@ -752,7 +824,6 @@ const BackButton = styled(Link)`
     justify-content: center;
     width: 3.2rem;
     height: 3.2rem;
-
     color: ${({ theme }) => theme.gray(1000)};
 
     @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
@@ -760,24 +831,13 @@ const BackButton = styled(Link)`
     }
 `;
 
-const EmptyCartDescription = styled.div`
-    font-size: 1.75rem;
-
-    & > a {
-        font-weight: 500;
-        font-size: 1.75rem;
-        color: ${p => p.theme.accent(800)};
-        text-decoration: underline;
-    }
+const CreateAccountWrapper = styled(motion.div)`
+    display: flex;
+    gap: 1.25rem;
 `;
 
 const BillingWrapper = styled(Stack)`
     margin-top: 1.75rem;
-`;
-
-const CreateAccountWrapper = styled(motion.div)`
-    display: flex;
-    gap: 1.25rem;
 `;
 
 const ShippingWrapper = styled(motion.div)`
@@ -787,25 +847,65 @@ const ShippingWrapper = styled(motion.div)`
     margin-top: 1.75rem;
 `;
 
-const StyledLink = styled(Link)`
-    color: ${p => p.theme.text.accentGreen};
-    text-decoration: none;
+const DeliveryMethodWrapper = styled(Stack)``;
 
-    &:hover {
-        color: ${p => p.theme.text.accentGreen};
+const StyledButton = styled(Button)`
+    appearance: none;
+    border: none;
+    background: ${(p) => p.theme.background.accentGreen};
+    text-transform: capitalize !important;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.6rem 0.8rem;
+    border-radius: 12px;
+
+    p {
+        text-transform: capitalize !important;
+        color: ${(p) => p.theme.background.white};
+    }
+    & > div {
+        color: ${(p) => p.theme.background.white};
+        text-align: center;
+        font-weight: 600;
+        font-size: 20px !important;
     }
 `;
 
-const Form = styled.form`
-    margin-top: 1.6rem;
+const LinkButton = styled(Link)`
+    width: 100%;
+    text-align: center;
+    color: ${(p) => p.theme.text.main};
+    font-size: 1.5rem;
+    font-weight: 600;
+`;
+
+const StyledLink = styled(Link)`
+    color: ${(p) => p.theme.text.accentGreen};
+    text-decoration: none;
+    &:hover {
+        color: ${(p) => p.theme.text.accentGreen};
+    }
+`;
+
+const EmptyCartDescription = styled.div`
+  font-size: 1.75rem;
+  & > a {
+    font-weight: 500;
+    font-size: 1.75rem;
+    color: ${(p) => p.theme.accent(800)};
+    text-decoration: underline;
+  }
 `;
 
 /**
- * ResponsiveRow forces its children into a row on larger screens but stacks them vertically on mobile.
+ * ResponsiveRow forces its children into a row on large screens
+ * but stacks them vertically on mobile.
  */
 const ResponsiveRow = styled(Stack)`
-    flex-direction: row;
-    @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
-        flex-direction: column;
-    }
+  flex-direction: row;
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+    flex-direction: column;
+  }
 `;
