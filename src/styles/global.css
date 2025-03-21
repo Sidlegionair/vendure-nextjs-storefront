@@ -94,13 +94,15 @@ select {
 /*    }*/
 /*}*/
 
+/* Base mobile styles */
 input,
-select {
+select,
+a,
+p {
     font-family: inherit;
-    /*font-size: 1.6rem;*/
-    /* turn off highlighting */
     font-size: 20px;
     line-height: 26px;
+    /* turn off highlighting */
     -webkit-background-clip: text;
     -webkit-text-fill-color: none;
     transition: background-color 5000s ease-in-out 0s;
@@ -111,45 +113,55 @@ ul {
     list-style: none;
 }
 
+/* Mobile heading sizes */
 h1 {
-    font-size: 65px;
-    line-height: normal;
-    font-weight: bold;
-}
-h2 {
     font-size: 45px;
     line-height: normal;
     font-weight: bold;
 }
+h2 {
+    font-size: 30px;
+    line-height: normal;
+    font-weight: bold;
+}
 h3 {
-    font-size: 35px;
+    font-size: 25px;
     line-height: normal;
     font-weight: bold;
 }
 h4 {
-    font-size: 30px;
-    line-height: 36px;
+    font-size: 20px;
+    line-height: 24px;
 }
 h5 {
-    font-size: 25px;
-    line-height: 30px;
-}
-
-h6, small {
-    font-size: 16px;
-    line-height: 20px;
-}
-
-p {
     font-size: 20px;
     line-height: 26px;
 }
+h6,
+small {
+    font-size: 14px;
+    line-height: 18px;
+}
 
-a {
-    font-family: inherit;
-    text-decoration: none;
-    font-size: 20px;
-    line-height: 26px;
+/* Desktop styles */
+@media (min-width: 768px) {
+    h1 {
+        font-size: 65px;
+    }
+    h2 {
+        font-size: 45px;
+    }
+    h3 {
+        font-size: 35px;
+    }
+    h4 {
+        font-size: 30px;
+        line-height: 36px;
+    }
+    h5 {
+        font-size: 25px;
+        line-height: 30px;
+    }
 }
 
 .pswp__bg {
