@@ -57,7 +57,7 @@ const Footer = ({ blok }) => {
                 <div className={`links-section columns-${limitedColumns.length}`}>
                     {limitedColumns.map((column, index) => (
                         <div key={index} className="column">
-                            <h4 className="column-title">{column.title}</h4>
+                            <h5 className="column-title">{column.title}</h5>
                             <ul className="link-list">
                                 {column.links.map((link, i) => (
                                     <li key={i} className="link-item">
