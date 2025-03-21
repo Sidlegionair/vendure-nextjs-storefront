@@ -112,7 +112,9 @@ const DropdownHeader = styled(Stack)<{ selected: boolean }>`
     min-height: 65px;
     gap: 15px;
     min-width: 188px;
-    border: 1px solid #4d4d4d;
+    border: 1px solid ${({ theme, selected }) =>
+            selected ? theme.background.accent : '#4d4d4d'};
+
     border-radius: 8px;
     background-color: ${({ theme, selected }) =>
             selected ? theme.background.accent : theme.background.main};
