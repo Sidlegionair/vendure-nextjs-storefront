@@ -44,21 +44,21 @@ export const OrderSummary: React.FC<PropsWithChildren<OrderSummaryProps>> = ({ f
                         ))}
                     </Stack>
 
-                    <Stack column gap="1rem">
+                    <Stack column>
                         <SummaryRow>
-                            <TP size="2rem" weight={300}>
+                            <TP >
                                 {t('orderSummary.subtotal')}
                             </TP>
-                            <TP size="2rem" weight={300}>
+                            <TP>
                                 {priceFormatter(activeOrder.subTotalWithTax ?? 0, currencyCode)}
                             </TP>
                         </SummaryRow>
 
                         <SummaryRow>
-                            <TP size="2rem" weight={300}>
+                            <TP >
                                 {t('orderSummary.shipping')}
                             </TP>
-                            <TP size="2rem" weight={300}>
+                            <TP >
                                 {priceFormatter(activeOrder.shippingWithTax ?? 0, currencyCode)}
                             </TP>
                         </SummaryRow>
@@ -94,7 +94,7 @@ export const OrderSummary: React.FC<PropsWithChildren<OrderSummaryProps>> = ({ f
             </SummaryContent>
         </SummaryContainer>
         </Stack>
-    );
+    );7
 };
 
 // Styled Components

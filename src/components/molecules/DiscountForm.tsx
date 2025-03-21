@@ -90,7 +90,7 @@ const Input = styled.input`
     appearance: none;
     border: none;
     outline: none;
-    background: transparent;
+    background: white;
 
     width: calc(100% - 3.2rem);
     height: 100%;

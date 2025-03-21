@@ -50,30 +50,36 @@ const Wrapper = styled(Stack)`
 `;
 
 const StyledTP = styled(TP)<{ selected: boolean; error: boolean }>`
-    color: ${p => (p.error ? p.theme.error : p.selected ? '#fff' : '#000')};
-    font-size: 1.5rem;
-    font-weight: 400;
+    color: ${p => (p.error ? p.theme.error : p.selected ? p.theme.text.white : p.theme.text.main)};
+    font-size: ${({ theme }) => theme.typography.fontSize.h6};
+    line-height: normal;
+    //font-family: "Suisse BP", sans-serif;
+
 `;
+
 
 const Box = styled(Stack)<{ selected: boolean; error: boolean }>`
     cursor: pointer;
-    padding: 23px 0px;
+    padding: 15px 25px;
     text-align: center;
-    border: 1px solid ${p => (p.error ? p.theme.error : p.selected ? p.theme.gray(800) : p.theme.gray(200))};
-    font-size: 16px;
+    border: 1px solid ${p => (p.error ? p.theme.error : p.selected ? p.theme.background.accent : p.theme.text.main)};
+    font-size: ${({ theme }) => theme.typography.fontSize.h6};
     font-weight: 400;
     color: ${p => (p.error ? p.theme.error : p.selected ? '#fff' : '#000')} !important;
-    background-color: ${p => (p.error ? p.theme.error : p.selected ? '#000' : '#fff')} !important;
+    background-color: ${p => (p.error ? p.theme.error : p.selected ? p.theme.background.accent : '#fff')} !important;
     border-radius: 8px;
     
     &:hover {
-        border: 1px solid ${p => p.theme.gray(400)};
+        //border: 1px solid ${p => p.theme.text.main};
+        background-color: ${p => p.theme.background.accent};
     }
 
     & > div {
         color: ${p => (p.error ? p.theme.error : p.selected ? '#fff' : '#000')}; /* Adjusted color logic for div */
 
         & > p {
+            font-family: "Suisse BP Int'l antique", sans-serif;
+
             font-size: 20px;
             font-weight: 600;
             color: ${p => (p.error ? p.theme.error : p.selected ? '#fff' : '#000')}; /* Color logic for p element */
