@@ -113,6 +113,8 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
 };
 
 const StyledLink = styled(Link)<{ isSubMenu?: boolean; isActive?: boolean }>`
+    font-family: "Suisse BP Int'l antique", sans-serif;
+
     color: ${p => (p.isActive ? p.theme.text.accent : p.theme.text.main)} !important;
     text-decoration: ${p => (p.isActive ? 'underline' : 'none')};
     text-underline-offset: 4px;
