@@ -263,8 +263,8 @@ const ProductTitle = styled.div`
     justify-content: left;
     width: 100%;
     text-align: left;
-    gap: 20px;
-
+    //gap: 5px;
+    flex-direction: column;
 
     @media (max-width: 768px) {
         font-size: 14px;
@@ -823,7 +823,7 @@ export const CircularProductCarousel: React.FC<{
                 <BottomStack column>
                     <InfoBlock>
                         <Stack justifyBetween itemsCenter gap={20}>
-                            <ProductTitle>
+                            <ProductTitle column>
                                 <b>{currentProduct?.customFields?.brand}</b>
                                 {currentProduct?.productName}
                             </ProductTitle>
@@ -833,7 +833,7 @@ export const CircularProductCarousel: React.FC<{
                                 </StockButton>
                             </Link>
                         </Stack>
-                        <Divider marginBlock="1.5rem" />
+                        <Divider marginBlock="15px" />
                         <Stack gap={26}>
                             <ProductDetails>
                                 <h6>
