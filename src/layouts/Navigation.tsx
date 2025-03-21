@@ -78,7 +78,7 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                 <CustomContentContainer>
                     <MainStack>
                         <LeftStack gap="50px" itemsCenter>
-                            {/* Desktop: show navigation */}
+                             Desktop: show navigation
                             <DesktopWrapper>
                                 <DesktopNavigation gap={100} navigation={navigation} />
                             </DesktopWrapper>

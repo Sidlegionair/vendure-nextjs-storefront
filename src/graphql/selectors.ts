@@ -583,6 +583,9 @@ export const ActiveOrderSelector = Selector('Order')({
                 },
             },
         },
+        customFields: {
+            requestedSellerChannel: true,
+        },
     },
 });
 
