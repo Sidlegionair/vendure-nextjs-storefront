@@ -104,7 +104,7 @@ const RichTextEditor = ({ blok }) => {
 
     // Helper to generate an id from heading text if one isn't provided
     const generateIdFromText = (children) => {
-        const text = children
+        const text = (children || [])
             .map((child) => (typeof child === 'string' ? child : ''))
             .join('');
         return text
