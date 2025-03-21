@@ -195,7 +195,6 @@ const RichTextEditor = ({ blok }) => {
                     border-radius: ${blok.borderRadius || '0'};
                     box-shadow: ${blok.boxShadow || 'none'};
                     overflow: hidden;
-                }
 
                 h1 {
                     margin-bottom: 26px;
@@ -216,6 +215,7 @@ const RichTextEditor = ({ blok }) => {
 
                 a,
                 a * {
+                    color: rgba(158, 46, 58, 1) !important;
                     /* If you want anchors to have any specific overrides, add them here */
                     font-size: inherit;
                     text-decoration: underline;
@@ -244,6 +244,8 @@ const RichTextEditor = ({ blok }) => {
                     height: auto;
                     margin: 1rem 0;
                 }
+                }
+
             `}</style>
         </div>
     );
