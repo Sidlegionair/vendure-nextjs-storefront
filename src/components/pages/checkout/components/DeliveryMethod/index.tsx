@@ -50,7 +50,7 @@ const Wrapper = styled(Stack)`
 `;
 
 const StyledTP = styled(TP)<{ selected: boolean; error: boolean }>`
-    color: ${p => (p.error ? p.theme.error : p.selected ? p.theme.text.white : p.theme.text.main)};
+    color: ${p => (p.error ? p.theme.text.white : p.selected ? p.theme.text.white : p.theme.text.main)};
     font-size: ${({ theme }) => theme.typography.fontSize.h6};
     line-height: normal;
     //font-family: "Suisse BP", sans-serif;
@@ -60,6 +60,7 @@ const StyledTP = styled(TP)<{ selected: boolean; error: boolean }>`
 
 const Box = styled(Stack)<{ selected: boolean; error: boolean }>`
     cursor: pointer;
+    
     padding: 15px 25px;
     text-align: center;
     border: 1px solid ${p => (p.error ? p.theme.error : p.selected ? p.theme.background.accent : p.theme.text.main)};
@@ -70,6 +71,8 @@ const Box = styled(Stack)<{ selected: boolean; error: boolean }>`
     border-radius: 8px;
     
     &:hover {
+        transform: scale(1.1);
+
         //border: 1px solid ${p => p.theme.text.main};
         background-color: ${p => p.theme.background.accent};
     }

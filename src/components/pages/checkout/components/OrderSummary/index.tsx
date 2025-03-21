@@ -80,12 +80,12 @@ export const OrderSummary: React.FC<PropsWithChildren<OrderSummaryProps>> = ({ f
                         <Divider />
 
                         <SummaryRow isTotal>
-                            <TP size="2.5rem" weight={600}>
+                            <h4>
                                 {t('orderSummary.total')}
-                            </TP>
-                            <TP size="2.5rem" weight={600}>
+                            </h4>
+                            <h4>
                                 {priceFormatter(activeOrder.totalWithTax ?? 0, currencyCode)}
-                            </TP>
+                            </h4>
                         </SummaryRow>
 
                         {footer}

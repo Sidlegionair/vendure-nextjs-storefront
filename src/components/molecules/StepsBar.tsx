@@ -55,7 +55,7 @@ const StepsRow = styled.div`
 // New container that limits the line width to ~90% of the row
 const LineContainer = styled.div`
     position: absolute;
-    top: 35%;
+    top: 30%;
     left: 5%;
     width: 90%;
     height: 2px;

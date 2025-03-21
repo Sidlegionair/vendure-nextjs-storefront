@@ -861,15 +861,31 @@ const StyledButton = styled(Button)`
     padding: 1.6rem 0.8rem;
     border-radius: 12px;
 
+    
     p {
         text-transform: capitalize !important;
         color: ${(p) => p.theme.background.white};
+
+
+
     }
     & > div {
         color: ${(p) => p.theme.background.white};
         text-align: center;
         font-weight: 600;
         font-size: 20px !important;
+    }
+    
+    &:hover {
+        border: 1px solid ${(p) => p.theme.background.accentGreen};
+        p {
+            text-transform: capitalize !important;
+            color: ${(p) => p.theme.background.accentGreen};
+
+
+
+        }
+
     }
 `;
 
