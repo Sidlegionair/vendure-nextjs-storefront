@@ -7,15 +7,23 @@ interface StepsBarProps {
 }
 
 export const StepsBar: React.FC<StepsBarProps> = ({ steps, currentStep }) => {
+    const progressWidth =
+        steps.length > 1 ? ((currentStep - 1) / (steps.length - 1)) * 100 : 0;
+
     return (
-        <StepsContainer>
-            {steps.map((stepLabel, index) => {
-                const stepNumber = index + 1;
-                const isActive = stepNumber === currentStep;
-                const isCompleted = stepNumber < currentStep;
-                return (
-                    <React.Fragment key={index}>
-                        <StepItem>
+        <Container>
+            <StepsRow>
+                <LineContainer>
+                    <LineBackground />
+                    <LineProgress progressWidth={progressWidth} />
+                </LineContainer>
+                {steps.map((stepLabel, index) => {
+                    const stepNumber = index + 1;
+                    const isActive = stepNumber === currentStep;
+                    const isCompleted = stepNumber < currentStep;
+
+                    return (
+                        <StepItem key={index}>
                             <Circle isActive={isActive} isCompleted={isCompleted}>
                                 {stepNumber}
                             </Circle>
@@ -23,30 +31,67 @@ export const StepsBar: React.FC<StepsBarProps> = ({ steps, currentStep }) => {
                                 {stepLabel}
                             </StepLabel>
                         </StepItem>
-                        {index < steps.length - 1 && (
-                            <Connector isCompleted={stepNumber < currentStep} />
-                        )}
-                    </React.Fragment>
-                );
-            })}
-        </StepsContainer>
+                    );
+                })}
+            </StepsRow>
+        </Container>
     );
 };
 
-const StepsContainer = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Ensure items are spread out */
+const Container = styled.div`
     width: 100%;
     max-width: 900px;
     margin: 2rem auto;
 `;
 
+const StepsRow = styled.div`
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: fit-content; /* match circle diameter */
+`;
+
+// New container that limits the line width to ~90% of the row
+const LineContainer = styled.div`
+    position: absolute;
+    top: 35%;
+    left: 5%;
+    width: 90%;
+    height: 2px;
+    transform: translateY(-50%);
+    z-index: 1;
+`;
+
+const LineBackground = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #ccc;
+`;
+
+interface ProgressProps {
+    progressWidth: number;
+}
+
+const LineProgress = styled.div<ProgressProps>`
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2px;
+    background-color: ${({ theme }) => theme.background.accent};
+    transition: width 0.3s ease;
+    width: ${({ progressWidth }) => `${progressWidth}%`};
+`;
+
 const StepItem = styled.div`
+    position: relative;
+    z-index: 2; /* circles above the line */
     display: flex;
     flex-direction: column;
     align-items: center;
-    flex-shrink: 0; /* Prevent the circle from shrinking */
 `;
 
 interface CircleProps {
@@ -67,20 +112,20 @@ const Circle = styled.div<CircleProps>`
     font-weight: 600;
     transition: all 0.3s ease;
 
-    ${({ isCompleted }) =>
+    ${({ isCompleted, theme }) =>
             isCompleted &&
             `
-      background-color: #cc0000;
-      border-color: #cc0000;
-      color: #fff; 
+      background-color: ${theme.background.accent};
+      border-color: ${theme.background.accent};
+      color: #fff;
     `}
 
-    ${({ isActive, isCompleted }) =>
+    ${({ isActive, isCompleted, theme }) =>
             isActive &&
             !isCompleted &&
             `
-      border-color: #cc0000;
-      color: #cc0000;
+      border-color: ${theme.background.accent};
+      color: ${theme.background.accent};
     `}
 `;
 
@@ -98,38 +143,13 @@ const StepLabel = styled.div<LabelProps>`
     ${({ isCompleted }) =>
             isCompleted &&
             `
-      color: #000; 
+      color: #000;
     `}
 
-    ${({ isActive, isCompleted }) =>
+    ${({ isActive, isCompleted, theme }) =>
             isActive &&
             !isCompleted &&
             `
-      color: #cc0000;
-    `}
-`;
-
-interface ConnectorProps {
-    isCompleted: boolean;
-}
-
-/*
-  The connector expands to fill the gap between circles.
-  Adding a min-width ensures that even if space is tight,
-  you see a line.
-*/
-const Connector = styled.div<ConnectorProps>`
-    flex: 1;
-    //padding: 20px 0px;
-    //min-width: 60px;
-    height: 2px;
-    //margin:  8px -25px;
-    background-color: #ccc;
-    transition: background-color 0.3s ease;
-
-    ${({ isCompleted }) =>
-            isCompleted &&
-            `
-      background-color: #cc0000;
+      color: ${theme.background.accent};
     `}
 `;
