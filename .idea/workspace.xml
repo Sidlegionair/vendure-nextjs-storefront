@@ -6,11 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="38c4f070-02b8-471c-a147-ab53bc327301" name="Changes" comment="86c1ycmb1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/molecules/StepsBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/molecules/StepsBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/organisms/CircularProductCarousel/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/components/DeliveryMethod/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/components/DeliveryMethod/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderForm/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderForm/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderPayment.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderPayment.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderSummary/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/components/OrderSummary/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/checkout/payment/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/checkout/payment/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -190,7 +189,7 @@
       <workItem from="1741794062545" duration="669000" />
       <workItem from="1742222193349" duration="23574000" />
       <workItem from="1742382076247" duration="14740000" />
-      <workItem from="1742467673113" duration="19586000" />
+      <workItem from="1742467673113" duration="23038000" />
     </task>
     <servers>
       <YouTrack url="https://modernmediahub.youtrack.cloud">

@@ -30,8 +30,8 @@ export const OrderSummary: React.FC<PropsWithChildren<OrderSummaryProps>> = ({ f
     if (!activeOrder) return null;
 
     return (
-        <Stack column>
-            <TH2 weight={600} size="2.5rem">
+        <Stack column gap="2rem">
+            <TH2 weight={600}>
                 {t('orderSummary.title')}
             </TH2>
 

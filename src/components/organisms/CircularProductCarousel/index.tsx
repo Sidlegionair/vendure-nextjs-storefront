@@ -823,7 +823,7 @@ export const CircularProductCarousel: React.FC<{
                 <BottomStack column>
                     <InfoBlock>
                         <Stack justifyBetween itemsCenter gap={20}>
-                            <ProductTitle column>
+                            <ProductTitle>
                                 <b>{currentProduct?.customFields?.brand}</b>
                                 {currentProduct?.productName}
                             </ProductTitle>
@@ -833,7 +833,7 @@ export const CircularProductCarousel: React.FC<{
                                 </StockButton>
                             </Link>
                         </Stack>
-                        <Divider marginBlock="15px" />
+                        <Divider marginBlock={"1rem"} />
                         <Stack gap={26}>
                             <ProductDetails>
                                 <h6>

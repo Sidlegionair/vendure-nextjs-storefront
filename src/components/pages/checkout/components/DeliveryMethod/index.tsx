@@ -47,6 +47,9 @@ export const DeliveryMethod: React.FC<Props> = ({
 
 const Wrapper = styled(Stack)`
     margin: 1.6rem 0;
+    @media(max-width: 767px) {
+        flex-direction: column;
+    }
 `;
 
 const StyledTP = styled(TP)<{ selected: boolean; error: boolean }>`
