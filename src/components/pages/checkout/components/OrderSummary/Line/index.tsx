@@ -21,20 +21,14 @@ interface LineProps {
 
 export const Line: React.FC<LineProps> = ({
                                               isForm,
-                                              line: {
-                                                  id,
-                                                  productVariant,
-                                                  quantity,
-                                                  featuredAsset,
-                                                  unitPriceWithTax,
-                                                  linePriceWithTax,
-                                                  discountedLinePriceWithTax,
-                                                  customFields,
-                                              },
+                                              line,
                                               currencyCode = CurrencyCode.USD,
                                           }) => {
-    const { removeFromCheckout, changeQuantity } = useCheckout();
+    const { id, productVariant, quantity, featuredAsset, unitPriceWithTax, linePriceWithTax, discountedLinePriceWithTax } = line;
+    // Instead of destructuring customFields here, we access it later
+    const customFields = (line as { customFields?: { requestedSellerChannel?: string; brand?: string } }).customFields;
     const { t } = useTranslation('checkout');
+    const { removeFromCheckout, changeQuantity } = useCheckout();
 
     // Fetch channels as in CartBody
     const [channels, setChannels] = useState<any[]>([]);
@@ -46,7 +40,7 @@ export const Line: React.FC<LineProps> = ({
         loadChannels();
     }, []);
 
-    // Determine the seller name based on requestedSellerChannel
+    // Determine the seller name using the requestedSellerChannel from customFields
     const requestedSellerChannel = customFields?.requestedSellerChannel;
     const sellerName =
         channels.find(ch => ch.slug === requestedSellerChannel)?.seller?.name ||
@@ -61,7 +55,7 @@ export const Line: React.FC<LineProps> = ({
         <CartRow w100 justifyBetween>
             <Stack gap="2rem">
                 <ProductImageWrapper>
-                    <StyledProductImage
+                    <ProductImage
                         src={featuredAsset?.preview}
                         alt={productVariant.product.name}
                         title={productVariant.product.name}
@@ -70,9 +64,9 @@ export const Line: React.FC<LineProps> = ({
                 <Stack column gap="18px">
                     <Stack column gap="0.125rem">
                         <Stack gap="0.5rem">
-                            {brandFields?.brand && (
+                            {customFields?.brand && (
                                 <TP size="18px" weight={700}>
-                                    {brandFields.brand}
+                                    {customFields.brand}
                                 </TP>
                             )}
                         </Stack>
@@ -131,18 +125,14 @@ export const Line: React.FC<LineProps> = ({
     );
 };
 
-const StyledProductImage = styled(ProductImage)`
-`
-
 /* --- Styled Components --- */
 const CartRow = styled(Stack)`
-
     padding: 2rem 0;
     border-bottom: 1px solid ${p => p.theme.withOpacity(p.theme.border.main, 0.3)};
 `;
 
 const ProductImageWrapper = styled.div`
-    height: 125px;
+    height: 250px;
     overflow: hidden;
     border-radius: 4px;
 
@@ -173,7 +163,6 @@ const RemoveText = styled(TP)`
     color: ${p => p.theme.text.accent};
 `;
 
-/* These styles mirror the CartBody styling */
 const StyledTP = styled(TP)`
     display: flex;
     gap: 5px;

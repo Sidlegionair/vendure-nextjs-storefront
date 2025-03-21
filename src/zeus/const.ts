@@ -262,7 +262,7 @@ export const AllTypesProps: Record<string,any> = {
 		customFields:"UpdateCustomerCustomFieldsInput"
 	},
 	UpdateOrderInput:{
-		customFields:"JSON"
+		customFields:"UpdateOrderCustomFieldsInput"
 	},
 	PaymentInput:{
 		metadata:"JSON"
@@ -613,7 +613,9 @@ export const AllTypesProps: Record<string,any> = {
 		total:"NumberOperators",
 		totalWithTax:"NumberOperators",
 		_and:"OrderFilterParameter",
-		_or:"OrderFilterParameter"
+		_or:"OrderFilterParameter",
+		scenario:"StringOperators",
+		serviceAgentAvailable:"BooleanOperators"
 	},
 	OrderSortParameter:{
 		id:"SortOrder",
@@ -628,7 +630,11 @@ export const AllTypesProps: Record<string,any> = {
 		shipping:"SortOrder",
 		shippingWithTax:"SortOrder",
 		total:"SortOrder",
-		totalWithTax:"SortOrder"
+		totalWithTax:"SortOrder",
+		scenario:"SortOrder",
+		primaryVendor:"SortOrder",
+		serviceDealer:"SortOrder",
+		serviceAgentAvailable:"SortOrder"
 	},
 	FacetValueFilterParameter:{
 		id:"IDOperators",
@@ -813,6 +819,9 @@ export const AllTypesProps: Record<string,any> = {
 
 	},
 	UpdateCustomerCustomFieldsInput:{
+
+	},
+	UpdateOrderCustomFieldsInput:{
 
 	},
 	CreateSellerCustomFieldsInput:{
@@ -1623,7 +1632,7 @@ export const ReturnTypes: Record<string,any> = {
 		totalWithTax:"Money",
 		taxSummary:"OrderTaxSummary",
 		history:"HistoryEntryList",
-		customFields:"JSON"
+		customFields:"OrderCustomFields"
 	},
 	OrderTaxSummary:{
 		description:"String",
@@ -2323,6 +2332,12 @@ export const ReturnTypes: Record<string,any> = {
 	},
 	CustomerCustomFields:{
 		preferredSeller:"Seller"
+	},
+	OrderCustomFields:{
+		scenario:"String",
+		primaryVendor:"Seller",
+		serviceDealer:"Seller",
+		serviceAgentAvailable:"Boolean"
 	},
 	OrderLineCustomFields:{
 		requestedSellerChannel:"String"
