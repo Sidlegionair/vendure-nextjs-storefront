@@ -97,11 +97,10 @@ select {
 /* Base mobile styles */
 input,
 select,
-a,
 p {
     font-family: inherit;
-    font-size: 20px;
-    line-height: 26px;
+    font-size: 14px;
+    line-height: 18px;
     /* turn off highlighting */
     -webkit-background-clip: text;
     -webkit-text-fill-color: none;
@@ -145,6 +144,14 @@ small {
 
 /* Desktop styles */
 @media (min-width: 768px) {
+    /* Base mobile styles */
+    input,
+    select,
+    p {
+        font-family: inherit;
+        font-size: 20px;
+        line-height: 26px;
+    }
     h1 {
         font-size: 65px;
     }
