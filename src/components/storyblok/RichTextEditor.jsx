@@ -121,11 +121,11 @@ const RichTextEditor = ({ blok }) => {
                 const anchorId = rest.id || generateIdFromText(children);
                 return React.createElement(`h${level}`, { id: anchorId }, children);
             },
-            [NODE_UL]: (children) => <ul className="list-disc list-inside mb-4 pl-4">{children}</ul>,
-            [NODE_OL]: (children) => <ol className="list-decimal list-inside mb-4 pl-4">{children}</ol>,
+            [NODE_UL]: (children) => <ul className="list-disc list-outside mb-4 pl-4">{children}</ul>,
+            [NODE_OL]: (children) => <ol className="list-decimal list-outside mb-4 pl-4">{children}</ol>,
             [NODE_LI]: (children) => (
                 <li className="mb-2 leading-relaxed">
-                    <span className="inline-block">{children}</span>
+                    {children}
                 </li>
             ),
             [NODE_QUOTE]: (children) => <blockquote>{children}</blockquote>,
