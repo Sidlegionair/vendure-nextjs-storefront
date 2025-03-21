@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { TH1, TP, ContentContainer, Stack, Price, Link, Divider, TH2 } from '@/src/components/atoms';
+import {
+    TH1,
+    TP,
+    ContentContainer,
+    Stack,
+    Price,
+    Link,
+    Divider,
+    TH2
+} from '@/src/components/atoms';
 import { FullWidthButton } from '@/src/components/molecules/Button';
 import { NotifyMeForm } from '@/src/components/molecules/NotifyMeForm';
 import { ProductPageProductsSlider } from '@/src/components/organisms/ProductPageProductsSlider';
@@ -10,13 +19,11 @@ import { ArrowRightIcon, ShoppingBasket } from 'lucide-react';
 import { InferGetStaticPropsType } from 'next';
 import { getStaticProps } from '@/src/components/pages/products/props';
 import { ProductVariantTileType, productVariantTileSelector } from '@/src/graphql/selectors';
-
 import { Trans, useTranslation } from 'next-i18next';
 import { ProductOptions } from '@/src/components/organisms/ProductOptions';
 import { Breadcrumbs } from '@/src/components/molecules';
 import { useProduct } from '@/src/state/product';
 import { ProductPhotosPreview } from '@/src/components/organisms/ProductPhotosPreview';
-// Removed generateProductSpecs from here
 import { ProductTabs } from '@/src/components/molecules/ProductTabs';
 import { QuantityCounter } from '@/src/components/molecules/QuantityCounter';
 import { OptionTabContent } from '@/src/components/organisms/OptionTabContent';
@@ -28,6 +35,7 @@ import { storefrontApiQuery } from '@/src/graphql/client';
 import { useChannels } from '@/src/state/channels';
 import { ProductSizingTable } from '@/src/components/molecules/ProductSizingTable';
 import { HomePageSliders } from '@/src/components/organisms/HomePageSliders';
+import { fetchChannels } from '@/src/lib/channels';
 
 export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = props => {
     const { t } = useTranslation('products');
@@ -47,27 +55,31 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
         handleSetItemQuantityInCart
     } = useProduct();
 
+    // Load channels using fetchChannels (like in CartBody)
+    const [channels, setChannels] = useState<any[]>([]);
+    useEffect(() => {
+        async function loadChannels() {
+            const channelsData = await fetchChannels();
+            setChannels(channelsData);
+        }
+        loadChannels();
+    }, []);
+
+    // (Optional) Vendor check – you can remove this if not needed
     useEffect(() => {
         if (!variant || !ctx?.channel) return;
-
         const checkVendorChannel = async () => {
             try {
                 const { selectVendorForVariation } = await storefrontApiQuery(ctx)({
                     selectVendorForVariation: [
                         { productId: variant.id },
-                        { slug: true, channel: true }
+                        { slug: true, channel: true, seller: { name: true } }
                     ]
                 });
-
-                console.log('hi');
                 console.log('VENDOR:', selectVendorForVariation);
                 console.log('CUR CHANNEL:', ctx.channel);
-
-                // Check if the current URL does not contain the vendor's slug
                 if (selectVendorForVariation && !router.asPath.includes(selectVendorForVariation.slug)) {
                     ctx.channel = selectVendorForVariation.slug;
-
-                    // Append variant query param if variant.id exists
                     const variantQuery = variant.id ? `?variant=${variant.id}` : '';
                     router.replace(
                         `/${selectVendorForVariation.slug}/${ctx.locale}/snowboards/${product?.slug}${variantQuery}`
@@ -77,14 +89,16 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                 console.error('Error checking vendor channel', error);
             }
         };
-
         checkVendorChannel();
     }, [variant, ctx.channel, product?.slug, router]);
 
-    // **1. Add a Conditional Check for Both `props.product` and `product`**
     if (!props.product || !product) {
         return (
-            <Layout categories={props.collections ?? []} navigation={props.navigation ?? []} subnavigation={props.subnavigation ?? []}>
+            <Layout
+                categories={props.collections ?? []}
+                navigation={props.navigation ?? []}
+                subnavigation={props.subnavigation ?? []}
+            >
                 <ContentContainer>
                     <Wrapper column>
                         <Stack w100 column gap={20}>
@@ -102,7 +116,6 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
     ];
 
     const [recentlyProducts, setRecentlyProducts] = useState<ProductVariantTileType[]>([]);
-
     useEffect(() => {
         if (typeof window === 'undefined') return;
         const fetchData = async () => {
@@ -121,7 +134,8 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                         },
                     ],
                 });
-                if (collection?.productVariants?.items.length) setRecentlyProducts(collection.productVariants.items);
+                if (collection?.productVariants?.items.length)
+                    setRecentlyProducts(collection.productVariants.items);
             } catch (error) {
                 console.log(error);
             }
@@ -129,9 +143,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
         fetchData();
     }, [product.id, ctx]);
 
-    // **2. Use `specs` from Props**
     const specs = props.specs;
-
     const rating = Math.random() * 5;
 
     return (
@@ -174,27 +186,28 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                             <ProductInfoStack w100 column gap={15}>
                                 <Stack gap={15}>
                                     {typeof product.customFields?.brand === 'string' && (
-                                        <StyledBrand>
-                                            {product.customFields.brand}
-                                        </StyledBrand>
+                                        <StyledBrand>{product.customFields.brand}</StyledBrand>
                                     )}
                                     <StyledProductTitle>{product.name}</StyledProductTitle>
                                 </Stack>
-
-                                <RatingStack itemsCenter gap={10}><Ratings rating={rating} /> <b>Reviews:</b> 4.9</RatingStack>
+                                <RatingStack itemsCenter gap={10}>
+                                    <Ratings rating={rating} /> <b>Reviews:</b> 4.9
+                                </RatingStack>
                                 {variant && <Price price={variant.priceWithTax} currencyCode={variant.currencyCode} />}
                             </ProductInfoStack>
                             <Stack w100 gap="10px" column>
-                                {variant && Number(variant?.stockLevel) > 0 && Number(variant?.stockLevel) <= 10 && (
-                                    <MakeItQuick size="1rem" weight={500}>
-                                        <Trans
-                                            i18nKey="stock-levels.low-stock"
-                                            t={t}
-                                            values={{ value: variant?.stockLevel }}
-                                            components={{ 1: <span></span> }}
-                                        />
-                                    </MakeItQuick>
-                                )}
+                                {variant &&
+                                    Number(variant?.stockLevel) > 0 &&
+                                    Number(variant?.stockLevel) <= 10 && (
+                                        <MakeItQuick size="1rem" weight={500}>
+                                            <Trans
+                                                i18nKey="stock-levels.low-stock"
+                                                t={t}
+                                                values={{ value: variant?.stockLevel }}
+                                                components={{ 1: <span></span> }}
+                                            />
+                                        </MakeItQuick>
+                                    )}
                                 <StockInfo
                                     comingSoon={!variant}
                                     outOfStock={Number(variant?.stockLevel) <= 0}
@@ -208,8 +221,9 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                                 : Number(variant?.stockLevel) > 0
                                                     ? (
                                                         <span>
-                                                            <b>{variant?.stockLevel}</b> {t('stock-levels.left-in-stock')}
-                                                        </span>
+                                                        <b>{variant?.stockLevel}</b>{' '}
+                                                            {t('stock-levels.left-in-stock')}
+                                                    </span>
                                                     )
                                                     : t('stock-levels.out-of-stock')}
                                         </TP>
@@ -246,7 +260,9 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                             ? Array.from({ length: 4 }, (_, i) => i + 1)
                                                 .filter(tabIndex => (variant?.customFields as Record<string, any>)[`optionTab${tabIndex}Visible`])
                                                 .map(tabIndex => ({
-                                                    title: (variant?.customFields as Record<string, any>)[`optionTab${tabIndex}Label`] || `Option Tab ${tabIndex}`,
+                                                    title:
+                                                        (variant?.customFields as Record<string, any>)[`optionTab${tabIndex}Label`] ||
+                                                        `Option Tab ${tabIndex}`,
                                                     children: (
                                                         <OptionTabContent
                                                             customFields={variant?.customFields}
@@ -258,10 +274,30 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                     ]}
                                 />
                             </Stack>
+                            {/* Replace the "FREE SHIPPING" section with an unstyled shipping details table */}
                             <StyledDividerTop />
-                            <Stack justifyBetween>
-                                <TP weight={700} size={18}>FREE SHIPPING</TP>
-                            </Stack>
+                            <ShippingTable>
+                                <tbody>
+                                <tr>
+                                    <td>Standard shipping</td>
+                                    <td>Free</td>
+                                </tr>
+                                <tr>
+                                    <td>Delivery time</td>
+                                    <td>2-3 days</td>
+                                </tr>
+                                <tr>
+                                    <td>Sold &amp; shipped by:</td>
+                                    <td>
+                                        {
+                                            channels.find(ch => ch.slug === ctx.channel)?.seller?.name ||
+                                            'Burnside'
+                                        }
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </ShippingTable>
+
                             <StyledDividerTop />
                             {!variant ? null : Number(variant?.stockLevel) <= 0 ? (
                                 <NotifyMeForm />
@@ -291,11 +327,15 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                     ? Array.from({ length: 3 }, (_, i) => i + 1)
                                         .filter(tabIndex => (variant?.customFields as Record<string, any>)[`descriptionTab${tabIndex}Visible`])
                                         .map(tabIndex => ({
-                                            title: (variant?.customFields as Record<string, any>)[`descriptionTab${tabIndex}Label`] || `Description Tab ${tabIndex}`,
+                                            title:
+                                                (variant?.customFields as Record<string, any>)[`descriptionTab${tabIndex}Label`] ||
+                                                `Description Tab ${tabIndex}`,
                                             children: (
                                                 <div
                                                     dangerouslySetInnerHTML={{
-                                                        __html: (variant?.customFields as Record<string, any>)[`descriptionTab${tabIndex}Content`] || 'No content available',
+                                                        __html:
+                                                            (variant?.customFields as Record<string, any>)[`descriptionTab${tabIndex}Content`] ||
+                                                            'No content available',
                                                     }}
                                                 />
                                             ),
@@ -320,28 +360,23 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                 <Stack w100 column gap={20}>
                     <StyledBoughtHeading>{t('clients-also-bought')}</StyledBoughtHeading>
                     <StyledBoughtContent>
-                        Aenean faucibus egestas ipsum, nec consequat urna fermentum sit amet. Ut scelerisque elit in leo hendrerit, pretium ultricies nisi euismod.
+                        Aenean faucibus egestas ipsum, nec consequat urna fermentum sit amet. Ut scelerisque elit in
+                        leo hendrerit, pretium ultricies nisi euismod.
                     </StyledBoughtContent>
                 </Stack>
             </ContentContainer>
-            <HomePageSliders useVariants={true} sliders={props.clientsAlsoBought} seeAllText={'test'}></HomePageSliders>
-            {/*<ProductPageProductsSlider
-                title={t('recently-viewed')}
-                products={props.clientsAlsoBought?.collection?.productVariants?.items ?? []}
-            />*/}
-            {/*<ProductPageProductsSlider title={t('recently-viewed')} products={recentlyProducts ?? []} />*/}
+            <HomePageSliders useVariants={true} sliders={props.clientsAlsoBought} seeAllText={'test'} />
             <ProductStory slug={props.product.slug} />
         </Layout>
     );
 };
 
-// Fields to display, with their corresponding keys and labels
 const fields = [
     { key: 'boardWidth', label: 'Board Width (cm)' },
     { key: 'riderLengthMin', label: 'Rider Length Min (cm)' },
     { key: 'riderLengthMax', label: 'Rider Length Max (cm)' },
     { key: 'riderWeightMin', label: 'Rider Weight Min (kg)' },
-    { key: 'riderWeightMax', label: 'Rider Weight Max (cm)' },
+    { key: 'riderWeightMax', label: 'Rider Length Max (cm)' },
     { key: 'bootLengthMax', label: 'Boot Length Max (cm)' },
     { key: 'flex', label: 'Flex' },
     { key: 'noseWidth', label: 'Nose Width (cm)' },
@@ -357,20 +392,25 @@ const fields = [
     { key: 'bindingSizeVariant', label: 'Binding Size' },
 ];
 
-
 const RatingStack = styled(Stack)`
     font-family: "Suisse BP Int'l light", sans-serif;
     font-size: 18px;
-`
+`;
 
-// Styled Components (unchanged)
+const ShippingTable = styled.table`
+    font-family: "Suisse BP Int'l", sans-serif;
+  td {
+    padding: 0.5rem 1rem;
+  }
+`;
+
+
 const StyledBoughtHeading = styled(TH2)`
     margin-top: 60px;
     font-size: 38px;
     line-height: 38px;
     font-weight: 600;
-
-    @media(max-width: ${p => p.theme.breakpoints.md}) {
+    @media (max-width: ${p => p.theme.breakpoints.md}) {
         font-size: 30px;
         line-height: 30px;
     }
@@ -380,8 +420,7 @@ const StyledBoughtContent = styled('p')`
     font-size: 20px;
     line-height: 26px;
     color: ${p => p.theme.text.subtitle};
-
-    @media(max-width: 767px) {
+    @media (max-width: 767px) {
         font-size: 18px;
         line-height: 26px;
     }
@@ -397,7 +436,6 @@ const Wrapper = styled(Stack)`
     flex-direction: column;
     width: 100%;
     box-sizing: border-box;
-
     @media (min-width: ${({ theme }) => theme.breakpoints.xl}) {
         padding: 3.5rem 0;
     }
@@ -413,8 +451,7 @@ const StyledBrand = styled.h4`
     font-weight: bold;
 `;
 
-const StyledProductTitle = styled.h4`
-`;
+const StyledProductTitle = styled.h4``;
 
 const Main = styled(Stack)`
     padding: 1.5rem 0;
@@ -423,12 +460,10 @@ const Main = styled(Stack)`
     width: 100%;
     border-bottom: 1px solid ${({ theme }) => theme.gray(100)};
     margin-bottom: 2rem;
-
     @media (min-width: 768px) {
         flex-direction: row;
         padding: 2rem 0;
     }
-
     @media (min-width: ${({ theme }) => theme.breakpoints.xl}) {
         padding: 4rem 0;
     }
@@ -436,7 +471,6 @@ const Main = styled(Stack)`
 
 const StickyLeft = styled(Stack)`
     width: 100%;
-
     @media (min-width: 1024px) {
         position: sticky;
         top: 12rem;
@@ -447,7 +481,6 @@ const StickyLeft = styled(Stack)`
 const ResponsiveRightColumn = styled(Stack)`
     width: 100%;
     gap: 2rem;
-
     @media (min-width: 1024px) {
         width: 60%;
         align-items: flex-start;
@@ -480,7 +513,6 @@ const StyledDividerTop = styled(Divider)`
 const ResponsiveActionRow = styled(Stack)`
     width: 100%;
     flex-direction: column;
-
     @media (min-width: 480px) {
         flex-direction: row;
     }
@@ -497,18 +529,15 @@ const StyledFullWidthButton = styled(FullWidthButton)`
     padding: 1.5rem;
     justify-content: center;
     transition: background 250ms ease-in-out, transform 200ms ease-in-out, box-shadow 250ms ease-in-out;
-
     svg {
         flex-shrink: 0;
     }
-
     &:hover {
         color: white;
         background: ${({ theme }) => theme.background.accentGreen};
         transform: scale(1.03);
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
-
     &:active {
         transform: scale(0.98);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
@@ -516,10 +545,8 @@ const StyledFullWidthButton = styled(FullWidthButton)`
 `;
 
 const StockDisplay = styled(Stack)`
-    font-size: 1.125rem;
     font-weight: 400;
     gap: 3px;
-
     b {
         color: ${({ theme }) => theme.text.accentGreen};
         font-weight: 700;
