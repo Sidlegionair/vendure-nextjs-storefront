@@ -44,7 +44,7 @@
         },
         "detailsForm": {
             "title": "Account Details",
-            "changeDetails": "Change Details",
+            "changeDetails": "Save Details",
             "addressEmail": "Address email",
             "firstName": "First name",
             "lastName": "Last name",

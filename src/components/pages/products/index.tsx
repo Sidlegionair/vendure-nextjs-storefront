@@ -184,7 +184,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                         </StickyLeft>
                         <ResponsiveRightColumn w100 column gap={10}>
                             <ProductInfoStack w100 column gap={15}>
-                                <Stack gap={15}>
+                                <Stack column>
                                     {typeof product.customFields?.brand === 'string' && (
                                         <StyledBrand>{product.customFields.brand}</StyledBrand>
                                     )}
@@ -289,10 +289,15 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                 <tr>
                                     <td>Sold &amp; shipped by:</td>
                                     <td>
+                                        <StyledLink
+                                            skipChannelHandling
+                                            href={`/content/partners/${ctx?.channel.slug}`}
+                                        >
                                         {
                                             channels.find(ch => ch.slug === ctx.channel)?.seller?.name ||
-                                            'Burnside'
+                                            'Seller not found'
                                         }
+                                        </StyledLink>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -402,6 +407,21 @@ const ShippingTable = styled.table`
   td {
     padding: 0.5rem 1rem;
   }
+`;
+
+const StyledLink = styled(Link)`
+    font-family: "Suisse BP Int'l", sans-serif;
+    color: ${p => p.theme.text.accent};
+    text-decoration: underline;
+    text-underline-offset: 4px;
+
+    &:hover {
+        color: ${p => p.theme.text.accent};
+        text-decoration: underline;
+    }
+
+    display: flex;
+    align-items: start;
 `;
 
 
