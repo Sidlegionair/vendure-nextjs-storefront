@@ -28,6 +28,7 @@ const Footer = ({ blok }) => {
         columns = [],
         newsletter_placeholder,
         social_links = [],
+        form_id, // New field from Storyblok to set the form id
     } = blok;
 
     const limitedColumns = columns.slice(0, 5); // Limit to 5 columns
@@ -38,7 +39,6 @@ const Footer = ({ blok }) => {
                 {/* Brand Section */}
                 <div className="brand-section">
                     {logo?.filename && (
-
                         <div className="logo">
                             <img
                                 src={logo.filename}
@@ -79,7 +79,7 @@ const Footer = ({ blok }) => {
                 {/* Newsletter and Social Links Section */}
                 <div className="newsletter-section">
                     <div className="email-wrapper">
-                        <div className="klaviyo-form-VUnBaH"></div>
+                        <div id={form_id || "klaviyo-form-VUnBaH"}></div>
                     </div>
                     <div className="social-icons">
                         {social_links.map((social, index) => (
@@ -114,31 +114,19 @@ const Footer = ({ blok }) => {
                     margin-top: 100px;
                     * {
                         font-family: 'Suisse BP Int\'l' !important;
-
                     }
 
                     .brand-section {
                         p {
                             font-family: 'Suisse BP Int\'l' !important;
-                            //font-style: normal;
-                            //font-weight: 400;
-                            //font-size: 18px;
-                            //line-height: 26px;
-                            /* or 144% */
                         }
 
                         span {
                             font-family: 'Suisse BP Int\'l' !important;
-                            //font-style: normal;
-                            //font-weight: 400;
-                            //font-size: 18px;
-                            //line-height: 26px;
-                            /* or 144% */
                         }
 
                         * {
                             font-family: 'Suisse BP Int\'l' !important;
-
                         }
                     }
                 }
@@ -230,10 +218,8 @@ const Footer = ({ blok }) => {
                 }
 
                 .column-title {
-                    //font-size: 20px;
                     font-weight: 500;
                     margin-bottom: 20px;
-                    //text-transform: uppercase;
                 }
 
                 .link-list {
@@ -241,10 +227,6 @@ const Footer = ({ blok }) => {
                     padding: 0;
                     margin: 0;
                 }
-
-                //.link-item {
-                //    margin-bottom: 8px;
-                //}
 
                 .link {
                     color: #fff;
@@ -258,7 +240,7 @@ const Footer = ({ blok }) => {
                     display: flex;
                     flex-direction: column;
                     align-items: flex-end;
-                    gap: 15px; /* Space between the input and social icons */
+                    gap: 15px;
                     width: 100%;
                     max-width: 250px;
                 }
@@ -278,21 +260,18 @@ const Footer = ({ blok }) => {
                     width: 100%;
                     box-sizing: border-box;
                     max-width: 100%;
-                    /*border-radius: 30px;*/
-                    padding-right: 50px; /* Space for the button */
+                    padding-right: 50px;
                 }
 
                 .send-button {
                     position: absolute;
-                    right: 10px; /* Inside the input */
+                    right: 10px;
                     top: 50%;
                     transform: translateY(-50%);
                     border: none;
-                    /*background-color: #c00;*/
                     color: #fff;
                     padding: 10px 15px;
                     font-size: 14px;
-                    /*border-radius: 50%;*/
                     cursor: pointer;
                 }
 
@@ -301,7 +280,7 @@ const Footer = ({ blok }) => {
                     font-style: normal;
                     font-weight: 400;
                     font-size: 16px;
-                    line-height: 24px; /* Identical to box height, or 150% */
+                    line-height: 24px;
                     color: #4D4D4D;
                 }
 
@@ -373,7 +352,6 @@ const Footer = ({ blok }) => {
                     }
 
                     .logo-image {
-                        /*max-width: 150px;*/
                         max-height: 28px;
                     }
                 }
