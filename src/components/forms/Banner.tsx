@@ -89,7 +89,7 @@ const BannerBox = styled(motion.div)<{ status?: 'success' | 'error' }>`
     border-radius: 7px;
     border: 1px solid ${p => (p.status === 'success' ? p.theme.background.accentGreen : p.theme.background.accent)};
     background-color: ${p => (p.status === 'success' ? p.theme.background.accentGreen : p.theme.background.accent)};
-    font-size: 1.5rem;
+    font-size: ${p => p.theme.typography.fontSize.h6};
     box-shadow: 0.3rem 0.2rem 0.3rem 0.1rem ${({ theme }) => theme.shadow};
 `;
 
