@@ -99,7 +99,7 @@ const BarRange: React.FC<{ value: number; max: number; steps: number }> = ({ val
                     style={{
                         flex: 1,
                         height: '100%',
-                        backgroundColor: index < activeSteps ? '#0E4632' : '#d5d5d5',
+                        backgroundColor: index < activeSteps ? 'rgba(158, 46, 58, 1)' : '#d5d5d5',
                         borderRight: index < steps - 1 ? '1px solid #ffffff' : 'none',
                         borderRadius:
                             index === 0
