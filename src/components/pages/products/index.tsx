@@ -291,7 +291,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                     <td>
                                         <StyledLink
                                             skipChannelHandling
-                                            href={`/content/partners/${ctx?.channel.slug}`}
+                                            href={`/content/partners/${ctx?.channel}`}
                                         >
                                         {
                                             channels.find(ch => ch.slug === ctx.channel)?.seller?.name ||
