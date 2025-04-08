@@ -22,8 +22,7 @@ import Navigation from '@/src/components/storyblok/Navigation';
 import Page from '@/src/components/storyblok/Page';
 import PopularArticles from '@/src/components/storyblok/PopularArticles';
 import Teaser from '@/src/components/storyblok/Teaser';
-import { ReactCookieFirst } from '@cookiefirst/cookiefirst-react'
-
+import { ReactCookieFirst } from '@cookiefirst/cookiefirst-react';
 
 import { apiPlugin, storyblokInit } from '@storyblok/react';
 import AboutUsBlockInverted from '@/src/components/storyblok/AboutUsBlockInverted';
@@ -65,8 +64,8 @@ const components = {
     'page': Page,
     'popular-articles': PopularArticles,
     'teaser': Teaser,
-    'about-us-block': AboutUsBlock, // Registering AboutUsBlock component here
-    'about-us-block-inverted': AboutUsBlockInverted, // Registering AboutUsBlock component here
+    'about-us-block': AboutUsBlock,
+    'about-us-block-inverted': AboutUsBlockInverted,
     'carousel': Carousel,
     'rich-text-editor': RichTextEditor,
     'mosaic-block': MosaicBlock,
@@ -87,7 +86,6 @@ const components = {
     // 'vendure-collection-slider': VendureCollectionSlider,
 };
 
-
 // Storyblok initialization
 storyblokInit({
     accessToken: process.env.NEXT_PUBLIC_STORYBLOK_ACCESS_TOKEN,
@@ -99,14 +97,10 @@ const App = ({ Component, pageProps }: AppProps) => {
     const [showCookieBanner, setShowCookieBanner] = useState(false);
 
     useEffect(() => {
-        // Check for query string parameter
+        // Check for query string parameter or testing conditions to skip the cookie banner
         const queryParams = new URLSearchParams(window.location.search);
         const isPageSpeedQuery = queryParams.get('google_pagespeed') === '1';
-
-        // Check for user agent hints
         const isTestingAgent = /lighthouse|Google Page Speed Insights/i.test(navigator.userAgent);
-
-        // If either testing condition is met, skip the cookie banner
         if (isPageSpeedQuery || isTestingAgent) return;
 
         const observer = new IntersectionObserver((entries) => {
@@ -117,11 +111,18 @@ const App = ({ Component, pageProps }: AppProps) => {
                 }
             });
         });
-
         observer.observe(document.body);
-
         return () => observer.disconnect();
     }, []);
+
+    // Reliable defaults for channel and locale
+    const defaultChannel = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL_SLUG || 'default-channel';
+    const defaultLocale = 'en';
+
+    const initialChannelsState = {
+        channel: pageProps?.channel || defaultChannel,
+        locale: pageProps?.locale || defaultLocale,
+    };
 
     return (
         <>
@@ -130,7 +131,7 @@ const App = ({ Component, pageProps }: AppProps) => {
             )}
 
             <ThemeProvider theme={LightTheme}>
-                <ChannelsProvider initialState={{ channel: pageProps.channel, locale: pageProps.locale }}>
+                <ChannelsProvider initialState={initialChannelsState}>
                     <Global styles={``} />
                     {'checkout' in pageProps ? (
                         <CheckoutProvider initialState={{ checkout: pageProps.checkout }}>
