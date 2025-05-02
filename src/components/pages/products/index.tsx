@@ -65,25 +65,32 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
         loadChannels();
     }, []);
 
-    // (Optional) Vendor check – you can remove this if not needed
     useEffect(() => {
-        if (!variant || !ctx?.channel) return;
+        if (!variant) return;
         const checkVendorChannel = async () => {
             try {
                 const { selectVendorForVariation } = await storefrontApiQuery(ctx)({
                     selectVendorForVariation: [
                         { productId: variant.id },
-                        { slug: true, channel: true, sellerId: true }
-                    ]
+                        { slug: true, channel: true, sellerId: true },
+                    ],
                 });
 
-                console.log('VENDOR:', selectVendorForVariation);
-                console.log('CUR CHANNEL:', ctx.channel);
-                if (selectVendorForVariation && !router.asPath.includes(selectVendorForVariation.slug)) {
-                    ctx.channel = selectVendorForVariation.slug;
+
+                console.log('SELECTED CHANNEL', selectVendorForVariation);
+                console.log('CUR CHANNEL', ctx.channel);
+                // if the API suggests a different channel
+                if (
+                    selectVendorForVariation?.slug &&
+                    selectVendorForVariation.slug !== ctx.channel
+                ) {
+                    // 1️⃣ update your channel context
+                    ctx.setChannel(selectVendorForVariation.slug);
+
+                    // 2️⃣ rebuild the path using Next’s locale
                     const variantQuery = variant.id ? `?variant=${variant.id}` : '';
                     router.replace(
-                        `/${selectVendorForVariation.slug}/${ctx.locale}/snowboards/${product?.slug}${variantQuery}`
+                        `/${selectVendorForVariation.slug}/${router.locale}/snowboards/${product?.slug}${variantQuery}`
                     );
                 }
             } catch (error) {
@@ -91,7 +98,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
             }
         };
         checkVendorChannel();
-    }, [variant, ctx.channel, product?.slug, router]);
+    }, [variant, ctx.channel, product?.slug, router, ctx]);
 
     if (!props.product || !product) {
         return (

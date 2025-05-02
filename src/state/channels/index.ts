@@ -1,14 +1,38 @@
+import { useState } from 'react';
 import { createContainer } from 'unstated-next';
-import { ChannelsContainerType } from './types';
+import { ChannelsContainerType, ChannelState } from './types';
 import { channelsEmptyState } from './utils';
 
-const useChannelsContainer = createContainer<ChannelsContainerType, { locale: string; channel: string }>(
-    initialState => {
-        if (!initialState) return channelsEmptyState;
+function useChannelsHook(
+    initialState?: ChannelState
+): ChannelsContainerType {
+    // full list of channels
+    const [channels, setChannels] = useState(
+        channelsEmptyState.channels
+    );
 
-        return { channel: initialState.channel, locale: initialState.locale };
-    },
-);
+    // active channel slug
+    const [channel, setChannel] = useState(
+        initialState?.channel ?? channelsEmptyState.channel
+    );
 
-export const useChannels = useChannelsContainer.useContainer;
-export const ChannelsProvider = useChannelsContainer.Provider;
+    // current locale
+    const [locale, setLocale] = useState(
+        initialState?.locale ?? channelsEmptyState.locale
+    );
+
+    return {
+        channels,
+        setChannels,
+        channel,
+        setChannel,
+        locale,
+        setLocale,
+    };
+}
+
+// create and export container
+const ChannelsContainer = createContainer(useChannelsHook);
+
+export const ChannelsProvider = ChannelsContainer.Provider;
+export const useChannels = ChannelsContainer.useContainer;
