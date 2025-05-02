@@ -6,10 +6,6 @@ import { channelsEmptyState } from './utils';
 function useChannelsHook(
     initialState?: ChannelState
 ): ChannelsContainerType {
-    // full list of channels
-    const [channels, setChannels] = useState(
-        channelsEmptyState.channels
-    );
 
     // active channel slug
     const [channel, setChannel] = useState(
@@ -22,8 +18,6 @@ function useChannelsHook(
     );
 
     return {
-        channels,
-        setChannels,
         channel,
         setChannel,
         locale,

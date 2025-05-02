@@ -1,6 +1,9 @@
+// src/state/channels/utils.ts
 import { ChannelsContainerType } from './types';
 
 export const channelsEmptyState: ChannelsContainerType = {
-    channel: 'pl',
-    locale: 'pl',
+    channel: 'en',
+    locale: 'en',
+    setChannel: () => {},
+    setLocale: () => {},
 };
