@@ -90,7 +90,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                     // 2️⃣ rebuild the path using Next’s locale
                     const variantQuery = variant.id ? `?variant=${variant.id}` : '';
                     router.replace(
-                        `/${selectVendorForVariation.slug}/${router.locale}/snowboards/${product?.slug}${variantQuery}`
+                        `/${selectVendorForVariation.slug}/${ctx.locale}/snowboards/${product?.slug}${variantQuery}`
                     );
                 }
             } catch (error) {
