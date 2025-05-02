@@ -16,11 +16,11 @@ const useCartContainer = createContainer(() => {
     const open = () => setOpen(true);
     const close = () => setOpen(false);
 
-    // Merge the context with default values (fallbacks)
+    // Merge context with defaults, last-wins ensures fallbacks
     const getCtx = () => ({
-        channel: (ctx && ctx.channel) || DEFAULT_CHANNEL,
-        locale: (ctx && ctx.locale) || DEFAULT_LOCALE,
-        ...(ctx || {}),
+        ...ctx!,
+        channel: ctx?.channel ?? DEFAULT_CHANNEL,
+        locale: ctx?.locale ?? DEFAULT_LOCALE,
     });
 
     const fetchActiveOrder = async () => {
@@ -35,41 +35,33 @@ const useCartContainer = createContainer(() => {
             setIsLogged(!!activeCustomer?.id);
             return activeOrder;
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     };
 
-    // Wait until ctx is available, then fetch cart data.
     useEffect(() => {
-        if (ctx !== undefined) {
+        if (ctx) {
             console.log('MOUNTED CART with ctx:', getCtx());
             fetchActiveOrder();
         }
     }, [ctx]);
 
-    // Refresh the cart when the page becomes visible.
     useEffect(() => {
-        const handleVisibilityChange = () => {
-            if (document.visibilityState === 'visible') {
-                fetchActiveOrder();
-            }
+        const onVisibilityChange = () => {
+            if (document.visibilityState === 'visible') fetchActiveOrder();
         };
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-        return () =>
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        document.addEventListener('visibilitychange', onVisibilityChange);
+        return () => document.removeEventListener('visibilitychange', onVisibilityChange);
     }, [ctx]);
 
-    const addToCart = async (id: string, q: number, o?: boolean) => {
-        // Optimistically update local state.
-        setActiveOrder(c => (c ? { ...c, totalQuantity: c.totalQuantity + 1 } : c));
+    const addToCart = async (id: string, quantity: number, openModal?: boolean) => {
+        setActiveOrder(c =>
+            c ? { ...c, totalQuantity: c.totalQuantity + quantity } : c
+        );
         try {
             const { addItemToOrder } = await storefrontApiMutation(getCtx())({
                 addItemToOrder: [
-                    {
-                        productVariantId: id,
-                        quantity: q,
-                        customFields: { requestedSellerChannel: getCtx().channel },
-                    },
+                    { productVariantId: id, quantity, customFields: { requestedSellerChannel: getCtx().channel } },
                     {
                         __typename: true,
                         '...on Order': ActiveOrderSelector,
@@ -83,20 +75,21 @@ const useCartContainer = createContainer(() => {
             });
             if (addItemToOrder.__typename === 'Order') {
                 setActiveOrder(addItemToOrder);
-                if (o) open();
+                if (openModal) open();
             }
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     };
 
-    const removeFromCart = async (id: string) => {
-        // Optimistically remove from local state.
-        setActiveOrder(c => (c ? { ...c, lines: c.lines.filter(l => l.id !== id) } : c));
+    const removeFromCart = async (orderLineId: string) => {
+        setActiveOrder(c =>
+            c ? { ...c, lines: c.lines.filter(l => l.id !== orderLineId) } : c
+        );
         try {
             const { removeOrderLine } = await storefrontApiMutation(getCtx())({
                 removeOrderLine: [
-                    { orderLineId: id },
+                    { orderLineId },
                     {
                         __typename: true,
                         '...on Order': ActiveOrderSelector,
@@ -109,22 +102,23 @@ const useCartContainer = createContainer(() => {
                 setActiveOrder(removeOrderLine);
             }
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     };
 
-    const setItemQuantityInCart = async (id: string, q: number) => {
-        // Optimistically update local state.
-        setActiveOrder(c => {
-            if (c?.lines.find(l => l.id === id)) {
-                return { ...c, lines: c.lines.map(l => (l.id === id ? { ...l, q } : l)) };
-            }
-            return c;
-        });
+    const setItemQuantityInCart = async (orderLineId: string, quantity: number) => {
+        setActiveOrder(c =>
+            c
+                ? {
+                    ...c,
+                    lines: c.lines.map(l => (l.id === orderLineId ? { ...l, quantity } : l)),
+                }
+                : c
+        );
         try {
             const { adjustOrderLine } = await storefrontApiMutation(getCtx())({
                 adjustOrderLine: [
-                    { orderLineId: id, quantity: q },
+                    { orderLineId, quantity },
                     {
                         __typename: true,
                         '...on Order': ActiveOrderSelector,
@@ -141,7 +135,7 @@ const useCartContainer = createContainer(() => {
             }
             return adjustOrderLine;
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     };
 
@@ -165,7 +159,7 @@ const useCartContainer = createContainer(() => {
             }
             return false;
         } catch (e) {
-            console.log(e);
+            console.error(e);
             return false;
         }
     };
@@ -175,11 +169,9 @@ const useCartContainer = createContainer(() => {
             const { removeCouponCode } = await storefrontApiMutation(getCtx())({
                 removeCouponCode: [{ couponCode: code }, ActiveOrderSelector],
             });
-            if (removeCouponCode?.id) {
-                setActiveOrder(removeCouponCode);
-            }
+            if (removeCouponCode?.id) setActiveOrder(removeCouponCode);
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     };
 
