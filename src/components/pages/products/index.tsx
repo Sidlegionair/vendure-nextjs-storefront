@@ -73,9 +73,10 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                 const { selectVendorForVariation } = await storefrontApiQuery(ctx)({
                     selectVendorForVariation: [
                         { productId: variant.id },
-                        { slug: true, channel: true, seller: { name: true } }
+                        { slug: true, channel: true, sellerId: true }
                     ]
                 });
+
                 console.log('VENDOR:', selectVendorForVariation);
                 console.log('CUR CHANNEL:', ctx.channel);
                 if (selectVendorForVariation && !router.asPath.includes(selectVendorForVariation.slug)) {
