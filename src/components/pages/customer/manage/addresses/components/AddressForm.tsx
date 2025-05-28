@@ -66,7 +66,7 @@ export const AddressForm: React.FC<{
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <Stack w100 column gap="2rem">
                     <Input {...register('fullName')} label={t('addressForm.fullName')} error={errors.fullName} />
-                    <Stack w100 itemsCenter gap="1.25rem">
+                    <ResponsiveStack w100 itemsCenter gap="1.25rem">
                         <Input
                             type="tel"
                             label={t('addressForm.phone')}
@@ -76,8 +76,8 @@ export const AddressForm: React.FC<{
                             error={errors.phoneNumber}
                         />
                         <Input {...register('company')} label={t('addressForm.company')} error={errors.company} />
-                    </Stack>
-                    <Stack w100 itemsCenter gap="1.25rem">
+                    </ResponsiveStack>
+                    <ResponsiveStack w100 itemsCenter gap="1.25rem">
                         <Input
                             {...register('streetLine1')}
                             label={t('addressForm.streetLine1')}
@@ -88,7 +88,7 @@ export const AddressForm: React.FC<{
                             label={t('addressForm.streetLine2')}
                             error={errors.streetLine2}
                         />
-                    </Stack>
+                    </ResponsiveStack>
                     {availableCountries && (
                         <CountrySelect
                             {...register('countryCode')}
@@ -103,7 +103,7 @@ export const AddressForm: React.FC<{
                     <Input {...register('province')} label={t('addressForm.province')} error={errors.province} />
                 </Stack>
                 <Stack w100 column gap="1.25rem">
-                    <Stack itemsCenter gap="2rem">
+                    <ResponsiveStack itemsCenter gap="2rem">
                         <CheckboxStack itemsCenter gap="0.75rem">
                             <DefaultBilling active={watch('defaultBillingAddress')} />
                             <Checkbox type="checkbox" {...register('defaultBillingAddress')} />
@@ -114,8 +114,8 @@ export const AddressForm: React.FC<{
                             <Checkbox type="checkbox" {...register('defaultShippingAddress')} />
                             <label htmlFor="defaultShippingAddress">{t('addressForm.defaultShippingAddress')}</label>
                         </CheckboxStack>
-                    </Stack>
-                    <Stack gap="3.5rem" w100 itemsCenter justifyBetween>
+                    </ResponsiveStack>
+                    <ResponsiveStack gap="2rem" w100 itemsCenter justifyBetween>
                         {onModalClose && (
                             <Button disabled={isSubmitting} onClick={onModalClose} type="button">
                                 {t('addressForm.cancel')}
@@ -124,7 +124,7 @@ export const AddressForm: React.FC<{
                         <FullWidthButton loading={isSubmitting} type="submit">
                             {addressToEdit ? t('addressForm.update') : t('addressForm.add')}
                         </FullWidthButton>
-                    </Stack>
+                    </ResponsiveStack>
                 </Stack>
             </Form>
         </Stack>
@@ -133,10 +133,13 @@ export const AddressForm: React.FC<{
 
 const Form = styled.form`
     width: 100%;
-
     display: flex;
     flex-direction: column;
     gap: 2rem;
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+        gap: 1.5rem;
+    }
 `;
 
 const CheckboxStack = styled(Stack)`
@@ -165,4 +168,11 @@ const DefaultBilling = styled(CreditCard)<{ active?: boolean }>`
 const DefaultShipping = styled(Truck)<{ active?: boolean }>`
     color: ${p => (p.active ? p.theme.success : p.theme.gray(1000))};
     transition: color 0.2s ease-in-out;
+`;
+
+const ResponsiveStack = styled(Stack)`
+    @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+        flex-direction: column;
+        gap: 1rem;
+    }
 `;

@@ -108,13 +108,18 @@ const Edit = styled(Pen)`
 `;
 
 const CustomerAddress = styled(Stack)<{ selected?: boolean }>`
-    min-width: 42rem;
+    width: 100%;
     position: relative;
     padding: 3rem 2.5rem;
-    background-color: ${p => p.theme.gray(50)};
+    background-color: ${p => p.theme.background.main};
     border-radius: ${p => p.theme.borderRadius};
     box-shadow: 0 0 0.5rem ${({ theme }) => theme.shadow};
 
     outline: ${p => (p.selected ? `1px solid ${p.theme.accent(700)}` : `1px solid ${p.theme.gray(200)}`)};
     transition: outline 0.2s ease-in-out;
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+        min-width: auto;
+        padding: 2rem 1.5rem;
+    }
 `;

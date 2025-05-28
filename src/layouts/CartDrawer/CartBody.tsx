@@ -4,14 +4,17 @@ import { Stack } from '@/src/components/atoms/Stack';
 import { TP } from '@/src/components/atoms/TypoGraphy';
 import { ProductImageWithInfo } from '@/src/components/molecules/ProductImageWithInfo';
 import { QuantityCounter } from '@/src/components/molecules/QuantityCounter';
-import { ActiveOrderType } from '@/src/graphql/selectors';
+import { ActiveOrderType, ServiceLocationType } from '@/src/graphql/selectors';
 import { useCart } from '@/src/state/cart';
 import { CurrencyCode } from '@/src/zeus';
 import styled from '@emotion/styled';
 import { Trash2 } from 'lucide-react';
 import { useTranslation } from 'next-i18next';
 import { fetchChannels } from '@/src/lib/channels';
-import { Link } from '@/src/components/atoms/Link'
+import { Link } from '@/src/components/atoms/Link';
+import { getServiceLocationForProduct } from '@/src/graphql/sharedQueries';
+import { useChannels } from '@/src/state/channels';
+import { DEFAULT_CHANNEL, DEFAULT_LOCALE } from '@/src/lib/consts';
 interface Props {
     activeOrder?: ActiveOrderType;
     currencyCode: CurrencyCode;
@@ -21,6 +24,10 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
     const { t } = useTranslation('common');
     const { setItemQuantityInCart, removeFromCart } = useCart();
     const [channels, setChannels] = useState<any[]>([]);
+    const [serviceLocations, setServiceLocations] = useState<Record<string, ServiceLocationType | null>>({});
+    const [loadingServiceLocations, setLoadingServiceLocations] = useState<Record<string, boolean>>({});
+    // Get channel and locale from context
+    const ctx = useChannels();
 
     useEffect(() => {
         async function loadChannels() {
@@ -32,6 +39,44 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
         console.log(channels);
         loadChannels();
     }, []);
+
+    // Fetch service location data for each product variant
+    useEffect(() => {
+        if (!activeOrder?.lines?.length) return;
+
+        async function loadServiceLocations() {
+            // Use the channel and locale from context with fallbacks to defaults
+            const locale = ctx?.locale ?? DEFAULT_LOCALE;
+            const channel = ctx?.channel ?? DEFAULT_CHANNEL;
+
+            for (const line of activeOrder.lines) {
+                if (line.productVariant?.id && !serviceLocations[line.productVariant.id]) {
+                    setLoadingServiceLocations(prev => ({ ...prev, [line.productVariant.id]: true }));
+
+                    try {
+                        const serviceLocationData = await getServiceLocationForProduct(
+                            { locale, channel },
+                            line.productVariant.id
+                        );
+
+                        setServiceLocations(prev => ({ 
+                            ...prev, 
+                            [line.productVariant.id]: serviceLocationData 
+                        }));
+                    } catch (error) {
+                        console.error('Error loading service location:', error);
+                    } finally {
+                        setLoadingServiceLocations(prev => ({ 
+                            ...prev, 
+                            [line.productVariant.id]: false 
+                        }));
+                    }
+                }
+            }
+        }
+
+        loadServiceLocations();
+    }, [activeOrder?.lines]);
 
     return (
         <CartList w100 column>
@@ -103,7 +148,7 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
                                         </Stack>
                                     </Stack>
                                 </Stack>
-                                <Stack column justifyBetween itemsEnd>
+                                <Stack column itemsEnd gap="10px">
                                     <Price
                                         inCart={true}
                                         weight={500}
@@ -112,11 +157,27 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
                                         discountPrice={discountedLinePriceWithTax / quantity}
                                         quantity={quantity}
                                     />
-                                    {/* Display the seller's name */}
-                                    <StyledTP size="16px" weight={500}>
-                                        Sold by <StyledLink skipChannelHandling href={`/content/partners/${requestedSellerChannel}`}>{sellerName}</StyledLink>
-                                    </StyledTP>
+                                    <Stack column gap="5px">
+                                        {/* Display the seller's name */}
+                                        <StyledTP size="16px" weight={500}>
+                                            Sold by <StyledLink skipChannelHandling href={`/content/partners/${requestedSellerChannel}`}>{sellerName}</StyledLink>
+                                        </StyledTP>
 
+                                        {/* Display service location information if available */}
+                                        {loadingServiceLocations[productVariant.id] ? (
+                                            <StyledTP size="16px" weight={500}>Loading service information...</StyledTP>
+                                        ) : serviceLocations[productVariant.id]?.serviceDealer ? (
+                                            <StyledTP size="16px" weight={500}>
+                                                Service by{' '}
+                                                <StyledLink
+                                                    skipChannelHandling
+                                                    href={`/content/partners/${serviceLocations[productVariant.id]?.serviceDealer?.slug}`}
+                                                >
+                                                    {serviceLocations[productVariant.id]?.serviceDealer?.name}
+                                                </StyledLink>
+                                            </StyledTP>
+                                        ) : null}
+                                    </Stack>
                                 </Stack>
 
                             </CartRow>

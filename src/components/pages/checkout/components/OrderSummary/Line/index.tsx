@@ -12,6 +12,10 @@ import { QuantityCounter } from '@/src/components/molecules/QuantityCounter';
 import { CurrencyCode } from '@/src/zeus';
 import { fetchChannels } from '@/src/lib/channels';
 import { Link } from '@/src/components/atoms/Link';
+import { getServiceLocationForProduct } from '@/src/graphql/sharedQueries';
+import { ServiceLocationType } from '@/src/graphql/selectors';
+import { useChannels } from '@/src/state/channels';
+import { DEFAULT_CHANNEL, DEFAULT_LOCALE } from '@/src/lib/consts';
 
 interface LineProps {
     line: ActiveOrderType['lines'][number] | OrderType['lines'][number];
@@ -32,6 +36,9 @@ export const Line: React.FC<LineProps> = ({
 
     // Fetch channels as in CartBody
     const [channels, setChannels] = useState<any[]>([]);
+    const [serviceLocation, setServiceLocation] = useState<ServiceLocationType | null>(null);
+    const [loadingServiceLocation, setLoadingServiceLocation] = useState(false);
+
     useEffect(() => {
         async function loadChannels() {
             const channelsData = await fetchChannels();
@@ -39,6 +46,34 @@ export const Line: React.FC<LineProps> = ({
         }
         loadChannels();
     }, []);
+
+    // Get channel and locale from context
+    const ctx = useChannels();
+
+    // Fetch service location data
+    useEffect(() => {
+        async function loadServiceLocation() {
+            if (productVariant?.id) {
+                setLoadingServiceLocation(true);
+                try {
+                    // Use the channel and locale from context with fallbacks to defaults
+                    const locale = ctx?.locale ?? DEFAULT_LOCALE;
+                    const channel = ctx?.channel ?? DEFAULT_CHANNEL;
+
+                    const serviceLocationData = await getServiceLocationForProduct(
+                        { locale, channel },
+                        productVariant.id
+                    );
+                    setServiceLocation(serviceLocationData);
+                } catch (error) {
+                    console.error('Error loading service location:', error);
+                } finally {
+                    setLoadingServiceLocation(false);
+                }
+            }
+        }
+        loadServiceLocation();
+    }, [productVariant?.id]);
 
     // Determine the seller name using the requestedSellerChannel from customFields
     const requestedSellerChannel = customFields?.requestedSellerChannel;
@@ -99,7 +134,7 @@ export const Line: React.FC<LineProps> = ({
                     )}
                 </Stack>
             </Stack>
-            <Stack column justifyBetween itemsEnd>
+            <Stack column itemsEnd gap="10px">
                 <Price
                     inCart={true}
                     weight={500}
@@ -110,16 +145,33 @@ export const Line: React.FC<LineProps> = ({
                     }
                     quantity={quantity}
                 />
-                {/* Display the seller's name with same styling and position as in CartBody */}
-                <StyledTP size="16px" weight={500}>
-                    Sold by{' '}
-                    <StyledLink
-                        skipChannelHandling
-                        href={`/content/partners/${requestedSellerChannel}`}
-                    >
-                        {sellerName}
-                    </StyledLink>
-                </StyledTP>
+                <Stack column gap="5px">
+                    {/* Display the seller's name with same styling and position as in CartBody */}
+                    <StyledTP size="16px" weight={500}>
+                        Sold by{' '}
+                        <StyledLink
+                            skipChannelHandling
+                            href={`/content/partners/${requestedSellerChannel}`}
+                        >
+                            {sellerName}
+                        </StyledLink>
+                    </StyledTP>
+
+                    {/* Display service location information if available */}
+                    {loadingServiceLocation ? (
+                        <StyledTP size="16px" weight={500}>Loading service information...</StyledTP>
+                    ) : serviceLocation?.serviceDealer ? (
+                        <StyledTP size="16px" weight={500}>
+                            Service by{' '}
+                            <StyledLink
+                                skipChannelHandling
+                                href={`/content/partners/${serviceLocation.serviceDealer.slug}`}
+                            >
+                                {serviceLocation.serviceDealer.name}
+                            </StyledLink>
+                        </StyledTP>
+                    ) : null}
+                </Stack>
             </Stack>
         </CartRow>
     );

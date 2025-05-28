@@ -83,44 +83,48 @@ export const AddressesPage: React.FC<InferGetServerSidePropsType<typeof getServe
 
 const Wrapper = styled(Stack)`
     justify-content: space-between;
+    width: 100%;
+
     @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
         flex-direction: column-reverse;
+        gap: 3rem;
     }
 `;
 
 const Wrap = styled(Stack)`
-    overflow: auto;
-    max-height: 80vh;
-    padding: 1.75rem 0.5rem;
+    overflow: visible;
+    padding: 1.75rem 0;
+    width: 100%;
 
     @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
         flex-direction: column;
     }
 
-    ::-webkit-scrollbar {
-        height: 0.8rem;
-        width: 0.8rem;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: ${p => p.theme.gray(200)};
-        border-radius: 1rem;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: ${p => p.theme.gray(400)};
+    @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
     }
 `;
 
 const ModalContent = styled(Stack)`
-    width: fit-content;
+    width: 100%;
+    max-width: 800px;
     padding: 3.5rem;
     background-color: ${p => p.theme.background.main};
     border-radius: ${p => p.theme.borderRadius};
+    overflow-y: auto;
+    max-height: 90vh;
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+        padding: 2.5rem;
+        max-width: 90%;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+        padding: 1.5rem;
+        max-width: 95%;
+    }
 `;
 
 const Modal = styled(motion.div)`
@@ -140,28 +144,29 @@ const Modal = styled(motion.div)`
 
 
 const StyledContentContainer = styled(ContentContainer)`
-    padding: 50px;
+    padding: 80px 50px 50px;
     justify-content: start;
     align-items: center;
     z-index: 0;
+
     @media (max-width: ${({ theme }) => theme.breakpoints['3xl']}) {
         width: 100%;
-        padding: 0 4rem;
+        padding: 4rem 4rem 2rem;
     }
 
     @media (max-width: ${({ theme }) => theme.breakpoints['2xl']}) {
         width: 100%;
-        padding: 0 3rem;
+        padding: 4rem 3rem 2rem;
     }
 
     @media (max-width: ${({ theme }) => theme.breakpoints.xl}) {
         width: 100%;
-        padding: 0 2rem;
+        padding: 4rem 2rem 2rem;
     }
 
     @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
         width: 100%;
-        padding: 0 1.5rem;
+        padding: 4rem 1.5rem 2rem;
     }
 
 

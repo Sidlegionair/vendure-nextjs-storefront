@@ -25,17 +25,44 @@ const useCartContainer = createContainer(() => {
 
     const fetchActiveOrder = async () => {
         try {
+            console.log('Starting fetchActiveOrder');
             const mergedCtx = getCtx();
-            const [{ activeOrder }, { activeCustomer }] = await Promise.all([
-                storefrontApiQuery(mergedCtx)({ activeOrder: ActiveOrderSelector }),
-                storefrontApiQuery(mergedCtx)({ activeCustomer: { id: true } }),
-            ]);
+            console.log('Context for queries:', mergedCtx);
+
+            let orderResponse, customerResponse;
+            try {
+                console.log('Fetching activeOrder');
+                orderResponse = await storefrontApiQuery(mergedCtx)({ activeOrder: ActiveOrderSelector });
+                console.log('activeOrder response:', orderResponse);
+            } catch (orderError) {
+                console.error('Error fetching activeOrder:', orderError);
+                throw orderError;
+            }
+
+            try {
+                console.log('Fetching activeCustomer');
+                customerResponse = await storefrontApiQuery(mergedCtx)({ activeCustomer: { id: true } });
+                console.log('activeCustomer response:', customerResponse);
+            } catch (customerError) {
+                console.error('Error fetching activeCustomer:', customerError);
+                throw customerError;
+            }
+
+            const { activeOrder } = orderResponse;
+            const { activeCustomer } = customerResponse;
+
             console.log('Fetched activeOrder:', activeOrder);
+            console.log('Fetched activeCustomer:', activeCustomer);
+
             setActiveOrder(activeOrder);
             setIsLogged(!!activeCustomer?.id);
+            console.log('Updated state - isLogged:', !!activeCustomer?.id);
+
             return activeOrder;
         } catch (e) {
-            console.error(e);
+            console.error('Exception in fetchActiveOrder:', e);
+            // Re-throw the error so the caller knows something went wrong
+            throw e;
         }
     };
 

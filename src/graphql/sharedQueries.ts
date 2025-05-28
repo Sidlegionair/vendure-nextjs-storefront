@@ -1,8 +1,10 @@
-import { SSGQuery } from '@/src/graphql/client';
+import { SSGQuery, storefrontApiQuery } from '@/src/graphql/client';
 import {
     CollectionTileSelector,
     CollectionTileProductVariantType,
     CollectionTileProductVariantSelector,
+    ServiceLocationSelector,
+    ServiceLocationType,
 } from '@/src/graphql/selectors';
 import { SortOrder } from '@/src/zeus';
 import { DEFAULT_CHANNEL, DEFAULT_CHANNEL_SLUG } from '@/src/lib/consts';
@@ -15,6 +17,24 @@ export const GetMainNavigation = (params: { locale: string; channel: string }) =
 export const GetSubNavigation = () => {
 
 }
+
+export const getServiceLocationForProduct = async (
+    params: { locale: string; channel: string },
+    productId: string
+): Promise<ServiceLocationType | null> => {
+    try {
+        const result = await storefrontApiQuery(params)({
+            getServiceLocationForProduct: [
+                { productId },
+                ServiceLocationSelector
+            ]
+        });
+        return result.getServiceLocationForProduct;
+    } catch (error) {
+        console.error('Error fetching service location:', error);
+        return null;
+    }
+};
 
 export const getCollections = async (params: { locale: string; channel: string }) => {
     const excludedSlugs = ['carousel-snowboards', 'home-slider-snowboards']; // Replace with slugs you want to exclude

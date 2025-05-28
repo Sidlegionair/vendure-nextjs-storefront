@@ -1,4 +1,11 @@
 {
+    "loginForm": {
+        "title": "Heb je al een account?",
+        "subtitle": "Log in om je afrekenprocedure te versnellen en toegang te krijgen tot je bestelgeschiedenis.",
+        "email": "E-mailadres",
+        "password": "Wachtwoord",
+        "signIn": "Inloggen"
+    },
     "seoTitles": {
         "checkout": "Afrekenen",
         "payment": "Betaling",
@@ -10,6 +17,12 @@
         "confirmation": "Bevestiging"
     },
     "orderForm": {
+        "steps": {
+            "accountInformation": "Accountinformatie",
+            "billingDetails": "Factuurgegevens",
+            "reviewPayment": "Overzicht & Betaling"
+        },
+
         "emptyCart": "Je winkelwagen is leeg",
         "emptyCartDescription": "Je hebt geen items in je winkelwagen. Klik <1>hier</1> om verder te winkelen.",
         "whatAccountGives": "Een account geeft je toegang tot je bestelgeschiedenis en status. Het stelt je ook in staat om je persoonlijke gegevens en adressen te wijzigen.",
@@ -70,60 +83,61 @@
                 "closeButton": "Sluiten"
             },
             "emailAddress": {
-                "required": "E-mailadres is verplicht",
-                "email": "Ongeldig e-mailadres"
+                "required": "Required",
+                "email": "Ongeldig e-mailadres",
+                "exists": "Dit e-mailadres is al geregistreerd. Log in alstublieft."
             },
             "vatNumber": {
-                "required": "BTW-nummer is verplicht.",
+                "required": "Required",
                 "invalid": "Je BTW-nummer is ongeldig."
             },
             "firstName": {
-                "required": "Voornaam is verplicht"
+                "required": "Required"
             },
             "lastName": {
-                "required": "Achternaam is verplicht"
+                "required": "Required"
             },
             "phone": {
-                "required": "Telefoonnummer is verplicht"
+                "required": "Required"
             },
             "fullName": {
-                "required": "Volledige naam is verplicht"
+                "required": "Required"
             },
             "company": {
-                "required": "Bedrijf is verplicht"
+                "required": "Required"
             },
             "streetLine1": {
-                "required": "Adres is verplicht"
+                "required": "Required"
             },
             "streetLine2": {
-                "required": "Appartement, suite, etc. is verplicht"
+                "required": "Required"
             },
             "city": {
-                "required": "Stad is verplicht"
+                "required": "Required"
             },
             "countryCode": {
-                "required": "Land is verplicht"
+                "required": "Required"
             },
             "province": {
-                "required": "Provincie / Staat is verplicht"
+                "required": "Required"
             },
             "postalCode": {
-                "required": "Postcode is verplicht"
+                "required": "Required"
             },
             "terms": {
-                "required": "Algemene voorwaarden zijn verplicht"
+                "required": "Required"
             },
             "regulations": {
-                "required": "Regels zijn verplicht"
+                "required": "Required"
             },
             "NIP": {
-                "required": "NIP is verplicht"
+                "required": "Required"
             },
             "password": {
-                "required": "Wachtwoord is verplicht"
+                "required": "Required"
             },
             "confirmPassword": {
-                "required": "Bevestig wachtwoord is verplicht",
+                "required": "Required",
                 "notMatch": "Wachtwoorden komen niet overeen"
             }
         }
@@ -145,7 +159,7 @@
         "title": "Bezorgmethode",
         "required": "*(Een bezorgmethode is vereist)",
         "errors": {
-            "required": "Bezorgmethode is vereist"
+            "required": "Required"
         }
     },
     "paymentMethod": {

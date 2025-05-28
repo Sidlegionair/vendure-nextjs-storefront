@@ -1,4 +1,11 @@
 {
+    "loginForm": {
+        "title": "Already have an account?",
+        "subtitle": "Log in to speed up your checkout process and access your order history.",
+        "email": "Email Address",
+        "password": "Password",
+        "signIn": "Sign In"
+    },
     "seoTitles": {
         "checkout": "Checkout",
         "payment": "Payment",
@@ -77,7 +84,8 @@
             },
             "emailAddress": {
                 "required": "Email address is required",
-                "email": "Email address is invalid"
+                "email": "Email address is invalid",
+                "exists": "This email address is already registered. Please log in."
             },
             "vatNumber": {
                 "required": "VAT Number is required.",

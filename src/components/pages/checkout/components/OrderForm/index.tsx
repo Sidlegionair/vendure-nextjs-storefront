@@ -14,6 +14,7 @@ import { StepsBar } from '@/src/components/molecules/StepsBar';
 import { Banner, CheckBox, CountrySelect, FormError, Input } from '@/src/components/forms';
 import { DeliveryMethod } from '../DeliveryMethod';
 import { OrderSummary } from '../OrderSummary';
+import { LoginForm } from '../LoginForm';
 import { Tooltip } from '@/src/components/molecules/Tooltip';
 
 import { usePush } from '@/src/lib/redirect';
@@ -29,6 +30,7 @@ import {
 
 import { useCheckout } from '@/src/state/checkout';
 import { useChannels } from '@/src/state/channels';
+import { useCart } from '@/src/state/cart';
 import { baseCountryFromLanguage } from '@/src/util/baseCountryFromLanguage';
 import { useValidationSchema } from './useValidationSchema';
 
@@ -47,6 +49,7 @@ interface OrderFormProps {
     availableCountries?: AvailableCountriesType[];
     activeCustomer: ActiveCustomerType | null;
     shippingMethods: ShippingMethodType[] | null;
+    eligiblePaymentMethods?: any[] | null;
 }
 
 const isAddressesEqual = (a: object, b?: object) => {
@@ -89,9 +92,13 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                                                         availableCountries,
                                                         activeCustomer,
                                                         shippingMethods,
+                                                        eligiblePaymentMethods,
                                                     }) => {
     const ctx = useChannels();
     const { activeOrder, changeShippingMethod } = useCheckout();
+    const { fetchActiveOrder } = useCart();
+    const [showLoginForm, setShowLoginForm] = React.useState(!activeCustomer?.id);
+    const [emailExists, setEmailExists] = React.useState(false);
 
     const { t } = useTranslation('checkout');
     const { t: tErrors } = useTranslation('common');
@@ -320,11 +327,22 @@ export const OrderForm: React.FC<OrderFormProps> = ({
 
                 if (setCustomerForOrder?.__typename !== 'Order') {
                     if (setCustomerForOrder.__typename === 'EmailAddressConflictError') {
-                        setError('emailAddress', {
-                            message: tErrors(
-                                `errors.backend.${setCustomerForOrder.errorCode}`
-                            ),
+                        // Email exists, show login form
+                        setEmailExists(true);
+                        setShowLoginForm(true);
+                        // Set a root-level error for more visibility
+                        setError('root', {
+                            message: t('orderForm.errors.emailAddress.exists'),
                         });
+                        // Scroll to the error banner with offset to ensure it's visible
+                        if (errorRef.current) {
+                            // Add a small delay to ensure the banner is rendered
+                            setTimeout(() => {
+                                const yOffset = -100; // Adjust this value as needed for proper visibility
+                                const y = errorRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                                window.scrollTo({ top: y, behavior: 'smooth' });
+                            }, 100);
+                        }
                         setFocus('emailAddress');
                     } else {
                         setError('root', {
@@ -384,11 +402,178 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                 return;
             }
 
-            // Success! Proceed to payment
-            push('/checkout/payment');
+            // If there's only one payment method available, automatically select it and proceed to confirmation
+            if (eligiblePaymentMethods && eligiblePaymentMethods.length === 1) {
+                // Handle payment with the only available method
+                try {
+                    const paymentMethod = eligiblePaymentMethods[0].code;
+                    const { addPaymentToOrder } = await storefrontApiMutation(ctx)({
+                        addPaymentToOrder: [
+                            { input: { method: paymentMethod, metadata: {} } },
+                            {
+                                __typename: true,
+                                '...on Order': {
+                                    state: true,
+                                    code: true,
+                                    payments: { metadata: true },
+                                },
+                                '...on IneligiblePaymentMethodError': {
+                                    message: true,
+                                    errorCode: true,
+                                    eligibilityCheckerMessage: true,
+                                },
+                                '...on NoActiveOrderError': {
+                                    message: true,
+                                    errorCode: true,
+                                },
+                                '...on OrderPaymentStateError': {
+                                    message: true,
+                                    errorCode: true,
+                                },
+                                '...on OrderStateTransitionError': {
+                                    message: true,
+                                    errorCode: true,
+                                    fromState: true,
+                                    toState: true,
+                                    transitionError: true,
+                                },
+                                '...on PaymentDeclinedError': {
+                                    errorCode: true,
+                                    message: true,
+                                    paymentErrorMessage: true,
+                                },
+                                '...on PaymentFailedError': {
+                                    errorCode: true,
+                                    message: true,
+                                    paymentErrorMessage: true,
+                                },
+                            },
+                        ],
+                    });
+
+                    if (addPaymentToOrder.__typename !== 'Order') {
+                        setError('root', { message: tErrors(`errors.backend.${addPaymentToOrder.errorCode}`) });
+                        return;
+                    } else {
+                        // If it's Mollie, handle redirect if needed
+                        if (paymentMethod === 'connected-payment-method') {
+                            const molliePayment = addPaymentToOrder.payments?.[0];
+                            const redirectUrl = molliePayment?.metadata?.public?.redirectUrl;
+                            if (redirectUrl) {
+                                window.location.href = redirectUrl;
+                                return;
+                            }
+                        }
+                        // Otherwise proceed to confirmation
+                        push(`/checkout/confirmation/${addPaymentToOrder.code}`);
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error processing payment:', error);
+                    setError('root', { message: tErrors(`errors.backend.UNKNOWN_ERROR`) });
+                    return;
+                }
+            } else {
+                // Multiple payment methods or no payment methods, proceed to payment selection
+                push('/checkout/payment');
+            }
         } catch (error) {
             console.error('Error during onSubmit:', error);
             setError('root', { message: tErrors(`errors.backend.UNKNOWN_ERROR`) });
+        }
+    };
+
+    // Handle successful login
+    const handleLoginSuccess = async () => {
+        try {
+            // Refresh the page data after login
+            await fetchActiveOrder();
+
+            // Get the updated customer data
+            const { activeCustomer } = await storefrontApiQuery(ctx)({
+                activeCustomer: {
+                    id: true,
+                    lastName: true,
+                    firstName: true,
+                    emailAddress: true,
+                    phoneNumber: true,
+                    addresses: {
+                        id: true,
+                        fullName: true,
+                        company: true,
+                        streetLine1: true,
+                        streetLine2: true,
+                        city: true,
+                        province: true,
+                        postalCode: true,
+                        phoneNumber: true,
+                        defaultShippingAddress: true,
+                        defaultBillingAddress: true,
+                        country: {
+                            code: true,
+                            name: true
+                        },
+                        customFields: {
+                            vatNumber: true
+                        }
+                    }
+                }
+            });
+
+            if (activeCustomer) {
+                // Find default addresses
+                const defaultShippingAddress = activeCustomer.addresses?.find(
+                    (address) => address.defaultShippingAddress
+                );
+                const defaultBillingAddress = activeCustomer.addresses?.find(
+                    (address) => address.defaultBillingAddress
+                );
+
+                // Update form values with customer data
+                setValue('emailAddress', activeCustomer.emailAddress);
+                setValue('firstName', activeCustomer.firstName);
+                setValue('lastName', activeCustomer.lastName);
+                setValue('phoneNumber', activeCustomer.phoneNumber);
+                setValue('shippingDifferentThanBilling', defaultShippingAddress
+                    ? !isAddressesEqual(defaultShippingAddress, defaultBillingAddress)
+                    : false);
+
+                // Update shipping address
+                if (defaultShippingAddress) {
+                    setValue('shipping.fullName', defaultShippingAddress.fullName || '');
+                    setValue('shipping.company', defaultShippingAddress.company || '');
+                    setValue('shipping.streetLine1', defaultShippingAddress.streetLine1 || '');
+                    setValue('shipping.streetLine2', defaultShippingAddress.streetLine2 || '');
+                    setValue('shipping.city', defaultShippingAddress.city || '');
+                    setValue('shipping.province', defaultShippingAddress.province || '');
+                    setValue('shipping.postalCode', defaultShippingAddress.postalCode || '');
+                    setValue('shipping.countryCode', defaultShippingAddress.country?.code || countryCode);
+                    setValue('shipping.phoneNumber', defaultShippingAddress.phoneNumber || activeCustomer.phoneNumber || '');
+                    setValue('shipping.customFields.vatNumber', defaultShippingAddress.customFields?.vatNumber || '');
+                }
+
+                // Update billing address
+                if (defaultBillingAddress) {
+                    setValue('billing.fullName', defaultBillingAddress.fullName || '');
+                    setValue('billing.company', defaultBillingAddress.company || '');
+                    setValue('billing.streetLine1', defaultBillingAddress.streetLine1 || '');
+                    setValue('billing.streetLine2', defaultBillingAddress.streetLine2 || '');
+                    setValue('billing.city', defaultBillingAddress.city || '');
+                    setValue('billing.province', defaultBillingAddress.province || '');
+                    setValue('billing.postalCode', defaultBillingAddress.postalCode || '');
+                    setValue('billing.countryCode', defaultBillingAddress.country?.code || countryCode);
+                    setValue('billing.phoneNumber', defaultBillingAddress.phoneNumber || activeCustomer.phoneNumber || '');
+                    setValue('billing.customFields.vatNumber', defaultBillingAddress.customFields?.vatNumber || '');
+                }
+            }
+
+            setShowLoginForm(false);
+            setEmailExists(false);
+        } catch (error) {
+            console.error('Error updating form after login:', error);
+            // Still hide the login form even if there's an error
+            setShowLoginForm(false);
+            setEmailExists(false);
         }
     };
 
@@ -433,6 +618,15 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                 <Container>
                     {/* LEFT COLUMN: the main form */}
                     <FormColumn>
+                        {/* Login Form (only shown when user is not logged in) */}
+                        {!activeCustomer?.id && showLoginForm && (
+                            <LoginForm 
+                                onLoginSuccess={handleLoginSuccess} 
+                                fetchActiveOrder={fetchActiveOrder}
+                                insideForm={true}
+                            />
+                        )}
+
                         {/* Contact / Account Information */}
                         <Stack column gap={50}>
                             <Stack column gap="2rem">
@@ -476,6 +670,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                                             type="tel"
                                             label={t('orderForm.phone')}
                                             error={errors.phoneNumber}
+                                            required
                                         />
                                         <Input
                                             {...register('emailAddress')}
@@ -861,7 +1056,7 @@ const StyledButton = styled(Button)`
     padding: 1.6rem 0.8rem;
     border-radius: 12px;
 
-    
+
     p {
         text-transform: capitalize !important;
         color: ${(p) => p.theme.background.white};
@@ -875,7 +1070,7 @@ const StyledButton = styled(Button)`
         font-weight: 600;
         font-size: 20px !important;
     }
-    
+
     &:hover {
         border: 1px solid ${(p) => p.theme.background.accentGreen};
         p {

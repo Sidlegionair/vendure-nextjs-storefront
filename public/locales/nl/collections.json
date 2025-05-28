@@ -1,13 +1,13 @@
 {
-    "search-results": "Search Results",
+    "search-results": "Zoekresultaten",
     "filters": "Filters",
-    "sort-by": "Sort",
+    "sort-by": "Sorteren",
     "sort-keys": {
-        "title": "Title",
-        "price": "Price"
+        "title": "Titel",
+        "price": "Prijs"
     },
     "sort-directions": {
-        "ASC": "Low to High",
-        "DESC": "High to Low"
+        "ASC": "Laag naar Hoog",
+        "DESC": "Hoog naar Laag"
     }
 }

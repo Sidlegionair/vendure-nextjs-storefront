@@ -32,31 +32,29 @@ export const ManageAccountPage: React.FC<InferGetServerSidePropsType<typeof getS
 
 
 const StyledContentContainer = styled(ContentContainer)`
-    padding: 50px;
+    padding: 80px 50px 50px;
     justify-content: start;
     z-index: 0;
+
     @media (max-width: ${({ theme }) => theme.breakpoints['3xl']}) {
         width: 100%;
-        padding: 0 4rem;
+        padding: 4rem 4rem 2rem;
     }
 
     @media (max-width: ${({ theme }) => theme.breakpoints['2xl']}) {
         width: 100%;
-        padding: 0 3rem;
+        padding: 4rem 3rem 2rem;
     }
 
     @media (max-width: ${({ theme }) => theme.breakpoints.xl}) {
         width: 100%;
-        padding: 0 2rem;
+        padding: 4rem 2rem 2rem;
     }
 
     @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
         width: 100%;
-        padding: 0 1.5rem;
+        padding: 4rem 1.5rem 2rem;
     }
-
-
-
 
     position: relative;
     height: 100%;

@@ -19,6 +19,17 @@ export const Form = styled.form`
 `;
 
 export const StyledButton = styled(Button)<{ active?: boolean }>`
-    background: ${p => p.active && p.theme.gray(700)};
+    background: ${p => p.active ? p.theme.gray(700) : p.theme.button.back};
     font-size: 1.2rem;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background: ${p => p.active ? p.theme.gray(800) : p.theme.button.hover?.back || p.theme.button.back};
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
 `;

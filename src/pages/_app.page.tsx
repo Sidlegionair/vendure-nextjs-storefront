@@ -134,9 +134,11 @@ const App = ({ Component, pageProps }: AppProps) => {
                 <ChannelsProvider initialState={initialChannelsState}>
                     <Global styles={``} />
                     {'checkout' in pageProps ? (
-                        <CheckoutProvider initialState={{ checkout: pageProps.checkout }}>
-                            <Component {...pageProps} />
-                        </CheckoutProvider>
+                        <CartProvider>
+                            <CheckoutProvider initialState={{ checkout: pageProps.checkout }}>
+                                <Component {...pageProps} />
+                            </CheckoutProvider>
+                        </CartProvider>
                     ) : (
                         <CartProvider>
                             <ProductProvider initialState={{ product: pageProps.product }}>

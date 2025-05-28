@@ -3,6 +3,7 @@ import {
     ActiveCustomerSelector,
     ActiveOrderSelector,
     AvailableCountriesSelector,
+    AvailablePaymentMethodsSelector,
     ShippingMethodsSelector,
     homePageSlidersSelector,
 } from '@/src/graphql/selectors';
@@ -25,12 +26,14 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
             { availableCountries },
             { activeCustomer },
             { eligibleShippingMethods },
+            { eligiblePaymentMethods },
             { collection: alsoBoughtProducts },
         ] = await Promise.all([
             api({ activeOrder: ActiveOrderSelector }),
             api({ availableCountries: AvailableCountriesSelector }),
             api({ activeCustomer: ActiveCustomerSelector }),
             api({ eligibleShippingMethods: ShippingMethodsSelector }),
+            api({ eligiblePaymentMethods: AvailablePaymentMethodsSelector }),
             api({ collection: [{ slug: 'all' }, homePageSlidersSelector] }),
         ]);
 
@@ -50,6 +53,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
             alsoBoughtProducts: alsoBoughtProducts?.productVariants.items ?? null,
             activeCustomer: activeCustomer ?? null,
             eligibleShippingMethods: eligibleShippingMethods ?? null,
+            eligiblePaymentMethods: eligiblePaymentMethods ?? null,
         };
 
         return { props: returnedStuff };

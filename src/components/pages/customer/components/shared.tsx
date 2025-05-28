@@ -3,11 +3,12 @@ import styled from '@emotion/styled';
 
 export const FormContainer = styled(Stack)`
     width: 100%;
-    min-height: calc(100vh);
+    min-height: calc(100vh - 200px);
     flex-direction: column;
     gap: 3.5rem;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    padding-top: 2rem;
 
     @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
         min-height: 60vh;
@@ -16,22 +17,37 @@ export const FormContainer = styled(Stack)`
 
 export const FormWrapper = styled(Stack)`
     position: relative;
-    padding: 90px 65px;
+    padding: 60px 65px;
     border-radius: ${({ theme }) => theme.borderRadius};
     border: 1px solid #4D4D4D;
     align-items: center;
-    width: fit-content;
+    width: 100%;
+    max-width: 1200px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease-in-out;
+
+    &:hover {
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+        padding: 50px 40px;
+    }
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+        padding: 40px 25px;
+    }
 `;
 
 export const Form = styled.form`
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    min-width: 480px;
-    //max-width: 27.5rem;
-    
+    width: 100%;
+    max-width: 480px;
+
     @media(max-width: ${({ theme }) => theme.breakpoints.md}) {
-        min-width: 100%;
+        max-width: 100%;
     }
 `;
 
@@ -43,15 +59,23 @@ export const Absolute = styled(Stack)`
 `;
 
 export const FormContent = styled(Stack)`
-    min-width: 32rem;
+    width: 100%;
     max-width: 700px;
+
+    @media(max-width: ${({ theme }) => theme.breakpoints.md}) {
+        max-width: 100%;
+    }
 `;
 
 export const CustomerWrap = styled(Stack)`
-    //min-height: calc(100vh - 10rem);
-    padding: 2rem 0;
+    width: 100%;
+    padding: 1.5rem 0;
+    align-items: center;
+    justify-content: center;
 
     @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
         flex-direction: column;
+        gap: 2.5rem;
+        padding: 1rem 0;
     }
 `;

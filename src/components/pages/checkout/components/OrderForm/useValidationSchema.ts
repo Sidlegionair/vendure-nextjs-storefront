@@ -10,8 +10,7 @@ export const useValidationSchema = () => {
         lastName: z.string().min(1, { message: t('orderForm.errors.lastName.required') }),
         phoneNumber: z
             .string()
-            .min(1, { message: t('orderForm.errors.phone.required') })
-            .optional(),
+            .min(1, { message: t('orderForm.errors.phone.required') }),
 
         deliveryMethod: z.string().min(1, { message: t('deliveryMethod.errors.required') }),
 

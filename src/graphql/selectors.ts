@@ -774,3 +774,28 @@ export const homePageSlidersSelector = Selector('Collection')({
 });
 
 export type HomePageSlidersType = FromSelector<typeof homePageSlidersSelector, 'Collection', typeof scalars>;
+
+export const ServiceDealerSelector = Selector('VendorSelectionResult')({
+    sellerId: true,
+    name: true,
+    firstName: true,
+    lastName: true,
+    emailAddress: true,
+    address: true,
+    postalCode: true,
+    country: true,
+    vendorType: true,
+    slug: true,
+    channel: true,
+    locales: true,
+    nationalLocale: true,
+});
+
+export const ServiceLocationSelector = Selector('ServiceLocationResult')({
+    serviceDealer: ServiceDealerSelector,
+    serviceAgentAvailable: true,
+    scenario: true,
+});
+
+export type ServiceDealerType = FromSelector<typeof ServiceDealerSelector, 'VendorSelectionResult', typeof scalars>;
+export type ServiceLocationType = FromSelector<typeof ServiceLocationSelector, 'ServiceLocationResult', typeof scalars>;

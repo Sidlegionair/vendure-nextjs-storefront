@@ -23,7 +23,7 @@ export const _Button = forwardRef((props: ButtonType, ref: React.ForwardedRef<HT
                     </LoaderWrapper>
                 ) : null}
             </AnimatePresence>
-            <HideChildren loading={loading ? true : undefined}>{props.children}</HideChildren>
+            <HideChildren loading={loading ? "true" : undefined}>{props.children}</HideChildren>
         </FakeButton>
     );
 });
@@ -40,7 +40,7 @@ const LoaderWrapper = styled(motion.div)`
     transform: translate(-50%, -50%);
 `;
 
-const HideChildren = styled.div<{ loading?: boolean }>`
+const HideChildren = styled.div<{ loading?: string }>`
     width: inherit;
     display: inherit;
     flex-direction: inherit;
@@ -48,8 +48,8 @@ const HideChildren = styled.div<{ loading?: boolean }>`
     justify-content: center;
     align-items: center;
     position: relative;
-    visibility: ${p => (p.loading ? 'hidden' : 'visible')};
-    opacity: ${p => (p.loading ? 0 : 1)};
+    visibility: ${p => (p.loading === "true" ? 'hidden' : 'visible')};
+    opacity: ${p => (p.loading === "true" ? 0 : 1)};
     transition: opacity 0.2s ease-in-out;
 `;
 

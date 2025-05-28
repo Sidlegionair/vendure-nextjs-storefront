@@ -10,7 +10,7 @@ import { ContentContainer } from '@/src/components/atoms';
 
 export const CheckoutPage: React.FC<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
     const { t } = useTranslation('checkout');
-    const { availableCountries, alsoBoughtProducts, eligibleShippingMethods, activeCustomer } = props;
+    const { availableCountries, alsoBoughtProducts, eligibleShippingMethods, eligiblePaymentMethods, activeCustomer } = props;
 
     return (
         <CheckoutLayoutStyled pageTitle={`${t('seoTitles.checkout')}`}>
@@ -19,6 +19,7 @@ export const CheckoutPage: React.FC<InferGetServerSidePropsType<typeof getServer
                     availableCountries={availableCountries}
                     shippingMethods={eligibleShippingMethods}
                     activeCustomer={activeCustomer}
+                    eligiblePaymentMethods={eligiblePaymentMethods}
                 />
                 <CheckoutCarousel alsoBoughtProducts={alsoBoughtProducts} />
             </Content>

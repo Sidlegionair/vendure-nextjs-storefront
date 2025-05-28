@@ -77,12 +77,14 @@ const UnderLine = styled(motion.div)`
 const NavigationBox = styled(Stack)`
     width: fit-content;
     margin-top: 2rem;
+    margin-bottom: 3rem;
     display: flex;
     align-items: center;
     text-transform: uppercase;
 
     @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
         margin-top: 0;
+        margin-bottom: 4rem;
     }
 `;
 
@@ -91,10 +93,14 @@ const MenuItem = styled(Link)`
     border: 1px solid ${p => p.theme.gray(100)};
     padding: 1.6rem 2.4rem;
     height: 100%;
+    transition: all 0.3s ease-in-out;
+
     &:hover {
+        background-color: ${p => p.theme.gray(50)};
+        border-color: ${p => p.theme.gray(200)};
+
         & > p {
-            opacity: 0.7;
+            opacity: 0.8;
         }
     }
-    transition: opacity 0.3s ease-in;
 `;

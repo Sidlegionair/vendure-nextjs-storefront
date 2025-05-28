@@ -27,14 +27,22 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                                                                                        closeSearch,
                                                                                        onSubmit,
                                                                                    }) => {
-    const { t } = useTranslation('common');
+    const { t, ready } = useTranslation('common');
     const popularSearches = ['Dupraz', 'D1', 'Snowboards'];
 
     const inputRef = useRef<HTMLInputElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const [isPanelVisible, setIsPanelVisible] = useState(false);
+    const [placeholder, setPlaceholder] = useState('Find your board'); // Default value for SSR
 
     const handleFocus = () => setIsPanelVisible(true);
+
+    // Update placeholder when translations are ready
+    useEffect(() => {
+        if (ready) {
+            setPlaceholder(t('search-for-best-products'));
+        }
+    }, [ready, t]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -74,7 +82,7 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                             }
                         }}
                         ref={inputRef}
-                        placeholder={t('search-for-best-products')}
+                        placeholder={placeholder}
                         value={searchQuery}
                         onFocus={handleFocus}
                         onChange={e => {
@@ -256,7 +264,7 @@ const StyledLink = styled(Link)`
     font-size: 1.5rem;
 
     @media (max-width: ${p => p.theme.breakpoints.md}) {
-        font-family: 'Suisse BP Int\'l', sans-serif;
+        font-family: "Suisse BP Int'l", sans-serif;
         font-size: 1.8rem;
         line-height: 1.8rem;
     }

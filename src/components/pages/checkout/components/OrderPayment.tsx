@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'next-i18next';
@@ -36,6 +36,18 @@ export const OrderPayment: React.FC<OrderPaymentProps> = ({
     const push = usePush();
     const ctx = useChannels();
     const [error, setError] = useState<string | null>(null);
+
+    // Check for failed payments when component loads
+    useEffect(() => {
+        if (activeOrder?.payments && activeOrder.payments.length > 0) {
+            const lastPayment = activeOrder.payments[activeOrder.payments.length - 1];
+
+            // Check if the payment has failed or has an error message
+            if (lastPayment.state === 'Error' || lastPayment.state === 'Declined' || lastPayment.errorMessage) {
+                setError(lastPayment.errorMessage || tError('errors.backend.PAYMENT_FAILED_ERROR'));
+            }
+        }
+    }, [activeOrder, tError]);
 
     const {
         watch,

@@ -46,6 +46,7 @@ export const CustomerDetailsForm: React.FC<{
 
     // 2) Zod schema for the nested object
     const customerSchema = z.object({
+        addressEmail: z.string().email({ message: tErrors('errors.email.invalid') }),
         firstName: z.string().min(1, { message: tErrors('errors.firstName.required') }),
         lastName: z.string().min(1, { message: tErrors('errors.lastName.required') }),
         phoneNumber: z.string().min(1, { message: tErrors('errors.phoneNumber.required') }).optional(),
@@ -85,7 +86,7 @@ export const CustomerDetailsForm: React.FC<{
     // 4) Submit: read from 'customFields.preferredSeller.id'
     // and pass that to the mutation (no quotes, purely JS object).
     const onCustomerDataChange: SubmitHandler<CustomerDataForm> = async (input) => {
-        const { firstName, lastName, phoneNumber, customFields } = input;
+        const { addressEmail, firstName, lastName, phoneNumber, customFields } = input;
         const sellerId = customFields?.preferredSeller?.id; // string or undefined
 
         try {
@@ -93,6 +94,7 @@ export const CustomerDetailsForm: React.FC<{
                 updateCustomer: [
                     {
                         input: {
+                            emailAddress: addressEmail,
                             firstName,
                             lastName,
                             phoneNumber,
@@ -133,9 +135,8 @@ export const CustomerDetailsForm: React.FC<{
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{
-                    type: 'spring',
-                    stiffness: 380,
-                    damping: 30,
+                    duration: 0.2,
+                    ease: "easeInOut"
                 }}
             >
                 <Form onSubmit={handleSubmit(onCustomerDataChange)} noValidate>
@@ -143,7 +144,6 @@ export const CustomerDetailsForm: React.FC<{
                         <Input
                             {...register('addressEmail')}
                             label={t('accountPage.detailsForm.addressEmail')}
-                            disabled
                         />
                         <Stack w100 gap="1.25rem">
                             <Input
