@@ -2,7 +2,6 @@ import { getCollections } from '@/src/graphql/sharedQueries';
 import { getNavigationTree } from '@/src/lib/menuConfig';
 import { makeServerSideProps } from '@/src/lib/getStatic';
 import { redirectFromDefaultChannelSSR } from '@/src/lib/redirect';
-import { arrayToTree } from '@/src/util/arrayToTree';
 import { GetServerSidePropsContext } from 'next';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
@@ -11,18 +10,14 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     if (translationRedirect) return translationRedirect;
 
     const collections = await getCollections(r.context);
-    const { navigation, subnavigation } = await getNavigationTree(
-        r.context,
-        collections
-    );
-
+    const { navigation, subnavigation } = await getNavigationTree(r.context, collections);
 
     const returnedStuff = {
         ...r.props,
         ...r.context,
         collections,
         navigation,
-        subnavigation
+        subnavigation,
     };
 
     return { props: returnedStuff };

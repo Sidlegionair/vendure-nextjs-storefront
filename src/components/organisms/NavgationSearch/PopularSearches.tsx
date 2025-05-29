@@ -31,7 +31,6 @@ export const PopularSearches: React.FC<PopularSearchesProps> = ({ children, popu
 const PopularSearchesWrapper = styled(Stack)`
     flex-direction: row;
 
-
     @media (min-width: ${p => p.theme.breakpoints.lg}) {
         flex-direction: column;
     }

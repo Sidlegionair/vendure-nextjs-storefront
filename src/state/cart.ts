@@ -82,9 +82,7 @@ const useCartContainer = createContainer(() => {
     }, [ctx]);
 
     const addToCart = async (id: string, quantity: number, openModal?: boolean) => {
-        setActiveOrder(c =>
-            c ? { ...c, totalQuantity: c.totalQuantity + quantity } : c
-        );
+        setActiveOrder(c => (c ? { ...c, totalQuantity: c.totalQuantity + quantity } : c));
         try {
             const { addItemToOrder } = await storefrontApiMutation(getCtx())({
                 addItemToOrder: [
@@ -110,9 +108,7 @@ const useCartContainer = createContainer(() => {
     };
 
     const removeFromCart = async (orderLineId: string) => {
-        setActiveOrder(c =>
-            c ? { ...c, lines: c.lines.filter(l => l.id !== orderLineId) } : c
-        );
+        setActiveOrder(c => (c ? { ...c, lines: c.lines.filter(l => l.id !== orderLineId) } : c));
         try {
             const { removeOrderLine } = await storefrontApiMutation(getCtx())({
                 removeOrderLine: [
@@ -137,10 +133,10 @@ const useCartContainer = createContainer(() => {
         setActiveOrder(c =>
             c
                 ? {
-                    ...c,
-                    lines: c.lines.map(l => (l.id === orderLineId ? { ...l, quantity } : l)),
-                }
-                : c
+                      ...c,
+                      lines: c.lines.map(l => (l.id === orderLineId ? { ...l, quantity } : l)),
+                  }
+                : c,
         );
         try {
             const { adjustOrderLine } = await storefrontApiMutation(getCtx())({

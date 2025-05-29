@@ -2,26 +2,23 @@ import React, { useEffect, useRef } from 'react';
 import { storyblokEditable } from '@storyblok/react';
 
 const GorgiasFormBlock = ({ blok }) => {
-    const {
-        formUid = "n923oe7z",
-        scriptSrc = "https://contact.gorgias.help/api/contact-forms/loader.js?v=3",
-    } = blok;
+    const { formUid = 'n923oe7z', scriptSrc = 'https://contact.gorgias.help/api/contact-forms/loader.js?v=3' } = blok;
 
     const containerRef = useRef(null);
 
     useEffect(() => {
         if (containerRef.current) {
             // Remove any existing script to prevent duplication
-            const existingScript = containerRef.current.querySelector("script[data-gorgias-loader-contact-form]");
+            const existingScript = containerRef.current.querySelector('script[data-gorgias-loader-contact-form]');
             if (existingScript) {
                 existingScript.remove();
             }
 
-            const script = document.createElement("script");
+            const script = document.createElement('script');
             script.src = scriptSrc;
             script.defer = true;
-            script.setAttribute("data-gorgias-loader-contact-form", "");
-            script.setAttribute("data-gorgias-contact-form-uid", formUid);
+            script.setAttribute('data-gorgias-loader-contact-form', '');
+            script.setAttribute('data-gorgias-contact-form-uid', formUid);
             containerRef.current.appendChild(script);
         }
     }, [scriptSrc, formUid]);

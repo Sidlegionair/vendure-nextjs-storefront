@@ -41,8 +41,9 @@ export const FacetCheckBox = forwardRef((props: InputType, ref: React.ForwardedR
                     }}
                 />
                 <StyledLabel htmlFor={props.name}>
-                    <span>{label}
-                    {props.required && <FormRequired>&nbsp;*</FormRequired>}
+                    <span>
+                        {label}
+                        {props.required && <FormRequired>&nbsp;*</FormRequired>}
                     </span>
                     <span>{count}</span>
                 </StyledLabel>
@@ -68,7 +69,6 @@ export const FacetCheckBox = forwardRef((props: InputType, ref: React.ForwardedR
 
 FacetCheckBox.displayName = 'CheckBox';
 
-
 const StyledLabel = styled(Label)`
     display: flex;
     align-items: space-between;
@@ -80,15 +80,12 @@ const StyledLabel = styled(Label)`
     align-items: center;
 
     color: #898989;
-
-
-`
+`;
 
 const Wrapper = styled(Stack)`
     position: relative;
     width: fit-content;
     width: 100%;
-
 `;
 
 const CheckboxAnimation = styled(motion.div)`
@@ -107,10 +104,9 @@ const CheckboxAnimation = styled(motion.div)`
 
 const CheckboxIcon = styled(Check)`
     background: #000000;
-    color: ${p => p.theme.text.white}
+    color: ${p => p.theme.text.white};
     //min-width: 17px;
     //min-height: 17px;
-
 `;
 
 const CheckboxIconHolder = styled.div`
@@ -131,7 +127,6 @@ const CheckboxStack = styled(Stack)`
     position: relative;
     //width: fit-content;
     width: 100%;
-
 `;
 
 const Checkbox = styled.input`

@@ -13,7 +13,11 @@ import styled from '@emotion/styled';
 export const ManageAccountPage: React.FC<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
     const { t } = useTranslation('customer');
     return (
-        <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation} pageTitle={t('accountPage.title')}>
+        <Layout
+            categories={props.collections}
+            navigation={props.navigation}
+            subnavigation={props.subnavigation}
+            pageTitle={t('accountPage.title')}>
             <StyledContentContainer>
                 <Stack w100 justifyCenter>
                     <CustomerNavigation />
@@ -29,7 +33,6 @@ export const ManageAccountPage: React.FC<InferGetServerSidePropsType<typeof getS
         </Layout>
     );
 };
-
 
 const StyledContentContainer = styled(ContentContainer)`
     padding: 80px 50px 50px;

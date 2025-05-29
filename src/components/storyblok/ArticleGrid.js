@@ -10,9 +10,8 @@ const ArticleGrid = ({ blok }) => {
             {/* Full-width heading block */}
             <div className="heading-block">
                 {/* Render content above the grid if it exists */}
-                {content_above_grid && content_above_grid.map((blok) => (
-                    <StoryblokComponent blok={blok} key={blok._uid} />
-                ))}
+                {content_above_grid &&
+                    content_above_grid.map(blok => <StoryblokComponent blok={blok} key={blok._uid} />)}
             </div>
 
             <ContentContainer>
@@ -22,17 +21,15 @@ const ArticleGrid = ({ blok }) => {
                         display: 'grid',
                         gap: '50px', // Set column gap to 50px
                         gridTemplateColumns: `repeat(${columns}, 1fr)`,
-                    }}
-                >
-                    {articles.map((article) => (
+                    }}>
+                    {articles.map(article => (
                         <StoryblokComponent blok={article} key={article._uid} />
                     ))}
                 </div>
 
                 {/* Render content below the grid if it exists */}
-                {content_below_grid && content_below_grid.map((blok) => (
-                    <StoryblokComponent blok={blok} key={blok._uid} />
-                ))}
+                {content_below_grid &&
+                    content_below_grid.map(blok => <StoryblokComponent blok={blok} key={blok._uid} />)}
             </ContentContainer>
 
             <style jsx>{`

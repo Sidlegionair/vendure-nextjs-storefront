@@ -1,5 +1,5 @@
 // src/components/molecules/FacetFilter.tsx
-import { Divider, Stack, TFacetHeading } from '@/src/components/atoms';
+import { Divider, Stack } from '@/src/components/atoms';
 import { FiltersFacetType } from '@/src/graphql/selectors';
 import styled from '@emotion/styled';
 import { useState } from 'react';
@@ -10,24 +10,16 @@ interface FacetProps {
     facet: FiltersFacetType;
     selected?: string[];
     onClick: (group: { id: string; name: string }, facet: { id: string; name: string }) => void;
-    // New optional prop to let the parent “register” the underlying checkbox ref
-    registerRef?: (facetValueId: string, ref: HTMLButtonElement | null) => void;
+    // Removed unused registerRef prop
 }
 
-export const FacetFilterCheckbox: React.FC<FacetProps> = ({
-                                                              facet: { id, name, values },
-                                                              onClick,
-                                                              selected,
-                                                              registerRef,
-                                                          }) => {
+export const FacetFilterCheckbox: React.FC<FacetProps> = ({ facet: { id, name, values }, onClick, selected }) => {
     const [open, setOpen] = useState<boolean>(false);
     return (
         <GridWrapper w100 column>
             <StyledDivider />
             <GridTitle onClick={() => setOpen(!open)}>
-                <StyledTFacetHeading>
-                    {name}
-                </StyledTFacetHeading>
+                <StyledTFacetHeading>{name}</StyledTFacetHeading>
                 <IconWrapper>
                     <ChevronDown />
                 </IconWrapper>
@@ -35,7 +27,7 @@ export const FacetFilterCheckbox: React.FC<FacetProps> = ({
             <Grid open={open}>
                 <GridEntry>
                     <CheckGrid>
-                        {values.map((v) => {
+                        {values.map(v => {
                             const isSelected = selected?.includes(v.id);
                             return (
                                 <FacetCheckBox
@@ -76,7 +68,7 @@ const Grid = styled.div<{ open: boolean }>`
     display: grid;
     grid-template-rows: ${({ open }) => (open ? '1fr' : '0fr')};
     transition: grid-template-rows 0.3s ease-in-out;
-    border-bottom: 1px solid ${(p) => p.theme.gray(100)};
+    border-bottom: 1px solid ${p => p.theme.gray(100)};
 `;
 
 const GridTitle = styled.button`

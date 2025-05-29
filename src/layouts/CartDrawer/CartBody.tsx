@@ -15,6 +15,14 @@ import { Link } from '@/src/components/atoms/Link';
 import { getServiceLocationForProduct } from '@/src/graphql/sharedQueries';
 import { useChannels } from '@/src/state/channels';
 import { DEFAULT_CHANNEL, DEFAULT_LOCALE } from '@/src/lib/consts';
+
+interface Channel {
+    slug: string;
+    seller?: {
+        name: string;
+    };
+}
+
 interface Props {
     activeOrder?: ActiveOrderType;
     currencyCode: CurrencyCode;
@@ -23,7 +31,7 @@ interface Props {
 export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
     const { t } = useTranslation('common');
     const { setItemQuantityInCart, removeFromCart } = useCart();
-    const [channels, setChannels] = useState<any[]>([]);
+    const [channels, setChannels] = useState<Channel[]>([]);
     const [serviceLocations, setServiceLocations] = useState<Record<string, ServiceLocationType | null>>({});
     const [loadingServiceLocations, setLoadingServiceLocations] = useState<Record<string, boolean>>({});
     // Get channel and locale from context
@@ -49,6 +57,8 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
             const locale = ctx?.locale ?? DEFAULT_LOCALE;
             const channel = ctx?.channel ?? DEFAULT_CHANNEL;
 
+            if (!activeOrder || !activeOrder.lines) return;
+
             for (const line of activeOrder.lines) {
                 if (line.productVariant?.id && !serviceLocations[line.productVariant.id]) {
                     setLoadingServiceLocations(prev => ({ ...prev, [line.productVariant.id]: true }));
@@ -56,19 +66,19 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
                     try {
                         const serviceLocationData = await getServiceLocationForProduct(
                             { locale, channel },
-                            line.productVariant.id
+                            line.productVariant.id,
                         );
 
-                        setServiceLocations(prev => ({ 
-                            ...prev, 
-                            [line.productVariant.id]: serviceLocationData 
+                        setServiceLocations(prev => ({
+                            ...prev,
+                            [line.productVariant.id]: serviceLocationData,
                         }));
                     } catch (error) {
                         console.error('Error loading service location:', error);
                     } finally {
-                        setLoadingServiceLocations(prev => ({ 
-                            ...prev, 
-                            [line.productVariant.id]: false 
+                        setLoadingServiceLocations(prev => ({
+                            ...prev,
+                            [line.productVariant.id]: false,
                         }));
                     }
                 }
@@ -83,16 +93,15 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
             {activeOrder && activeOrder.totalQuantity > 0 ? (
                 activeOrder.lines.map(
                     ({
-                         productVariant,
-                         id,
-                         featuredAsset,
-                         quantity,
-                         unitPriceWithTax,
-                         discountedLinePriceWithTax,
-                         customFields,
-                     }) => {
-                        const optionInName =
-                            productVariant.name.replace(productVariant.product.name, '') !== '';
+                        productVariant,
+                        id,
+                        featuredAsset,
+                        quantity,
+                        unitPriceWithTax,
+                        discountedLinePriceWithTax,
+                        customFields,
+                    }) => {
+                        const optionInName = productVariant.name.replace(productVariant.product.name, '') !== '';
                         const brandFields = productVariant.product.customFields as { brand?: string };
 
                         // Get the requested seller channel from customFields and find the matching channel
@@ -123,10 +132,7 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
                                                 </TP>
                                                 {optionInName && (
                                                     <TP size="18px" weight={300} noWrap>
-                                                        {productVariant.name.replace(
-                                                            productVariant.product.name,
-                                                            ''
-                                                        )}
+                                                        {productVariant.name.replace(productVariant.product.name, '')}
                                                     </TP>
                                                 )}
                                             </Stack>
@@ -144,7 +150,6 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
                                                     </RemoveText>
                                                 </Remove>
                                             </Stack>
-
                                         </Stack>
                                     </Stack>
                                 </Stack>
@@ -160,29 +165,34 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
                                     <Stack column gap="5px">
                                         {/* Display the seller's name */}
                                         <StyledTP size="16px" weight={500}>
-                                            Sold by <StyledLink skipChannelHandling href={`/content/partners/${requestedSellerChannel}`}>{sellerName}</StyledLink>
+                                            Sold by{' '}
+                                            <StyledLink
+                                                skipChannelHandling
+                                                href={`/content/partners/${requestedSellerChannel}`}>
+                                                {sellerName}
+                                            </StyledLink>
                                         </StyledTP>
 
                                         {/* Display service location information if available */}
                                         {loadingServiceLocations[productVariant.id] ? (
-                                            <StyledTP size="16px" weight={500}>Loading service information...</StyledTP>
+                                            <StyledTP size="16px" weight={500}>
+                                                Loading service information...
+                                            </StyledTP>
                                         ) : serviceLocations[productVariant.id]?.serviceDealer ? (
                                             <StyledTP size="16px" weight={500}>
                                                 Service by{' '}
                                                 <StyledLink
                                                     skipChannelHandling
-                                                    href={`/content/partners/${serviceLocations[productVariant.id]?.serviceDealer?.slug}`}
-                                                >
+                                                    href={`/content/partners/${serviceLocations[productVariant.id]?.serviceDealer?.slug}`}>
                                                     {serviceLocations[productVariant.id]?.serviceDealer?.name}
                                                 </StyledLink>
                                             </StyledTP>
                                         ) : null}
                                     </Stack>
                                 </Stack>
-
                             </CartRow>
                         );
-                    }
+                    },
                 )
             ) : (
                 <Stack itemsCenter justifyCenter style={{ height: '100%' }}>
@@ -196,14 +206,13 @@ export const CartBody: React.FC<Props> = ({ currencyCode, activeOrder }) => {
 const StyledTP = styled(TP)`
     display: flex;
     gap: 5px;
-    color: #BBBBBB;
-
-`
+    color: #bbbbbb;
+`;
 
 const StyledLink = styled(Link)`
     font-family: "Suisse BP Int'l", sans-serif;
 
-    color: #BBBBBB;
+    color: #bbbbbb;
     text-decoration: underline;
     text-underline-offset: 4px;
 
@@ -215,7 +224,6 @@ const StyledLink = styled(Link)`
     display: flex;
     align-items: start;
 `;
-
 
 const CartList = styled(Stack)`
     flex: 1;

@@ -9,15 +9,13 @@ import { CartDrawer } from '@/src/layouts/CartDrawer';
 import { CollectionTileType, NavigationType } from '@/src/graphql/selectors';
 import { RootNode } from '@/src/util/arrayToTree';
 import { DesktopNavigation } from '@/src/components/organisms/DesktopNavigation';
-import { SearchIcon, Menu } from 'lucide-react';
-import { Button, IconButton, MenuOpenButton } from '@/src/components/molecules/Button';
-import { CategoryBar } from './CategoryBar';
+import {} from 'lucide-react';
+import { Button, MenuOpenButton } from '@/src/components/molecules/Button';
 import { NavigationSearch } from '@/src/components/organisms/NavgationSearch';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigationSearch } from '@/src/components/organisms/NavgationSearch/hooks';
 import { useEffect, useRef, useState } from 'react';
 import { Picker } from '@/src/components/organisms/Picker';
-import { useTranslation } from 'next-i18next';
 
 interface NavigationProps {
     navigation: RootNode<NavigationType> | null;
@@ -31,8 +29,7 @@ interface NavigationProps {
     subnavigation: RootNode<NavigationType> | null;
 }
 
-export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, changeModal, subnavigation }) => {
-    const { t } = useTranslation('common');
+export const Navigation: React.FC<NavigationProps> = ({ navigation, changeModal, subnavigation }) => {
     const { isLogged, cart } = useCart();
     const navigationSearch = useNavigationSearch();
     const searchRef = useRef<HTMLDivElement>(null);
@@ -60,17 +57,6 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
             document.removeEventListener('click', handleOutsideClick);
         };
     }, []);
-
-    const announcementsBar = typeof t('announcements-bar', { defaultValue: '' }) === 'string'
-        ? (t('announcements-bar', { defaultValue: '' }) as string).split('|')
-        : [];
-
-    const entries = [
-        { text: announcementsBar[0] || '', href: '/collections/all' },
-        { text: announcementsBar[1] || '', href: '/' },
-        { text: announcementsBar[2] || '', href: '/' },
-        { text: announcementsBar[3] || '', href: '/' },
-    ];
 
     return (
         <>
@@ -121,12 +107,20 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                                 <MenuOpenButton
                                     aria-label="Open menu"
                                     onClick={() => setMobileMenuOpen(true)}
-                                    style={{ padding: '0.5rem' }}
-                                >
-                                    <svg width="26" height="18" viewBox="0 0 26 18" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M1 1H25M1 9H25M1 17H25" stroke="black" stroke-width="2"
-                                              stroke-linecap="round" stroke-linejoin="round" />
+                                    style={{ padding: '0.5rem' }}>
+                                    <svg
+                                        width="26"
+                                        height="18"
+                                        viewBox="0 0 26 18"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M1 1H25M1 9H25M1 17H25"
+                                            stroke="black"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        />
                                     </svg>
                                 </MenuOpenButton>
                             </MobileWrapper>
@@ -134,7 +128,7 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                     </MainStack>
 
                     <DesktopWrapper>
-                    <Divider />
+                        <Divider />
                     </DesktopWrapper>
 
                     {/* Desktop: subnavigation */}
@@ -155,8 +149,7 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 transition={{ duration: 0.2 }}
-                                ref={searchRef}
-                            >
+                                ref={searchRef}>
                                 <NavigationSearch {...navigationSearch} />
                             </DesktopNavigationContainer>
                         </AnimatePresence>
@@ -181,19 +174,23 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                         initial={{ x: '100%' }}
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
-                        transition={{ duration: 0.3 }}
-                    >
+                        transition={{ duration: 0.3 }}>
                         <MobileMenuContent>
                             <MobileMenuHeader>
                                 <Link ariaLabel="Home" href="/" onClick={() => setMobileMenuOpen(false)}>
                                     <LogoAexol width={165} />
                                 </Link>
                                 <Button aria-label="Close menu" onClick={() => setMobileMenuOpen(false)}>
-                                    <svg width="17" height="17" viewBox="0 0 17 17" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
+                                    <svg
+                                        width="17"
+                                        height="17"
+                                        viewBox="0 0 17 17"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             d="M0.954027 17L0 16.046L7.54597 8.5L0 0.954027L0.954027 0L8.5 7.54597L16.046 0L17 0.954027L9.45403 8.5L17 16.046L16.046 17L8.5 9.45403L0.954027 17Z"
-                                            fill="#9E2E3A" />
+                                            fill="#9E2E3A"
+                                        />
                                     </svg>
                                 </Button>
                             </MobileMenuHeader>
@@ -203,9 +200,7 @@ export const Navigation: React.FC<NavigationProps> = ({ navigation, categories, 
                                 <MobileMenuNav>
                                     <DesktopNavigation gap={21} navigation={navigation} />
                                     <Divider />
-                                    {subnavigation && (
-                                        <DesktopNavigation navigation={subnavigation} isSubMenu={true} />
-                                    )}
+                                    {subnavigation && <DesktopNavigation navigation={subnavigation} isSubMenu={true} />}
                                 </MobileMenuNav>
                             )}
                         </MobileMenuContent>
@@ -237,11 +232,10 @@ const StickyContainer = styled.nav`
     @media (min-width: ${p => p.theme.breakpoints.md}) {
         padding: 25px;
         position: sticky;
-
     }
 
     top: 0;
-    background: #FFFFFF;
+    background: #ffffff;
     z-index: 2137;
     box-shadow: 0px 6px 4px rgba(0, 0, 0, 0.06);
 
@@ -257,7 +251,6 @@ const CustomContentContainer = styled(ContentContainer)`
     //width: 100%;
     gap: 2rem;
 `;
-
 
 const DesktopNavigationContainer = styled(motion.div)`
     display: flex;
@@ -286,7 +279,7 @@ const DesktopWrapper = styled.div`
 
 const MobileWrapper = styled.div`
     display: block;
-    
+
     @media (min-width: ${p => p.theme.breakpoints.md}) {
         display: none;
     }
@@ -381,7 +374,7 @@ const LeftStack = styled(Stack)`
     //max-width: 33%;
 
     // @media (min-width: ${p => p.theme.breakpoints.md}) {
-        width: 100%;
+    width: 100%;
     //}
 `;
 
@@ -402,6 +395,5 @@ const RightStack = styled(Stack)`
     @media (min-width: ${p => p.theme.breakpoints.md}) {
         width: 100%;
         gap: 20px;
-
     }
 `;

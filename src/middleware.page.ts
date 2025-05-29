@@ -25,8 +25,6 @@ export function middleware(request: NextRequest) {
     const cachedLocale = request.cookies.get('i18next')?.value;
     const cachedChannel = request.cookies.get('channel')?.value;
 
-
-
     const regex = new RegExp(`/[a-z]{2}(/[a-z]{2})?/`);
     if (regex.test(url.pathname)) {
         const split = url.pathname.split('/').filter(x => x !== '');

@@ -3,30 +3,11 @@ import { Stack, Link, TP, ProductImage } from '@/src/components/atoms/';
 import { priceFormatter } from '@/src/util/priceFormatter';
 import styled from '@emotion/styled';
 import { Ratings } from './Ratings';
-import {
-    CollectionTileType,
-    ProductDetailType,
-    ProductSearchType as OriginalProductSearchType,
-} from '@/src/graphql/selectors';
 import { CurrencyCode } from '@/src/zeus';
-
-type ProductSearchType = OriginalProductSearchType & {
-    customFields?: {
-        brand?: string; // Extend to include brand
-    };
-    facetValues?: Array<{
-        code: string; // Move 'code' and 'name' directly here
-        name: string;
-        value: string;
-        facet?: {
-            code: string;
-            name: string;
-        };
-    }>;
-};
+import { EnhancedProductType } from '@/src/types/product';
 
 export const ProductTile: React.FC<{
-    product: ProductSearchType;
+    product: EnhancedProductType;
     lazy?: boolean;
 }> = ({ product, lazy }) => {
     const includedFacetCodes = ['terrain', 'rider-level'];
@@ -36,36 +17,42 @@ export const ProductTile: React.FC<{
 
     const facets =
         product.facetValues
-            ?.filter((facet) => includedFacetCodes.includes(facet.code))
-            .reduce((unique, facet) => {
-                if (!unique.some((item) => item.code === facet.code)) {
-                    unique.push(facet);
-                }
-                return unique;
-            }, [] as Array<{ code: string; name: string; value: string }>)
+            ?.filter(facet => includedFacetCodes.includes(facet.code))
+            .reduce(
+                (unique, facet) => {
+                    if (!unique.some(item => item.code === facet.code)) {
+                        unique.push(facet);
+                    }
+                    return unique;
+                },
+                [] as Array<{ code: string; name: string; value?: string }>,
+            )
             // Sort facets based on the predefined order
             .sort((a, b) => facetOrder.indexOf(a.code) - facetOrder.indexOf(b.code))
             .slice(0, 3) || [];
 
-    function isSinglePrice(priceWithTax: any): priceWithTax is { value: number } {
-        return priceWithTax && 'value' in priceWithTax;
+    // Define a type for the price structure
+    type PriceWithTax = { value: number } | { min: number; max: number } | undefined;
+
+    function isSinglePrice(priceWithTax: PriceWithTax): priceWithTax is { value: number } {
+        return !!priceWithTax && 'value' in priceWithTax;
     }
 
-    function isPriceRange(priceWithTax: any): priceWithTax is { min: number; max: number } {
-        return priceWithTax && 'min' in priceWithTax && 'max' in priceWithTax;
+    function isPriceRange(priceWithTax: PriceWithTax): priceWithTax is { min: number; max: number } {
+        return !!priceWithTax && 'min' in priceWithTax && 'max' in priceWithTax;
     }
 
     const priceValue = product.priceWithTax
         ? isSinglePrice(product.priceWithTax)
             ? priceFormatter(product.priceWithTax.value, product.currencyCode as CurrencyCode)
             : isPriceRange(product.priceWithTax)
-                ? product.priceWithTax.min === product.priceWithTax.max
-                    ? priceFormatter(product.priceWithTax.min, product.currencyCode as CurrencyCode)
-                    : `${priceFormatter(
+              ? product.priceWithTax.min === product.priceWithTax.max
+                  ? priceFormatter(product.priceWithTax.min, product.currencyCode as CurrencyCode)
+                  : `${priceFormatter(
                         product.priceWithTax.min,
-                        product.currencyCode as CurrencyCode
+                        product.currencyCode as CurrencyCode,
                     )} - ${priceFormatter(product.priceWithTax.max, product.currencyCode as CurrencyCode)}`
-                : 'Price not available'
+              : 'Price not available'
         : 'Price not available';
 
     const src = product.productAsset?.preview;
@@ -88,27 +75,23 @@ export const ProductTile: React.FC<{
                     {/* Title and Brand container */}
                     <TitleContainer>
                         <Stack column>
-                            {brand && (
-                                <Brand>
-                                    {brand}
-                                </Brand>
-                            )}
+                            {brand && <Brand>{brand}</Brand>}
                             <ProductName>{product.productName.toLowerCase()}</ProductName>
                         </Stack>
                     </TitleContainer>
                     {/* Facets and Ratings container */}
                     <Stack column gap={10}>
                         <FacetsContainer>
-                            {!facets.some((facet) => facet.code === 'rider-level') && (
+                            {!facets.some(facet => facet.code === 'rider-level') && (
                                 <Facet>
                                     <FacetTitle>rider level</FacetTitle>
                                     <FacetValue>n/a</FacetValue>
                                 </Facet>
                             )}
-                            {facets.map((facet) => (
+                            {facets.map(facet => (
                                 <Facet key={facet.code}>
                                     <FacetTitle>{facet.name.toLowerCase()}</FacetTitle>
-                                    <FacetValue>{facet.value.toLowerCase() || 'n/a'}</FacetValue>
+                                    <FacetValue>{facet.value?.toLowerCase() || 'n/a'}</FacetValue>
                                 </Facet>
                             ))}
                         </FacetsContainer>
@@ -124,8 +107,8 @@ export const ProductTile: React.FC<{
 };
 
 const ImageContainer = styled.div`
-    background:  ${({ theme }) => theme.tile.background};
-    padding: 23px 14px ;
+    background: ${({ theme }) => theme.tile.background};
+    padding: 23px 14px;
 
     position: relative;
     //max-width: 100%;
@@ -139,7 +122,7 @@ const ImageContainer = styled.div`
     @media (min-width: ${({ theme }) => theme.breakpoints.xl}) {
         min-height: 260px;
     }
-    
+
     @media (min-width: ${({ theme }) => theme.breakpoints['2xl']}) {
         min-height: 280px;
     }
@@ -182,11 +165,9 @@ const FacetsContainer = styled.div`
         min-height: 100px;
     }
 
-
     @media (min-width: ${({ theme }) => theme.breakpoints.lg}) and (max-width: ${({ theme }) => theme.breakpoints.xl}) {
         min-height: 150px;
     }
-
 `;
 
 const Facet = styled.div`
@@ -209,28 +190,25 @@ const TitleContainer = styled.div`
     /* Reserve space so that the title (brand + product name) always occupies the same height */
     min-height: 50px; /* adjust this value based on your design */
 
-
     @media (max-width: ${({ theme }) => theme.breakpoints.md}) and (min-width: ${({ theme }) => theme.breakpoints.sm}) {
         min-height: 80px;
     }
 
-
     @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
         min-height: 70px;
-
     }
-        display: flex;
+    display: flex;
     flex-direction: column;
     justify-content: flex-start;
 `;
 
 const TextWrapper = styled(Link)`
-    padding: 23px 14px ;
+    padding: 23px 14px;
 
     margin-top: 0.75rem;
     display: flex;
-  flex-direction: column;
-  gap: 1rem;
+    flex-direction: column;
+    gap: 1rem;
 `;
 
 const Main = styled(Stack)`

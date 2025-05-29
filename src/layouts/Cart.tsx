@@ -62,13 +62,13 @@ export const Cart = ({ activeOrder }: { activeOrder?: ActiveOrderType }) => {
                                     <CartList column>
                                         {activeOrder?.lines.map(
                                             ({
-                                                 productVariant,
-                                                 id,
-                                                 featuredAsset,
-                                                 quantity,
-                                                 linePriceWithTax,
-                                                 discountedLinePriceWithTax,
-                                             }) => {
+                                                productVariant,
+                                                id,
+                                                featuredAsset,
+                                                quantity,
+                                                linePriceWithTax,
+                                                discountedLinePriceWithTax,
+                                            }) => {
                                                 const optionInName =
                                                     productVariant.name.replace(productVariant.product.name, '') !== '';
                                                 const isPriceDiscounted =
@@ -251,10 +251,10 @@ const StyledButton = styled.button<{ dark?: boolean }>`
     text-align: center;
     text-transform: uppercase;
     font-weight: 500;
-    
-    &:active, &:hover {
-        border: 1px solid ${p => p.theme.accent(50)};
 
+    &:active,
+    &:hover {
+        border: 1px solid ${p => p.theme.accent(50)};
     }
 `;
 const StyledLink = styled(Link)`

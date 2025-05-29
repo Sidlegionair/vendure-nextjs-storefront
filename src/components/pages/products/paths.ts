@@ -24,7 +24,6 @@
 //     return { paths, fallback: 'blocking' };
 // };
 
-
 export const getStaticPaths = async () => {
     return {
         paths: [], // Or only pre-build a few key pages

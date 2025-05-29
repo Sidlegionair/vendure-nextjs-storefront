@@ -23,7 +23,7 @@ export const _Button = forwardRef((props: ButtonType, ref: React.ForwardedRef<HT
                     </LoaderWrapper>
                 ) : null}
             </AnimatePresence>
-            <HideChildren loading={loading ? "true" : undefined}>{props.children}</HideChildren>
+            <HideChildren loading={loading ? 'true' : undefined}>{props.children}</HideChildren>
         </FakeButton>
     );
 });
@@ -48,8 +48,8 @@ const HideChildren = styled.div<{ loading?: string }>`
     justify-content: center;
     align-items: center;
     position: relative;
-    visibility: ${p => (p.loading === "true" ? 'hidden' : 'visible')};
-    opacity: ${p => (p.loading === "true" ? 0 : 1)};
+    visibility: ${p => (p.loading === 'true' ? 'hidden' : 'visible')};
+    opacity: ${p => (p.loading === 'true' ? 0 : 1)};
     transition: opacity 0.2s ease-in-out;
 `;
 
@@ -121,8 +121,8 @@ export const IconButton = styled.button<{ isActive?: boolean }>`
     font-weight: 600;
     outline: 0;
     //@media(min-width: 767px) {
-        width: 24px;
-        height: 24px;
+    width: 24px;
+    height: 24px;
     //}
     display: flex;
     align-items: center;
@@ -135,9 +135,7 @@ export const IconButton = styled.button<{ isActive?: boolean }>`
     :hover {
         box-shadow: none;
     }
-
 `;
-
 
 export const MenuOpenButton = styled.button<{ isActive?: boolean }>`
     position: relative;

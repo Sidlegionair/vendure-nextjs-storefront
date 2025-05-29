@@ -1,22 +1,12 @@
 import styled from '@emotion/styled';
-import React, { useEffect, useState, useRef } from 'react';
-import { Stack, Price, Link, TP, ProductImage, TH1 } from '@/src/components/atoms';
+import React, { useEffect, useState } from 'react';
+import { Stack, Price, Link, TP } from '@/src/components/atoms';
 import { Button } from './Button';
 import { Ratings } from './Ratings';
 import { CurrencyCode } from '@/src/zeus';
 import { useTheme } from '@emotion/react';
 import { optimizeImage } from '@/src/util/optimizeImage';
-
-// Define a type matching the facet structure
-interface FacetValue {
-    code: string;
-    id: string;
-    name: string;
-    facet: {
-        name: string;
-        code: string;
-    };
-}
+import { FacetValueType, ProductCustomFields } from '@/src/types/product';
 
 interface ProductVariantTileProps {
     variant: {
@@ -25,33 +15,28 @@ interface ProductVariantTileProps {
         product: {
             slug: string;
             featuredAsset?: { preview: string };
-            customFields?: { brand?: string | unknown };
-            facetValues?: FacetValue[];
+            customFields?: ProductCustomFields;
+            facetValues?: FacetValueType[];
         };
         featuredAsset?: { preview: string };
         priceWithTax: number;
         currencyCode: CurrencyCode;
     };
     addToCart?: { text: string; action: (id: string) => Promise<void> };
-    lazy?: boolean;
     withoutRatings?: boolean;
     withoutRedirect?: boolean;
-    displayAllCategories?: boolean;
+    lazy?: boolean;
 }
 
 export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
-                                                                          variant,
-                                                                          addToCart,
-                                                                          lazy,
-                                                                          withoutRatings = false,
-                                                                          withoutRedirect = false,
-                                                                          displayAllCategories,
-                                                                      }) => {
-    const theme = useTheme();
+    variant,
+    addToCart,
+    withoutRatings = false,
+    withoutRedirect = false,
+}) => {
+    useTheme(); // Theme is used in styled components
     const [rating, setRating] = useState<number | null>(null);
-    const imgRef = useRef<HTMLImageElement>(null);
-    const src =
-        variant?.featuredAsset?.preview ?? variant?.product?.featuredAsset?.preview;
+    const src = variant?.featuredAsset?.preview ?? variant?.product?.featuredAsset?.preview;
     const ImageLink = withoutRedirect ? ImageContainer : LinkContainer;
     const TextWrapper = withoutRedirect ? TextContainer : TextRedirectContainer;
 
@@ -61,20 +46,23 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
     // Define the desired order for facets
     const facetOrder = ['terrain', 'rider-level'];
 
-    const facets: FacetValue[] =
-        (variant.product.facetValues
-            ?.filter((facet) => includedFacetCodes.includes(facet.facet.code))
-            .reduce<FacetValue[]>((unique, facet) => {
-                if (!unique.some((item) => item.code === facet.code)) {
+    const facets: FacetValueType[] = (
+        variant.product.facetValues
+            ?.filter(facet => facet.facet?.code && includedFacetCodes.includes(facet.facet?.code))
+            .reduce<FacetValueType[]>((unique, facet) => {
+                if (!unique.some(item => item.code === facet.code)) {
                     unique.push(facet);
                 }
                 return unique;
-            }, []) || [])
-            // Sort facets based on the predefined order
-            .sort(
-                (a, b) => facetOrder.indexOf(a.facet.code) - facetOrder.indexOf(b.facet.code)
-            )
-            .slice(0, 3);
+            }, []) || []
+    )
+        // Sort facets based on the predefined order
+        .sort((a, b) => {
+            const aCode = a.facet?.code || '';
+            const bCode = b.facet?.code || '';
+            return facetOrder.indexOf(aCode) - facetOrder.indexOf(bCode);
+        })
+        .slice(0, 3);
 
     console.log(facets);
 
@@ -85,18 +73,6 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
             setRating(generatedRating);
         }
     }, [withoutRatings]);
-
-    // Handle image load events (optional)
-    const handleImageLoad = () => {
-        // Additional logic post image load can go here
-    };
-
-    // Handle image load errors
-    const handleImageError = () => {
-        if (imgRef.current) {
-            imgRef.current.src = '/path/to/fallback-image.webp'; // Replace with your fallback image path
-        }
-    };
 
     // Optional: Function to get optimized image src
     const getOptimizedSrc = (src: string | undefined) => {
@@ -127,15 +103,15 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
                     {/* Facets & Ratings Container */}
                     <FacetsContainer>
                         <FacetsWrapper>
-                            {!facets.some((facet) => facet.facet.code === 'rider-level') && (
+                            {!facets.some(facet => facet.facet?.code === 'rider-level') && (
                                 <Facet>
                                     <FacetTitle>rider level</FacetTitle>
                                     <FacetValue>n/a</FacetValue>
                                 </Facet>
                             )}
-                            {facets.map((facet) => (
+                            {facets.map(facet => (
                                 <Facet key={facet.code}>
-                                    <FacetTitle>{facet.facet.name.toLowerCase()}</FacetTitle>
+                                    <FacetTitle>{facet.facet?.name.toLowerCase()}</FacetTitle>
                                     <FacetValue>{facet.name || 'n/a'}</FacetValue>
                                 </Facet>
                             ))}
@@ -145,9 +121,7 @@ export const ProductVariantTile: React.FC<ProductVariantTileProps> = ({
                     <PriceTag price={variant.priceWithTax} currencyCode={variant.currencyCode} />
                 </TextWrapper>
                 {addToCart && (
-                    <AddToCartButton onClick={() => addToCart.action(variant.id)}>
-                        {addToCart.text}
-                    </AddToCartButton>
+                    <AddToCartButton onClick={() => addToCart.action(variant.id)}>{addToCart.text}</AddToCartButton>
                 )}
             </ContentWrapper>
         </TileContainer>
@@ -178,7 +152,6 @@ const ProductImageWrapper = styled.div<{ src?: string }>`
         transform: scale(1.05);
     }
 
-
     min-height: 280px; /* adjust this value to suit your design */
 
     @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
@@ -196,7 +169,7 @@ const ProductImageWrapper = styled.div<{ src?: string }>`
     @media (min-width: ${({ theme }) => theme.breakpoints['3xl']}) {
         min-height: 240px;
     }
-    
+
     @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
         //height: 300px;
         //padding: 8px;
@@ -215,13 +188,11 @@ const TitleContainer = styled.div`
 
     @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
         min-height: 70px;
-
     }
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 `;
-
 
 const FacetsContainer = styled.div`
     /* Reserve space for facets and ratings */
@@ -289,14 +260,14 @@ const AddToCartButton = styled(Button)`
 `;
 
 const ImageContainer = styled(Stack)`
-  position: relative;
-  /* Additional styling if needed */
+    position: relative;
+    /* Additional styling if needed */
 `;
 
 const LinkContainer = styled(Link)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  max-height: 370px; /* Ensures height matches the image wrapper */
-  width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 370px; /* Ensures height matches the image wrapper */
+    width: 100%;
 `;

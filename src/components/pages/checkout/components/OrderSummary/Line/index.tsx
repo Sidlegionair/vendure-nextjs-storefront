@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import { TP, TypoGraphy } from '@/src/components/atoms/TypoGraphy';
+import { TP } from '@/src/components/atoms/TypoGraphy';
 import { ProductImage } from '@/src/components/atoms/ProductImage';
 import { ActiveOrderType, OrderType } from '@/src/graphql/selectors';
 import { Trash2 } from 'lucide-react';
@@ -17,25 +17,37 @@ import { ServiceLocationType } from '@/src/graphql/selectors';
 import { useChannels } from '@/src/state/channels';
 import { DEFAULT_CHANNEL, DEFAULT_LOCALE } from '@/src/lib/consts';
 
+// Define a type for channel data
+interface Channel {
+    slug: string;
+    seller?: {
+        name: string;
+    };
+}
+
 interface LineProps {
     line: ActiveOrderType['lines'][number] | OrderType['lines'][number];
     isForm?: boolean;
     currencyCode?: CurrencyCode;
 }
 
-export const Line: React.FC<LineProps> = ({
-                                              isForm,
-                                              line,
-                                              currencyCode = CurrencyCode.USD,
-                                          }) => {
-    const { id, productVariant, quantity, featuredAsset, unitPriceWithTax, linePriceWithTax, discountedLinePriceWithTax } = line;
+export const Line: React.FC<LineProps> = ({ isForm, line, currencyCode = CurrencyCode.USD }) => {
+    const {
+        id,
+        productVariant,
+        quantity,
+        featuredAsset,
+        unitPriceWithTax,
+        linePriceWithTax,
+        discountedLinePriceWithTax,
+    } = line;
     // Instead of destructuring customFields here, we access it later
     const customFields = (line as { customFields?: { requestedSellerChannel?: string; brand?: string } }).customFields;
     const { t } = useTranslation('checkout');
     const { removeFromCheckout, changeQuantity } = useCheckout();
 
     // Fetch channels as in CartBody
-    const [channels, setChannels] = useState<any[]>([]);
+    const [channels, setChannels] = useState<Channel[]>([]);
     const [serviceLocation, setServiceLocation] = useState<ServiceLocationType | null>(null);
     const [loadingServiceLocation, setLoadingServiceLocation] = useState(false);
 
@@ -53,7 +65,8 @@ export const Line: React.FC<LineProps> = ({
     // Fetch service location data
     useEffect(() => {
         async function loadServiceLocation() {
-            if (productVariant?.id) {
+            // Check if productVariant has an id property using 'in' operator
+            if (productVariant && 'id' in productVariant && productVariant.id) {
                 setLoadingServiceLocation(true);
                 try {
                     // Use the channel and locale from context with fallbacks to defaults
@@ -62,7 +75,7 @@ export const Line: React.FC<LineProps> = ({
 
                     const serviceLocationData = await getServiceLocationForProduct(
                         { locale, channel },
-                        productVariant.id
+                        productVariant.id,
                     );
                     setServiceLocation(serviceLocationData);
                 } catch (error) {
@@ -73,18 +86,14 @@ export const Line: React.FC<LineProps> = ({
             }
         }
         loadServiceLocation();
-    }, [productVariant?.id]);
+    }, [productVariant]);
 
     // Determine the seller name using the requestedSellerChannel from customFields
     const requestedSellerChannel = customFields?.requestedSellerChannel;
-    const sellerName =
-        channels.find(ch => ch.slug === requestedSellerChannel)?.seller?.name ||
-        'Unknown Seller';
+    const sellerName = channels.find(ch => ch.slug === requestedSellerChannel)?.seller?.name || 'Unknown Seller';
 
-    const brandFields = productVariant.product.customFields as { brand?: string };
     const isPriceDiscounted = linePriceWithTax !== discountedLinePriceWithTax;
-    const optionInName =
-        productVariant.name.replace(productVariant.product.name, '') !== '';
+    const optionInName = productVariant.name.replace(productVariant.product.name, '') !== '';
 
     return (
         <CartRow w100 justifyBetween>
@@ -118,10 +127,7 @@ export const Line: React.FC<LineProps> = ({
                     </Stack>
                     {isForm && (
                         <Stack column gap="18px">
-                            <QuantityCounter
-                                v={quantity}
-                                onChange={(v: number) => changeQuantity(id, v)}
-                            />
+                            <QuantityCounter v={quantity} onChange={(v: number) => changeQuantity(id, v)} />
                             <Stack>
                                 <Remove onClick={() => removeFromCheckout(id)}>
                                     <Trash2 size="16px" />
@@ -140,33 +146,29 @@ export const Line: React.FC<LineProps> = ({
                     weight={500}
                     currencyCode={currencyCode}
                     price={unitPriceWithTax}
-                    discountPrice={
-                        isPriceDiscounted ? discountedLinePriceWithTax / quantity : undefined
-                    }
+                    discountPrice={isPriceDiscounted ? discountedLinePriceWithTax / quantity : undefined}
                     quantity={quantity}
                 />
                 <Stack column gap="5px">
                     {/* Display the seller's name with same styling and position as in CartBody */}
                     <StyledTP size="16px" weight={500}>
                         Sold by{' '}
-                        <StyledLink
-                            skipChannelHandling
-                            href={`/content/partners/${requestedSellerChannel}`}
-                        >
+                        <StyledLink skipChannelHandling href={`/content/partners/${requestedSellerChannel}`}>
                             {sellerName}
                         </StyledLink>
                     </StyledTP>
 
                     {/* Display service location information if available */}
                     {loadingServiceLocation ? (
-                        <StyledTP size="16px" weight={500}>Loading service information...</StyledTP>
-                    ) : serviceLocation?.serviceDealer ? (
+                        <StyledTP size="16px" weight={500}>
+                            Loading service information...
+                        </StyledTP>
+                    ) : serviceLocation && serviceLocation.serviceDealer ? (
                         <StyledTP size="16px" weight={500}>
                             Service by{' '}
                             <StyledLink
                                 skipChannelHandling
-                                href={`/content/partners/${serviceLocation.serviceDealer.slug}`}
-                            >
+                                href={`/content/partners/${serviceLocation.serviceDealer.slug}`}>
                                 {serviceLocation.serviceDealer.name}
                             </StyledLink>
                         </StyledTP>

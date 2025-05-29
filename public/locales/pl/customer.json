@@ -84,7 +84,7 @@
         "totalPrice": "Cena całkowita",
         "loadMore": "Załaduj więcej",
         "viewOrder": "Zobacz zamówienie",
-        "orderStatus":"Status zamówienia"
+        "orderStatus": "Status zamówienia"
     },
     "addressForm": {
         "title": "Moje adresy",

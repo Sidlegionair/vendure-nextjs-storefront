@@ -70,7 +70,6 @@ const InputWrapper = styled(Stack)`
     background: #ffffff;
     border-radius: 8px;
     opacity: 0.8;
-
 `;
 
 const EyeWrapper = styled(Stack)<{ active: boolean }>`
@@ -95,11 +94,11 @@ export const StyledInput = styled.input<{ error?: boolean }>`
     margin-top: 0.6rem;
     //padding: 15px 0px;
     color: ${p => p.theme.text.main};
-    border-bottom: 1px solid #BBBBBB;
+    border-bottom: 1px solid #bbbbbb;
     font-size: ${p => p.theme.typography.fontSize.h6};
 
     :focus {
-        border-bottom: 1px solid #BBBBBB;
+        border-bottom: 1px solid #bbbbbb;
     }
 
     ::placeholder {

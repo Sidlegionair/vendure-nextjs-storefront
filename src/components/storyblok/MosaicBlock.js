@@ -13,21 +13,21 @@ const MosaicBlock = ({ blok }) => {
         },
     });
 
-    const getButtonLink = (link) => {
+    const getButtonLink = link => {
         if (!link) return '#'; // Default fallback
         if (link.linktype === 'url') return link.url; // External URL
         if (link.linktype === 'story') return `/${link.cached_url || ''}`; // Internal Storyblok story
         return '#'; // Fallback for unknown types
     };
 
-    console.log('LINK:', );
+    console.log('LINK:');
 
     return (
         <section className="mosaic" {...storyblokEditable(blok)}>
             <div className="mosaic__text" style={{ backgroundColor: blok.backgroundColor || '#355047' }}>
                 <h1 className="mosaic__title">{blok.title || 'Our Story'}</h1>
                 <div className="mosaic__description" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
-                {blok.buttonLink && blok.buttonLink.url !== "" && (
+                {blok.buttonLink && blok.buttonLink.url !== '' && (
                     <a
                         className="mosaic__button"
                         href={getButtonLink(blok.buttonLink)}
@@ -37,8 +37,7 @@ const MosaicBlock = ({ blok }) => {
                             backgroundColor: '#FFFFFF',
                         }}
                         target={blok.buttonLink.target || '_self'}
-                        rel={blok.buttonLink.target === '_blank' ? 'noopener noreferrer' : undefined}
-                    >
+                        rel={blok.buttonLink.target === '_blank' ? 'noopener noreferrer' : undefined}>
                         {blok.buttonText || 'Read More'} →
                     </a>
                 )}
@@ -53,9 +52,8 @@ const MosaicBlock = ({ blok }) => {
                                 <div
                                     key={index}
                                     className={`mosaic__gallery-item item-${index + 1}`}
-                                    style={{ backgroundImage: `url(${img.filename})` }}
-                                ></div>
-                            ) : null
+                                    style={{ backgroundImage: `url(${img.filename})` }}></div>
+                            ) : null,
                         )}
                 </div>
             </div>

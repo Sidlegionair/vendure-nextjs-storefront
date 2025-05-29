@@ -10,7 +10,8 @@ import { ContentContainer } from '@/src/components/atoms';
 
 export const CheckoutPage: React.FC<InferGetServerSidePropsType<typeof getServerSideProps>> = props => {
     const { t } = useTranslation('checkout');
-    const { availableCountries, alsoBoughtProducts, eligibleShippingMethods, eligiblePaymentMethods, activeCustomer } = props;
+    const { availableCountries, alsoBoughtProducts, eligibleShippingMethods, eligiblePaymentMethods, activeCustomer } =
+        props;
 
     return (
         <CheckoutLayoutStyled pageTitle={`${t('seoTitles.checkout')}`}>
@@ -47,7 +48,6 @@ const CheckoutLayoutStyled = styled(CheckoutLayout)`
     }
 `;
 
-
 const Content = styled(ContentContainer)`
     position: relative;
     width: 1600px;
@@ -57,7 +57,7 @@ const Content = styled(ContentContainer)`
         width: 1440px;
     }
 
-    @media(min-width: 1560px) {
+    @media (min-width: 1560px) {
         max-width: 1528px;
     }
 `;

@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import styled from '@emotion/styled';
-import { Divider, Stack, TP } from '@/src/components/atoms';
+import { Divider, Stack } from '@/src/components/atoms';
 import DOMPurify from 'dompurify';
 
 export const ProductOptionTabs: React.FC<{
     data: { title: string; children: React.ReactNode | string }[];
     defaultOpenIndex?: number;
 }> = ({ data, defaultOpenIndex = 0 }) => {
-    const [activeTab, setActiveTab] = useState<number>(
-        data.length > 0 ? defaultOpenIndex : -1
-    );
+    const [activeTab, setActiveTab] = useState<number>(data.length > 0 ? defaultOpenIndex : -1);
 
     if (!data || data.length === 0) {
         return <EmptyMessage>No tabs available for this product.</EmptyMessage>;
@@ -26,26 +24,19 @@ export const ProductOptionTabs: React.FC<{
                         role="tab"
                         aria-selected={activeTab === index}
                         aria-controls={`tab-content-${index}`}
-                        id={`tab-header-${index}`}
-                    >
+                        id={`tab-header-${index}`}>
                         {entry.title}
                     </TabHeader>
                 ))}
             </TabHeaders>
             <Divider />
-            <Content
-                id={`tab-content-${activeTab}`}
-                role="tabpanel"
-                aria-labelledby={`tab-header-${activeTab}`}
-            >
+            <Content id={`tab-content-${activeTab}`} role="tabpanel" aria-labelledby={`tab-header-${activeTab}`}>
                 {activeTab !== -1 &&
                     (data[activeTab]?.children ? (
                         typeof data[activeTab]?.children === 'string' ? (
                             <div
                                 dangerouslySetInnerHTML={{
-                                    __html: DOMPurify.sanitize(
-                                        data[activeTab]?.children as string
-                                    ),
+                                    __html: DOMPurify.sanitize(data[activeTab]?.children as string),
                                 }}
                             />
                         ) : (
@@ -81,11 +72,7 @@ const TabHeader = styled.button<{ active: boolean }>`
     border: none;
     cursor: pointer;
     position: relative;
-    color: ${({ theme, active }) =>
-            active ? '400' : 'bold'};
-
-    color: ${({ theme, active }) =>
-            active ? theme.text.main : theme.text.subtitle};
+    color: ${({ theme, active }) => (active ? theme.text.main : theme.text.subtitle)};
     transition: color 0.3s ease-in-out;
 
     &:after {
@@ -95,8 +82,7 @@ const TabHeader = styled.button<{ active: boolean }>`
         left: 0;
         right: 0;
         height: 5px;
-        background-color: ${({ theme, active }) =>
-                active ? theme.button.front : 'transparent'};
+        background-color: ${({ theme, active }) => (active ? theme.button.front : 'transparent')};
         transition: background-color 0.3s ease-in-out;
     }
 `;
@@ -116,4 +102,3 @@ const EmptyMessage = styled.div`
     border: 1px solid ${({ theme }) => theme.border.main};
     border-radius: 10px;
 `;
-

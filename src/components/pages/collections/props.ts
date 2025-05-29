@@ -4,7 +4,6 @@ import { getCollections } from '@/src/graphql/sharedQueries';
 import { getNavigationTree } from '@/src/lib/menuConfig';
 import { ContextModel, makeStaticProps } from '@/src/lib/getStatic';
 import { PER_PAGE, reduceFacets } from '@/src/state/collection/utils';
-import { arrayToTree } from '@/src/util/arrayToTree';
 import { SortOrder } from '@/src/zeus';
 
 export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>) => {
@@ -17,10 +16,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
 
     const r = await makeStaticProps(['common', 'collections'])(_context);
     const collections = await getCollections(r.context);
-    const { navigation, subnavigation } = await getNavigationTree(
-        r.context,
-        collections
-    );
+    const { navigation, subnavigation } = await getNavigationTree(r.context, collections);
 
     const api = SSGQuery(r.context);
 
@@ -45,9 +41,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
     });
 
     // Fetch brands
-    const productIds = productsQuery.search.items
-        .map(product => product.productId)
-        .filter(id => !!id); // Ensure only valid IDs are used.
+    const productIds = productsQuery.search.items.map(product => product.productId).filter(id => !!id); // Ensure only valid IDs are used.
 
     if (productIds.length === 0) {
         console.error('No valid product IDs found for brand query.');
@@ -69,7 +63,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
                 console.error(`Failed to fetch brand for product ID: ${id}`, error);
                 return { id, brand: null }; // Fallback to null on failure
             }
-        })
+        }),
     );
 
     // Map brands to snowboards
@@ -82,7 +76,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
         return {
             ...product,
             customFields: {
-                brand: matchingBrandData?.brand || null
+                brand: matchingBrandData?.brand || null,
             }, // Map the brand or fallback to null
         };
     });
@@ -102,12 +96,11 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
         totalProducts: productsQuery.search?.totalItems,
         collection,
         navigation,
-        subnavigation
+        subnavigation,
     };
 
     return {
         props: returnedStuff,
         revalidate: process.env.NEXT_REVALIDATE ? parseInt(process.env.NEXT_REVALIDATE) : 10,
     };
-
 };

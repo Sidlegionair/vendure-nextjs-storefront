@@ -1,9 +1,9 @@
 import React from 'react';
-import { storyblokEditable, renderRichText } from '@storyblok/react';
+import { renderRichText } from '@storyblok/react';
 import sanitizeHtml from 'sanitize-html';
 
 const AboutUsBlock = ({ blok }) => {
-    const getButtonLink = (link) => {
+    const getButtonLink = link => {
         if (!link || !link.linktype) return null;
         if (link.linktype === 'url') return link.url;
         if (link.linktype === 'story') return `/${link.cached_url || ''}`;
@@ -17,12 +17,7 @@ const AboutUsBlock = ({ blok }) => {
             <div className="about-us-container" style={{ backgroundColor: blok.backgroundColor || '#9E2E3A' }}>
                 {/* Image Section */}
                 <div className="about-us-image">
-                    {blok.image && (
-                        <img
-                            src={blok.image.filename + '/m/'}
-                            alt={blok.image.alt || 'About Us Image'}
-                        />
-                    )}
+                    {blok.image && <img src={blok.image.filename + '/m/'} alt={blok.image.alt || 'About Us Image'} />}
                 </div>
 
                 {/* Text Content */}
@@ -41,13 +36,12 @@ const AboutUsBlock = ({ blok }) => {
                             }),
                         }}
                     />
-                    {blok.buttonLink && blok.buttonLink.url !== "" && blok.buttonText && (
+                    {blok.buttonLink && blok.buttonLink.url !== '' && blok.buttonText && (
                         <a
                             className="learn-more-button"
                             href={buttonLink}
                             target={blok.buttonLink.target || '_self'}
-                            rel={blok.buttonLink.target === '_blank' ? 'noopener noreferrer' : undefined}
-                        >
+                            rel={blok.buttonLink.target === '_blank' ? 'noopener noreferrer' : undefined}>
                             {blok.buttonText} →
                         </a>
                     )}
@@ -92,7 +86,7 @@ const AboutUsBlock = ({ blok }) => {
                     width: 50vw;
                     padding: 82px 192px 82px 82px;
                     margin-left: auto;
-                    color: #FFFFFF;
+                    color: #ffffff;
                 }
 
                 .about-us-text h2 {
@@ -111,8 +105,8 @@ const AboutUsBlock = ({ blok }) => {
                     font-weight: bold;
                     display: inline-block;
                     padding: 18px 30px;
-                    background-color: #FFFFFF;
-                    color: #9E2E3A;
+                    background-color: #ffffff;
+                    color: #9e2e3a;
                     border-radius: 8px;
                     text-decoration: none;
                     margin-top: 1rem;
@@ -152,7 +146,7 @@ const AboutUsBlock = ({ blok }) => {
                         gap: 20px;
                         text-align: left;
                     }
-                    
+
                     .rich-text-content p {
                         font-family: 'Calibri', sans-serif;
                         font-weight: 400;
@@ -162,7 +156,7 @@ const AboutUsBlock = ({ blok }) => {
 
                     .learn-more-button {
                         font-size: ${p => p.typography.fontSize.h6};
-                        line-height:${p => p.typography.fontSize.h6};
+                        line-height: ${p => p.typography.fontSize.h6};
                     }
                 }
             `}</style>

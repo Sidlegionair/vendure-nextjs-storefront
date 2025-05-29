@@ -14,8 +14,7 @@ export const LogoAexol: React.FC<SvgProps> = ({ width, height }) => {
             viewBox="0 0 660.42 112"
             fill="none"
             preserveAspectRatio="xMidYMid meet"
-            xmlns="http://www.w3.org/2000/svg"
-        >
+            xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <style>
                     {`

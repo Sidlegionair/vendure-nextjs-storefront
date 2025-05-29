@@ -11,11 +11,11 @@ interface QuantityCounterProps {
 }
 
 export const QuantityCounter = ({
-                                    onChange,
-                                    v,
-                                    size = '16px', // Default icon and font size
-                                    height = '35px', // Default overall height
-                                }: QuantityCounterProps) => {
+    onChange,
+    v,
+    size = '16px', // Default icon and font size
+    height = '35px', // Default overall height
+}: QuantityCounterProps) => {
     return (
         <Main>
             <IconButtonStatic height={height} onClick={() => onChange(v - 1)}>
@@ -35,7 +35,7 @@ export const QuantityCounter = ({
 
 const MinWidth = styled.div`
     display: flex;
-    
+
     align-items: center;
     justify-content: center;
 `;
@@ -52,7 +52,6 @@ const IconButtonStatic = styled(IconButton)<{ height?: string }>`
     justify-content: center;
     padding: 0; // Remove default padding for better customization
 `;
-
 
 const Main = styled(Stack)<{ height?: string }>`
     width: fit-content;

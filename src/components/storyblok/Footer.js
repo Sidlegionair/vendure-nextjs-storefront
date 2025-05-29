@@ -2,7 +2,7 @@ import React from 'react';
 import { storyblokEditable } from '@storyblok/react';
 import RichTextEditor from '@/src/components/storyblok/RichTextEditor';
 
-const getButtonLink = (link) => {
+const getButtonLink = link => {
     if (!link) return '#'; // Default fallback
 
     if (link.linktype === 'url') {
@@ -26,7 +26,6 @@ const Footer = ({ blok }) => {
         name,
         description,
         columns = [],
-        newsletter_placeholder,
         social_links = [],
         form_id, // New field from Storyblok to set the form id
     } = blok;
@@ -40,17 +39,11 @@ const Footer = ({ blok }) => {
                 <div className="brand-section">
                     {logo?.filename && (
                         <div className="logo">
-                            <img
-                                src={logo.filename}
-                                alt={name || 'Logo'}
-                                className="logo-image"
-                            />
+                            <img src={logo.filename} alt={name || 'Logo'} className="logo-image" />
                         </div>
                     )}
 
-                    {description && (
-                        <RichTextEditor blok={{ content: description, textColor: '#fff' }} />
-                    )}
+                    {description && <RichTextEditor blok={{ content: description, textColor: '#fff' }} />}
                 </div>
 
                 {/* Links Section */}
@@ -65,8 +58,7 @@ const Footer = ({ blok }) => {
                                             href={getButtonLink(link.url)}
                                             className="link"
                                             target={link.url?.target || '_self'}
-                                            rel={link.url?.target === '_blank' ? 'noopener noreferrer' : undefined}
-                                        >
+                                            rel={link.url?.target === '_blank' ? 'noopener noreferrer' : undefined}>
                                             {link.text}
                                         </a>
                                     </li>
@@ -79,7 +71,7 @@ const Footer = ({ blok }) => {
                 {/* Newsletter and Social Links Section */}
                 <div className="newsletter-section">
                     <div className="email-wrapper">
-                        <div id={form_id || "klaviyo-form-VUnBaH"}></div>
+                        <div id={form_id || 'klaviyo-form-VUnBaH'}></div>
                     </div>
                     <div className="social-icons">
                         {social_links.map((social, index) => (
@@ -88,8 +80,7 @@ const Footer = ({ blok }) => {
                                 href={getButtonLink(social.url)}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="social-icon"
-                            >
+                                className="social-icon">
                                 {social.icon?.filename && (
                                     <img
                                         src={social.icon.filename}
@@ -113,20 +104,20 @@ const Footer = ({ blok }) => {
                     overflow: hidden; /* Ensures no overflow */
                     margin-top: 100px;
                     * {
-                        font-family: 'Suisse BP Int\'l' !important;
+                        font-family: "Suisse BP Int'l" !important;
                     }
 
                     .brand-section {
                         p {
-                            font-family: 'Suisse BP Int\'l' !important;
+                            font-family: "Suisse BP Int'l" !important;
                         }
 
                         span {
-                            font-family: 'Suisse BP Int\'l' !important;
+                            font-family: "Suisse BP Int'l" !important;
                         }
 
                         * {
-                            font-family: 'Suisse BP Int\'l' !important;
+                            font-family: "Suisse BP Int'l" !important;
                         }
                     }
                 }
@@ -281,7 +272,7 @@ const Footer = ({ blok }) => {
                     font-weight: 400;
                     font-size: 16px;
                     line-height: 24px;
-                    color: #4D4D4D;
+                    color: #4d4d4d;
                 }
 
                 .social-icons {

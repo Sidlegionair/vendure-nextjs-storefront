@@ -1,5 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export default class MyDocument extends Document {
     render(): JSX.Element {
@@ -14,20 +14,16 @@ export default class MyDocument extends Document {
                     <link rel="preconnect" href="https://fonts.cdnfonts.com" crossOrigin="anonymous" />
 
                     {/* Load Calibri font with optimization */}
-                    <link
-                        href="https://fonts.cdnfonts.com/css/calibri"
-                        rel="stylesheet"
-                        media="print"
-                    />
+                    <link href="https://fonts.cdnfonts.com/css/calibri" rel="stylesheet" media="print" />
 
                     <noscript>
                         <link href="https://fonts.cdnfonts.com/css/calibri" rel="stylesheet" />
                     </noscript>
                 </Head>
                 <body>
-                <Main />
-                <NextScript />
-                <SpeedInsights />
+                    <Main />
+                    <NextScript />
+                    <SpeedInsights />
                 </body>
             </Html>
         );

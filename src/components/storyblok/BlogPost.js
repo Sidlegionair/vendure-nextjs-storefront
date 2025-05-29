@@ -1,7 +1,7 @@
-import { storyblokEditable, StoryblokComponent } from "@storyblok/react";
+import { storyblokEditable, StoryblokComponent } from '@storyblok/react';
 
 const BlogPost = ({ blok, articles }) => {
-    console.log("Received blok in BlogPost:", blok);
+    console.log('Received blok in BlogPost:', blok);
     console.log(articles);
 
     if (!blok) {
@@ -29,12 +29,12 @@ const BlogPost = ({ blok, articles }) => {
                         {
                             component: 'rich-text-editor',
                             content: blok.content || [], // Pass rich text content here
-                            articles: articles
+                            articles: articles,
                         },
                         {
                             component: 'related-articles',
-                            articles: articles
-                        }
+                            articles: articles,
+                        },
                         // Other nested blocks can go here as needed
                     ],
                 }}
@@ -46,8 +46,6 @@ const BlogPost = ({ blok, articles }) => {
                 }
             `}</style>
         </div>
-
-
     );
 };
 

@@ -16,12 +16,12 @@ export const ProductSpecsTable: React.FC<ProductSpecsTableProps> = ({ specs }) =
     return (
         <Table>
             <tbody>
-            {specs.map((spec, index) => (
-                <Row key={index}>
-                    <CellLabel>{spec.label}</CellLabel>
-                    <CellValue>{spec.value}</CellValue>
-                </Row>
-            ))}
+                {specs.map((spec, index) => (
+                    <Row key={index}>
+                        <CellLabel>{spec.label}</CellLabel>
+                        <CellValue>{spec.value}</CellValue>
+                    </Row>
+                ))}
             </tbody>
         </Table>
     );
@@ -29,23 +29,23 @@ export const ProductSpecsTable: React.FC<ProductSpecsTableProps> = ({ specs }) =
 
 // Styled Components
 const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1.5rem;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
 `;
 
 const Row = styled.tr`
-  border-bottom: 1px solid ${({ theme }) => theme.gray(200)};
+    border-bottom: 1px solid ${({ theme }) => theme.gray(200)};
 `;
 
 const CellLabel = styled.td`
-  padding: 0.75rem;
-  font-weight: 600;
-  width: 30%;
-  vertical-align: top;
+    padding: 0.75rem;
+    font-weight: 600;
+    width: 30%;
+    vertical-align: top;
 `;
 
 const CellValue = styled.td`
-  padding: 0.75rem;
-  color: ${({ theme }) => theme.text.main};
+    padding: 0.75rem;
+    color: ${({ theme }) => theme.text.main};
 `;

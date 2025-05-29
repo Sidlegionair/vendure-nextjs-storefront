@@ -1,18 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import {
-    TH1,
-    TP,
-    ContentContainer,
-    Stack,
-    Price,
-    Link,
-    Divider,
-    TH2
-} from '@/src/components/atoms';
+import { TP, ContentContainer, Stack, Price, Link, Divider, TH2 } from '@/src/components/atoms';
 import { FullWidthButton } from '@/src/components/molecules/Button';
 import { NotifyMeForm } from '@/src/components/molecules/NotifyMeForm';
-import { ProductPageProductsSlider } from '@/src/components/organisms/ProductPageProductsSlider';
 import { Layout } from '@/src/layouts';
 import styled from '@emotion/styled';
 import { ArrowRightIcon, ShoppingBasket } from 'lucide-react';
@@ -30,7 +20,6 @@ import { OptionTabContent } from '@/src/components/organisms/OptionTabContent';
 import { ProductOptionTabs } from '@/src/components/molecules/ProductOptionTabs';
 import { ProductStory } from '@/src/components/organisms/ProductStory';
 import { Ratings } from '@/src/components/molecules/Ratings';
-import { ProductSpecsTable } from '@/src/components/molecules/ProductSpecsTable';
 import { storefrontApiQuery } from '@/src/graphql/client';
 import { useChannels } from '@/src/state/channels';
 import { ProductSizingTable } from '@/src/components/molecules/ProductSizingTable';
@@ -50,13 +39,19 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
         addingError,
         productOptionsGroups,
         handleOptionClick,
-        handleBuyNow,
+        // handleBuyNow is defined but not used in this component
         handleAddToCart,
-        handleSetItemQuantityInCart
+        handleSetItemQuantityInCart,
     } = useProduct();
 
     // Load channels using fetchChannels (like in CartBody)
-    const [channels, setChannels] = useState<any[]>([]);
+    interface Channel {
+        slug: string;
+        seller?: {
+            name: string;
+        };
+    }
+    const [channels, setChannels] = useState<Channel[]>([]);
     useEffect(() => {
         async function loadChannels() {
             const channelsData = await fetchChannels();
@@ -76,21 +71,17 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                     ],
                 });
 
-
                 console.log('SELECTED CHANNEL', selectVendorForVariation);
                 console.log('CUR CHANNEL', ctx.channel);
                 // if the API suggests a different channel
-                if (
-                    selectVendorForVariation?.slug &&
-                    selectVendorForVariation.slug !== ctx.channel
-                ) {
+                if (selectVendorForVariation?.slug && selectVendorForVariation.slug !== ctx.channel) {
                     // 1️⃣ update your channel context
                     ctx.setChannel(selectVendorForVariation.slug);
 
                     // 2️⃣ rebuild the path using Next’s locale
                     const variantQuery = variant.id ? `?variant=${variant.id}` : '';
                     router.replace(
-                        `/${selectVendorForVariation.slug}/${ctx.locale}/snowboards/${product?.slug}${variantQuery}`
+                        `/${selectVendorForVariation.slug}/${ctx.locale}/snowboards/${product?.slug}${variantQuery}`,
                     );
                 }
             } catch (error) {
@@ -105,8 +96,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
             <Layout
                 categories={props.collections ?? []}
                 navigation={props.navigation ?? []}
-                subnavigation={props.subnavigation ?? []}
-            >
+                subnavigation={props.subnavigation ?? []}>
                 <ContentContainer>
                     <Wrapper column>
                         <Stack w100 column gap={20}>
@@ -123,7 +113,9 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
         { name: props.product.name, href: `/snowboards/${props.product.slug}` },
     ];
 
-    const [recentlyProducts, setRecentlyProducts] = useState<ProductVariantTileType[]>([]);
+    // This state and effect are for tracking recently viewed products
+    // Currently not used in the UI but kept for future implementation
+    const [, setRecentlyProducts] = useState<ProductVariantTileType[]>([]);
     useEffect(() => {
         if (typeof window === 'undefined') return;
         const fetchData = async () => {
@@ -142,8 +134,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                         },
                     ],
                 });
-                if (collection?.productVariants?.items.length)
-                    setRecentlyProducts(collection.productVariants.items);
+                if (collection?.productVariants?.items.length) setRecentlyProducts(collection.productVariants.items);
             } catch (error) {
                 console.log(error);
             }
@@ -151,7 +142,7 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
         fetchData();
     }, [product.id, ctx]);
 
-    const specs = props.specs;
+    // Product specifications - not currently used but kept for future implementation
     const rating = Math.random() * 5;
 
     return (
@@ -167,15 +158,15 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                 featuredAsset={
                                     variant?.assets?.length
                                         ? {
-                                            source: variant?.assets[0].source,
-                                            preview: variant?.assets[0].preview,
-                                        }
+                                              source: variant?.assets[0].source,
+                                              preview: variant?.assets[0].preview,
+                                          }
                                         : product.featuredAsset
-                                            ? {
+                                          ? {
                                                 source: product.featuredAsset.source,
                                                 preview: product.featuredAsset.preview,
                                             }
-                                            : undefined
+                                          : undefined
                                 }
                                 images={[
                                     ...(variant?.assets?.map(a => ({
@@ -204,42 +195,36 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                 {variant && <Price price={variant.priceWithTax} currencyCode={variant.currencyCode} />}
                             </ProductInfoStack>
                             <Stack w100 gap="10px" column>
-                                {variant &&
-                                    Number(variant?.stockLevel) > 0 &&
-                                    Number(variant?.stockLevel) <= 10 && (
-                                        <MakeItQuick size="1rem" weight={500}>
-                                            <Trans
-                                                i18nKey="stock-levels.low-stock"
-                                                t={t}
-                                                values={{ value: variant?.stockLevel }}
-                                                components={{ 1: <span></span> }}
-                                            />
-                                        </MakeItQuick>
-                                    )}
+                                {variant && Number(variant?.stockLevel) > 0 && Number(variant?.stockLevel) <= 10 && (
+                                    <MakeItQuick size="1rem" weight={500}>
+                                        <Trans
+                                            i18nKey="stock-levels.low-stock"
+                                            t={t}
+                                            values={{ value: variant?.stockLevel }}
+                                            components={{ 1: <span></span> }}
+                                        />
+                                    </MakeItQuick>
+                                )}
                                 <StockInfo
                                     comingSoon={!variant}
                                     outOfStock={Number(variant?.stockLevel) <= 0}
                                     itemsCenter
-                                    gap="0.25rem"
-                                >
+                                    gap="0.25rem">
                                     <StockDisplay>
                                         <TP>
-                                            {!variant
-                                                ? null
-                                                : Number(variant?.stockLevel) > 0
-                                                    ? (
-                                                        <span>
-                                                        <b>{variant?.stockLevel}</b>{' '}
-                                                            {t('stock-levels.left-in-stock')}
-                                                    </span>
-                                                    )
-                                                    : t('stock-levels.out-of-stock')}
+                                            {!variant ? null : Number(variant?.stockLevel) > 0 ? (
+                                                <span>
+                                                    <b>{variant?.stockLevel}</b> {t('stock-levels.left-in-stock')}
+                                                </span>
+                                            ) : (
+                                                t('stock-levels.out-of-stock')
+                                            )}
                                         </TP>
                                     </StockDisplay>
                                 </StockInfo>
                                 {(() => {
                                     const shortDescription = String(
-                                        variant?.customFields?.shortdescription || product.description || ''
+                                        variant?.customFields?.shortdescription || product.description || '',
                                     );
                                     return shortDescription ? (
                                         <StyledDescription
@@ -266,18 +251,32 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                                         },
                                         ...(variant?.customFields
                                             ? Array.from({ length: 4 }, (_, i) => i + 1)
-                                                .filter(tabIndex => (variant?.customFields as Record<string, any>)[`optionTab${tabIndex}Visible`])
-                                                .map(tabIndex => ({
-                                                    title:
-                                                        (variant?.customFields as Record<string, any>)[`optionTab${tabIndex}Label`] ||
-                                                        `Option Tab ${tabIndex}`,
-                                                    children: (
-                                                        <OptionTabContent
-                                                            customFields={variant?.customFields}
-                                                            tabIndex={tabIndex}
-                                                        />
-                                                    ),
-                                                }))
+                                                  .filter(tabIndex => {
+                                                      type CustomFields = {
+                                                          [key: `optionTab${number}Visible`]: boolean;
+                                                          [key: `optionTab${number}Label`]: string;
+                                                      };
+                                                      return (variant?.customFields as CustomFields)[
+                                                          `optionTab${tabIndex}Visible`
+                                                      ];
+                                                  })
+                                                  .map(tabIndex => {
+                                                      type CustomFields = {
+                                                          [key: `optionTab${number}Label`]: string;
+                                                      };
+                                                      return {
+                                                          title:
+                                                              (variant?.customFields as CustomFields)[
+                                                                  `optionTab${tabIndex}Label`
+                                                              ] || `Option Tab ${tabIndex}`,
+                                                          children: (
+                                                              <OptionTabContent
+                                                                  customFields={variant?.customFields}
+                                                                  tabIndex={tabIndex}
+                                                              />
+                                                          ),
+                                                      };
+                                                  })
                                             : []),
                                     ]}
                                 />
@@ -286,28 +285,23 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                             <StyledDividerTop />
                             <ShippingTable>
                                 <tbody>
-                                <tr>
-                                    <td>Standard shipping</td>
-                                    <td>Free</td>
-                                </tr>
-                                <tr>
-                                    <td>Delivery time</td>
-                                    <td>2-3 days</td>
-                                </tr>
-                                <tr>
-                                    <td>Sold &amp; shipped by:</td>
-                                    <td>
-                                        <StyledLink
-                                            skipChannelHandling
-                                            href={`/content/partners/${ctx?.channel}`}
-                                        >
-                                        {
-                                            channels.find(ch => ch.slug === ctx.channel)?.seller?.name ||
-                                            'Seller not found'
-                                        }
-                                        </StyledLink>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td>Standard shipping</td>
+                                        <td>Free</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Delivery time</td>
+                                        <td>2-3 days</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sold &amp; shipped by:</td>
+                                        <td>
+                                            <StyledLink skipChannelHandling href={`/content/partners/${ctx?.channel}`}>
+                                                {channels.find(ch => ch.slug === ctx.channel)?.seller?.name ||
+                                                    'Seller not found'}
+                                            </StyledLink>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </ShippingTable>
 
@@ -338,21 +332,36 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                             data={[
                                 ...(variant?.customFields
                                     ? Array.from({ length: 3 }, (_, i) => i + 1)
-                                        .filter(tabIndex => (variant?.customFields as Record<string, any>)[`descriptionTab${tabIndex}Visible`])
-                                        .map(tabIndex => ({
-                                            title:
-                                                (variant?.customFields as Record<string, any>)[`descriptionTab${tabIndex}Label`] ||
-                                                `Description Tab ${tabIndex}`,
-                                            children: (
-                                                <div
-                                                    dangerouslySetInnerHTML={{
-                                                        __html:
-                                                            (variant?.customFields as Record<string, any>)[`descriptionTab${tabIndex}Content`] ||
-                                                            'No content available',
-                                                    }}
-                                                />
-                                            ),
-                                        }))
+                                          .filter(tabIndex => {
+                                              type CustomFields = {
+                                                  [key: `descriptionTab${number}Visible`]: boolean;
+                                              };
+                                              return (variant?.customFields as CustomFields)[
+                                                  `descriptionTab${tabIndex}Visible`
+                                              ];
+                                          })
+                                          .map(tabIndex => {
+                                              type CustomFields = {
+                                                  [key: `descriptionTab${number}Label`]: string;
+                                                  [key: `descriptionTab${number}Content`]: string;
+                                              };
+                                              return {
+                                                  title:
+                                                      (variant?.customFields as CustomFields)[
+                                                          `descriptionTab${tabIndex}Label`
+                                                      ] || `Description Tab ${tabIndex}`,
+                                                  children: (
+                                                      <div
+                                                          dangerouslySetInnerHTML={{
+                                                              __html:
+                                                                  (variant?.customFields as CustomFields)[
+                                                                      `descriptionTab${tabIndex}Content`
+                                                                  ] || 'No content available',
+                                                          }}
+                                                      />
+                                                  ),
+                                              };
+                                          })
                                     : []),
                                 {
                                     title: 'Specifications',
@@ -373,12 +382,12 @@ export const ProductPage: React.FC<InferGetStaticPropsType<typeof getStaticProps
                 <Stack w100 column gap={20}>
                     <StyledBoughtHeading>{t('clients-also-bought')}</StyledBoughtHeading>
                     <StyledBoughtContent>
-                        Aenean faucibus egestas ipsum, nec consequat urna fermentum sit amet. Ut scelerisque elit in
-                        leo hendrerit, pretium ultricies nisi euismod.
+                        Aenean faucibus egestas ipsum, nec consequat urna fermentum sit amet. Ut scelerisque elit in leo
+                        hendrerit, pretium ultricies nisi euismod.
                     </StyledBoughtContent>
                 </Stack>
             </ContentContainer>
-            <HomePageSliders useVariants={true} sliders={props.clientsAlsoBought} seeAllText={'test'} />
+            <HomePageSliders useVariants={true} sliders={props.clientsAlsoBought} />
             <ProductStory slug={props.product.slug} />
         </Layout>
     );
@@ -412,9 +421,9 @@ const RatingStack = styled(Stack)`
 
 const ShippingTable = styled.table`
     font-family: "Suisse BP Int'l", sans-serif;
-  td {
-    padding: 0.5rem 1rem;
-  }
+    td {
+        padding: 0.5rem 1rem;
+    }
 `;
 
 const StyledLink = styled(Link)`
@@ -431,7 +440,6 @@ const StyledLink = styled(Link)`
     display: flex;
     align-items: start;
 `;
-
 
 const StyledBoughtHeading = styled(TH2)`
     margin-top: 60px;
@@ -556,7 +564,10 @@ const StyledFullWidthButton = styled(FullWidthButton)`
     text-transform: uppercase;
     padding: 1.5rem;
     justify-content: center;
-    transition: background 250ms ease-in-out, transform 200ms ease-in-out, box-shadow 250ms ease-in-out;
+    transition:
+        background 250ms ease-in-out,
+        transform 200ms ease-in-out,
+        box-shadow 250ms ease-in-out;
     svg {
         flex-shrink: 0;
     }

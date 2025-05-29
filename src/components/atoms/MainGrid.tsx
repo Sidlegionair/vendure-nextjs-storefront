@@ -8,7 +8,8 @@ export const MainGrid = styled.div`
     gap: 70px;
     row-gap: 70px;
 
-    @media (max-width: 768px) { /* Adjust for mobile */
+    @media (max-width: 768px) {
+        /* Adjust for mobile */
         gap: 50px;
         row-gap: 50px;
 

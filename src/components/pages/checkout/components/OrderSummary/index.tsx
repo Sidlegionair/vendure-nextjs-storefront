@@ -31,70 +31,57 @@ export const OrderSummary: React.FC<PropsWithChildren<OrderSummaryProps>> = ({ f
 
     return (
         <Stack column gap="2rem">
-            <TH2 weight={600}>
-                {t('orderSummary.title')}
-            </TH2>
+            <TH2 weight={600}>{t('orderSummary.title')}</TH2>
 
             <SummaryContainer isForm={!!shipping}>
-            <SummaryContent column gap="2.5rem">
-                <Stack column gap="2.5rem">
-                    <Stack column gap="1rem">
-                        {activeOrder.lines.map((line) => (
-                            <Line key={line.id} line={line} currencyCode={currencyCode} isForm={!!shipping} />
-                        ))}
+                <SummaryContent column gap="2.5rem">
+                    <Stack column gap="2.5rem">
+                        <Stack column gap="1rem">
+                            {activeOrder.lines.map(line => (
+                                <Line key={line.id} line={line} currencyCode={currencyCode} isForm={!!shipping} />
+                            ))}
+                        </Stack>
+
+                        <Stack column>
+                            <SummaryRow>
+                                <TP>{t('orderSummary.subtotal')}</TP>
+                                <TP>{priceFormatter(activeOrder.subTotalWithTax ?? 0, currencyCode)}</TP>
+                            </SummaryRow>
+
+                            <SummaryRow>
+                                <TP>{t('orderSummary.shipping')}</TP>
+                                <TP>{priceFormatter(activeOrder.shippingWithTax ?? 0, currencyCode)}</TP>
+                            </SummaryRow>
+
+                            {shipping && jsEnabled && (
+                                <Stack column gap="2.5rem">
+                                    <Discounts
+                                        discounts={activeOrder.discounts}
+                                        currencyCode={currencyCode}
+                                        removeCouponCode={removeCouponCode}
+                                    />
+                                    <DiscountFormWrapper>
+                                        <DiscountForm applyCouponCode={applyCouponCode} />
+                                    </DiscountFormWrapper>
+                                </Stack>
+                            )}
+
+                            {shipping}
+                            <Divider />
+
+                            <SummaryRow isTotal>
+                                <h4>{t('orderSummary.total')}</h4>
+                                <h4>{priceFormatter(activeOrder.totalWithTax ?? 0, currencyCode)}</h4>
+                            </SummaryRow>
+
+                            {footer}
+                        </Stack>
                     </Stack>
-
-                    <Stack column>
-                        <SummaryRow>
-                            <TP >
-                                {t('orderSummary.subtotal')}
-                            </TP>
-                            <TP>
-                                {priceFormatter(activeOrder.subTotalWithTax ?? 0, currencyCode)}
-                            </TP>
-                        </SummaryRow>
-
-                        <SummaryRow>
-                            <TP >
-                                {t('orderSummary.shipping')}
-                            </TP>
-                            <TP >
-                                {priceFormatter(activeOrder.shippingWithTax ?? 0, currencyCode)}
-                            </TP>
-                        </SummaryRow>
-
-                        {shipping && jsEnabled && (
-                            <Stack column gap="2.5rem">
-                                <Discounts
-                                    discounts={activeOrder.discounts}
-                                    currencyCode={currencyCode}
-                                    removeCouponCode={removeCouponCode}
-                                />
-                                <DiscountFormWrapper>
-                                    <DiscountForm applyCouponCode={applyCouponCode} />
-                                </DiscountFormWrapper>
-                            </Stack>
-                        )}
-
-                        {shipping}
-                        <Divider />
-
-                        <SummaryRow isTotal>
-                            <h4>
-                                {t('orderSummary.total')}
-                            </h4>
-                            <h4>
-                                {priceFormatter(activeOrder.totalWithTax ?? 0, currencyCode)}
-                            </h4>
-                        </SummaryRow>
-
-                        {footer}
-                    </Stack>
-                </Stack>
-            </SummaryContent>
-        </SummaryContainer>
+                </SummaryContent>
+            </SummaryContainer>
         </Stack>
-    );7
+    );
+    7;
 };
 
 // Styled Components
@@ -117,18 +104,18 @@ const SummaryContainer = styled(Stack)<{ isForm?: boolean }>`
 `;
 
 const SummaryContent = styled(Stack)`
-  width: 100%;
+    width: 100%;
 `;
 
 const SummaryRow = styled(Stack)<{ isTotal?: boolean }>`
-  justify-content: space-between;
-  align-items: center;
-  padding: ${({ isTotal }) => (isTotal ? '1rem 0' : '0.5rem 0')};
-  border-top: ${({ isTotal }) => (isTotal ? '2px solid ${({ theme }) => theme.border.lightgray}' : 'none')};
+    justify-content: space-between;
+    align-items: center;
+    padding: ${({ isTotal }) => (isTotal ? '1rem 0' : '0.5rem 0')};
+    border-top: ${({ isTotal }) => (isTotal ? '2px solid ${({ theme }) => theme.border.lightgray}' : 'none')};
 `;
 
 const DiscountFormWrapper = styled(Stack)`
-  width: 100%;
+    width: 100%;
 `;
 
 export default OrderSummary;

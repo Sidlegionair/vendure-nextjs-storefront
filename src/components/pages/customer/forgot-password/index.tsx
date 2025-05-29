@@ -12,11 +12,9 @@ import { storefrontApiMutation } from '@/src/graphql/client';
 import { Absolute, Form, FormContainer, FormContent, FormWrapper } from '../components/shared';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TP } from '@/src/components/atoms/TypoGraphy';
 import { getServerSideProps } from './props';
 import { useChannels } from '@/src/state/channels';
 import styled from '@emotion/styled';
-import theme from 'tailwindcss/defaultTheme';
 
 type FormValues = {
     emailAddress: string;
@@ -78,7 +76,11 @@ export const ForgotPasswordPage: React.FC<InferGetServerSidePropsType<typeof get
     };
 
     return (
-        <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation} pageTitle={t('forgotPasswordTitle')}>
+        <Layout
+            categories={props.collections}
+            navigation={props.navigation}
+            subnavigation={props.subnavigation}
+            pageTitle={t('forgotPasswordTitle')}>
             <StyledAuthContainer>
                 <FormContainer>
                     <StyledFormWrapper column itemsCenter gap="3.5rem">
@@ -132,7 +134,6 @@ const StyledLink = styled(Link)`
     }
 `;
 
-
 const StyledH3 = styled.h3`
     font-family: "Suisse BP Int'l antique", sans-serif;
 `;
@@ -141,9 +142,7 @@ const StyledFormWrapper = styled(FormWrapper)`
     //background: white;
     opacity: 0.8;
     background: ${({ theme }) => theme.background.main};
-
 `;
-
 
 const StyledAuthContainer = styled(ContentContainer)`
     z-index: 0;
@@ -167,9 +166,6 @@ const StyledAuthContainer = styled(ContentContainer)`
         padding: 0 1.5rem;
     }
 
-
-
-
     position: relative;
     height: 100%;
     min-height: 100vh;
@@ -189,14 +185,13 @@ const StyledAuthContainer = styled(ContentContainer)`
     }
 `;
 
-
 const StyledInput = styled(Input)`
     width: 100%;
 
     label {
         font-weight: bold;
     }
-`
+`;
 
 const StyledButton = styled(Button)`
     align-self: center;
@@ -205,9 +200,10 @@ const StyledButton = styled(Button)`
     background-color: ${({ theme }) => theme.background.accent};
     color: ${({ theme }) => theme.background.main};
 
-    &:hover, &:focus{
+    &:hover,
+    &:focus {
         color: ${({ theme }) => theme.text.accent};
 
         border: 1px solid ${({ theme }) => theme.background.accent};
     }
-`
+`;

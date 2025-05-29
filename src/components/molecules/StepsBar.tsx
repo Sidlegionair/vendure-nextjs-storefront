@@ -7,8 +7,7 @@ interface StepsBarProps {
 }
 
 export const StepsBar: React.FC<StepsBarProps> = ({ steps, currentStep }) => {
-    const progressWidth =
-        steps.length > 1 ? ((currentStep - 1) / (steps.length - 1)) * 100 : 0;
+    const progressWidth = steps.length > 1 ? ((currentStep - 1) / (steps.length - 1)) * 100 : 0;
 
     return (
         <Container>
@@ -113,17 +112,17 @@ const Circle = styled.div<CircleProps>`
     transition: all 0.3s ease;
 
     ${({ isCompleted, theme }) =>
-            isCompleted &&
-            `
+        isCompleted &&
+        `
       background-color: ${theme.background.accent};
       border-color: ${theme.background.accent};
       color: #fff;
     `}
 
     ${({ isActive, isCompleted, theme }) =>
-            isActive &&
-            !isCompleted &&
-            `
+        isActive &&
+        !isCompleted &&
+        `
       border-color: ${theme.background.accent};
       color: ${theme.background.accent};
     `}
@@ -141,15 +140,15 @@ const StepLabel = styled.div<LabelProps>`
     transition: color 0.3s ease;
 
     ${({ isCompleted }) =>
-            isCompleted &&
-            `
+        isCompleted &&
+        `
       color: #000;
     `}
 
     ${({ isActive, isCompleted, theme }) =>
-            isActive &&
-            !isCompleted &&
-            `
+        isActive &&
+        !isCompleted &&
+        `
       color: ${theme.background.accent};
     `}
 `;

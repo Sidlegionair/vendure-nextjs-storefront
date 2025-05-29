@@ -4,7 +4,6 @@ import { SSGQuery } from '@/src/graphql/client';
 import { ProductSearchType, SearchSelector } from '@/src/graphql/selectors';
 import { SortOrder } from '@/src/zeus';
 import { DEFAULT_LOCALE } from '@/src/lib/consts';
-import { DEFAULT_CHANNEL_SLUG } from '@/src/lib/consts';
 import Cookies from 'js-cookie';
 
 interface SliderType {
@@ -21,14 +20,12 @@ interface CollectionSliderProps {
 
 // Function to fetch slider data for a single collection
 const fetchSliderData = async (slug: string, take = 15): Promise<SliderType> => {
+    console.log('DEFAULT CHANNEL SLUG', process.env.NEXT_PUBLIC_DEFAULT_CHANNEL_SLUG);
 
-    console.log('DEFAULT CHANNEL SLUG', process.env.NEXT_PUBLIC_DEFAULT_CHANNEL_SLUG)
-
-
-    const channel = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL_SLUG || Cookies.get('channel') ;
+    const channel = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL_SLUG || Cookies.get('channel');
     const locale = Cookies.get('i18next') || DEFAULT_LOCALE;
 
-    if(!channel) {
+    if (!channel) {
         throw new Error('No such channel');
     }
 
@@ -73,29 +70,29 @@ const fetchSliderData = async (slug: string, take = 15): Promise<SliderType> => 
         });
 
         const facetValueMap: Record<string, { code: string; name: string; value: string }> =
-            allFacetsResponse?.facets?.items.reduce((map, facet) => {
-                facet.values.forEach((value) => {
-                    map[value.id] = {
-                        code: facet.code,
-                        name: facet.name,
-                        value: value.name,
-                    };
-                });
-                return map;
-            }, {} as Record<string, { code: string; name: string; value: string }>);
+            allFacetsResponse?.facets?.items.reduce(
+                (map, facet) => {
+                    facet.values.forEach(value => {
+                        map[value.id] = {
+                            code: facet.code,
+                            name: facet.name,
+                            value: value.name,
+                        };
+                    });
+                    return map;
+                },
+                {} as Record<string, { code: string; name: string; value: string }>,
+            );
 
         const productsWithFacets = await Promise.all(
-            productsQuery.search.items.map(async (product) => {
-                const facetValues = product.facetValueIds?.map((id) => {
+            productsQuery.search.items.map(async product => {
+                const facetValues = product.facetValueIds?.map(id => {
                     return facetValueMap[id] || { code: 'Unknown', name: 'Unknown', value: 'Unknown' };
                 });
 
                 // Fetch additional details for brand
                 const productDetails = await api({
-                    product: [
-                        { id: product.productId },
-                        { customFields: { brand: true } },
-                    ],
+                    product: [{ id: product.productId }, { customFields: { brand: true } }],
                 });
 
                 const brand = productDetails.product?.customFields?.brand || 'Unknown Brand';
@@ -105,7 +102,7 @@ const fetchSliderData = async (slug: string, take = 15): Promise<SliderType> => 
                     customFields: { brand }, // Add brand to customFields
                     facetValues, // Attach facetValues array to each product
                 };
-            })
+            }),
         );
 
         return { slug, products: productsWithFacets };
@@ -118,12 +115,12 @@ const fetchSliderData = async (slug: string, take = 15): Promise<SliderType> => 
 // Main `CollectionSlider` Component
 const CollectionSlider: React.FC<CollectionSliderProps> = ({ blok }) => {
     const [sliders, setSliders] = useState<SliderType[]>([]);
-    const { slugs, title } = blok;
+    const { slugs } = blok;
 
     useEffect(() => {
         if (slugs) {
-            const slugArray = slugs.split(',').map((slug) => slug.trim());
-            Promise.all(slugArray.map((slug) => fetchSliderData(slug))).then(setSliders);
+            const slugArray = slugs.split(',').map(slug => slug.trim());
+            Promise.all(slugArray.map(slug => fetchSliderData(slug))).then(setSliders);
         }
     }, [slugs]);
 
@@ -134,7 +131,7 @@ const CollectionSlider: React.FC<CollectionSliderProps> = ({ blok }) => {
     return (
         // <div>
         //     {title && <h2>{title}</h2>}
-            <HomePageSliders sliders={sliders} seeAllText="See All" />
+        <HomePageSliders sliders={sliders} />
         // </div>
     );
 };

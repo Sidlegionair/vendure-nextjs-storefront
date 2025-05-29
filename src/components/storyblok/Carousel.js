@@ -12,7 +12,7 @@ const Carousel = ({ blok }) => {
             align: 'center',
             skipSnaps: false,
         },
-        [Autoplay({ delay: 3000, stopOnInteraction: false })]
+        [Autoplay({ delay: 3000, stopOnInteraction: false })],
     );
 
     // Ensure loop reinitialization only when needed
@@ -31,7 +31,7 @@ const Carousel = ({ blok }) => {
         };
     }, [emblaApi, setupLooping]);
 
-    const getSlideLink = (link) => {
+    const getSlideLink = link => {
         if (!link) return '#'; // Default fallback
         if (link.linktype === 'url') return link.url; // External URL
         if (link.linktype === 'story') return `/${link.cached_url || ''}`; // Internal Storyblok story
@@ -47,16 +47,14 @@ const Carousel = ({ blok }) => {
                         key={`${slide._uid}-${index}`}
                         style={{
                             backgroundImage: `url(${slide.image.filename + '/m/'})`,
-                        }}
-                    >
+                        }}>
                         <div className="slideOverlay">
                             <div className="slideContent">
                                 <h3>{slide.title}</h3>
                                 <a
                                     href={getSlideLink(slide.link)}
                                     // target="_blank"
-                                    rel="noopener noreferrer"
-                                >
+                                    rel="noopener noreferrer">
                                     {slide.ctaText}
                                 </a>
                             </div>

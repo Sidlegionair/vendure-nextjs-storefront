@@ -1,6 +1,6 @@
 import { sortOptions } from '@/src/state/collection/utils';
 import React, { useRef, useState } from 'react';
-import { Stack, TP } from '@/src/components/atoms';
+import { Stack } from '@/src/components/atoms';
 import { Sort } from '@/src/state/collection/types';
 import { useTranslation } from 'next-i18next';
 import styled from '@emotion/styled';
@@ -40,8 +40,7 @@ export const SortBy: React.FC<Props> = ({ handleSort, sort }) => {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        transition={{ duration: 0.2, ease: 'easeInOut' }}
-                    >
+                        transition={{ duration: 0.2, ease: 'easeInOut' }}>
                         {sortOptions.map(o => (
                             <DropdownItem
                                 key={o.key + o.direction}
@@ -49,9 +48,10 @@ export const SortBy: React.FC<Props> = ({ handleSort, sort }) => {
                                 onClick={async () => {
                                     setOpen(false);
                                     await handleSort(o);
-                                }}
-                            >
-                                <small>{o.key} ({t(`sort-directions.${o.direction}`)})</small>
+                                }}>
+                                <small>
+                                    {o.key} ({t(`sort-directions.${o.direction}`)})
+                                </small>
                                 {o.key === sort.key && o.direction === sort.direction && (
                                     <CheckIcon>
                                         <Check />
@@ -93,7 +93,7 @@ const SelectedText = styled.small`
 
 const StyledSmall = styled.small`
     text-align: left;
-`
+`;
 
 const ChevronIcon = styled.div`
     display: flex;
@@ -127,8 +127,7 @@ const DropdownItem = styled.div<{ selected: boolean }>`
     padding: 1rem;
     display: flex;
     align-items: center;
-    background-color: ${({ theme, selected }) =>
-    selected ? theme.background.third : 'unset'};
+    background-color: ${({ theme, selected }) => (selected ? theme.background.third : 'unset')};
     &:hover {
         background-color: ${({ theme }) => theme.background.third};
     }

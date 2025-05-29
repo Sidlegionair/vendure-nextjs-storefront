@@ -1,4 +1,4 @@
-import { storyblokEditable, StoryblokComponent } from "@storyblok/react";
+import { storyblokEditable, StoryblokComponent } from '@storyblok/react';
 import { ContentContainer } from '@/src/components';
 
 const MultiColGrid = ({ blok }) => {
@@ -10,17 +10,15 @@ const MultiColGrid = ({ blok }) => {
 
     // Extract top margin and flex alignment from Storyblok fields or set defaults
     const topMargin = blok.topMargin || 0;
-    const flexDirection = blok.flexDirection || "row"; // Default to row
-    const justifyContent = blok.justifyContent || "start"; // Default alignment
+    const flexDirection = blok.flexDirection || 'row'; // Default to row
+    const justifyContent = blok.justifyContent || 'start'; // Default alignment
 
     // Background Image Support (ensuring /m/ is appended)
-    const backgroundImageUrl = blok.backgroundImage?.filename
-        ? `${blok.backgroundImage.filename}/m/`
-        : "";
+    const backgroundImageUrl = blok.backgroundImage?.filename ? `${blok.backgroundImage.filename}/m/` : '';
 
-    const backgroundSize = blok.backgroundSize || "cover";
-    const backgroundPosition = blok.backgroundPosition || "center";
-    const backgroundRepeat = blok.backgroundRepeat || "no-repeat";
+    const backgroundSize = blok.backgroundSize || 'cover';
+    const backgroundPosition = blok.backgroundPosition || 'center';
+    const backgroundRepeat = blok.backgroundRepeat || 'no-repeat';
 
     // Divide columns into rows
     const rows = [];
@@ -33,13 +31,12 @@ const MultiColGrid = ({ blok }) => {
         <div
             className="flex flex-col w-full gap-6"
             style={{
-                backgroundImage: backgroundImageUrl ? `url(${backgroundImageUrl})` : "none",
+                backgroundImage: backgroundImageUrl ? `url(${backgroundImageUrl})` : 'none',
                 backgroundSize: backgroundSize,
                 backgroundPosition: backgroundPosition,
                 backgroundRepeat: backgroundRepeat,
             }}
-            {...storyblokEditable(blok)}
-        >
+            {...storyblokEditable(blok)}>
             {rows.map((row, rowIndex) => (
                 <div
                     key={rowIndex}
@@ -47,8 +44,7 @@ const MultiColGrid = ({ blok }) => {
                     style={{
                         flexDirection: flexDirection, // Apply flex direction
                         justifyContent: justifyContent, // Apply justify content
-                    }}
-                >
+                    }}>
                     {row.map((nestedBlok, colIndex) => (
                         <div
                             key={nestedBlok._uid || colIndex}
@@ -57,8 +53,7 @@ const MultiColGrid = ({ blok }) => {
                                 flex: `0 0 ${100 / validColumnsPerRow}%`, // Set column width
                                 display: 'flex',
                                 maxWidth: `${100 / validColumnsPerRow}%`,
-                            }}
-                        >
+                            }}>
                             <StoryblokComponent blok={nestedBlok} />
                         </div>
                     ))}
@@ -68,18 +63,10 @@ const MultiColGrid = ({ blok }) => {
     );
 
     // Conditionally wrap in ContentContainer
-    const content = blok.wrap_in_content_container ? (
-        <ContentContainer>{gridContent}</ContentContainer>
-    ) : (
-        gridContent
-    );
+    const content = blok.wrap_in_content_container ? <ContentContainer>{gridContent}</ContentContainer> : gridContent;
 
     // Apply the top margin
-    return (
-        <div style={{ marginTop: `${topMargin}px` }}>
-            {content}
-        </div>
-    );
+    return <div style={{ marginTop: `${topMargin}px` }}>{content}</div>;
 };
 
 export default MultiColGrid;

@@ -4,8 +4,8 @@ import { Link, Stack, TH2 } from '@/src/components/atoms';
 import styled from '@emotion/styled';
 
 export const NavigationLinks: React.FC<{ collection: RootNode<CollectionTileType>['children'][number] }> = ({
-                                                                                                                collection,
-                                                                                                            }) => {
+    collection,
+}) => {
     return (
         <Stack column gap={22}>
             <TH2>{collection.name}</TH2>
@@ -21,7 +21,9 @@ export const NavigationLinks: React.FC<{ collection: RootNode<CollectionTileType
 
                     return (
                         <Stack key={cc.name + '1'} style={{ padding: '0.5rem' }}>
-                            <NavigationLink href={href} isSubMenu={isSubMenu}>{cc.name}</NavigationLink>
+                            <NavigationLink href={href} isSubMenu={isSubMenu}>
+                                {cc.name}
+                            </NavigationLink>
                         </Stack>
                     );
                 })}

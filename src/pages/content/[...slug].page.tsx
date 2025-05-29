@@ -2,18 +2,13 @@
 
 import { useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
-import {
-    GetStaticProps,
-    GetStaticPaths,
-    InferGetStaticPropsType,
-} from 'next';
+import { GetStaticPaths, InferGetStaticPropsType } from 'next';
 import StoryPage from '@/src/components/pages/storyblok/index';
 import { ContextModel, makeStaticProps } from '@/src/lib/getStatic';
 import { DEFAULT_LOCALE, DEFAULT_CHANNEL } from '@/src/lib/consts';
-import { fetchStory, fetchNavigation, fetchRelatedArticles } from '@/src/lib/storyblok';
+import { fetchStory, fetchRelatedArticles } from '@/src/lib/storyblok';
 import { getStoryblokApi } from '@storyblok/react';
 import { getCollections } from '@/src/graphql/sharedQueries';
-import { arrayToTree, RootNode } from '@/src/util/arrayToTree';
 import { getNavigationTree } from '@/src/lib/menuConfig';
 
 // Define the StoryItem interface
@@ -21,7 +16,7 @@ interface StoryItem {
     id: string;
     name: string;
     content?: {
-        [key: string]: any;
+        [key: string]: unknown;
     };
     first_published_at: string;
     slug: string;
@@ -29,20 +24,20 @@ interface StoryItem {
 }
 
 const StoryPageWrapper = ({
-                              slug,
-                              story,
-                              relatedArticles,
-                              navigation,
-                              subnavigation,
-                              categories,
-                              isOverview,
-                              articleGridProps,
-                              articles,
-                              contentAboveGrid,
-                              contentBelowGrid,
-                              locale,
-                              channel,
-                          }: InferGetStaticPropsType<typeof getStaticProps>) => {
+    slug,
+    story,
+    relatedArticles,
+    navigation,
+    subnavigation,
+    categories,
+    isOverview,
+    articleGridProps,
+    articles,
+    contentAboveGrid,
+    contentBelowGrid,
+    locale,
+    channel,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
     const { i18n } = useTranslation();
 
     useEffect(() => {
@@ -154,10 +149,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
         const r = await makeStaticProps(['common', 'collections'])(_context);
 
         const collections = await getCollections(r.context);
-        const { navigation, subnavigation } = await getNavigationTree(
-            r.context,
-            collections
-        );
+        const { navigation, subnavigation } = await getNavigationTree(r.context, collections);
 
         // Fetch related articles using the utility function
         const relatedArticles = await fetchRelatedArticles(locale, story.id);

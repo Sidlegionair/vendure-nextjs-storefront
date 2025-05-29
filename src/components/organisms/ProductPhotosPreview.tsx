@@ -1,4 +1,4 @@
-import { ProductImage, Stack } from '@/src/components/atoms';
+import { Stack } from '@/src/components/atoms';
 import styled from '@emotion/styled';
 import { ImageOff } from 'lucide-react';
 import React, { useEffect, useState, useMemo, useRef } from 'react';
@@ -83,11 +83,7 @@ export const ProductPhotosPreview: React.FC<ProductPhotosPreview> = ({ featuredA
     return (
         <Wrapper w100 justifyBetween>
             {/* Thumbnails */}
-            {images?.length ? (
-                <AssetBrowser ref={assetBrowserRef}>
-                    {Thumbnails}
-                </AssetBrowser>
-            ) : null}
+            {images?.length ? <AssetBrowser ref={assetBrowserRef}>{Thumbnails}</AssetBrowser> : null}
 
             {/* Main Image with swipe handlers */}
             <ImageWrapper {...handlers}>
@@ -177,7 +173,9 @@ const AssetBrowser = styled.div`
 const StyledThumbnail = styled.div<{ src: string; isSelected: boolean }>`
     cursor: pointer;
     opacity: ${({ isSelected }) => (isSelected ? 1 : 0.6)};
-    transition: opacity 0.3s ease, border 0.3s ease;
+    transition:
+        opacity 0.3s ease,
+        border 0.3s ease;
     background-image: url(${({ src }) => src});
     background-size: cover; /* Changed to cover for better thumbnail fitting */
     background-position: center;

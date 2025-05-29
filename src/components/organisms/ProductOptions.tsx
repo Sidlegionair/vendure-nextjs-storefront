@@ -58,7 +58,6 @@ export const ProductOptions: React.FC<ProductOptionsProps> = ({ productOptionsGr
     );
 };
 
-
 const Error = styled(TP)`
     color: ${({ theme }) => theme.error};
 `;
@@ -87,7 +86,7 @@ const SizeSelector = styled(VariantButton)<{ selected: boolean; outOfStock: bool
     font-size: 14px;
     font-weight: 400;
     text-align: center;
-    
+
     width: 49px;
     height: 49px;
     border-radius: 50%;
@@ -99,11 +98,15 @@ const SizeSelector = styled(VariantButton)<{ selected: boolean; outOfStock: bool
     align-items: center;
     position: relative;
 
-    ${p => p.selected && `
+    ${p =>
+        p.selected &&
+        `
         color: ${p.theme.button.back};
     `}
 
-    ${p => p.outOfStock && `
+    ${p =>
+        p.outOfStock &&
+        `
         opacity: 0.5;
         position: relative;
 
@@ -125,12 +128,10 @@ const SizeSelector = styled(VariantButton)<{ selected: boolean; outOfStock: bool
         background: ${p => (p.selected || p.outOfStock ? null : p.theme.gray(500))};
         color: ${p => (p.selected || p.outOfStock ? null : p.theme.gray(0))};
     }
-    
-    @media(max-width: 767px) {
-        
+
+    @media (max-width: 767px) {
     }
 `;
-
 
 const StyledStack = styled(Stack)`
     //justify-content: center;

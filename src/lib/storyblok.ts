@@ -1,14 +1,15 @@
 // src/lib/storyblok.ts
 
 import { getStoryblokApi } from '@storyblok/react';
-import { arrayToTree, RootNode } from '@/src/util/arrayToTree';
+import { RootNode } from '@/src/util/arrayToTree';
 import { getCollections } from '@/src/graphql/sharedQueries';
-import { getNavigationTree } from '@/src/lib/menuConfig';import { CollectionTileType } from '@/src/graphql/selectors';
+import { getNavigationTree } from '@/src/lib/menuConfig';
+import { CollectionTileType } from '@/src/graphql/selectors';
 interface StoryItem {
     id: string;
     name: string;
     content?: {
-        [key: string]: any;
+        [key: string]: unknown;
     };
     first_published_at: string;
     slug: string;
@@ -33,19 +34,13 @@ export const fetchStory = async (locale: string, fullSlug: string): Promise<Stor
  * @returns An object containing navigation and subnavigation data.
  */
 
-
-export const fetchNavigation = async (
-    context: any,
-    locale: string
-): Promise<{ navigation: RootNode<CollectionTileType>; subnavigation: RootNode<CollectionTileType> }> => {
+export const fetchNavigation = async (context: {
+    locale: string;
+    channel: string;
+}): Promise<{ navigation: RootNode<CollectionTileType>; subnavigation: RootNode<CollectionTileType> }> => {
     const collections: CollectionTileType[] = await getCollections(context); // Ensure type matches
 
-
-    const { navigation, subnavigation } = await getNavigationTree(
-        context,
-        collections
-    );
-
+    const { navigation, subnavigation } = await getNavigationTree(context, collections);
 
     // const subnavigation: RootNode<CollectionTileType> = { children: [...subNavigation] };
 
@@ -58,7 +53,17 @@ export const fetchNavigation = async (
  * @param storyId - The ID of the current story to exclude.
  * @returns An array of related articles.
  */
-export const fetchRelatedArticles = async (locale: string, storyId: string): Promise<any[]> => {
+interface RelatedArticle {
+    component: string;
+    _uid: string;
+    title: string;
+    image: string;
+    description: string;
+    first_published_at: string;
+    link: string;
+}
+
+export const fetchRelatedArticles = async (locale: string, storyId: string): Promise<RelatedArticle[]> => {
     const storyblokApi = getStoryblokApi();
     const relatedData = await storyblokApi.get('cdn/stories', {
         starts_with: `${locale}/content/blog`,

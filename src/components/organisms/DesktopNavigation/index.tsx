@@ -1,11 +1,13 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Stack, Link, ContentContainer } from '@/src/components/atoms';
+import { Stack, Link } from '@/src/components/atoms';
 import { RootNode } from '@/src/util/arrayToTree';
 import { NavigationType } from '@/src/graphql/selectors';
-import { NavigationLinks } from './NavigationLinks';
-import { ProductsSellout } from './ProductsSellout';
+// These imports are used in commented-out code that might be re-enabled in the future
+// import { ContentContainer } from '@/src/components/atoms';
+// import { NavigationLinks } from './NavigationLinks';
+// import { ProductsSellout } from './ProductsSellout';
 import { useTranslation } from 'next-i18next';
 import { useCart } from '@/src/state/cart';
 
@@ -16,13 +18,36 @@ interface NavProps {
 }
 
 export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, isSubMenu = false }) => {
-    const { t } = useTranslation('common');
-    const { addToCart } = useCart();
+    // These variables are used in commented-out code that might be re-enabled in the future
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { t: _t } = useTranslation('common');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { addToCart: _addToCart } = useCart();
     const router = useRouter();
 
     const StackComponent = isSubMenu ? SubMenuStack : DesktopStack;
 
-    const gapMapping: Record<number, '0rem' | '0.125rem' | '0.25rem' | '0.5rem' | '0.75rem' | '1rem' | '1.25rem' | '1.5rem' | '1.75rem' | '2rem' | '2.5rem' | '3rem' | '3.125rem' | '3.5rem'| '3.75rem' | '4rem' | '5rem' | undefined> = {
+    const gapMapping: Record<
+        number,
+        | '0rem'
+        | '0.125rem'
+        | '0.25rem'
+        | '0.5rem'
+        | '0.75rem'
+        | '1rem'
+        | '1.25rem'
+        | '1.5rem'
+        | '1.75rem'
+        | '2rem'
+        | '2.5rem'
+        | '3rem'
+        | '3.125rem'
+        | '3.5rem'
+        | '3.75rem'
+        | '4rem'
+        | '5rem'
+        | undefined
+    > = {
         10: '0.125rem',
         20: '0.25rem',
         30: '0.5rem',
@@ -59,21 +84,19 @@ export const DesktopNavigation: React.FC<NavProps> = ({ navigation, gap = 50, is
         return cleanHref !== '/' && cleanPath.startsWith(cleanHref);
     };
 
-
     return (
         <StackComponent itemsCenter gap={gapValue}>
-            {navigation?.children.map((collection) => {
+            {navigation?.children.map(collection => {
                 const href =
                     collection.id === 'none'
                         ? `/${collection.slug}`
                         : collection.parent?.slug !== '__root_collection__'
-                            ? `/collections/${collection.parent?.slug}/${collection.slug}`
-                            : `/collections/${collection.slug}`;
+                          ? `/collections/${collection.parent?.slug}/${collection.slug}`
+                          : `/collections/${collection.slug}`;
 
                 const isActive = isActiveLink(href);
 
                 console.log(href);
-
 
                 if (!collection.children || collection.children.length === 0) {
                     return (
@@ -182,36 +205,37 @@ const RelativeStack = styled(Stack)`
     }
 `;
 
-const AbsoluteStack = styled(Stack)`
-    position: absolute;
-    z-index: 20;
-    top: 100%;
-    left: 100vw;
-    transform: translateX(-50%);
-    margin-top: 0;
-    transition: all 0.35s ease-in-out;
-    overflow: visible;
-
-    @media (max-width: ${p => p.theme.breakpoints.sm}) {
-        left: 0;
-        transform: translateX(0);
-    }
-`;
-
-const ProductSelloutWrapper = styled(Stack)`
-    max-width: 50%;
-    overflow: hidden;
-`;
-
-const Background = styled(Stack)`
-    background: ${p => p.theme.background.main};
-    box-shadow: 0px 0px 12px ${p => p.theme.shadow};
-    border: 1px solid ${p => p.theme.gray(100)};
-    margin-top: 4rem;
-    padding: 40px;
-
-    @media (max-width: ${p => p.theme.breakpoints.md}) {
-        margin-top: 2rem;
-        padding: 20px;
-    }
-`;
+// These styled components are used in commented-out code that might be re-enabled in the future
+// const AbsoluteStack = styled(Stack)`
+//     position: absolute;
+//     z-index: 20;
+//     top: 100%;
+//     left: 100vw;
+//     transform: translateX(-50%);
+//     margin-top: 0;
+//     transition: all 0.35s ease-in-out;
+//     overflow: visible;
+//
+//     @media (max-width: ${p => p.theme.breakpoints.sm}) {
+//         left: 0;
+//         transform: translateX(0);
+//     }
+// `;
+//
+// const ProductSelloutWrapper = styled(Stack)`
+//     max-width: 50%;
+//     overflow: hidden;
+// `;
+//
+// const Background = styled(Stack)`
+//     background: ${p => p.theme.background.main};
+//     box-shadow: 0px 0px 12px ${p => p.theme.shadow};
+//     border: 1px solid ${p => p.theme.gray(100)};
+//     margin-top: 4rem;
+//     padding: 40px;
+//
+//     @media (max-width: ${p => p.theme.breakpoints.md}) {
+//         margin-top: 2rem;
+//         padding: 20px;
+//     }
+// `;

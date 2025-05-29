@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { storyblokEditable, getStoryblokApi, StoryblokComponent } from '@storyblok/react';
+import { storyblokEditable, getStoryblokApi, StoryblokComponent, SbBlokData } from '@storyblok/react';
 import styled from '@emotion/styled';
 import { useTranslation } from 'next-i18next';
 
 export const Footer = () => {
     const { i18n } = useTranslation(); // Use i18n for locale detection
-    const [footerContent, setFooterContent] = useState<any>(null);
+    const [footerContent, setFooterContent] = useState<SbBlokData | null>(null);
 
     useEffect(() => {
         const fetchFooterStory = async () => {
@@ -25,15 +25,13 @@ export const Footer = () => {
 
     return (
         <FooterWrapper>
-            {footerContent && (
-                <StoryblokComponent blok={footerContent} {...storyblokEditable(footerContent)} />
-            )}
+            {footerContent && <StoryblokComponent blok={footerContent} {...storyblokEditable(footerContent)} />}
         </FooterWrapper>
     );
 };
 
 const FooterWrapper = styled.footer`
     width: 100%;
-        // background-color: ${({ theme }) => theme.background.secondary};
+    // background-color: ${({ theme }) => theme.background.secondary};
     //padding: 3rem 0;
 `;

@@ -53,7 +53,7 @@ export const Tooltip: React.FC<{
 };
 
 // Define StyledArrow as a functional component
-const StyledArrow: React.FC<React.ComponentProps<typeof Arrow>> = (props) => <Arrow {...props} />;
+const StyledArrow: React.FC<React.ComponentProps<typeof Arrow>> = props => <Arrow {...props} />;
 
 const StyledTooltip = styled(motion.div)`
     max-width: 20rem;

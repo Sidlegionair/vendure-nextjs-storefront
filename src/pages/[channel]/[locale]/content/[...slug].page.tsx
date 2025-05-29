@@ -2,18 +2,13 @@
 
 import React, { useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
-import { GetStaticProps, GetStaticPaths, InferGetStaticPropsType } from 'next';
-import Head from 'next/head';
-import { StoryblokComponent, SbBlokData } from "@storyblok/react";
+import { GetStaticPaths, InferGetStaticPropsType } from 'next';
 import StoryPage from '@/src/components/pages/storyblok/index';
 // import Layout from '@/src/components/Layout'; // Ensure correct import
 import { ContextModel, makeStaticProps } from '@/src/lib/getStatic';
 import { channels, DEFAULT_LOCALE } from '@/src/lib/consts';
-import { fetchStory, fetchNavigation, fetchRelatedArticles } from '@/src/lib/storyblok';
+import { fetchStory, fetchRelatedArticles } from '@/src/lib/storyblok';
 import { getStoryblokApi } from '@storyblok/react';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { arrayToTree, RootNode } from '@/src/util/arrayToTree';
-import { NavigationType } from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
 import { getNavigationTree } from '@/src/lib/menuConfig';
 
@@ -21,7 +16,7 @@ interface StoryItem {
     id: string;
     name: string;
     content?: {
-        [key: string]: any;
+        [key: string]: unknown;
     };
     first_published_at: string;
     slug: string;
@@ -29,20 +24,20 @@ interface StoryItem {
 }
 
 const StoryPageWrapper = ({
-                              story,
-                              relatedArticles,
-                              navigation,
-                              subnavigation,
-                              categories,
-                              isOverview,
-                              articleGridProps,
-                              articles,
-                              contentAboveGrid,
-                              contentBelowGrid,
-                              locale,
-                              channel,
-                              slug,
-                          }: InferGetStaticPropsType<typeof getStaticProps>) => {
+    story,
+    relatedArticles,
+    navigation,
+    subnavigation,
+    categories,
+    isOverview,
+    articleGridProps,
+    articles,
+    contentAboveGrid,
+    contentBelowGrid,
+    locale,
+    channel,
+    slug,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
     const { i18n } = useTranslation();
 
     useEffect(() => {
@@ -79,7 +74,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
         if (!data?.stories) throw new Error('No content found');
 
-        const shippingLocales = channels.map((channel) => channel.slug); // e.g., ['en', 'nl']
+        const shippingLocales = channels.map(channel => channel.slug); // e.g., ['en', 'nl']
         const contentLocales = ['en', 'nl']; // Content locales
 
         const paths: {
@@ -91,8 +86,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
             const slugParts = story.full_slug.split('/').slice(1); // Remove 'content'
 
-            contentLocales.forEach((contentLocale) => {
-                shippingLocales.forEach((shippingLocale) => {
+            contentLocales.forEach(contentLocale => {
+                shippingLocales.forEach(shippingLocale => {
                     paths.push({
                         params: {
                             channel: shippingLocale,
@@ -100,9 +95,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
                             slug: slugParts,
                         },
                     });
-                    console.log(
-                        `Generated path: /${shippingLocale}/${contentLocale}/content/${slugParts.join('/')}`
-                    );
+                    console.log(`Generated path: /${shippingLocale}/${contentLocale}/content/${slugParts.join('/')}`);
                 });
             });
         });
@@ -111,7 +104,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
         return { paths, fallback: 'blocking' };
     } catch (error) {
-        console.error('Error fetching content from Storyblok in getStaticPaths for /[channel]/[locale]/content/[...slug]:', error);
+        console.error(
+            'Error fetching content from Storyblok in getStaticPaths for /[channel]/[locale]/content/[...slug]:',
+            error,
+        );
         return { paths: [], fallback: 'blocking' };
     }
 };
@@ -135,10 +131,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
 
     const r = await makeStaticProps(['common', 'homepage'])(_context);
     const collections = await getCollections(r.context);
-    const { navigation, subnavigation } = await getNavigationTree(
-        r.context,
-        collections
-    );
+    const { navigation, subnavigation } = await getNavigationTree(r.context, collections);
     const { channel, locale } = context.params as {
         channel: string;
         locale: string;
@@ -201,7 +194,10 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
             revalidate: process.env.NEXT_REVALIDATE ? parseInt(process.env.NEXT_REVALIDATE) : 1,
         };
     } catch (error) {
-        console.error('Error fetching Storyblok data in getStaticProps for /[channel]/[locale]/content/[...slug]:', error);
+        console.error(
+            'Error fetching Storyblok data in getStaticProps for /[channel]/[locale]/content/[...slug]:',
+            error,
+        );
         return { notFound: true };
     }
 };

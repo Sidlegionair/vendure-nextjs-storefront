@@ -4,7 +4,6 @@ import { getCollections } from '@/src/graphql/sharedQueries';
 import { getNavigationTree } from '@/src/lib/menuConfig';
 import { makeServerSideProps } from '@/src/lib/getStatic';
 import { redirectFromDefaultChannelSSR, prepareSSRRedirect } from '@/src/lib/redirect';
-import { arrayToTree } from '@/src/util/arrayToTree';
 import { GetServerSidePropsContext } from 'next';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
@@ -13,16 +12,15 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     if (translationRedirect) return translationRedirect;
 
     const collections = await getCollections(r.context);
-    const { navigation, subnavigation } = await getNavigationTree(
-        r.context,
-        collections
-    );
+    const { navigation, subnavigation } = await getNavigationTree(r.context, collections);
 
     const homePageRedirect = prepareSSRRedirect('/')(context);
     const code = context.params?.code as string;
 
     try {
-        const { activeCustomer } = await (await SSRQuery(context))({
+        const { activeCustomer } = await (
+            await SSRQuery(context)
+        )({
             activeCustomer: {
                 ...ActiveCustomerSelector,
                 orders: [
@@ -46,7 +44,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
             activeCustomer,
             navigation,
             subnavigation,
-
         };
 
         return { props: returnedStuff };

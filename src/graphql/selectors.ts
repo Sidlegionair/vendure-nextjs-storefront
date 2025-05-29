@@ -25,7 +25,6 @@ export type NavigationType = CollectionTileType & {
     } | null;
 };
 
-
 export type FiltersFacetType = FacetType & { values: (FacetType & { count: number })[] };
 
 export const ProductTileSelector = Selector('Product')({
@@ -80,7 +79,6 @@ export const FacetSelector = Selector('Facet')({
 
 export type FacetType = FromSelector<typeof FacetSelector, 'Facet', typeof scalars>;
 
-
 export const ProductCustomFieldsSelector = Selector('Product')({
     id: true,
     name: true,
@@ -88,8 +86,6 @@ export const ProductCustomFieldsSelector = Selector('Product')({
         brand: true,
     },
 });
-
-
 
 export const CollectionSelector = Selector('Collection')({
     id: true,
@@ -218,7 +214,7 @@ export const ProductDetailSelector = Selector('Product')({
     id: true,
     featuredAsset: {
         preview: true,
-        source: true
+        source: true,
     },
     slug: true,
     optionGroups: {
@@ -362,8 +358,8 @@ export const ProductDetailSelector = Selector('Product')({
             stanceMin: true,
             stanceMax: true,
             weightKg: true,
-            bindingSizeVariant: true
-        }
+            bindingSizeVariant: true,
+        },
     },
     customFields: {
         brand: true,
@@ -381,19 +377,17 @@ export const ProductDetailSelector = Selector('Product')({
         layup3: true,
         boardbase: true,
         terrain: true,
-        taperProfile: true
+        taperProfile: true,
     },
     collections: {
         slug: true,
         name: true,
         parent: {
-            slug: true
-        }
+            slug: true,
+        },
     },
     facetValues: ProductDetailsFacetSelector,
 });
-
-
 
 export type ProductDetailType = FromSelector<typeof ProductDetailSelector, 'Product', typeof scalars>;
 
@@ -495,9 +489,9 @@ export const ActiveCustomerSelector = Selector('Customer')({
     user: CurrentUserSelector,
     customFields: {
         preferredSeller: {
-            id: true
-        }
-    }
+            id: true,
+        },
+    },
 });
 
 export type ActiveCustomerType = FromSelector<typeof ActiveCustomerSelector, 'Customer', typeof scalars>;
@@ -625,8 +619,8 @@ export const OrderSelector = Selector('Order')({
                 slug: true,
                 name: true,
                 customFields: {
-                    brand: true
-                }
+                    brand: true,
+                },
             },
         },
     },
@@ -677,8 +671,8 @@ export const CreateAddressSelector = Selector('CreateAddressInput')({
     defaultShippingAddress: true,
     defaultBillingAddress: true,
     customFields: {
-        vatNumber: true
-    }
+        vatNumber: true,
+    },
 });
 
 export type CreateAddressType = FromSelector<typeof CreateAddressSelector, 'CreateAddressInput', typeof scalars>;
@@ -741,14 +735,16 @@ export const productVariantTileSelector = Selector('ProductVariant')({
         source: true,
         preview: true,
     },
+    facetValues: { ...FacetSelector, facet: FacetSelector },
     product: {
+        id: true,
         collections: { slug: true, name: true, parent: { slug: true } },
         slug: true,
         featuredAsset: { preview: true },
         facetValues: { ...FacetSelector, facet: FacetSelector },
         customFields: {
-            brand: true
-        }
+            brand: true,
+        },
     },
 });
 
@@ -791,11 +787,11 @@ export const ServiceDealerSelector = Selector('VendorSelectionResult')({
     nationalLocale: true,
 });
 
-export const ServiceLocationSelector = Selector('ServiceLocationResult')({
-    serviceDealer: ServiceDealerSelector,
-    serviceAgentAvailable: true,
-    scenario: true,
-});
+export const ServiceLocationSelector = ServiceDealerSelector;
 
 export type ServiceDealerType = FromSelector<typeof ServiceDealerSelector, 'VendorSelectionResult', typeof scalars>;
-export type ServiceLocationType = FromSelector<typeof ServiceLocationSelector, 'ServiceLocationResult', typeof scalars>;
+export type ServiceLocationType = {
+    serviceDealer: FromSelector<typeof ServiceLocationSelector, 'VendorSelectionResult', typeof scalars>;
+    serviceAgentAvailable: boolean;
+    scenario: boolean;
+};

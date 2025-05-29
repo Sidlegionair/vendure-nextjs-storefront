@@ -3,10 +3,10 @@ import styled from '@emotion/styled';
 import { useTranslation } from 'next-i18next';
 
 export function Select<T extends string | number>({
-                                                      options,
-                                                      value,
-                                                      setValue,
-                                                  }: {
+    options,
+    value,
+    setValue,
+}: {
     options?: Array<{
         label: string;
         value: T;

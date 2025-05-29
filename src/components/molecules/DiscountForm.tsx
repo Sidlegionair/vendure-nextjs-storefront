@@ -97,23 +97,19 @@ const Input = styled.input`
 
     font-weight: 600;
 
-
     font-size: 1.6rem;
 
     /* Placeholder styles */
     &::placeholder {
         font-size: 16px;
         weight: 600;
-        color: ${p => p.theme.text.lightgray}
-
+        color: ${p => p.theme.text.lightgray};
     }
-
 `;
 
 const FakeForm = styled(Stack)`
     width: 100%;
     position: relative;
-
 
     padding: 1rem;
 

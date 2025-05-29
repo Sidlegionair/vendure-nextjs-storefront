@@ -5,7 +5,6 @@ import { getNavigationTree } from '@/src/lib/menuConfig';
 import { makeServerSideProps } from '@/src/lib/getStatic';
 import { redirectFromDefaultChannelSSR } from '@/src/lib/redirect';
 import { PER_PAGE, prepareFilters, reduceFacets } from '@/src/state/collection/utils';
-import { arrayToTree } from '@/src/util/arrayToTree';
 import { SortOrder, GraphQLTypes } from '@/src/zeus';
 import { GetServerSidePropsContext } from 'next';
 
@@ -15,10 +14,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     if (translationRedirect) return translationRedirect;
 
     const collections = await getCollections(r.context);
-    const { navigation, subnavigation } = await getNavigationTree(
-        r.context,
-        collections
-    );
+    const { navigation, subnavigation } = await getNavigationTree(r.context, collections);
 
     const api = await SSRQuery(context);
 
@@ -74,9 +70,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     });
 
     // Fetch brands
-    const productIds = productsQuery.search.items
-        .map(product => product.productId)
-        .filter(id => !!id); // Ensure only valid IDs are used.
+    const productIds = productsQuery.search.items.map(product => product.productId).filter(id => !!id); // Ensure only valid IDs are used.
 
     if (productIds.length === 0) {
         console.error('No valid product IDs found for brand query.');
@@ -98,7 +92,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
                 console.error(`Failed to fetch brand for product ID: ${id}`, error);
                 return { id, brand: null }; // Fallback to null on failure
             }
-        })
+        }),
     );
 
     // Map brands to snowboards

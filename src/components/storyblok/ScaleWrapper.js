@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { storyblokEditable, StoryblokComponent } from "@storyblok/react";
+import { useState } from 'react';
+import { storyblokEditable, StoryblokComponent } from '@storyblok/react';
 import { ContentContainer } from '@/src/components';
 
 const ScaleWrapper = ({ blok }) => {
@@ -13,7 +13,7 @@ const ScaleWrapper = ({ blok }) => {
     // Define the combined style based on hover state
     const combinedStyle = {
         transition: `transform ${transitionDuration}ms ease-in-out`,
-        transform: isHovered ? `scale(${scaleAmount})` : "scale(1)",
+        transform: isHovered ? `scale(${scaleAmount})` : 'scale(1)',
     };
 
     const content = (
@@ -22,8 +22,7 @@ const ScaleWrapper = ({ blok }) => {
             className="inline-block"
             style={combinedStyle}
             onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-        >
+            onMouseLeave={() => setIsHovered(false)}>
             {blok.childComponent &&
                 (Array.isArray(blok.childComponent) ? (
                     blok.childComponent.map((child, index) => (
@@ -31,8 +30,7 @@ const ScaleWrapper = ({ blok }) => {
                     ))
                 ) : (
                     <StoryblokComponent blok={blok.childComponent} />
-                ))
-            }
+                ))}
         </div>
     );
 

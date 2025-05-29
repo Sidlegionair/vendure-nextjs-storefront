@@ -21,27 +21,29 @@ export const ProductSizingTable: React.FC<ProductSizingTableProps> = ({ product,
         <TableContainer>
             <Table>
                 <thead>
-                <tr>
-                    <th>SPECIFICATION</th>
-                    {product.variants.map((variant) => (
-                        <th key={variant.id}>{variant.name}</th>
-                    ))}
-                </tr>
-                </thead>
-                <tbody>
-                {fields.map((field) => (
-                    <tr key={field.key}>
-                        <td>{field.label}</td>
-                        {product.variants.map((variant) => (
-                            <td key={`${variant.id}-${field.key}`}>
-                                {typeof variant.customFields?.[field.key as keyof typeof variant.customFields] === 'string' ||
-                                typeof variant.customFields?.[field.key as keyof typeof variant.customFields] === 'number'
-                                    ? variant.customFields[field.key as keyof typeof variant.customFields]
-                                    : 'N/A'}
-                            </td>
+                    <tr>
+                        <th>SPECIFICATION</th>
+                        {product.variants.map(variant => (
+                            <th key={variant.id}>{variant.name}</th>
                         ))}
                     </tr>
-                ))}
+                </thead>
+                <tbody>
+                    {fields.map(field => (
+                        <tr key={field.key}>
+                            <td>{field.label}</td>
+                            {product.variants.map(variant => (
+                                <td key={`${variant.id}-${field.key}`}>
+                                    {typeof variant.customFields?.[field.key as keyof typeof variant.customFields] ===
+                                        'string' ||
+                                    typeof variant.customFields?.[field.key as keyof typeof variant.customFields] ===
+                                        'number'
+                                        ? variant.customFields[field.key as keyof typeof variant.customFields]
+                                        : 'N/A'}
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
                 </tbody>
             </Table>
         </TableContainer>
@@ -51,7 +53,7 @@ export const ProductSizingTable: React.FC<ProductSizingTableProps> = ({ product,
 const TableContainer = styled.div`
     margin: 20px 0;
     max-height: 400px; /* fixed height for vertical scrolling */
-    overflow: auto;    /* enables both vertical and horizontal scrolling */
+    overflow: auto; /* enables both vertical and horizontal scrolling */
     width: 100%;
     position: relative;
     /* Optionally, add a border to the container */
@@ -78,7 +80,7 @@ const Table = styled.table`
         background-clip: padding-box;
         /* Force a visible top border with a pseudo-element */
         &::before {
-            content: "";
+            content: '';
             position: absolute;
             top: -1px; /* position above the cell */
             left: 0;

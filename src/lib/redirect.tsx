@@ -44,28 +44,28 @@ export const useRedirect = (
 //NOTE: middleware do this (keep it in emergency)
 export const Redirect =
     ({ children }: { children?: React.ReactNode }) =>
-        // eslint-disable-next-line react/display-name
-        () => {
-            return children;
+    // eslint-disable-next-line react/display-name
+    () => {
+        return children;
 
-            // prev version
-            // const [cookie, setCookie] = useState<string>();
-            // useEffect(() => {
-            //     const cachedChannel = document.cookie
-            //         .split(';')
-            //         .find(c => c.trim().startsWith('channel='))
-            //         ?.split('=')[1];
-            //     setCookie(cachedChannel);
-            // }, []);
-            // const ch = channels.find(c => c.channel === cookie);
-            // const channelSlug = ch?.slug ?? DEFAULT_CHANNEL_SLUG;
-            // // const detectedLng = languageDetector.detect();
-            // if (channelSlug === DEFAULT_CHANNEL_SLUG) {
-            //     return children;
-            // }
-            // useRedirect({});
-            // return <AppLoader />;
-        };
+        // prev version
+        // const [cookie, setCookie] = useState<string>();
+        // useEffect(() => {
+        //     const cachedChannel = document.cookie
+        //         .split(';')
+        //         .find(c => c.trim().startsWith('channel='))
+        //         ?.split('=')[1];
+        //     setCookie(cachedChannel);
+        // }, []);
+        // const ch = channels.find(c => c.channel === cookie);
+        // const channelSlug = ch?.slug ?? DEFAULT_CHANNEL_SLUG;
+        // // const detectedLng = languageDetector.detect();
+        // if (channelSlug === DEFAULT_CHANNEL_SLUG) {
+        //     return children;
+        // }
+        // useRedirect({});
+        // return <AppLoader />;
+    };
 
 // eslint-disable-next-line react/display-name
 export const getRedirect = (to?: string) => () => {

@@ -5,10 +5,17 @@ import resources from '@/src/@types/resources';
 import { GetServerSidePropsContext } from 'next';
 import { getContext } from './utils';
 import { channels, DEFAULT_LOCALE } from '@/src/lib/consts'; // Keep your default locale constant here
-import { DEFAULT_CHANNEL, DEFAULT_CHANNEL_SLUG, fetchChannels } from './channels';
+import { fetchChannels } from './channels';
 
 export interface ContextModel<T = Record<string, string>> {
     params: { locale: string; channel: string } & T;
+}
+
+interface Channel {
+    slug: string;
+    nationalLocale: string;
+    locales?: string[];
+    languages?: string[];
 }
 
 /**
@@ -19,7 +26,7 @@ export const getAllPossibleWithChannels = async () => {
     const paths: { params: { locale: string; channel: string } }[] = [];
 
     // Generate paths for each dynamic channel.
-    dynamicChannels.forEach((c: any) => {
+    dynamicChannels.forEach((c: Channel) => {
         // Always include the channel's nationalLocale.
         paths.push({ params: { channel: c.slug, locale: c.nationalLocale } });
         // Add additional locales if available.
@@ -33,14 +40,12 @@ export const getAllPossibleWithChannels = async () => {
     // Fallback: Add paths for each language supported by the default channel.
     // Assume the default channel is identified by process.env.DEFAULT_CHANNEL or 'gx9ktntebrqot7t8ua'
     const defaultChannelSlug = process.env.DEFAULT_CHANNEL || 'gx9ktntebrqot7t8ua';
-    const defaultChannelObj = dynamicChannels.find((c: any) => c.slug === defaultChannelSlug);
+    const defaultChannelObj = dynamicChannels.find((c: Channel) => c.slug === defaultChannelSlug);
     if (defaultChannelObj && defaultChannelObj.languages) {
         defaultChannelObj.languages.forEach((lang: string) => {
             // Always add fallback path { channel: lang, locale: lang }
             // This ensures that a URL like /nl/ will be built.
-            const alreadyAdded = paths.some(
-                (p) => p.params.channel === lang && p.params.locale === lang
-            );
+            const alreadyAdded = paths.some(p => p.params.channel === lang && p.params.locale === lang);
             if (!alreadyAdded) {
                 paths.push({ params: { channel: lang, locale: lang } });
             }
@@ -63,17 +68,14 @@ const getStandardLocalePaths = async () => {
             });
     });
 
-    console.log("Final paths:", paths);
+    console.log('Final paths:', paths);
     return paths;
 };
 
 /**
  * Get translation props ensuring a valid locale. Uses DEFAULT_LOCALE as fallback.
  */
-export async function getI18nProps(
-    ctx: ContextModel,
-    ns: Array<keyof typeof resources> = ['common']
-) {
+export async function getI18nProps(ctx: ContextModel, ns: Array<keyof typeof resources> = ['common']) {
     const locale = ctx?.params?.locale ?? DEFAULT_LOCALE;
     if (process.env.NODE_ENV === 'development') await i18n?.reloadResources();
     const props = {

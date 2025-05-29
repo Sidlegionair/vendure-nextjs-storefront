@@ -94,7 +94,6 @@ const useProductContainer = createContainer<ProductContainerType, { product: Pro
         setQuantity(validQuantity);
     };
 
-
     const handleBuyNow = async () => {
         if (variant?.id) {
             await addToCart(variant.id, 1);

@@ -29,7 +29,8 @@ export const OrderPage: React.FC<InferGetServerSidePropsType<typeof getServerSid
     return (
         <Layout
             categories={props.collections}
-            navigation={props.navigation} subnavigation={props.subnavigation}
+            navigation={props.navigation}
+            subnavigation={props.subnavigation}
             pageTitle={`${t('orderPage.title')} #${order?.code}`}>
             <ContentContainer>
                 <Stack w100 justifyEnd>

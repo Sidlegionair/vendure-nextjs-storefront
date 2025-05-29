@@ -12,14 +12,12 @@ const nextConfig = {
         remotePatterns: [
             {
                 protocol: 'https',
-                hostname: 'a.storyblok.com'
+                hostname: 'a.storyblok.com',
             },
-        ]
+        ],
     },
     experimental: {
-        useDeploymentId: true,
-        // Optionally, use with Server Actions
-        useDeploymentIdServerActions: true,
+        // Removed unsupported options
     },
     async rewrites() {
         return [
@@ -34,7 +32,6 @@ const nextConfig = {
                 destination: `/${DEFAULT_CHANNEL}/:locale/:path*`,
             },
         ];
-
     },
 
     // i18n: {
@@ -57,6 +54,6 @@ const nextConfig = {
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
     enabled: process.env.ANALYZE === 'true',
-})
+});
 
-module.exports = withBundleAnalyzer(nextConfig)
+module.exports = withBundleAnalyzer(nextConfig);

@@ -15,12 +15,12 @@ interface Props {
 }
 
 export const DeliveryMethod: React.FC<Props> = ({
-                                                    selected,
-                                                    onChange,
-                                                    error,
-                                                    shippingMethods,
-                                                    currencyCode = CurrencyCode.USD,
-                                                }) => {
+    selected,
+    onChange,
+    error,
+    shippingMethods,
+    currencyCode = CurrencyCode.USD,
+}) => {
     return (
         <Stack w100 column>
             <Wrapper gap="2rem">
@@ -47,7 +47,7 @@ export const DeliveryMethod: React.FC<Props> = ({
 
 const Wrapper = styled(Stack)`
     margin: 1.6rem 0;
-    @media(max-width: 767px) {
+    @media (max-width: 767px) {
         flex-direction: column;
     }
 `;
@@ -57,13 +57,11 @@ const StyledTP = styled(TP)<{ selected: boolean; error: boolean }>`
     font-size: ${({ theme }) => theme.typography.fontSize.h6};
     line-height: normal;
     //font-family: "Suisse BP", sans-serif;
-
 `;
-
 
 const Box = styled(Stack)<{ selected: boolean; error: boolean }>`
     cursor: pointer;
-    
+
     padding: 15px 25px;
     text-align: center;
     border: 1px solid ${p => (p.error ? p.theme.error : p.selected ? p.theme.background.accent : p.theme.text.main)};
@@ -72,7 +70,7 @@ const Box = styled(Stack)<{ selected: boolean; error: boolean }>`
     color: ${p => (p.error ? p.theme.error : p.selected ? '#fff' : '#000')} !important;
     background-color: ${p => (p.error ? p.theme.error : p.selected ? p.theme.background.accent : '#fff')} !important;
     border-radius: 8px;
-    
+
     &:hover {
         transform: scale(1.1);
 

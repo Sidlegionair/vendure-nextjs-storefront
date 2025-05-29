@@ -1,5 +1,6 @@
 ### ![VENDURE NEXTJS STOREFRONT IDEA](https://github.com/user-attachments/assets/a909bfd1-17d7-447e-b216-c6c3f37c6536) ![Vector 902 (Stroke) (1)](https://github.com/user-attachments/assets/93e38773-7467-4374-a9e8-13387aa5b076#gh-dark-mode-only) ![Vector 902 (Stroke) (1)](https://github.com/user-attachments/assets/51b16a12-11c3-4b72-8f87-d78afdbe9c83#gh-light-mode-only)
-This is a NextJS starter for Vendure in the form of a demo e-commerce shop. 
+
+This is a NextJS starter for Vendure in the form of a demo e-commerce shop.
 
 > The project is in its **alpha phase**! However, you can still read the concepts, run the storefront page locally, or check how it works at: [shop.aexol.com](https://shop.aexol.com).
 
@@ -8,69 +9,68 @@ This is a NextJS starter for Vendure in the form of a demo e-commerce shop.
 ## Table of Contents
 
 [Vendure NextJS Storefront](#vendure-nextjs-storefront)
+
 - [Table of Contents](#table-of-contents)
--  [Installation](#Installation)
+- [Installation](#Installation)
     - [Vendure Server](#vendure-server)
 - [Zeus](#Zeus)
 - [Page Naming Conventions](#page-Naming-Conventions)
 - [Internationalization With i18next](#internationalization-With-i18next)
 - [Appearance](#appearance)
-  - [Icons](#Icons)
-  - [Styles](#styles)
-  - [Theme](#theme)
+    - [Icons](#Icons)
+    - [Styles](#styles)
+    - [Theme](#theme)
 - [More Info](#more-info)
-  - [About Us](#About-Us)
-  - [Useful Links](#Useful-Links)
-  - [Roadmap](#Roadmap)
+    - [About Us](#About-Us)
+    - [Useful Links](#Useful-Links)
+    - [Roadmap](#Roadmap)
 
 <br />
 
-##  <span><img src="https://github.com/user-attachments/assets/de0783fd-cd28-42a5-ab35-4a7543fe2283" width = 24 px></span>&nbsp;&nbsp;Installation 
-
-
+## <span><img src="https://github.com/user-attachments/assets/de0783fd-cd28-42a5-ab35-4a7543fe2283" width = 24 px></span>&nbsp;&nbsp;Installation
 
 **1.** Clone this repo via SSH, HTTPS or the GitHub CLI.
-   
-**2.** Install the packages using: ```npm i```.
-   
+
+**2.** Install the packages using: `npm i`.
+
 **3.** Set up your Vendure server locally and run it on `http://localhost:3000/`. You can read more about how to set that up in the Vendure Server section below.
 
 #### VENDURE SERVER
+
 You need to have the Vendure store running locally to use this storefront. This storefront requires a Vendure V2 server. You can either run a local instance or use our public demo server. The demo of the Vendure server (MinIO & Postgres & SMTP) can be found [here](https://github.com/aexol-studio/aexol-shop-backend). Check it out to see all changes.
 
 <br />
 
 > [!IMPORTANT]
 > For the best experience when using our demo, you also need to apply certain modifications to the Vendure server:
-> 
+>
 > - Apply two collections `all` and `search`. Both of them should contain all products (with the exception of cases using gift cards or shipping-protections)
 > - Add the stock level as a number value and not as enum values, as seen below:
 
 ```ts
 export class ExactStockDisplayStrategy implements StockDisplayStrategy {
-  getStockLevel(
-    ctx: RequestContext,
-    productVariant: ProductVariant,
-    saleableStockLevel: number
-  ): string {
-    return saleableStockLevel.toString();
-  }
+    getStockLevel(ctx: RequestContext, productVariant: ProductVariant, saleableStockLevel: number): string {
+        return saleableStockLevel.toString();
+    }
 }
 
-export const catalogOptions: VendureConfig["catalogOptions"] = {
-  stockDisplayStrategy: new ExactStockDisplayStrategy(),
+export const catalogOptions: VendureConfig['catalogOptions'] = {
+    stockDisplayStrategy: new ExactStockDisplayStrategy(),
 };
 ```
-   
+
 **4.** Create a new `.env` file in the root of the project and add the following variables:
+
 ```env
 NEXT_PUBLIC_HOST="http://localhost:3000/shop-api".
 ```
-**5.** Run the project locally using ```npm run dev```.
+
+**5.** Run the project locally using `npm run dev`.
 
 <br />
 
 ## <span><img src="https://github.com/user-attachments/assets/2b98ae79-3b28-4310-8531-8dcacb9822c7" width=24px></span>&nbsp;&nbsp;Zeus
+
 <!-- License: PD. Made by paomedia: https://github.com/paomedia/small-n-flat -->
 
 We use GraphQL Zeus to provide selectors for GraphQL queries and mutations. You can think of selectors as fragments in GraphQL, just with the added type-safety.
@@ -80,7 +80,6 @@ We use GraphQL Zeus to provide selectors for GraphQL queries and mutations. You 
 ## <span><img src="https://github.com/user-attachments/assets/8140d8d8-7c6b-4da8-8afd-90a38ec278db" width=24px></span>&nbsp;&nbsp;Page Naming Conventions
 
 We aimed for a fairly simple naming convention for pages that aligns with the DDD (Domain-driven design) principles:
-
 
 - Each page file is named using the format `page-name.page.tsx`, where `page-name` represents the name of the page or route. <br /> For example, the main page of your application would be named `index.page.tsx`.
 - We are using slug pages for products and collections, where we have a `products` and `collections` folder with a `[slug].page.tsx`. The `[slug]` is replaced by the product or collection name fetched from the backend as props. <br /> This allows to dynamically generate those pages at scale, while maintaining a structure that is easy to navigate with routes such as `/collections/electronics/` or `/products/laptop/`.
@@ -100,13 +99,14 @@ Because the majority of e-commerce shops uses localization to accomodate clients
 How we use i18next:
 |Element|Description|
 |:---|:---|
-| **Translation Files** |  We maintain separate JSON translation files for each supported language. These files contain translation keys and their corresponding localized text. <br /> For example, you might find the English translation file for home page at `public/locales/en/homePage.json` |
+| **Translation Files** | We maintain separate JSON translation files for each supported language. These files contain translation keys and their corresponding localized text. <br /> For example, you might find the English translation file for home page at `public/locales/en/homePage.json` |
 | **Locale Configuration** | We configure i18next to load the appropriate translation files based on the user's selected locale. |
 | **Integration with React** | We use the `next-i18next` package to integrate i18next with React components to seamlessly access the translations in your React components via a simple `useTranslation` hook. It will then always use the matching translation for the user's selected locale. |
 
 <br />
 
 Example:
+
 ```ts
 import { useTranslation } from 'next-i18next';
 
@@ -144,7 +144,7 @@ Lucide Icons is an open source library of over one thousand svg icons and symbol
 
 ## <span><img src="https://github.com/user-attachments/assets/60bd6c23-bc65-4773-a06a-35d3d5315002" width=24px></span>&nbsp;&nbsp;Styles
 
-We are building our own engine based on styled components with props that work similarly to our favorite CSS framework: [Tailwind](https://tailwindcss.com/). 
+We are building our own engine based on styled components with props that work similarly to our favorite CSS framework: [Tailwind](https://tailwindcss.com/).
 
 For example, here's what our `Stack` component looks like:
 
@@ -162,16 +162,15 @@ export const Stack = styled.div<BaseFlexParams>`
 
 <br />
 
-Due to this set-up of props, the usage is very similar to Tailwind. The difference is that, in this case, you have to skip `ClassName`, as seen  below:
+Due to this set-up of props, the usage is very similar to Tailwind. The difference is that, in this case, you have to skip `ClassName`, as seen below:
 
 ```tsx
 <Stack column gap="2rem">
-  {children}
+    {children}
 </Stack>
 ```
 
 <br />
-
 
 ## <span><img src="https://github.com/user-attachments/assets/dd5e86cf-536e-479d-aa09-460e3964fd28" width=24px></span>&nbsp;&nbsp;Theme
 
@@ -179,7 +178,7 @@ Theming is provided by a set of generic functions in the code and [Emotion](http
 
 You can use values from the theme with `thv`. It is a function that consumes the theme and returns only the value.
 
-You can alternatively use the usual method with `${p => p.theme}`. 
+You can alternatively use the usual method with `${p => p.theme}`.
 
 You can see both methods in the example below:
 
@@ -207,7 +206,6 @@ export const IconButton = styled.button<{ isActive?: boolean }>`
         box-shadow: none;
     }
 `;
-
 ```
 
 <br />
@@ -233,14 +231,14 @@ We are devs and contributors to the GraphQL ecosystem with a lot of experience. 
 ## <span><img src="https://github.com/user-attachments/assets/fb09df04-1285-43da-8261-a30c5d85a885" width=24px></span>&nbsp;&nbsp;Roadmap
 
 - [ ] Finish the starter
-- [X] Deploy the storefront connected to the demo shop
-- [X] Implement basic cart functionality
-- [X] Implement basic checkout process
+- [x] Deploy the storefront connected to the demo shop
+- [x] Implement basic cart functionality
+- [x] Implement basic checkout process
 - [ ] Implement the design
-- [X] Add a basic payment process
-- [X] Add a basic User Profile
-- [X] Add the search products function
-- [X] Add filters
+- [x] Add a basic payment process
+- [x] Add a basic User Profile
+- [x] Add the search products function
+- [x] Add filters
 - [ ] Provide localization with devtranslate.app
 - [ ] Add Static Git CMS MDTX
 - [ ] Configure SEO and schema.org for every site

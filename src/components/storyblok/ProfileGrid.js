@@ -9,17 +9,17 @@ const ProfileGrid = ({ blok }) => {
         if (isHovered || activeIndex !== null) return;
 
         const interval = setInterval(() => {
-            setActiveIndex((prevIndex) => (prevIndex + 1) % blok.profiles.length);
+            setActiveIndex(prevIndex => (prevIndex + 1) % blok.profiles.length);
         }, 3000);
 
         return () => clearInterval(interval);
     }, [blok.profiles.length, isHovered, activeIndex]);
 
-    const handleProfileSelect = (index) => {
+    const handleProfileSelect = index => {
         setActiveIndex(index);
     };
 
-    const handleMouseEnter = (index) => {
+    const handleMouseEnter = index => {
         setIsHovered(true);
         setActiveIndex(index);
     };
@@ -53,8 +53,7 @@ const ProfileGrid = ({ blok }) => {
                             className={`carousel-slide ${index === activeIndex ? 'active' : ''}`}
                             style={{
                                 backgroundImage: `url(${profile.image.filename + '/m/'})`,
-                            }}
-                        >
+                            }}>
                             {index === activeIndex && (
                                 <div className="overlay">
                                     <h3 className="profile-name">{profile.name}</h3>
@@ -156,13 +155,13 @@ const ProfileGrid = ({ blok }) => {
                 .profile-name {
                     font-weight: 700;
                     font-size: 20px;
-                    color: #2A2A2A;
+                    color: #2a2a2a;
                 }
 
                 .profile-description {
                     font-weight: 300;
                     font-size: ${({ theme }) => theme.typography.fontSize.h6};
-                    color: #2A2A2A;
+                    color: #2a2a2a;
                 }
             `}</style>
         </ContentContainer>

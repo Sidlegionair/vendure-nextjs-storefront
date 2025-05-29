@@ -4,10 +4,10 @@ import Script from 'next/script';
 
 const HubspotFormBlock = ({ blok }) => {
     const {
-        portalId = "145432083",
-        formId = "7169da37-5530-45a3-a6f5-13590b81a61c",
-        region = "eu1",
-        targetId = "hubspot-form-container",
+        portalId = '145432083',
+        formId = '7169da37-5530-45a3-a6f5-13590b81a61c',
+        region = 'eu1',
+        targetId = 'hubspot-form-container',
     } = blok;
 
     return (
@@ -31,10 +31,10 @@ const HubspotFormBlock = ({ blok }) => {
             />
 
             <style jsx>{`
-        .hubspot-form-section {
-          width: 100%;
-        }
-      `}</style>
+                .hubspot-form-section {
+                    width: 100%;
+                }
+            `}</style>
         </section>
     );
 };

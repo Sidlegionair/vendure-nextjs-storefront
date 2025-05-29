@@ -6,7 +6,7 @@ const PageHeading = ({ blok }) => {
     // Render and sanitize the rich text content
     const htmlContent = renderRichText(blok.content);
     const sanitizedContent = sanitizeHtml(htmlContent, {
-        allowedTags: [...sanitizeHtml.defaults.allowedTags, "img"],
+        allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img'],
         allowedAttributes: sanitizeHtml.defaults.allowedAttributes,
     });
 
@@ -18,10 +18,7 @@ const PageHeading = ({ blok }) => {
     const enableNegativeMargin = blok.enableNegativeMargin ?? true; // Default to true if the field is undefined
 
     return (
-        <div
-            className="page-heading"
-            {...storyblokEditable(blok)}
-        >
+        <div className="page-heading" {...storyblokEditable(blok)}>
             <div className="rich-text-editor" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
 
             <style jsx>{`
@@ -42,7 +39,7 @@ const PageHeading = ({ blok }) => {
                 .page-heading::before {
                     background-size: cover;
                     background-position: center center;
-                    background-image: url("${backgroundImageUrl}");
+                    background-image: url('${backgroundImageUrl}');
                     content: ' ';
                     position: absolute;
                     top: 0;

@@ -30,7 +30,11 @@ export const AddressesPage: React.FC<InferGetServerSidePropsType<typeof getServe
     useOutsideClick(ref, () => onModalClose());
 
     return (
-        <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation} pageTitle={t('addressesPageTitle')}>
+        <Layout
+            categories={props.collections}
+            navigation={props.navigation}
+            subnavigation={props.subnavigation}
+            pageTitle={t('addressesPageTitle')}>
             <AnimatePresence>
                 {addressToEdit && (
                     <Modal initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -52,28 +56,28 @@ export const AddressesPage: React.FC<InferGetServerSidePropsType<typeof getServe
                 </Stack>
                 <FormContainer>
                     <FormWrapper>
-                    <CustomerWrap w100 itemsStart gap="1.75rem">
-                    <Wrapper w100 gap="1.5rem">
-                        <Stack w100>
-                            <AddressForm
-                                country={country}
-                                onSubmit={onSubmitCreate}
-                                availableCountries={props.availableCountries}
-                            />
-                        </Stack>
-                        <Wrap w100 itemsEnd gap="2.5rem">
-                            {activeCustomer?.addresses?.map(address => (
-                                <AddressBox
-                                    key={address.id}
-                                    address={address}
-                                    onEdit={onEdit}
-                                    onDelete={onDelete}
-                                    deleting={deleting}
-                                />
-                            ))}
-                        </Wrap>
-                    </Wrapper>
-                </CustomerWrap>
+                        <CustomerWrap w100 itemsStart gap="1.75rem">
+                            <Wrapper w100 gap="1.5rem">
+                                <Stack w100>
+                                    <AddressForm
+                                        country={country}
+                                        onSubmit={onSubmitCreate}
+                                        availableCountries={props.availableCountries}
+                                    />
+                                </Stack>
+                                <Wrap w100 itemsEnd gap="2.5rem">
+                                    {activeCustomer?.addresses?.map(address => (
+                                        <AddressBox
+                                            key={address.id}
+                                            address={address}
+                                            onEdit={onEdit}
+                                            onDelete={onDelete}
+                                            deleting={deleting}
+                                        />
+                                    ))}
+                                </Wrap>
+                            </Wrapper>
+                        </CustomerWrap>
                     </FormWrapper>
                 </FormContainer>
             </StyledContentContainer>
@@ -142,7 +146,6 @@ const Modal = styled(motion.div)`
     background-color: ${p => p.theme.background.modal};
 `;
 
-
 const StyledContentContainer = styled(ContentContainer)`
     padding: 80px 50px 50px;
     justify-content: start;
@@ -168,9 +171,6 @@ const StyledContentContainer = styled(ContentContainer)`
         width: 100%;
         padding: 4rem 1.5rem 2rem;
     }
-
-
-
 
     position: relative;
     height: 100%;

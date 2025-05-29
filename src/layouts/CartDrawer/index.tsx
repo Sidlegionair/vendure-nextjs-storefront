@@ -63,9 +63,9 @@ const QuantityBadge = styled.div`
     right: -0.5rem;
 
     //@media(min-width: 767px) {
-        padding: 0.25rem;
-        width: 1.5rem;
-        height: 1.5rem;
+    padding: 0.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
     //}
     border-radius: 100%;
     background: ${p => p.theme.gray(100)};
@@ -79,10 +79,10 @@ const Quantity = styled(TP)`
 `;
 
 const CartComponentMain = styled(motion.div)`
-    @media(max-width: 767px) {
+    @media (max-width: 767px) {
         width: 80%;
     }
-    
+
     height: 10%;
     height: 100%;
 

@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { X, Filter } from 'lucide-react';
 import { InferGetStaticPropsType } from 'next';
 import { useTranslation } from 'next-i18next';
-import { ContentContainer, Stack, TP, TH1, MainGrid } from '@/src/components/atoms';
+import { ContentContainer, Stack, TP, MainGrid } from '@/src/components/atoms';
 import { Breadcrumbs } from '@/src/components/molecules';
 import { IconButton } from '@/src/components/molecules/Button';
 import { FacetFilterCheckbox } from '@/src/components/molecules/FacetFilter';
@@ -17,7 +17,7 @@ import { getStaticProps } from './props';
 import { Layout } from '@/src/layouts';
 import { FacetGroupDropdown, FacetGroup, FacetValue } from '@/src/components/molecules/FacetGroupDropdown';
 
-const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = (props) => {
+const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = props => {
     const router = useRouter();
     const { t } = useTranslation('collections');
     const { t: breadcrumb } = useTranslation('common');
@@ -46,16 +46,16 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
             const queryValue = Array.isArray(value) ? value[0] : value;
 
             const facetGroup = facetValues.find(
-                (f) =>
+                f =>
                     f.id === key ||
                     (f.code && f.code.toLowerCase() === key.toLowerCase()) ||
-                    (f.name && f.name.toLowerCase() === key.toLowerCase())
+                    (f.name && f.name.toLowerCase() === key.toLowerCase()),
             );
 
             if (!facetGroup || !facetGroup.values) return;
 
             const facetValue = facetGroup.values.find(
-                (v) => v.id === queryValue || v.name.toLowerCase() === queryValue?.toLowerCase()
+                v => v.id === queryValue || v.name.toLowerCase() === queryValue?.toLowerCase(),
             );
             if (!facetValue) return;
 
@@ -78,7 +78,7 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
             name: props.collection?.name,
             href: `/collections/${props.collection?.parent?.slug}/${props.collection?.slug}`,
         },
-    ].filter((b) => b.name !== '__root_collection__');
+    ].filter(b => b.name !== '__root_collection__');
 
     // Define which facet groups (by their code) should be shown in the top bar.
     const displayFacetCodes = [
@@ -96,27 +96,19 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
 
         if (isSelected) {
             delete updatedQuery[group.id];
-            router
-                .replace({ query: updatedQuery }, undefined, { shallow: true })
-                .then(() => {
-                    removeFilter(group, value);
-                });
+            router.replace({ query: updatedQuery }, undefined, { shallow: true }).then(() => {
+                removeFilter(group, value);
+            });
         } else {
             updatedQuery[group.id] = value.id;
-            router
-                .replace({ query: updatedQuery }, undefined, { shallow: true })
-                .then(() => {
-                    applyFilter(group, value);
-                });
+            router.replace({ query: updatedQuery }, undefined, { shallow: true }).then(() => {
+                applyFilter(group, value);
+            });
         }
     };
 
     return (
-        <Layout
-            categories={props.collections}
-            navigation={props.navigation}
-            subnavigation={props.subnavigation}
-        >
+        <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation}>
             <HeadingStack>
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
                 <h1>{collection?.name}</h1>
@@ -140,9 +132,9 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
                             <CenterCell>
                                 <DesktopFilters>
                                     <FacetDropdownsWrapper>
-                                        {displayFacetCodes.map((code) => {
+                                        {displayFacetCodes.map(code => {
                                             const facetGroup = facetValues?.find(
-                                                (f) => f.code?.toLowerCase() === code.toLowerCase()
+                                                f => f.code?.toLowerCase() === code.toLowerCase(),
                                             );
                                             if (!facetGroup) return null;
                                             return (
@@ -172,8 +164,8 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
                         <DesktopFacets>
                             <Stack column flexWrap>
                                 {facetValues
-                                    ?.filter((f) => !displayFacetCodes.includes(f.code?.toLowerCase() || ''))
-                                    .map((f) => (
+                                    ?.filter(f => !displayFacetCodes.includes(f.code?.toLowerCase() || ''))
+                                    .map(f => (
                                         <FacetFilterCheckbox
                                             key={f.id}
                                             facet={f}
@@ -211,15 +203,13 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
-                                    transition={{ duration: 0.2, ease: 'easeInOut' }}
-                                >
+                                    transition={{ duration: 0.2, ease: 'easeInOut' }}>
                                     <FacetsFilters
-                                        onClick={(e) => e.stopPropagation()}
+                                        onClick={e => e.stopPropagation()}
                                         initial={{ x: '-100%' }}
                                         animate={{ x: 0 }}
                                         exit={{ x: '-100%' }}
-                                        transition={{ duration: 0.3, ease: 'easeInOut' }}
-                                    >
+                                        transition={{ duration: 0.3, ease: 'easeInOut' }}>
                                         <Stack justifyBetween itemsCenter>
                                             <TP weight={400} upperCase>
                                                 {t('filters')}
@@ -232,8 +222,8 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
                                         {/* --- Top filters for mobile overlay --- */}
                                         <Stack column gap="1rem">
                                             {facetValues
-                                                ?.filter((f) => displayFacetCodes.includes(f.code?.toLowerCase() || ''))
-                                                .map((f) => (
+                                                ?.filter(f => displayFacetCodes.includes(f.code?.toLowerCase() || ''))
+                                                .map(f => (
                                                     <FacetGroupDropdown
                                                         key={f.id}
                                                         facetGroup={f}
@@ -246,8 +236,8 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
                                         {/* --- Remaining filters --- */}
                                         <Stack column flexWrap>
                                             {facetValues
-                                                ?.filter((f) => !displayFacetCodes.includes(f.code?.toLowerCase() || ''))
-                                                .map((f) => (
+                                                ?.filter(f => !displayFacetCodes.includes(f.code?.toLowerCase() || ''))
+                                                .map(f => (
                                                     <FacetFilterCheckbox
                                                         key={f.id}
                                                         facet={f}
@@ -285,11 +275,7 @@ const CollectionPage: React.FC<InferGetStaticPropsType<typeof getStaticProps>> =
                         </AnimatePresence>
 
                         <Stack w100 column>
-                            <MainGrid>
-                                {products?.map((p) => (
-                                    <ProductTile product={p} key={p.slug} />
-                                ))}
-                            </MainGrid>
+                            <MainGrid>{products?.map(p => <ProductTile product={p} key={p.slug} />)}</MainGrid>
                             <Pagination
                                 page={paginationInfo.currentPage}
                                 changePage={changePage}
@@ -330,16 +316,6 @@ const HeadingStack = styled(Stack)`
         background-size: cover;
         opacity: 0.3;
         z-index: -1;
-    }
-`;
-
-const StyledTH1 = styled(TH1)`
-    font-size: 55px;
-    line-height: 55px;
-
-    @media (max-width: 767px) {
-        font-size: 40px;
-        line-height: 40px;
     }
 `;
 
@@ -410,7 +386,7 @@ const SortByWrapper = styled.div``;
 
 const DesktopFacets = styled.div`
     display: none;
-    @media (min-width: ${(p) => p.theme.breakpoints.xl}) {
+    @media (min-width: ${p => p.theme.breakpoints.xl}) {
         display: block;
         max-width: 287px;
         width: 100%;
@@ -426,7 +402,7 @@ const FacetsOverlay = styled(motion.div)`
     display: flex;
     justify-content: flex-start;
     align-items: stretch;
-    @media (min-width: ${(p) => p.theme.breakpoints.xl}) {
+    @media (min-width: ${p => p.theme.breakpoints.xl}) {
         display: none;
     }
 `;

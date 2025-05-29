@@ -19,7 +19,7 @@ export const FormWrapper = styled(Stack)`
     position: relative;
     padding: 60px 65px;
     border-radius: ${({ theme }) => theme.borderRadius};
-    border: 1px solid #4D4D4D;
+    border: 1px solid #4d4d4d;
     align-items: center;
     width: 100%;
     max-width: 1200px;
@@ -46,7 +46,7 @@ export const Form = styled.form`
     width: 100%;
     max-width: 480px;
 
-    @media(max-width: ${({ theme }) => theme.breakpoints.md}) {
+    @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
         max-width: 100%;
     }
 `;
@@ -62,7 +62,7 @@ export const FormContent = styled(Stack)`
     width: 100%;
     max-width: 700px;
 
-    @media(max-width: ${({ theme }) => theme.breakpoints.md}) {
+    @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
         max-width: 100%;
     }
 `;

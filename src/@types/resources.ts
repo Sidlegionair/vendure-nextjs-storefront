@@ -6,12 +6,12 @@ import homepage from '../../public/locales/en/homepage.json';
 import products from '../../public/locales/en/products.json';
 
 const resources = {
-  checkout,
-  collections,
-  common,
-  customer,
-  homepage,
-  products
+    checkout,
+    collections,
+    common,
+    customer,
+    homepage,
+    products,
 } as const;
 
 export default resources;

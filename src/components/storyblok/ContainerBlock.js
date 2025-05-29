@@ -10,9 +10,7 @@ const ContainerBlock = ({ blok }) => {
         <section {...storyblokEditable(blok)} className="container-section">
             <div className="container">
                 {content.length > 0 ? (
-                    content.map((nestedBlok) => (
-                        <StoryblokComponent blok={nestedBlok} key={nestedBlok._uid} />
-                    ))
+                    content.map(nestedBlok => <StoryblokComponent blok={nestedBlok} key={nestedBlok._uid} />)
                 ) : (
                     <p>No content available</p> // Fallback message if no content
                 )}
@@ -34,7 +32,7 @@ const ContainerBlock = ({ blok }) => {
                     //padding: 20px; /* Optional padding for content spacing */
                     box-shadow: ${blok.shadow ? '0px 4px 20px rgba(0, 0, 0, 0.1)' : 'none'};
 
-                    @media(max-width: 767px) {
+                    @media (max-width: 767px) {
                         padding: 30px 0;
                     }
                 }

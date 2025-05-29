@@ -4,7 +4,7 @@ import { CollectionType, FiltersFacetType, ProductSearchType, SearchSelector } f
 import { GraphQLTypes, SortOrder } from '@/src/zeus';
 import { storefrontApiQuery } from '@/src/graphql/client';
 import { useRouter } from 'next/router';
-import { PER_PAGE, collectionsEmptyState, prepareFilters, reduceFacets } from './utils';
+import { PER_PAGE, collectionsEmptyState, reduceFacets } from './utils';
 import { CollectionContainerType, Sort } from './types';
 import { useChannels } from '../channels';
 
@@ -26,16 +26,16 @@ const useCollectionContainer = createContainer<
         sort?: Sort;
         page?: number;
     }
->((initialState) => {
+>(initialState => {
     if (!initialState?.collection) return collectionsEmptyState;
 
     const ctx = useChannels();
-    const [collection, setCollection] = useState(initialState.collection);
+    const [collection] = useState(initialState.collection);
     const [products, setProducts] = useState(initialState.products);
     const [totalProducts, setTotalProducts] = useState(initialState.totalProducts);
     const [facetValues, setFacetValues] = useState(initialState.facets);
     const [filters, setFilters] = useState<{ [key: string]: string[] }>(
-        initialState.filters ? initialState.filters : {}
+        initialState.filters ? initialState.filters : {},
     );
     const initialSort = initialState.sort || { key: 'title', direction: SortOrder.ASC };
     const [sort, setSort] = useState(initialSort);
@@ -55,7 +55,7 @@ const useCollectionContainer = createContainer<
 
         const initialFilters: { [key: string]: string[] } = {};
 
-        Object.keys(query).forEach((key) => {
+        Object.keys(query).forEach(key => {
             if (key !== 'page' && key !== 'sort') {
                 const value = query[key];
 
@@ -63,7 +63,7 @@ const useCollectionContainer = createContainer<
 
                 if (Array.isArray(value)) {
                     // If it's an array, split each string by ',' and flatten the result
-                    values = value.flatMap((v) => v.split(','));
+                    values = value.flatMap(v => v.split(','));
                 } else if (typeof value === 'string') {
                     // If it's a single string, split by ','
                     values = value.split(',');
@@ -91,7 +91,7 @@ const useCollectionContainer = createContainer<
     // Fetch brand data
     useEffect(() => {
         const fetchBrandData = async () => {
-            const productIds = products.map((p) => p.productId).filter(Boolean);
+            const productIds = products.map(p => p.productId).filter(Boolean);
 
             if (productIds.length === 0) {
                 console.error('No valid product IDs found for brand query.');
@@ -99,7 +99,7 @@ const useCollectionContainer = createContainer<
             }
 
             const brands = await Promise.all(
-                productIds.map(async (id) => {
+                productIds.map(async id => {
                     try {
                         const { product } = await storefrontApiQuery(ctx)({
                             product: [{ id }, { customFields: { brand: true } }],
@@ -107,16 +107,13 @@ const useCollectionContainer = createContainer<
 
                         return {
                             id,
-                            brand:
-                                typeof product?.customFields?.brand === 'string'
-                                    ? product.customFields.brand
-                                    : null, // Ensure brand is string or null
+                            brand: typeof product?.customFields?.brand === 'string' ? product.customFields.brand : null, // Ensure brand is string or null
                         };
                     } catch (error) {
                         console.error(`Failed to fetch brand for product ID: ${id}`, error);
                         return { id, brand: null }; // Fallback to null
                     }
-                })
+                }),
             );
 
             setBrandData(brands); // No error here now
@@ -129,22 +126,26 @@ const useCollectionContainer = createContainer<
     const enrichedProducts: EnrichedProductType[] = useMemo(() => {
         if (!facetValues.length && !brandData.length) return products;
 
-        const facetValueMap = facetValues.reduce((map, facet) => {
-            facet.values.forEach((value) => {
-                map[value.id] = { name: facet.name, code: facet.code, value: value.name };
-            });
-            return map;
-        }, {} as Record<string, { name: string; code: string; value: string }>);
+        const facetValueMap = facetValues.reduce(
+            (map, facet) => {
+                facet.values.forEach(value => {
+                    map[value.id] = { name: facet.name, code: facet.code, value: value.name };
+                });
+                return map;
+            },
+            {} as Record<string, { name: string; code: string; value: string }>,
+        );
 
-        const brandMap = brandData.reduce((map, brandEntry) => {
-            map[brandEntry.id] = brandEntry.brand;
-            return map;
-        }, {} as Record<string, string | null>);
+        const brandMap = brandData.reduce(
+            (map, brandEntry) => {
+                map[brandEntry.id] = brandEntry.brand;
+                return map;
+            },
+            {} as Record<string, string | null>,
+        );
 
-        return products.map((product) => {
-            const enrichedFacets = product.facetValueIds
-                .map((id) => facetValueMap[id])
-                .filter(Boolean);
+        return products.map(product => {
+            const enrichedFacets = product.facetValueIds.map(id => facetValueMap[id]).filter(Boolean);
 
             const brand = brandMap[product.productId] || null;
 
@@ -158,14 +159,11 @@ const useCollectionContainer = createContainer<
         });
     }, [products, facetValues, brandData]);
 
-    const applyFilter = async (
-        group: { id: string; name: string },
-        value: { id: string; name: string }
-    ) => {
+    const applyFilter = async (group: { id: string; name: string }, value: { id: string; name: string }) => {
         // Use a functional update so we always start with the latest state.
-        setFilters((prev) => {
+        setFilters(prev => {
             const updatedGroupFilters = [...(prev[group.id] || []), value.id].filter(
-                (id, index, self) => self.indexOf(id) === index
+                (id, index, self) => self.indexOf(id) === index,
             );
             const newState = { ...prev, [group.id]: updatedGroupFilters };
 
@@ -187,12 +185,9 @@ const useCollectionContainer = createContainer<
         });
     };
 
-    const removeFilter = async (
-        group: { id: string; name: string },
-        value: { id: string; name: string }
-    ) => {
-        setFilters((prev) => {
-            const updatedGroupFilters = prev[group.id]?.filter((id) => id !== value.id) || [];
+    const removeFilter = async (group: { id: string; name: string }, value: { id: string; name: string }) => {
+        setFilters(prev => {
+            const updatedGroupFilters = prev[group.id]?.filter(id => id !== value.id) || [];
             const newState = updatedGroupFilters.length
                 ? { ...prev, [group.id]: updatedGroupFilters }
                 : Object.fromEntries(Object.entries(prev).filter(([key]) => key !== group.id));
@@ -200,7 +195,7 @@ const useCollectionContainer = createContainer<
             if (typeof window !== 'undefined') {
                 const url = new URL(window.location.href);
                 const existingValues = url.searchParams.get(group.name)?.split(',') || [];
-                const filteredValues = existingValues.filter((v) => v !== value.name);
+                const filteredValues = existingValues.filter(v => v !== value.name);
                 if (filteredValues.length) {
                     url.searchParams.set(group.name, filteredValues.join(','));
                 } else {
@@ -216,22 +211,17 @@ const useCollectionContainer = createContainer<
     };
 
     // Fetch filtered products
-    const getFilteredProducts = async (
-        state: { [key: string]: string[] },
-        page: number,
-        sort: Sort,
-        q?: string
-    ) => {
+    const getFilteredProducts = async (state: { [key: string]: string[] }, page: number, sort: Sort, q?: string) => {
         if (page < 1) page = 1;
         const facetValueFilters: GraphQLTypes['FacetValueFilterInput'][] = Object.entries(state).reduce(
             (filtersAcc, [key, value]) => {
-                const facet = initialState.facets.find((f) => f.id === key);
+                const facet = initialState.facets.find(f => f.id === key);
                 if (!facet) return filtersAcc; // Skip if facet not found
 
                 filtersAcc.push(value.length === 1 ? { and: value[0] } : { or: value });
                 return filtersAcc;
             },
-            [] as GraphQLTypes['FacetValueFilterInput'][]
+            [] as GraphQLTypes['FacetValueFilterInput'][],
         );
 
         const input: GraphQLTypes['SearchInput'] = {
@@ -275,7 +265,7 @@ const useCollectionContainer = createContainer<
             totalProducts,
             itemsPerPage: PER_PAGE,
         },
-        changePage: async (page) => {
+        changePage: async page => {
             if (typeof window !== 'undefined') {
                 const url = new URL(window.location.href);
                 url.searchParams.set('page', page.toString());

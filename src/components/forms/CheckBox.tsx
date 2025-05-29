@@ -108,7 +108,7 @@ const CheckboxStack = styled(Stack)`
 
 const StyledLabel = styled(Label)`
     font-size: ${p => p.theme.typography.fontSize.h6};
-`
+`;
 
 const Checkbox = styled.input`
     appearance: none;

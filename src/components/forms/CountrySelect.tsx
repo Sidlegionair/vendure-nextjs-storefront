@@ -59,14 +59,12 @@ const Wrapper = styled(Stack)`
     height: 100%;
     background: #ffffff;
     opacity: 0.8;
-
 `;
 
 const SelectWrapper = styled(Stack)`
     position: relative;
     padding: 25px;
     border: none;
-    
 `;
 
 export const StyledSelect = styled.select<{ error?: boolean }>`
@@ -77,12 +75,12 @@ export const StyledSelect = styled.select<{ error?: boolean }>`
     //margin-top: 0.6rem;
     padding: 15px 0px;
     color: ${p => p.theme.text.main};
-    border-bottom: 1px solid #BBBBBB;
+    border-bottom: 1px solid #bbbbbb;
     font-size: 16px;
     line-height: 16px;
     //background: #ffff;
 
-        // border: 1px solid ${p => p.theme.gray(600)};
+    // border: 1px solid ${p => p.theme.gray(600)};
     :focus {
         border-color: ${p => p.theme.gray(400)};
     }

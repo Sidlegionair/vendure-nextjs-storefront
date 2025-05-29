@@ -3,8 +3,8 @@ import { storyblokEditable } from '@storyblok/react';
 
 const GorgiasHelpCenterBlock = ({ blok }) => {
     const {
-        helpCenterUid = "d7ztxq8n",
-        scriptSrc = "https://help-center.gorgias.help/api/help-centers/loader.js?v=2",
+        helpCenterUid = 'd7ztxq8n',
+        scriptSrc = 'https://help-center.gorgias.help/api/help-centers/loader.js?v=2',
     } = blok;
 
     const containerRef = useRef(null);
@@ -12,16 +12,16 @@ const GorgiasHelpCenterBlock = ({ blok }) => {
     useEffect(() => {
         if (containerRef.current) {
             // Remove any existing help center script to prevent duplication
-            const existingScript = containerRef.current.querySelector("script[data-gorgias-loader-help-center]");
+            const existingScript = containerRef.current.querySelector('script[data-gorgias-loader-help-center]');
             if (existingScript) {
                 existingScript.remove();
             }
 
-            const script = document.createElement("script");
+            const script = document.createElement('script');
             script.src = scriptSrc;
             script.defer = true;
-            script.setAttribute("data-gorgias-loader-help-center", "");
-            script.setAttribute("data-gorgias-help-center-uid", helpCenterUid);
+            script.setAttribute('data-gorgias-loader-help-center', '');
+            script.setAttribute('data-gorgias-help-center-uid', helpCenterUid);
             containerRef.current.appendChild(script);
         }
     }, [scriptSrc, helpCenterUid]);

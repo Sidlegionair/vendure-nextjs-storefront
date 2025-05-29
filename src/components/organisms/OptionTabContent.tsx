@@ -2,8 +2,22 @@ import React from 'react';
 import { Stack } from '@/src/components';
 import styled from '@emotion/styled';
 
+// Define a more specific type for the customFields object
+interface OptionTabCustomFields {
+    [key: `optionTab${number}Bar${number}Visible`]: boolean;
+    [key: `optionTab${number}Bar${number}Name`]: string;
+    [key: `optionTab${number}Bar${number}Min`]: number;
+    [key: `optionTab${number}Bar${number}Max`]: number;
+    [key: `optionTab${number}Bar${number}Steps`]: number;
+    [key: `optionTab${number}Bar${number}Rating`]: number;
+    [key: `optionTab${number}Bar${number}MinLabel`]: string;
+    [key: `optionTab${number}Bar${number}MaxLabel`]: string;
+    // Allow for other custom fields that might be present
+    [key: string]: unknown;
+}
+
 interface OptionTabContentProps {
-    customFields?: Record<string, any>;
+    customFields?: OptionTabCustomFields;
     tabIndex: number;
 }
 
@@ -11,9 +25,7 @@ export const OptionTabContent: React.FC<OptionTabContentProps> = ({ customFields
     const MAX_BARS = 4;
 
     const bars = Array.from({ length: MAX_BARS }, (_, j) => j + 1)
-        .filter(
-            barIndex => customFields?.[`optionTab${tabIndex}Bar${barIndex}Visible`]
-        )
+        .filter(barIndex => customFields?.[`optionTab${tabIndex}Bar${barIndex}Visible`])
         .map(barIndex => ({
             name: customFields?.[`optionTab${tabIndex}Bar${barIndex}Name`] || `Bar ${barIndex}`,
             min: customFields?.[`optionTab${tabIndex}Bar${barIndex}Min`] || 0,
@@ -23,7 +35,6 @@ export const OptionTabContent: React.FC<OptionTabContentProps> = ({ customFields
             minLabel: customFields?.[`optionTab${tabIndex}Bar${barIndex}MinLabel`] || '',
             maxLabel: customFields?.[`optionTab${tabIndex}Bar${barIndex}MaxLabel`] || '',
         }));
-
 
     return (
         <Stack column gap="1rem">
@@ -77,13 +88,13 @@ const BarLabel = styled.div`
 
 const BarRangeWrapper = styled.div`
     display: flex;
-    justify-content: center;    
+    justify-content: center;
     align-items: center;
     width: 100%;
     padding: 3px;
     //padding-right: 3px;
     height: 14px;
-    border: 0.5px solid #D4D4D4;
+    border: 0.5px solid #d4d4d4;
     border-radius: 15px;
     overflow: hidden; /* Ensures the border radius applies cleanly */
 `;
@@ -105,8 +116,8 @@ const BarRange: React.FC<{ value: number; max: number; steps: number }> = ({ val
                             index === 0
                                 ? '15px 0 0 15px' // Rounded on the left for the first step
                                 : index === steps - 1
-                                    ? '0 15px 15px 0' // Rounded on the right for the last step
-                                    : '0', // No rounding for middle steps
+                                  ? '0 15px 15px 0' // Rounded on the right for the last step
+                                  : '0', // No rounding for middle steps
                         transition: 'background-color 0.3s ease-in-out',
                     }}
                 />

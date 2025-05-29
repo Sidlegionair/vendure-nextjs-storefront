@@ -11,7 +11,7 @@ const fetchStoryblokPaths = async () => {
     }
 
     const data = await response.json();
-    return data.stories.map((story) => ({
+    return data.stories.map(story => ({
         loc: `/${story.full_slug}`, // URL path
         lastmod: story.published_at || new Date().toISOString(), // Last modification date
     }));
@@ -22,7 +22,7 @@ module.exports = {
     siteUrl: process.env.VERCEL_URL || 'http://localhost:3000', // Your website's URL
     generateRobotsTxt: true, // Generates a robots.txt file
     sitemapSize: 7000, // Number of URLs per sitemap file
-    additionalPaths: async (config) => {
+    additionalPaths: async config => {
         const storyblokPaths = await fetchStoryblokPaths();
         return storyblokPaths;
     },

@@ -3,17 +3,20 @@ import { DEFAULT_CHANNEL, DEFAULT_CHANNEL_SLUG, DEFAULT_LOCALE } from '@/src/lib
 import { ContextModel } from '@/src/lib/getStatic';
 import { fetchChannels } from './channels';
 
+interface Channel {
+    slug: string;
+    nationalLocale: string;
+    locales?: string[];
+}
 
-export const getContext = async (
-    ctx: ContextModel | GetServerSidePropsContext
-): Promise<ContextModel> => {
+export const getContext = async (ctx: ContextModel | GetServerSidePropsContext): Promise<ContextModel> => {
     // Grab the channel param and locale param from the route.
     // Note: channel param might actually be a locale if it's "nl" or "en"
     let channelSlug = ctx.params?.channel ?? DEFAULT_CHANNEL_SLUG;
     let locale = ctx.params?.locale as string | string[] | undefined;
 
-    console.log("Initial channel param:", channelSlug);
-    console.log("Initial locale param:", locale);
+    console.log('Initial channel param:', channelSlug);
+    console.log('Initial locale param:', locale);
 
     // If the channel param is "nl" or "en", then it's actually the locale.
     if (channelSlug === 'nl' || channelSlug === 'en') {
@@ -29,7 +32,7 @@ export const getContext = async (
     const dynamicChannels = await fetchChannels();
 
     // If the provided channelSlug does not exist in the dynamic channels, fallback to the default channel.
-    const matchedChannel = dynamicChannels.find((c: any) => c.slug === channelSlug);
+    const matchedChannel = dynamicChannels.find((c: Channel) => c.slug === channelSlug);
     if (!matchedChannel) {
         channelSlug = DEFAULT_CHANNEL;
     }
@@ -37,7 +40,7 @@ export const getContext = async (
     // On the server, if a channel cookie exists, override channelSlug if it matches a dynamic channel.
     if ('res' in ctx && ctx.req.cookies['channel']) {
         const channelCookie = ctx.req.cookies['channel'];
-        const found = dynamicChannels.find((c: any) => c.slug === channelCookie);
+        const found = dynamicChannels.find((c: Channel) => c.slug === channelCookie);
         if (found) {
             channelSlug = found.slug;
         }
@@ -45,10 +48,9 @@ export const getContext = async (
 
     // If no locale is provided at this point, infer it from the dynamic channel.
     if (!locale) {
-        const channelObj = dynamicChannels.find((c: any) => c.slug === channelSlug);
+        const channelObj = dynamicChannels.find((c: Channel) => c.slug === channelSlug);
         const inferredLocale: string =
-            channelObj?.nationalLocale ||
-            (channelObj?.locales?.length ? channelObj.locales[0] : DEFAULT_LOCALE);
+            channelObj?.nationalLocale || (channelObj?.locales?.length ? channelObj.locales[0] : DEFAULT_LOCALE);
 
         console.log('DEBUG (inferred):', {
             params: { channel: channelObj?.slug ?? DEFAULT_CHANNEL, locale: inferredLocale },
@@ -59,8 +61,8 @@ export const getContext = async (
     // Ensure locale is a string. If it's an array, take the first element.
     const finalLocale = Array.isArray(locale) ? locale[0] : locale;
 
-    console.log("Resolved channel:", channelSlug);
-    console.log("Resolved locale:", finalLocale);
+    console.log('Resolved channel:', channelSlug);
+    console.log('Resolved locale:', finalLocale);
     const resolvedChannelSlug = Array.isArray(channelSlug) ? channelSlug[0] : channelSlug;
     const resolvedFinalLocale = Array.isArray(finalLocale) ? finalLocale[0] : finalLocale;
 

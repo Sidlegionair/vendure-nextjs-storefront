@@ -1,15 +1,15 @@
-import { storyblokEditable, StoryblokComponent } from "@storyblok/react";
-import { ContentContainer } from "@/src/components";
+import { storyblokEditable, StoryblokComponent } from '@storyblok/react';
+import { ContentContainer } from '@/src/components';
 
 /**
  * Safely parse a comma-separated string (e.g. "40,60") into two integers [40, 60].
  * Enforces 2 columns (if an incorrect format is supplied, fallback to 50-50).
  */
 function parseColumnWidths(widthString) {
-    if (typeof widthString !== "string") return [50, 50];
+    if (typeof widthString !== 'string') return [50, 50];
 
-    const parts = widthString.split(",").map((w) => parseInt(w.trim(), 10));
-    if (parts.length !== 2 || parts.some((n) => isNaN(n) || n <= 0)) {
+    const parts = widthString.split(',').map(w => parseInt(w.trim(), 10));
+    if (parts.length !== 2 || parts.some(n => isNaN(n) || n <= 0)) {
         return [50, 50];
     }
 
@@ -30,7 +30,7 @@ const TwoColGrid = ({ blok }) => {
     // Parse and validate all relevant values.
     const [initialWidth1, initialWidth2] = parseColumnWidths(blok.columnWidths);
     let columnGap = parseColumnGap(blok.columnGap);
-    const topMargin = typeof blok.topMargin === "number" ? blok.topMargin : 0;
+    const topMargin = typeof blok.topMargin === 'number' ? blok.topMargin : 0;
 
     // Scale down widths if sum(width1 + width2 + gap) exceeds 100.
     const totalDesired = initialWidth1 + initialWidth2 + columnGap;
@@ -49,26 +49,23 @@ const TwoColGrid = ({ blok }) => {
     const secondColumn = columns[1] || {};
 
     // Background Image Support (ensuring /m/ is appended)
-    const backgroundImageUrl = blok.backgroundImage?.filename
-        ? `${blok.backgroundImage.filename}/m/`
-        : "";
+    const backgroundImageUrl = blok.backgroundImage?.filename ? `${blok.backgroundImage.filename}/m/` : '';
 
-    const backgroundSize = blok.backgroundSize || "cover";
-    const backgroundPosition = blok.backgroundPosition || "center";
-    const backgroundRepeat = blok.backgroundRepeat || "no-repeat";
+    const backgroundSize = blok.backgroundSize || 'cover';
+    const backgroundPosition = blok.backgroundPosition || 'center';
+    const backgroundRepeat = blok.backgroundRepeat || 'no-repeat';
 
     const gridContent = (
         <div
             className="two-col-grid"
             style={{
                 marginTop: `${topMargin}px`,
-                backgroundImage: backgroundImageUrl ? `url(${backgroundImageUrl})` : "none",
+                backgroundImage: backgroundImageUrl ? `url(${backgroundImageUrl})` : 'none',
                 backgroundSize: backgroundSize,
                 backgroundPosition: backgroundPosition,
                 backgroundRepeat: backgroundRepeat,
             }}
-            {...storyblokEditable(blok)}
-        >
+            {...storyblokEditable(blok)}>
             <div className="column first-column">
                 <StoryblokComponent blok={firstColumn} />
             </div>
@@ -103,11 +100,7 @@ const TwoColGrid = ({ blok }) => {
         </div>
     );
 
-    const content = blok.wrap_in_content_container ? (
-        <ContentContainer>{gridContent}</ContentContainer>
-    ) : (
-        gridContent
-    );
+    const content = blok.wrap_in_content_container ? <ContentContainer>{gridContent}</ContentContainer> : gridContent;
 
     return <>{content}</>;
 };

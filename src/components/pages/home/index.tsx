@@ -2,11 +2,10 @@ import styled from '@emotion/styled';
 import { InferGetStaticPropsType } from 'next';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'next-i18next';
-import { Stack, ContentContainer } from '@/src/components/atoms';
-import { HomePageSliders } from '@/src/components/organisms/HomePageSliders';
+import { Stack } from '@/src/components/atoms';
 import { CircularProductCarousel } from '@/src/components/organisms/CircularProductCarousel';
 import { Layout } from '@/src/layouts';
-import { StoryblokComponent, getStoryblokApi } from '@storyblok/react';
+import { StoryblokComponent, getStoryblokApi, SbBlokData } from '@storyblok/react';
 import type { getStaticProps } from './props';
 
 const Main = styled(Stack)`
@@ -16,7 +15,7 @@ const Main = styled(Stack)`
 
 export const Home: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = props => {
     const { i18n, t } = useTranslation('homepage');
-    const [storyblokSections, setStoryblokSections] = useState<any[] | null>(null);
+    const [storyblokSections, setStoryblokSections] = useState<SbBlokData[] | null>(null);
 
     useEffect(() => {
         const fetchStory = async () => {
@@ -37,12 +36,14 @@ export const Home: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = pr
     }, [i18n.language]);
 
     return (
-        <Layout navigation={props.navigation} subnavigation={props.subnavigation} categories={props.categories} pageTitle={t('seo.home')}>
+        <Layout
+            navigation={props.navigation}
+            subnavigation={props.subnavigation}
+            categories={props.categories}
+            pageTitle={t('seo.home')}>
             <Main w100 column gap="4rem">
                 {/* Render CircularProductCarousel only if products array exists and has items */}
-                {props.products && props.products.length > 0 && (
-                    <CircularProductCarousel products={props.products} />
-                )}
+                {props.products && props.products.length > 0 && <CircularProductCarousel products={props.products} />}
 
                 {/* Render the first Storyblok component only if storyblokSections exists and is not empty */}
                 {storyblokSections && storyblokSections.length > 0 && (
@@ -50,9 +51,11 @@ export const Home: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = pr
                 )}
 
                 {/* Render additional Storyblok components if they exist */}
-                {storyblokSections && storyblokSections.length > 1 && storyblokSections.slice(1).map((section, index) => (
-                    <StoryblokComponent key={index} blok={section} />
-                ))}
+                {storyblokSections &&
+                    storyblokSections.length > 1 &&
+                    storyblokSections
+                        .slice(1)
+                        .map((section, index) => <StoryblokComponent key={index} blok={section} />)}
 
                 {/* Uncomment and conditionally render HomePageSliders if needed */}
                 {/* {props.sliders && props.sliders.length > 0 && (

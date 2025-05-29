@@ -29,7 +29,7 @@ interface CheckoutLayoutProps {
 }
 
 const ContentStack = styled(Stack)`
-    @media(max-width: ${({ theme }) => theme.breakpoints.md}) {
+    @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
         margin-top: 80px;
     }
 `;
@@ -44,26 +44,24 @@ const MainStack = styled.main`
 `;
 
 const MainStackStyled = styled.main`
-        position: relative;
-        height: 100%;
-        min-height: 100vh;
+    position: relative;
+    height: 100%;
+    min-height: 100vh;
+    width: 100%;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
-
-        &::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('/images/bg/checkout.jpeg') no-repeat center center;
-            background-size: cover;
-            opacity: 0.2;
-            z-index: -1; /* Set the background behind the content */
-        }
+        height: 100%;
+        background: url('/images/bg/checkout.jpeg') no-repeat center center;
+        background-size: cover;
+        opacity: 0.2;
+        z-index: -1; /* Set the background behind the content */
+    }
 `;
-
-
 
 export const Layout: React.FC<LayoutProps> = ({ pageTitle, children, categories, navigation, subnavigation }) => {
     const { fetchActiveOrder } = useCart();

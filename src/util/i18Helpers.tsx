@@ -1,4 +1,4 @@
-import { US, PL, FR, DE, ES, JP, NL, DK, CZ } from 'country-flag-icons/react/3x2';
+import { PL, FR, DE, ES, JP, NL, DK, CZ } from 'country-flag-icons/react/3x2';
 import React from 'react';
 import { GB } from 'country-flag-icons/react/1x1';
 

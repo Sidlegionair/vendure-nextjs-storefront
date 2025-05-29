@@ -1,16 +1,9 @@
 import { SSGQuery } from '@/src/graphql/client';
-import {
-    ProductDetailSelector,
-    homePageSlidersSelector,
-    ProductDetailType,
-    ProductVariantTileType,
-} from '@/src/graphql/selectors';
+import { ProductDetailSelector, homePageSlidersSelector, ProductDetailType } from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
 import { getNavigationTree } from '@/src/lib/menuConfig';
 import { ContextModel, makeStaticProps } from '@/src/lib/getStatic';
-import { arrayToTree } from '@/src/util/arrayToTree';
-import React from 'react';
-import { InferGetStaticPropsType } from 'next';
+import { mapFacetValuesToFacets } from '@/src/util/productHelpers';
 
 // Define ProductSpec interface
 interface ProductSpec {
@@ -19,10 +12,7 @@ interface ProductSpec {
 }
 
 // Function to generate specs
-const generateProductSpecs = (
-    product: ProductDetailType,
-    variant?: ProductVariantTileType
-): ProductSpec[] => {
+const generateProductSpecs = (product: ProductDetailType): ProductSpec[] => {
     const specs: ProductSpec[] = [];
 
     if (typeof product?.customFields?.brand === 'string') {
@@ -49,14 +39,11 @@ const notInDemoStore = [
     { name: 'pearl', code: '#FDEEF4' },
 ];
 
-export const getStaticProps = async (
-    context: ContextModel<{ slug?: string }>
-) => {
+export const getStaticProps = async (context: ContextModel<{ slug?: string }>) => {
     const r = await makeStaticProps(['common', 'products'])(context);
     const language = r.props._nextI18Next?.initialLocale || 'en';
     const { slug } = context.params || {};
     const api = SSGQuery(r.context);
-
 
     console.log(context);
 
@@ -64,17 +51,14 @@ export const getStaticProps = async (
     const response =
         typeof slug === 'string'
             ? await api({
-                product: [{ slug }, ProductDetailSelector],
-            })
+                  product: [{ slug }, ProductDetailSelector],
+              })
             : null;
 
     if (!response?.product) return { notFound: true };
 
     const collections = await getCollections(r.context);
-    const { navigation, subnavigation } = await getNavigationTree(
-        r.context,
-        collections
-    );
+    const { navigation, subnavigation } = await getNavigationTree(r.context, collections);
 
     // Base queries for related products & clientsAlsoBought (using homePageSlidersSelector)
     // const relatedProducts = await api({
@@ -84,39 +68,29 @@ export const getStaticProps = async (
     //     ],
     // });
     const clientsAlsoBought = await api({
-        collection: [
-            { slug: response.product?.collections?.[0]?.slug || 'search' },
-            homePageSlidersSelector,
-        ],
+        collection: [{ slug: response.product?.collections?.[0]?.slug || 'search' }, homePageSlidersSelector],
     });
 
     const { optionGroups: _optionGroups, ...productData } = response.product;
 
     // Mapping option groups to match the color names <-> hex codes
-    const getFacetsValues = await SSGQuery(r.context)({
-        facets: [
-            { options: { filter: { name: { eq: 'color' } } } },
-            { items: { values: { name: true, code: true } } },
-        ],
-    });
+    // This query is not currently used but kept for future reference
+    // const getFacetsValues = await SSGQuery(r.context)({
+    //     facets: [{ options: { filter: { name: { eq: 'color' } } } }, { items: { values: { name: true, code: true } } }],
+    // });
 
-    const optionGroups = _optionGroups.map((og) => ({
+    const optionGroups = _optionGroups.map(og => ({
         ...og,
         options: og.options
-            .sort(
-                (a, b) => a.name.length - b.name.length || a.name.localeCompare(b.name)
-            )
-            .map((o) => ({
+            .sort((a, b) => a.name.length - b.name.length || a.name.localeCompare(b.name))
+            .map(o => ({
                 ...o,
-                name:
-                    notInDemoStore.find(
-                        (v) => v.name.toLowerCase() === o.code.toLowerCase()
-                    )?.code || o.name,
+                name: notInDemoStore.find(v => v.name.toLowerCase() === o.code.toLowerCase())?.code || o.name,
             })),
     }));
 
     // **Generate specs here**
-    const specs = generateProductSpecs(response.product, undefined); // Pass variant if available
+    const specs = generateProductSpecs(response.product);
 
     // ---- NEW: Enrich clientsAlsoBought with extra data (following the sliders example) ----
     // First, fetch all facets to build a lookup map
@@ -134,43 +108,63 @@ export const getStaticProps = async (
         ],
     });
     const facetValueMap =
-        allFacetsResponse?.facets?.items.reduce((map, facet) => {
-            facet.values.forEach((value) => {
-                map[value.id] = { code: facet.code, name: facet.name, value: value.name };
-            });
-            return map;
-        }, {} as Record<string, { code: string; name: string; value: string }>) ||
-        {};
+        allFacetsResponse?.facets?.items.reduce(
+            (map, facet) => {
+                facet.values.forEach(value => {
+                    map[value.id] = { code: facet.code, name: facet.name, value: value.name };
+                });
+                return map;
+            },
+            {} as Record<string, { code: string; name: string; value: string }>,
+        ) || {};
+
+    // Define types for collection structure
+    interface _CollectionWithItems {
+        collection: {
+            productVariants: {
+                items: Array<{
+                    id: string;
+                    product: {
+                        id: string;
+                        // Other product properties
+                    };
+                    facetValues: Array<{
+                        id: string;
+                        code: string;
+                        name: string;
+                        facet: {
+                            code: string;
+                            name: string;
+                        };
+                    }>;
+                    [key: string]: unknown;
+                }>;
+            };
+        };
+    }
 
     // Enrich each product from clientsAlsoBought using the same logic as in the sliders example.
-    let enrichedClientsAlsoBought = clientsAlsoBought;
+    const enrichedClientsAlsoBought = clientsAlsoBought;
     if (
         clientsAlsoBought &&
         clientsAlsoBought.collection &&
-        Array.isArray((clientsAlsoBought.collection as any).items)
+        clientsAlsoBought.collection.productVariants &&
+        Array.isArray(clientsAlsoBought.collection.productVariants.items)
     ) {
-        (enrichedClientsAlsoBought.collection as any).items = await Promise.all(
-            ((clientsAlsoBought.collection as any).items as any[]).map(async (product: any) => {
+        // We know enrichedClientsAlsoBought.collection exists here because it's the same as clientsAlsoBought.collection
+        enrichedClientsAlsoBought.collection!.productVariants.items = await Promise.all(
+            clientsAlsoBought.collection.productVariants.items.map(async product => {
                 try {
                     // Fetch additional details for brand
                     const productDetails = await api({
-                        product: [
-                            { id: product.productId },
-                            { customFields: { brand: true } },
-                        ],
+                        product: [{ id: product.product.id }, { customFields: { brand: true } }],
                     });
-                    const brand =
-                        productDetails.product?.customFields?.brand || 'Unknown Brand';
+                    const brand = productDetails.product?.customFields?.brand || 'Unknown Brand';
 
-                    // Map facetValues for this product
-                    const facetValues = Array.from(
-                        new Map(
-                            product.facetValueIds.map((id: string) => [
-                                id,
-                                facetValueMap[id] ||
-                                { code: 'Unknown', name: 'Unknown', value: 'Unknown' },
-                            ])
-                        ).values()
+                    // Map facetValues for this product using the utility function
+                    const facetValues = mapFacetValuesToFacets(
+                        (product.facetValues?.map(fv => fv.id) || []) as string[],
+                        facetValueMap,
                     );
 
                     return {
@@ -179,18 +173,10 @@ export const getStaticProps = async (
                         facetValues,
                     };
                 } catch (error) {
-                    console.error(
-                        `Failed to enrich clientsAlsoBought product with ID: ${product.productId}`,
-                        error
-                    );
-                    const facetValues = Array.from(
-                        new Map(
-                            product.facetValueIds.map((id: string) => [
-                                id,
-                                facetValueMap[id] ||
-                                { code: 'Unknown', name: 'Unknown', value: 'Unknown' },
-                            ])
-                        ).values()
+                    console.error(`Failed to enrich clientsAlsoBought product with ID: ${product.product.id}`, error);
+                    const facetValues = mapFacetValuesToFacets(
+                        (product.facetValues?.map(fv => fv.id) || []) as string[],
+                        facetValueMap,
                     );
                     return {
                         ...product,
@@ -198,7 +184,7 @@ export const getStaticProps = async (
                         facetValues,
                     };
                 }
-            })
+            }),
         );
     }
     // ------------------------------------------------------------------------------------
@@ -223,8 +209,6 @@ export const getStaticProps = async (
 
     return {
         props: returnedStuff,
-        revalidate: process.env.NEXT_REVALIDATE
-            ? parseInt(process.env.NEXT_REVALIDATE)
-            : 10,
+        revalidate: process.env.NEXT_REVALIDATE ? parseInt(process.env.NEXT_REVALIDATE) : 10,
     };
 };

@@ -12,6 +12,13 @@ import { useChannels } from '@/src/state/channels';
 import { Select } from '@/src/components';
 import { Label } from '@/src/components/forms/shared';
 
+interface Channel {
+    sellerId: string;
+    seller: {
+        name: string;
+    };
+}
+
 /**
  * 1) Define the form shape:
  *    customFields -> preferredSeller -> { id: string }
@@ -30,7 +37,7 @@ interface CustomerDataForm {
 
 export const CustomerDetailsForm: React.FC<{
     initialCustomer: ActiveCustomerType;
-    channels: Array<any>;
+    channels: Array<Channel>;
 }> = ({ initialCustomer, channels }) => {
     const ctx = useChannels();
     const { t } = useTranslation('customer');
@@ -49,7 +56,10 @@ export const CustomerDetailsForm: React.FC<{
         addressEmail: z.string().email({ message: tErrors('errors.email.invalid') }),
         firstName: z.string().min(1, { message: tErrors('errors.firstName.required') }),
         lastName: z.string().min(1, { message: tErrors('errors.lastName.required') }),
-        phoneNumber: z.string().min(1, { message: tErrors('errors.phoneNumber.required') }).optional(),
+        phoneNumber: z
+            .string()
+            .min(1, { message: tErrors('errors.phoneNumber.required') })
+            .optional(),
         customFields: z
             .object({
                 preferredSeller: z
@@ -85,7 +95,7 @@ export const CustomerDetailsForm: React.FC<{
 
     // 4) Submit: read from 'customFields.preferredSeller.id'
     // and pass that to the mutation (no quotes, purely JS object).
-    const onCustomerDataChange: SubmitHandler<CustomerDataForm> = async (input) => {
+    const onCustomerDataChange: SubmitHandler<CustomerDataForm> = async input => {
         const { addressEmail, firstName, lastName, phoneNumber, customFields } = input;
         const sellerId = customFields?.preferredSeller?.id; // string or undefined
 
@@ -112,7 +122,7 @@ export const CustomerDetailsForm: React.FC<{
                 return;
             }
 
-            setActiveCustomer((prev) => ({ ...prev, ...updateCustomer }));
+            setActiveCustomer(prev => ({ ...prev, ...updateCustomer }));
             setSuccessBanner(t('accountPage.detailsForm.successMessage'));
         } catch {
             setError('root', { message: tErrors('errors.backend.UNKNOWN_ERROR') });
@@ -136,15 +146,11 @@ export const CustomerDetailsForm: React.FC<{
                 exit={{ opacity: 0 }}
                 transition={{
                     duration: 0.2,
-                    ease: "easeInOut"
-                }}
-            >
+                    ease: 'easeInOut',
+                }}>
                 <Form onSubmit={handleSubmit(onCustomerDataChange)} noValidate>
                     <Stack gap="2rem" column itemsCenter>
-                        <Input
-                            {...register('addressEmail')}
-                            label={t('accountPage.detailsForm.addressEmail')}
-                        />
+                        <Input {...register('addressEmail')} label={t('accountPage.detailsForm.addressEmail')} />
                         <Stack w100 gap="1.25rem">
                             <Input
                                 label={t('accountPage.detailsForm.firstName')}
@@ -169,17 +175,11 @@ export const CustomerDetailsForm: React.FC<{
                                 name="customFields.preferredSeller.id"
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
-                                    <Select<string>
-                                        options={sellerOptions}
-                                        value={value}
-                                        setValue={onChange}
-                                    />
+                                    <Select<string> options={sellerOptions} value={value} setValue={onChange} />
                                 )}
                             />
                             {errors.customFields?.preferredSeller?.id && (
-                                <p style={{ color: 'red' }}>
-                                    {errors.customFields.preferredSeller.id.message}
-                                </p>
+                                <p style={{ color: 'red' }}>{errors.customFields.preferredSeller.id.message}</p>
                             )}
                         </Stack>
                     </Stack>

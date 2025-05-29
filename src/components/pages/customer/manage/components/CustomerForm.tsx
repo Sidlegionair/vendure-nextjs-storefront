@@ -8,9 +8,16 @@ import { CustomerDetailsForm } from './forms/CustomerDetailsForm';
 import { StyledButton } from './atoms/shared';
 import { AnimatePresence } from 'framer-motion';
 
+interface Channel {
+    sellerId: string;
+    seller: {
+        name: string;
+    };
+}
+
 interface Props {
     initialCustomer: ActiveCustomerType;
-    channels: any[];
+    channels: Channel[];
 }
 
 export const CustomerForm: React.FC<Props> = ({ initialCustomer, channels }) => {
@@ -35,7 +42,7 @@ export const CustomerForm: React.FC<Props> = ({ initialCustomer, channels }) => 
             </Stack>
             <AnimatePresence>
                 {view === 'details' ? (
-                    <CustomerDetailsForm initialCustomer={initialCustomer} channels={channels}/>
+                    <CustomerDetailsForm initialCustomer={initialCustomer} channels={channels} />
                 ) : (
                     <CustomerResetPasswordForm />
                 )}

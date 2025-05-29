@@ -1,5 +1,5 @@
-import { useStoryblok, StoryblokComponent } from "@storyblok/react";
-import Link from "next/link";
+import { StoryblokComponent } from '@storyblok/react';
+import Link from 'next/link';
 
 const ArticlesOverviewPage = ({ stories }) => {
     return (
@@ -7,15 +7,17 @@ const ArticlesOverviewPage = ({ stories }) => {
             <h1>Articles Archive</h1>
             <div className="grid">
                 {stories?.length ? (
-                    stories.map((story) => (
+                    stories.map(story => (
                         <Link href={`/blog/${story.slug}`} key={story.id}>
                             <a>
-                                <StoryblokComponent blok={{
-                                    component: "card",
-                                    title: story.name,
-                                    image: story.content.featuredImage,
-                                    description: story.content.description || "",
-                                }} />
+                                <StoryblokComponent
+                                    blok={{
+                                        component: 'card',
+                                        title: story.name,
+                                        image: story.content.featuredImage,
+                                        description: story.content.description || '',
+                                    }}
+                                />
                             </a>
                         </Link>
                     ))

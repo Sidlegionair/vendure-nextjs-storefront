@@ -16,7 +16,9 @@
         "zeus": "zeus http://localhost:3000/shop-api ./src --td",
         "toc": "i18next-resources-for-ts toc -i ./public/locales/en -o ./src/@types/resources.ts",
         "interface": "i18next-resources-for-ts interface -i ./public/locales/en -o ./src/@types/resources.d.ts",
-        "lint": "next lint"
+        "lint": "next lint",
+        "lint-fix": "eslint \"src/**/*.{js,ts,jsx,tsx}\" --fix",
+        "format": "node scripts/format.js"
     },
     "dependencies": {
         "@cookiefirst/cookiefirst-react": "^1.0.0",
@@ -84,6 +86,7 @@
         "graphql-zeus": "5.2.0",
         "i18next-resources-for-ts": "^1.5.0",
         "prettier": "^3.1.0",
+        "semver": "^7.5.4",
         "typescript": "^5.3.2"
     }
 }

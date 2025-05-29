@@ -1,5 +1,4 @@
-import { GetServerSidePropsContext } from 'next';
-import { CollectionTileProductVariantType } from '@/src/graphql/selectors';
+import { CollectionTileProductVariantType, CollectionTileType } from '@/src/graphql/selectors';
 import { getCollections } from '@/src/graphql/sharedQueries';
 import { arrayToTree } from '@/src/util/arrayToTree';
 import { DEFAULT_CHANNEL } from '@/src/lib/consts';
@@ -38,15 +37,24 @@ const navItemsConfig: { [key: string]: NavItemConfig } = {
     },
     powder: {
         title: { en: 'Powder', nl: 'Powder' },
-        slug: { en: 'collections/snowboards/?terrain=powder&page=1', nl: 'collections/snowboards/?terrain=powder&page=1' },
+        slug: {
+            en: 'collections/snowboards/?terrain=powder&page=1',
+            nl: 'collections/snowboards/?terrain=powder&page=1',
+        },
     },
     allMountain: {
         title: { en: 'All mountain', nl: 'All mountain' },
-        slug: { en: 'collections/snowboards/?page=1&terrain=all+mountain', nl: 'collections/snowboards/?page=1&terrain=all+mountain' },
+        slug: {
+            en: 'collections/snowboards/?page=1&terrain=all+mountain',
+            nl: 'collections/snowboards/?page=1&terrain=all+mountain',
+        },
     },
     freestyle: {
         title: { en: 'Freestyle', nl: 'Freestyle' },
-        slug: { en: 'collections/snowboards/?6=143&terrain=freestyle&page=1', nl: 'collections/snowboards/?6=143&terrain=freestyle&page=1' },
+        slug: {
+            en: 'collections/snowboards/?6=143&terrain=freestyle&page=1',
+            nl: 'collections/snowboards/?6=143&terrain=freestyle&page=1',
+        },
     },
     brands: {
         title: { en: 'Brands', nl: 'Merken' },
@@ -56,7 +64,6 @@ const navItemsConfig: { [key: string]: NavItemConfig } = {
         title: { en: 'Shops', nl: 'Winkels' },
         slug: { en: 'content/boardshops', nl: 'content/boardshops/' },
     },
-
 };
 
 // Helper that returns a single string value based on the current locale
@@ -64,12 +71,7 @@ const resolveTranslatable = (value: { [locale: string]: string }, locale: string
     return value[locale] || value['en'] || '';
 };
 
-const createNavItem = (
-    key: string,
-    locale: string,
-    id: string,
-    parentId: string = ''
-): NavigationItemType => {
+const createNavItem = (key: string, locale: string, id: string, parentId: string = ''): NavigationItemType => {
     const config = navItemsConfig[key];
     return {
         name: resolveTranslatable(config.title, locale),
@@ -82,7 +84,9 @@ const createNavItem = (
     };
 };
 
-const buildNavigation = (locale: string): {
+const buildNavigation = (
+    locale: string,
+): {
     mainNavigation: NavigationItemType[];
     subNavigation: NavigationItemType[];
 } => {
@@ -96,13 +100,12 @@ const buildNavigation = (locale: string): {
         createNavItem('stores', locale, 'none', '1'),
     ];
 
-
     return { mainNavigation, subNavigation };
 };
 
 export const getNavigationTree = async (
     params: { locale: string; channel: string },
-    collections?: any[]
+    collections?: CollectionTileType[],
 ): Promise<{ navigation: RootNode<NavigationItemType>; subnavigation: RootNode<NavigationItemType> }> => {
     const { locale = 'en' } = params;
 
@@ -115,7 +118,7 @@ export const getNavigationTree = async (
     const navigation = arrayToTree(fetchedCollections) || { children: [] };
 
     if (!Array.isArray(navigation.children)) {
-        console.error("Navigation.children is not an array:", navigation);
+        console.error('Navigation.children is not an array:', navigation);
         return { navigation: { children: [] }, subnavigation: { children: [] } };
     }
 

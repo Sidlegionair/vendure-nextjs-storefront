@@ -1,9 +1,5 @@
 import { storefrontApiQuery } from '@/src/graphql/client';
-import {
-    ProductSearchSelector,
-    ProductSearchType,
-    FacetsSelector,
-} from '@/src/graphql/selectors';
+import { ProductSearchSelector, ProductSearchType } from '@/src/graphql/selectors';
 import { usePush } from '@/src/lib/redirect';
 import { useChannels } from '@/src/state/channels';
 import { useDebounce } from '@/src/util/hooks/useDebounce';
@@ -28,7 +24,7 @@ export const useNavigationSearch = () => {
         setSearchOpen(false);
     }, [asPath]);
 
-    const toggleSearch = () => setSearchOpen((prev) => !prev);
+    const toggleSearch = () => setSearchOpen(prev => !prev);
     const closeSearch = () => {
         toggleSearch();
         setSearchQuery('');
@@ -87,27 +83,32 @@ export const useNavigationSearch = () => {
                     ],
                 });
 
-                const facetValueMap = facets.facets.items.reduce((map, facet) => {
-                    facet.values.forEach((value) => {
-                        map[value.id] = {
-                            code: value.code,
-                            name: value.name,
-                            value: value.name,
-                            facet: {
-                                code: facet.code,
-                                name: facet.name,
-                            },
-                        };
-                    });
-                    return map;
-                }, {} as Record<string, { code: string; name: string; value: string; facet: { code: string; name: string } }>);
+                const facetValueMap = facets.facets.items.reduce(
+                    (map, facet) => {
+                        facet.values.forEach(value => {
+                            map[value.id] = {
+                                code: value.code,
+                                name: value.name,
+                                value: value.name,
+                                facet: {
+                                    code: facet.code,
+                                    name: facet.name,
+                                    id: facet.id,
+                                },
+                            };
+                        });
+                        return map;
+                    },
+                    {} as Record<
+                        string,
+                        { code: string; name: string; value: string; facet: { code: string; name: string; id: string } }
+                    >,
+                );
 
                 // Enrich snowboards with facetValues and brand
                 const enrichedResults = await Promise.all(
-                    products.map(async (product) => {
-                        const facetValues = product.facetValueIds
-                            .map((id) => facetValueMap[id])
-                            .filter(Boolean); // Filter out undefined facet values
+                    products.map(async product => {
+                        const facetValues = product.facetValueIds.map(id => facetValueMap[id]).filter(Boolean); // Filter out undefined facet values
 
                         const stockAndBrand = await storefrontApiQuery(ctx)({
                             product: [
@@ -125,7 +126,7 @@ export const useNavigationSearch = () => {
                         });
 
                         const inStock = stockAndBrand.product?.variants?.some(
-                            (variant) => Number(variant.stockLevel) > 0
+                            variant => Number(variant.stockLevel) > 0,
                         );
 
                         return {
@@ -136,7 +137,7 @@ export const useNavigationSearch = () => {
                             },
                             inStock,
                         };
-                    })
+                    }),
                 );
 
                 setSearchResults(enrichedResults);

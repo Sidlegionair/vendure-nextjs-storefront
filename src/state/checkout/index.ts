@@ -41,7 +41,7 @@ const useCheckoutContainer = createContainer<CheckoutContainerType, { checkout: 
                         },
                         '...on OrderInterceptorError': {
                             message: true,
-                            errorCode: true
+                            errorCode: true,
                         },
                         __typename: true,
                     },
@@ -69,7 +69,7 @@ const useCheckoutContainer = createContainer<CheckoutContainerType, { checkout: 
                         },
                         '...on OrderInterceptorError': {
                             message: true,
-                            errorCode: true
+                            errorCode: true,
                         },
 
                         __typename: true,
@@ -110,7 +110,7 @@ const useCheckoutContainer = createContainer<CheckoutContainerType, { checkout: 
                         },
                         '...on OrderInterceptorError': {
                             message: true,
-                            errorCode: true
+                            errorCode: true,
                         },
                         __typename: true,
                     },

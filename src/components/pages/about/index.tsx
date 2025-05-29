@@ -17,7 +17,11 @@ const faces: Array<{
 export const About: React.FC<InferGetStaticPropsType<typeof getStaticProps>> = props => {
     const { t } = useTranslation('homepage');
     return (
-        <Layout navigation={props.navigation} subnavigation={props.subnavigation} categories={props.categories} pageTitle={t('seo.home')}>
+        <Layout
+            navigation={props.navigation}
+            subnavigation={props.subnavigation}
+            categories={props.categories}
+            pageTitle={t('seo.home')}>
             <Container>
                 <h1>{aboutJson.title}</h1>
                 <h4>{aboutJson.description}</h4>

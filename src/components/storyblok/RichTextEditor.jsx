@@ -20,14 +20,14 @@ const RichTextEditor = ({ blok }) => {
     const contentRef = useRef(null);
 
     // Function to execute scripts found within code blocks
-    const executeScripts = (container) => {
+    const executeScripts = container => {
         if (!container) return;
 
         // Select all <code> blocks, regardless of their parent
         const codeBlocks = container.querySelectorAll('code');
         console.log(`Found ${codeBlocks.length} code blocks.`);
 
-        codeBlocks.forEach((block) => {
+        codeBlocks.forEach(block => {
             const codeContent = block.innerHTML;
             console.log(`Processing code block content: ${codeContent}`);
 
@@ -41,10 +41,10 @@ const RichTextEditor = ({ blok }) => {
                 tempDiv.innerHTML = cleanContent;
 
                 const scripts = tempDiv.querySelectorAll('script');
-                scripts.forEach((scriptTag) => {
+                scripts.forEach(scriptTag => {
                     try {
                         const script = document.createElement('script');
-                        Array.from(scriptTag.attributes).forEach((attr) => {
+                        Array.from(scriptTag.attributes).forEach(attr => {
                             script.setAttribute(attr.name, attr.value);
                         });
                         script.textContent = scriptTag.textContent;
@@ -103,44 +103,36 @@ const RichTextEditor = ({ blok }) => {
     }, []);
 
     // Helper to generate an id from heading text if one isn't provided
-    const generateIdFromText = (children) => {
-        const text = (children || [])
-            .map((child) => (typeof child === 'string' ? child : ''))
-            .join('');
+    const generateIdFromText = children => {
+        const text = (children || []).map(child => (typeof child === 'string' ? child : '')).join('');
         return text
             .toLowerCase()
             .trim()
             .replace(/\s+/g, '-')
-            .replace(/[^\w\-]+/g, '');
+            .replace(/[^\w-]+/g, '');
     };
 
     const options = {
         nodeResolvers: {
-            [NODE_PARAGRAPH]: (children) => <p>{children}</p>,
+            [NODE_PARAGRAPH]: children => <p>{children}</p>,
             [NODE_HEADING]: (children, { level, ...rest }) => {
                 const anchorId = rest.id || generateIdFromText(children);
                 return React.createElement(`h${level}`, { id: anchorId }, children);
             },
-            [NODE_UL]: (children) => <ul className="list-disc list-outside mb-4 pl-4">{children}</ul>,
-            [NODE_OL]: (children) => <ol className="list-decimal list-outside mb-4 pl-4">{children}</ol>,
-            [NODE_LI]: (children) => (
-                <li className="mb-2 leading-relaxed">
-                    {children}
-                </li>
-            ),
-            [NODE_QUOTE]: (children) => <blockquote>{children}</blockquote>,
+            [NODE_UL]: children => <ul className="list-disc list-outside mb-4 pl-4">{children}</ul>,
+            [NODE_OL]: children => <ol className="list-decimal list-outside mb-4 pl-4">{children}</ol>,
+            [NODE_LI]: children => <li className="mb-2 leading-relaxed">{children}</li>,
+            [NODE_QUOTE]: children => <blockquote>{children}</blockquote>,
             [NODE_PRE]: (children, props) => (
                 <pre>
                     <code className={props.node?.attrs?.class || ''}>{children}</code>
                 </pre>
             ),
-            [NODE_CODE]: (children, props) => (
-                <code className={props.node?.attrs?.class || ''}>{children}</code>
-            ),
+            [NODE_CODE]: (children, props) => <code className={props.node?.attrs?.class || ''}>{children}</code>,
         },
         markResolvers: {
-            [MARK_BOLD]: (children) => <strong>{children}</strong>,
-            [MARK_ITALIC]: (children) => <em>{children}</em>,
+            [MARK_BOLD]: children => <strong>{children}</strong>,
+            [MARK_ITALIC]: children => <em>{children}</em>,
             [MARK_LINK]: (children, { href, target, rel, title }) => {
                 console.log(href, target, rel, title);
                 if (href.startsWith('#')) {
@@ -185,8 +177,8 @@ const RichTextEditor = ({ blok }) => {
                 .rich-text-editor {
                     /* Dynamic font-family and weight applied to the whole container */
                     font-family: ${blok.useAntique
-                            ? `"Suisse BP Int'l Antique", sans-serif`
-                            : `"Suisse BP Int'l", sans-serif`};
+                        ? `"Suisse BP Int'l Antique", sans-serif`
+                        : `"Suisse BP Int'l", sans-serif`};
                     font-weight: ${blok.fontWeight || 'inherit'};
                     color: #4d4d4d;
                     line-height: 1.6;
@@ -196,56 +188,55 @@ const RichTextEditor = ({ blok }) => {
                     box-shadow: ${blok.boxShadow || 'none'};
                     overflow: hidden;
 
-                h1 {
-                    margin-bottom: 26px;
-                }
+                    h1 {
+                        margin-bottom: 26px;
+                    }
 
-                h2 {
-                    margin-bottom: 7px;
-                }
+                    h2 {
+                        margin-bottom: 7px;
+                    }
 
-                h3 {
-                    margin-bottom: 5px;
-                }
+                    h3 {
+                        margin-bottom: 5px;
+                    }
 
-                p {
-                    margin-bottom: 1.25rem;
-                    color: #4D4D4D;
-                }
+                    p {
+                        margin-bottom: 1.25rem;
+                        color: #4d4d4d;
+                    }
 
-                a,
-                a * {
-                    color: rgba(158, 46, 58, 1) !important;
-                    /* If you want anchors to have any specific overrides, add them here */
-                    font-size: inherit;
-                    text-decoration: underline;
-                }
+                    a,
+                    a * {
+                        color: rgba(158, 46, 58, 1) !important;
+                        /* If you want anchors to have any specific overrides, add them here */
+                        font-size: inherit;
+                        text-decoration: underline;
+                    }
 
-                a:hover {
-                    text-decoration: none;
-                }
+                    a:hover {
+                        text-decoration: none;
+                    }
 
-                blockquote {
-                    font-family: 'Calibri', sans-serif;
-                    font-style: italic;
-                    margin-left: 1em;
-                    border-left: 4px solid #ddd;
-                    padding-left: 1em;
-                    color: #555;
-                }
+                    blockquote {
+                        font-family: 'Calibri', sans-serif;
+                        font-style: italic;
+                        margin-left: 1em;
+                        border-left: 4px solid #ddd;
+                        padding-left: 1em;
+                        color: #555;
+                    }
 
-                ul,
-                ol {
-                    margin: 1rem 0;
-                }
+                    ul,
+                    ol {
+                        margin: 1rem 0;
+                    }
 
-                img {
-                    max-width: 100%;
-                    height: auto;
-                    margin: 1rem 0;
+                    img {
+                        max-width: 100%;
+                        height: auto;
+                        margin: 1rem 0;
+                    }
                 }
-                }
-
             `}</style>
         </div>
     );

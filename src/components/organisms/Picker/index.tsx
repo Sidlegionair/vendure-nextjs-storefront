@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import { Stack, TP } from '@/src/components';
-import { LogoAexol } from '@/src/assets';
-import { Check, ChevronDown, XIcon } from 'lucide-react';
+import { Check, XIcon } from 'lucide-react';
 import { Dropdown } from './Dropdown';
 import { Trans, useTranslation } from 'next-i18next';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -23,7 +22,6 @@ type FormValues = {
 type Alternate = {
     full_slug: string;
 };
-
 
 export const Picker: React.FC<{
     changeModal?: {
@@ -47,7 +45,6 @@ export const Picker: React.FC<{
 
             const response = await storyblokApi.get(`cdn/stories/${normalizedSlug}`, { version: 'draft' });
 
-
             const story = response.data.story;
 
             // console.log(story.alternates[0]);
@@ -67,14 +64,12 @@ export const Picker: React.FC<{
 
             const response = await storyblokApi.get(`cdn/stories/${normalizedSlug}`, { version: 'draft' });
 
-
             return !!response.data.story; // Page exists if response contains a story
         } catch (error) {
             console.error(`Error checking Storyblok page for slug "${slug}" in language "${language}":`, error);
             return false;
         }
     };
-
 
     // Good to note for future notice, this was used to open the popup if lng was detected.
     useEffect(() => {
@@ -93,9 +88,9 @@ export const Picker: React.FC<{
         values: changeModal?.modal ? { channel: changeModal.channel, locale: changeModal.locale } : undefined,
     });
 
-    const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    const onSubmit: SubmitHandler<FormValues> = async data => {
         const newLang = data.locale;
-        const channelAsLocale = channels.find((c) => c.slug === data.channel);
+        const channelAsLocale = channels.find(c => c.slug === data.channel);
         const sameAsChannel = newLang === channelAsLocale?.slug;
 
         languageDetector.cache && languageDetector.cache(newLang);
@@ -106,7 +101,9 @@ export const Picker: React.FC<{
             document.cookie = `channel=${channelAsLocale.channel}; path=/`;
         }
 
-        const correctSlug = Array.isArray(query.slug) ? DOMPurify.sanitize(query.slug.join('/')) : DOMPurify.sanitize(query.slug || '');
+        const correctSlug = Array.isArray(query.slug)
+            ? DOMPurify.sanitize(query.slug.join('/'))
+            : DOMPurify.sanitize(query.slug || '');
         const preparedPathname = pathname
             .replace('[slug]', correctSlug)
             .replace('[...slug]', correctSlug)
@@ -128,9 +125,7 @@ export const Picker: React.FC<{
                     setIsOpen(false);
                     return;
                 } else {
-                    console.warn(
-                        `No alternative found for Storyblok slug: ${correctSlug} in language: ${newLang}`
-                    );
+                    console.warn(`No alternative found for Storyblok slug: ${correctSlug} in language: ${newLang}`);
                 }
             } catch (error) {
                 console.error('Error fetching Storyblok alternative:', error);
@@ -146,23 +141,19 @@ export const Picker: React.FC<{
                 const split = preparedPathname.split('[locale]');
                 const correctPathname = buildPath(
                     split[0] + (newLang === channelAsLocale?.slug ? '' : newLang) + split[1],
-                    newLang
+                    newLang,
                 );
                 // console.log(correctPathname);
                 push(correctPathname);
             } else if (haveChannel && !haveLocale) {
                 const split = preparedPathname.split('[channel]');
-                const correctPathname = buildPath(
-                    split[0] + (channelAsLocale?.nationalLocale || ''),
-                    newLang
-                ) + split[1];
+                const correctPathname =
+                    buildPath(split[0] + (channelAsLocale?.nationalLocale || ''), newLang) + split[1];
                 // console.log(correctPathname);
                 push(correctPathname);
             } else if (!haveChannel && !haveLocale) {
                 const _channel =
-                    channelAsLocale?.channel === DEFAULT_CHANNEL
-                        ? ''
-                        : `${channelAsLocale?.nationalLocale || ''}/`;
+                    channelAsLocale?.channel === DEFAULT_CHANNEL ? '' : `${channelAsLocale?.nationalLocale || ''}/`;
                 const _newLang = newLang === DEFAULT_LOCALE ? '' : newLang;
                 const correctPathname = `/${_channel}${_newLang}${asPath}`;
                 // console.log(correctPathname);
@@ -176,10 +167,8 @@ export const Picker: React.FC<{
                 push(correctPathname);
             } else if (haveChannel && !haveLocale) {
                 const split = preparedPathname.split('[channel]');
-                const correctPathname = buildPath(
-                    split[0] + `${channelAsLocale?.nationalLocale}/${newLang}`,
-                    newLang
-                ) + split[1];
+                const correctPathname =
+                    buildPath(split[0] + `${channelAsLocale?.nationalLocale}/${newLang}`, newLang) + split[1];
                 // console.log(correctPathname);
                 push(correctPathname);
             } else if (!haveChannel && !haveLocale) {
@@ -196,22 +185,19 @@ export const Picker: React.FC<{
         setIsOpen(false);
     };
 
-
     return (
         <>
             <Stack itemsCenter gap={'5px'}>
                 <CurrentLocale onClick={() => setIsOpen(true)}>
                     <SvgWrapper>
-                        {getFlagByCode(
-                            (asPath === '/nl/' || pathname === '/nl/') ? 'nl' : locale,
-                            true
-                        )}
+                        {getFlagByCode(asPath === '/nl/' || pathname === '/nl/' ? 'nl' : locale, true)}
                     </SvgWrapper>
                 </CurrentLocale>
                 <svg width="5" height="3" viewBox="0 0 5 3" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M2.53212 2.42575L4.62826 0.193098C4.64861 0.171281 4.67286 0.154041 4.69957 0.1424C4.72627 0.130758 4.7549 0.124952 4.78375 0.125325C4.81261 0.125698 4.84109 0.132243 4.86753 0.144571C4.89397 0.1569 4.91782 0.174761 4.93766 0.197098C4.97833 0.242786 5.00068 0.303585 4.99998 0.366576C4.99928 0.429566 4.97558 0.489783 4.93391 0.534429L2.68276 2.93208C2.66256 2.95377 2.63851 2.97095 2.61202 2.98261C2.58552 2.99427 2.55711 3.00018 2.52845 3C2.49979 2.99981 2.47145 2.99353 2.44508 2.98153C2.41872 2.96952 2.39487 2.95203 2.37492 2.93008L0.0637635 0.40643C0.0228605 0.361252 0 0.300901 0 0.238098C0 0.175294 0.0228605 0.114944 0.0637635 0.0697655C0.083863 0.0476906 0.107911 0.0301417 0.134484 0.0181582C0.161057 0.00617463 0.189615 0 0.218466 0C0.247317 0 0.275874 0.00617463 0.302447 0.0181582C0.32902 0.0301417 0.353068 0.0476906 0.373168 0.0697655L2.53212 2.42575Z"
-                        fill="black" />
+                        fill="black"
+                    />
                 </svg>
             </Stack>
             {isOpen && (
@@ -221,8 +207,7 @@ export const Picker: React.FC<{
                             <XIcon />
                         </IconWrapper>
                         {changeModal?.modal ? (
-
-                                <Header gap="2rem" column itemsCenter>
+                            <Header gap="2rem" column itemsCenter>
                                 <TP>
                                     <Trans
                                         values={{ country: changeModal.country_name }}
@@ -231,7 +216,7 @@ export const Picker: React.FC<{
                                         t={t}
                                     />
                                 </TP>
-                        </Header>
+                            </Header>
                         ) : null}
 
                         <StyledForm onSubmit={handleSubmit(onSubmit)}>
@@ -244,15 +229,15 @@ export const Picker: React.FC<{
                                             channels
                                                 .find(c => c.nationalLocale === watch('channel'))
                                                 ?.locales.map(l => {
-                                                return {
-                                                    key: l,
-                                                    children: (
-                                                        <LocaleInList itemsCenter gap="1rem">
-                                                            {getFlagByCode(l)}
-                                                        </LocaleInList>
-                                                    ),
-                                                };
-                                            }) ?? []
+                                                    return {
+                                                        key: l,
+                                                        children: (
+                                                            <LocaleInList itemsCenter gap="1rem">
+                                                                {getFlagByCode(l)}
+                                                            </LocaleInList>
+                                                        ),
+                                                    };
+                                                }) ?? []
                                         }
                                         placeholder={t('picker.change-language')}
                                         setSelected={onChange}
@@ -303,7 +288,9 @@ export const Picker: React.FC<{
                                 <WhiteStyledButton type="button" onClick={() => setIsOpen(false)}>
                                     {t('picker.cancel')}
                                 </WhiteStyledButton>
-                                <PrimaryStyledButton type="submit">{t('picker.save')}  &nbsp;<Check></Check></PrimaryStyledButton>
+                                <PrimaryStyledButton type="submit">
+                                    {t('picker.save')} &nbsp;<Check></Check>
+                                </PrimaryStyledButton>
                             </Stack>
                         </StyledForm>
                     </PickerWrapper>
@@ -382,7 +369,6 @@ const SvgWrapper = styled.div`
     }
 `;
 
-
 const Overlay = styled.div`
     position: fixed;
     top: 0;
@@ -414,12 +400,11 @@ const IconWrapper = styled.div`
     top: 35px;
     right: 35px;
     cursor: pointer;
-    
-    
+
     svg {
         width: 17px;
         height: 17px;
-        color: ${({ theme }) => theme.text.accent}
+        color: ${({ theme }) => theme.text.accent};
     }
 `;
 
@@ -433,9 +418,9 @@ const WhiteStyledButton = styled(Button)`
     background-color: ${({ theme }) => theme.background.main};
     color: ${({ theme }) => theme.text.main};
     transition: all 0.2s ease-in-out;
-    border: 1px solid #4D4D4D;
+    border: 1px solid #4d4d4d;
     border-radius: 12px;
-    
+
     @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
         padding-block: 1.5rem;
     }
@@ -450,10 +435,9 @@ const PrimaryStyledButton = styled(Button)`
     background-color: ${({ theme }) => theme.background.accentGreen};
     color: ${({ theme }) => theme.text.white};
     transition: all 0.2s ease-in-out;
-    border: 1px solid #4D4D4D;
+    border: 1px solid #4d4d4d;
     border-radius: 12px;
-    
-    
+
     @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
         padding-block: 1.5rem;
     }

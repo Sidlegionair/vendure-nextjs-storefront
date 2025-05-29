@@ -8,9 +8,7 @@ export const useValidationSchema = () => {
         emailAddress: z.string().email(),
         firstName: z.string().min(1, { message: t('orderForm.errors.firstName.required') }),
         lastName: z.string().min(1, { message: t('orderForm.errors.lastName.required') }),
-        phoneNumber: z
-            .string()
-            .min(1, { message: t('orderForm.errors.phone.required') }),
+        phoneNumber: z.string().min(1, { message: t('orderForm.errors.phone.required') }),
 
         deliveryMethod: z.string().min(1, { message: t('deliveryMethod.errors.required') }),
 
@@ -34,10 +32,11 @@ export const useValidationSchema = () => {
         province: z.string().min(1, { message: t('orderForm.errors.province.required') }),
         postalCode: z.string().min(1, { message: t('orderForm.errors.postalCode.required') }),
         company: z.string().optional(),
-        customFields: z.object({
-            vatNumber: z.string().optional(),
-        }).optional(),
-
+        customFields: z
+            .object({
+                vatNumber: z.string().optional(),
+            })
+            .optional(),
     });
 
     const shippingObject = z.object({
@@ -49,10 +48,11 @@ export const useValidationSchema = () => {
         province: z.string().min(1, { message: t('orderForm.errors.province.required') }),
         postalCode: z.string().min(1, { message: t('orderForm.errors.postalCode.required') }),
         company: z.string().optional(),
-        customFields: z.object({
-            vatNumber: z.string().optional(),
-        }).optional(),
-
+        customFields: z
+            .object({
+                vatNumber: z.string().optional(),
+            })
+            .optional(),
     });
 
     const billingSchema = z.object({

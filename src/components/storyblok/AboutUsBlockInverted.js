@@ -1,5 +1,5 @@
 import React from 'react';
-import { storyblokEditable, renderRichText } from '@storyblok/react';
+import { renderRichText } from '@storyblok/react';
 import sanitizeHtml from 'sanitize-html';
 
 const AboutUsBlockInverted = ({ blok }) => {
@@ -13,7 +13,7 @@ const AboutUsBlockInverted = ({ blok }) => {
         },
     });
 
-    const getButtonLink = (link) => {
+    const getButtonLink = link => {
         if (!link) return '#'; // Default fallback
         if (link.linktype === 'url') return link.url; // External URL
         if (link.linktype === 'story') return `/${link.cached_url || ''}`; // Internal Storyblok story
@@ -28,23 +28,18 @@ const AboutUsBlockInverted = ({ blok }) => {
                     backgroundImage: `url(${blok.image?.filename})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center top',
-                }}
-            >
+                }}>
                 {/* Text Content */}
-                <div
-                    className="about-us-text"
-                    style={{ backgroundColor: blok.backgroundColor || '#9E2E3A' }}
-                >
+                <div className="about-us-text" style={{ backgroundColor: blok.backgroundColor || '#9E2E3A' }}>
                     <h1>{blok.title || 'About Us'}</h1>
                     <div className="rich-text-content" dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
-                    {blok.buttonLink && blok.buttonLink.url !== "" && blok.buttonText && (
+                    {blok.buttonLink && blok.buttonLink.url !== '' && blok.buttonText && (
                         <a
                             style={{ color: blok.backgroundColor }}
                             className="learn-more-button"
                             href={getButtonLink(blok.buttonLink)}
                             target={blok.buttonLink.target || '_self'}
-                            rel={blok.buttonLink.target === '_blank' ? 'noopener noreferrer' : undefined}
-                        >
+                            rel={blok.buttonLink.target === '_blank' ? 'noopener noreferrer' : undefined}>
                             {blok.buttonText} →
                         </a>
                     )}
@@ -107,20 +102,18 @@ const AboutUsBlockInverted = ({ blok }) => {
 
                 .about-us-text h2 {
                     margin-bottom: 1.25rem;
-
                 }
 
                 .rich-text-content p {
                     font-family: 'Calibri', sans-serif;
                     margin-bottom: 1.25rem;
-
                 }
 
                 .learn-more-button {
                     display: inline-block;
                     padding: 18px 30px;
                     background-color: #fff;
-                    color: #9E2E3A;
+                    color: #9e2e3a;
                     border-radius: 8px;
                     text-decoration: none;
                     margin-top: 1rem;

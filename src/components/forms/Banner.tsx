@@ -3,7 +3,7 @@ import { Stack } from '@/src/components/atoms/Stack';
 import styled from '@emotion/styled';
 import { GlobalError } from 'react-hook-form';
 import { AnimatePresence, HTMLMotionProps, motion } from 'framer-motion';
-import { AlertCircle, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
 type BannerType = HTMLMotionProps<'div'> & {
     success?: { message?: string; type?: string | number };
@@ -56,12 +56,7 @@ export const Banner = forwardRef((props: BannerType, ref: React.ForwardedRef<HTM
 
 Banner.displayName = 'Banner';
 
-const IconWrapper = styled(Stack)<{ type: 'success' | 'error' }>`
-    margin-top: 0.25rem;
-    width: 1.5rem;
-    height: 1.5rem;
-    color: ${p => (p.type === 'success' ? p.theme.success : p.theme.error)};
-`;
+// Removed unused IconWrapper component
 
 const BannerWrapper = styled(Stack)`
     width: 100%;
@@ -95,7 +90,6 @@ const BannerBox = styled(motion.div)<{ status?: 'success' | 'error' }>`
 
 const BannerContent = styled(Stack)`
     color: ${p => p.theme.background.main};
-
 `;
 
 const FormError = styled(motion.span)<{ status?: 'success' | 'error' }>`

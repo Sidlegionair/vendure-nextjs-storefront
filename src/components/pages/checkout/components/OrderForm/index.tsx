@@ -15,7 +15,6 @@ import { Banner, CheckBox, CountrySelect, FormError, Input } from '@/src/compone
 import { DeliveryMethod } from '../DeliveryMethod';
 import { OrderSummary } from '../OrderSummary';
 import { LoginForm } from '../LoginForm';
-import { Tooltip } from '@/src/components/molecules/Tooltip';
 
 import { usePush } from '@/src/lib/redirect';
 import { storefrontApiMutation, storefrontApiQuery } from '@/src/graphql/client';
@@ -45,11 +44,18 @@ type FormValues = CreateCustomerType & {
     terms?: boolean;
 };
 
+// Define a type for payment methods
+interface PaymentMethod {
+    code: string;
+    name?: string;
+    [key: string]: unknown;
+}
+
 interface OrderFormProps {
     availableCountries?: AvailableCountriesType[];
     activeCustomer: ActiveCustomerType | null;
     shippingMethods: ShippingMethodType[] | null;
-    eligiblePaymentMethods?: any[] | null;
+    eligiblePaymentMethods?: PaymentMethod[] | null;
 }
 
 const isAddressesEqual = (a: object, b?: object) => {
@@ -63,14 +69,9 @@ const isAddressesEqual = (a: object, b?: object) => {
 // -----------------------------------------------------------------
 // VAT-check function using the proxy endpoint and NEXT_PUBLIC_HOST
 // -----------------------------------------------------------------
-const checkVAT = async (
-    vatNumber: string,
-    countryCode: string
-): Promise<{ valid: boolean; name: string }> => {
+const checkVAT = async (vatNumber: string, countryCode: string): Promise<{ valid: boolean; name: string }> => {
     try {
-        const vatWithoutPrefix = vatNumber.startsWith(countryCode)
-            ? vatNumber.slice(countryCode.length)
-            : vatNumber;
+        const vatWithoutPrefix = vatNumber.startsWith(countryCode) ? vatNumber.slice(countryCode.length) : vatNumber;
         const host = process.env.NEXT_PUBLIC_HOST; // Vendure server host
         const url = `${host}/vies-proxy?countryCode=${countryCode}&vatNumber=${vatWithoutPrefix}`;
         console.log('Checking VAT via proxy at URL:', url);
@@ -89,15 +90,16 @@ const checkVAT = async (
 };
 
 export const OrderForm: React.FC<OrderFormProps> = ({
-                                                        availableCountries,
-                                                        activeCustomer,
-                                                        shippingMethods,
-                                                        eligiblePaymentMethods,
-                                                    }) => {
+    availableCountries,
+    activeCustomer,
+    shippingMethods,
+    eligiblePaymentMethods,
+}) => {
     const ctx = useChannels();
     const { activeOrder, changeShippingMethod } = useCheckout();
     const { fetchActiveOrder } = useCart();
     const [showLoginForm, setShowLoginForm] = React.useState(!activeCustomer?.id);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [emailExists, setEmailExists] = React.useState(false);
 
     const { t } = useTranslation('checkout');
@@ -107,18 +109,14 @@ export const OrderForm: React.FC<OrderFormProps> = ({
 
     const errorRef = React.useRef<HTMLDivElement>(null);
 
-    const defaultShippingAddress = activeCustomer?.addresses?.find(
-        (address) => address.defaultShippingAddress
-    );
-    const defaultBillingAddress = activeCustomer?.addresses?.find(
-        (address) => address.defaultBillingAddress
-    );
+    const defaultShippingAddress = activeCustomer?.addresses?.find(address => address.defaultShippingAddress);
+    const defaultBillingAddress = activeCustomer?.addresses?.find(address => address.defaultBillingAddress);
 
     // Decide on default country code
     const countryCode =
         defaultBillingAddress?.country.code ??
         defaultShippingAddress?.country.code ??
-        availableCountries?.find((country) => country.name === 'Poland')?.code ??
+        availableCountries?.find(country => country.name === 'Poland')?.code ??
         baseCountryFromLanguage(ctx.locale);
 
     const {
@@ -140,25 +138,25 @@ export const OrderForm: React.FC<OrderFormProps> = ({
         },
         values: activeCustomer
             ? {
-                createAccount: false,
-                emailAddress: activeCustomer.emailAddress,
-                firstName: activeCustomer.firstName,
-                lastName: activeCustomer.lastName,
-                phoneNumber: activeCustomer.phoneNumber,
-                shippingDifferentThanBilling: defaultShippingAddress
-                    ? !isAddressesEqual(defaultShippingAddress, defaultBillingAddress)
-                    : false,
-                shipping: {
-                    ...defaultShippingAddress,
-                    streetLine1: defaultShippingAddress?.streetLine1 ?? '',
-                    countryCode,
-                },
-                billing: {
-                    ...defaultBillingAddress,
-                    streetLine1: defaultBillingAddress?.streetLine1 ?? '',
-                    countryCode,
-                },
-            }
+                  createAccount: false,
+                  emailAddress: activeCustomer.emailAddress,
+                  firstName: activeCustomer.firstName,
+                  lastName: activeCustomer.lastName,
+                  phoneNumber: activeCustomer.phoneNumber,
+                  shippingDifferentThanBilling: defaultShippingAddress
+                      ? !isAddressesEqual(defaultShippingAddress, defaultBillingAddress)
+                      : false,
+                  shipping: {
+                      ...defaultShippingAddress,
+                      streetLine1: defaultShippingAddress?.streetLine1 ?? '',
+                      countryCode,
+                  },
+                  billing: {
+                      ...defaultBillingAddress,
+                      streetLine1: defaultBillingAddress?.streetLine1 ?? '',
+                      countryCode,
+                  },
+              }
             : undefined,
         resolver: zodResolver(schema),
     });
@@ -172,7 +170,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
     }, [errors]);
 
     const vatRegister = register('billing.customFields.vatNumber', {
-        onChange: (e) => {
+        onChange: e => {
             setValue('billing.customFields.vatNumber', e.target.value, {
                 shouldValidate: true,
             });
@@ -185,22 +183,19 @@ export const OrderForm: React.FC<OrderFormProps> = ({
     // Submit Handler
     // -------------------------------
     const onSubmit: SubmitHandler<FormValues> = async ({
-                                                           emailAddress,
-                                                           firstName,
-                                                           lastName,
-                                                           deliveryMethod,
-                                                           billing,
-                                                           shipping,
-                                                           phoneNumber,
-                                                           shippingDifferentThanBilling,
-                                                           password,
-                                                       }) => {
+        emailAddress,
+        firstName,
+        lastName,
+        deliveryMethod,
+        billing,
+        shipping,
+        phoneNumber,
+        shippingDifferentThanBilling,
+        password,
+    }) => {
         try {
             // If shipping method changed, update it
-            if (
-                deliveryMethod &&
-                activeOrder?.shippingLines[0]?.shippingMethod.id !== deliveryMethod
-            ) {
+            if (deliveryMethod && activeOrder?.shippingLines[0]?.shippingMethod.id !== deliveryMethod) {
                 await changeShippingMethod(deliveryMethod);
             }
 
@@ -338,9 +333,12 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                         if (errorRef.current) {
                             // Add a small delay to ensure the banner is rendered
                             setTimeout(() => {
-                                const yOffset = -100; // Adjust this value as needed for proper visibility
-                                const y = errorRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                                window.scrollTo({ top: y, behavior: 'smooth' });
+                                if (errorRef.current) {
+                                    const yOffset = -100; // Adjust this value as needed for proper visibility
+                                    const y =
+                                        errorRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                                    window.scrollTo({ top: y, behavior: 'smooth' });
+                                }
                             }, 100);
                         }
                         setFocus('emailAddress');
@@ -511,32 +509,31 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                         defaultBillingAddress: true,
                         country: {
                             code: true,
-                            name: true
+                            name: true,
                         },
                         customFields: {
-                            vatNumber: true
-                        }
-                    }
-                }
+                            vatNumber: true,
+                        },
+                    },
+                },
             });
 
             if (activeCustomer) {
                 // Find default addresses
                 const defaultShippingAddress = activeCustomer.addresses?.find(
-                    (address) => address.defaultShippingAddress
+                    address => address.defaultShippingAddress,
                 );
-                const defaultBillingAddress = activeCustomer.addresses?.find(
-                    (address) => address.defaultBillingAddress
-                );
+                const defaultBillingAddress = activeCustomer.addresses?.find(address => address.defaultBillingAddress);
 
                 // Update form values with customer data
                 setValue('emailAddress', activeCustomer.emailAddress);
                 setValue('firstName', activeCustomer.firstName);
                 setValue('lastName', activeCustomer.lastName);
                 setValue('phoneNumber', activeCustomer.phoneNumber);
-                setValue('shippingDifferentThanBilling', defaultShippingAddress
-                    ? !isAddressesEqual(defaultShippingAddress, defaultBillingAddress)
-                    : false);
+                setValue(
+                    'shippingDifferentThanBilling',
+                    defaultShippingAddress ? !isAddressesEqual(defaultShippingAddress, defaultBillingAddress) : false,
+                );
 
                 // Update shipping address
                 if (defaultShippingAddress) {
@@ -548,7 +545,10 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                     setValue('shipping.province', defaultShippingAddress.province || '');
                     setValue('shipping.postalCode', defaultShippingAddress.postalCode || '');
                     setValue('shipping.countryCode', defaultShippingAddress.country?.code || countryCode);
-                    setValue('shipping.phoneNumber', defaultShippingAddress.phoneNumber || activeCustomer.phoneNumber || '');
+                    setValue(
+                        'shipping.phoneNumber',
+                        defaultShippingAddress.phoneNumber || activeCustomer.phoneNumber || '',
+                    );
                     setValue('shipping.customFields.vatNumber', defaultShippingAddress.customFields?.vatNumber || '');
                 }
 
@@ -562,7 +562,10 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                     setValue('billing.province', defaultBillingAddress.province || '');
                     setValue('billing.postalCode', defaultBillingAddress.postalCode || '');
                     setValue('billing.countryCode', defaultBillingAddress.country?.code || countryCode);
-                    setValue('billing.phoneNumber', defaultBillingAddress.phoneNumber || activeCustomer.phoneNumber || '');
+                    setValue(
+                        'billing.phoneNumber',
+                        defaultBillingAddress.phoneNumber || activeCustomer.phoneNumber || '',
+                    );
                     setValue('billing.customFields.vatNumber', defaultBillingAddress.customFields?.vatNumber || '');
                 }
             }
@@ -586,11 +589,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                         {t('orderForm.emptyCart')}
                     </TH2>
                     <EmptyCartDescription>
-                        <Trans
-                            i18nKey="orderForm.emptyCartDescription"
-                            t={t}
-                            components={{ 1: <Link href="/" /> }}
-                        />
+                        <Trans i18nKey="orderForm.emptyCartDescription" t={t} components={{ 1: <Link href="/" /> }} />
                     </EmptyCartDescription>
                 </Stack>
             </Stack>
@@ -620,8 +619,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                     <FormColumn>
                         {/* Login Form (only shown when user is not logged in) */}
                         {!activeCustomer?.id && showLoginForm && (
-                            <LoginForm 
-                                onLoginSuccess={handleLoginSuccess} 
+                            <LoginForm
+                                onLoginSuccess={handleLoginSuccess}
                                 fetchActiveOrder={fetchActiveOrder}
                                 insideForm={true}
                             />
@@ -663,8 +662,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                                     <ResponsiveRow w100 gap={20}>
                                         <Input
                                             {...register('phoneNumber', {
-                                                onChange: (e) =>
-                                                    (e.target.value = e.target.value.replace(/[^0-9]/g, '')),
+                                                onChange: e => (e.target.value = e.target.value.replace(/[^0-9]/g, '')),
                                             })}
                                             placeholder={t('orderForm.placeholders.phoneNumber')}
                                             type="tel"
@@ -699,7 +697,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                                                 <Input
                                                     {...register('confirmPassword', {
                                                         required: 'Confirm password is required',
-                                                        validate: (value) =>
+                                                        validate: value =>
                                                             value === watch('password') || 'Passwords do not match',
                                                     })}
                                                     type="password"
@@ -789,8 +787,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                                         style={{
                                             visibility: watch('billing.company') ? 'visible' : 'hidden',
                                             height: watch('billing.company') ? 'auto' : '0px',
-                                        }}
-                                    >
+                                        }}>
                                         <Input
                                             {...vatRegister}
                                             placeholder={t('orderForm.placeholders.customFields.vatNumber')}
@@ -819,8 +816,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
-                                        transition={{ duration: 0.2 }}
-                                    >
+                                        transition={{ duration: 0.2 }}>
                                         <TH2 size="30px" weight={600} style={{ marginBottom: '30px' }}>
                                             {t('orderForm.shippingInfo')}
                                         </TH2>
@@ -915,8 +911,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
                                             exit={{ opacity: 0 }}
-                                            transition={{ duration: 0.2 }}
-                                        >
+                                            transition={{ duration: 0.2 }}>
                                             {errors.terms?.message}
                                         </FormError>
                                     )}
@@ -934,7 +929,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                                         <DeliveryMethod
                                             selected={watch('deliveryMethod')}
                                             error={errors.deliveryMethod?.message}
-                                            onChange={async (id) => {
+                                            onChange={async id => {
                                                 await changeShippingMethod(id);
                                                 setValue('deliveryMethod', id);
                                                 clearErrors('deliveryMethod');
@@ -972,20 +967,20 @@ const Form = styled.form`
 `;
 
 const Container = styled(Stack)`
-  /* 
+    /* 
     On mobile, stack in a column. 
     On larger screens, place columns side-by-side. 
   */
-  flex-direction: column;
-  gap: 2rem;
-  width: 100%;
-  margin: 0 auto;
-  padding: 2rem;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
 
-  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
-    flex-direction: row;
-    align-items: flex-start;
-  }
+    @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
+        flex-direction: row;
+        align-items: flex-start;
+    }
 `;
 
 /** Left Column for the main form */
@@ -1047,7 +1042,7 @@ const DeliveryMethodWrapper = styled(Stack)``;
 const StyledButton = styled(Button)`
     appearance: none;
     border: none;
-    background: ${(p) => p.theme.background.accentGreen};
+    background: ${p => p.theme.background.accentGreen};
     text-transform: capitalize !important;
     width: 100%;
     display: flex;
@@ -1056,58 +1051,50 @@ const StyledButton = styled(Button)`
     padding: 1.6rem 0.8rem;
     border-radius: 12px;
 
-
     p {
         text-transform: capitalize !important;
-        color: ${(p) => p.theme.background.white};
-
-
-
+        color: ${p => p.theme.background.white};
     }
     & > div {
-        color: ${(p) => p.theme.background.white};
+        color: ${p => p.theme.background.white};
         text-align: center;
         font-weight: 600;
         font-size: 20px !important;
     }
 
     &:hover {
-        border: 1px solid ${(p) => p.theme.background.accentGreen};
+        border: 1px solid ${p => p.theme.background.accentGreen};
         p {
             text-transform: capitalize !important;
-            color: ${(p) => p.theme.background.accentGreen};
-
-
-
+            color: ${p => p.theme.background.accentGreen};
         }
-
     }
 `;
 
 const LinkButton = styled(Link)`
     width: 100%;
     text-align: center;
-    color: ${(p) => p.theme.text.main};
+    color: ${p => p.theme.text.main};
     font-size: 1.5rem;
     font-weight: 600;
 `;
 
 const StyledLink = styled(Link)`
-    color: ${(p) => p.theme.text.accentGreen};
+    color: ${p => p.theme.text.accentGreen};
     text-decoration: none;
     &:hover {
-        color: ${(p) => p.theme.text.accentGreen};
+        color: ${p => p.theme.text.accentGreen};
     }
 `;
 
 const EmptyCartDescription = styled.div`
-  font-size: 1.75rem;
-  & > a {
-    font-weight: 500;
     font-size: 1.75rem;
-    color: ${(p) => p.theme.accent(800)};
-    text-decoration: underline;
-  }
+    & > a {
+        font-weight: 500;
+        font-size: 1.75rem;
+        color: ${p => p.theme.accent(800)};
+        text-decoration: underline;
+    }
 `;
 
 /**
@@ -1115,8 +1102,8 @@ const EmptyCartDescription = styled.div`
  * but stacks them vertically on mobile.
  */
 const ResponsiveRow = styled(Stack)`
-  flex-direction: row;
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
-    flex-direction: column;
-  }
+    flex-direction: row;
+    @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+        flex-direction: column;
+    }
 `;

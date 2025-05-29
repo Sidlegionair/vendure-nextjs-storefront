@@ -19,7 +19,7 @@ type LoginFormValues = {
 
 interface LoginFormProps {
     onLoginSuccess: () => void;
-    fetchActiveOrder: () => Promise<any>;
+    fetchActiveOrder: () => Promise<unknown>;
     insideForm?: boolean;
 }
 
@@ -125,11 +125,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess, fetchActiv
                             type="password"
                             {...register('password')}
                         />
-                        <LoginButton 
-                            loading={isSubmitting} 
-                            type="button" 
-                            onClick={handleSubmit(onSubmit)}
-                        >
+                        <LoginButton loading={isSubmitting} type="button" onClick={handleSubmit(onSubmit)}>
                             {t('loginForm.signIn')}
                         </LoginButton>
                     </Stack>
@@ -163,7 +159,7 @@ const LoginContainer = styled.div`
     margin-bottom: 30px;
     padding: 20px;
     border-radius: 8px;
-    background-color: ${p => p.theme.background.light};
+    background-color: ${p => p.theme.background.ice};
     border: 1px solid ${p => p.theme.border.main};
 `;
 

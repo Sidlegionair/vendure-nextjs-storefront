@@ -1,11 +1,7 @@
 import { LogoAexol } from '@/src/assets';
-import { ContentContainer, Divider } from '@/src/components/atoms';
+import { ContentContainer } from '@/src/components/atoms';
 import styled from '@emotion/styled';
-import { useTranslation } from 'next-i18next';
-
 export const CheckoutNavigation: React.FC = () => {
-    const { t } = useTranslation('common');
-
     return (
         <StickyContainer>
             <CustomContentContainer>
@@ -29,7 +25,7 @@ const StickyContainer = styled.nav`
     padding: 15px 0 56px 0;
     position: fixed;
     top: 0;
-    background: #FFFFFF;
+    background: #ffffff;
     z-index: 2137;
     box-shadow: 0px 6px 4px rgba(0, 0, 0, 0.06);
 

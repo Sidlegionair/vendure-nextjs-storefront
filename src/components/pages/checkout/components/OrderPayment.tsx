@@ -13,11 +13,9 @@ import { CreditCard } from 'lucide-react';
 import { useCheckout } from '@/src/state/checkout';
 import { usePush } from '@/src/lib/redirect';
 import { useChannels } from '@/src/state/channels';
-import { StepsBar } from '@/src/components/molecules/StepsBar';
 
 interface OrderPaymentProps {
     availablePaymentMethods?: AvailablePaymentMethodsType[];
-    mollieData?: { paymentIntent: string | null };
 }
 
 type FormValues = {
@@ -26,10 +24,7 @@ type FormValues = {
 
 const POSITIVE_DEFAULT_PAYMENT_STATUSES = ['PaymentAuthorized', 'PaymentSettled'];
 
-export const OrderPayment: React.FC<OrderPaymentProps> = ({
-                                                              availablePaymentMethods,
-                                                              mollieData,
-                                                          }) => {
+export const OrderPayment: React.FC<OrderPaymentProps> = ({ availablePaymentMethods }) => {
     const { t } = useTranslation('checkout');
     const { t: tError } = useTranslation('common');
     const { activeOrder } = useCheckout();
@@ -115,7 +110,7 @@ export const OrderPayment: React.FC<OrderPaymentProps> = ({
                         setError(
                             tError(['errors.backend.MOLLIE_REDIRECT_FAILED'], {
                                 defaultValue: 'Mollie redirect failed',
-                            })
+                            }),
                         );
                     }
                 } else {
@@ -128,7 +123,7 @@ export const OrderPayment: React.FC<OrderPaymentProps> = ({
         }
     };
 
-    const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    const onSubmit: SubmitHandler<FormValues> = async data => {
         await handlePayment(data.payment);
     };
 
@@ -136,13 +131,12 @@ export const OrderPayment: React.FC<OrderPaymentProps> = ({
 
     return (
         <Container column w100>
-
             <Banner error={{ message: error ?? undefined }} clearErrors={() => setError(null)} />
             <PaymentForm onSubmit={handleSubmit(onSubmit)} noValidate>
                 <Stack w100 column style={{ position: 'relative' }}>
                     <HiddenCheckBox defaultChecked type="checkbox" />
                     <Grid>
-                        {availablePaymentMethods?.map((method) => (
+                        {availablePaymentMethods?.map(method => (
                             <GridEntry key={method.code} column itemsCenter justifyCenter>
                                 <PaymentButton
                                     id={method.code}
@@ -179,52 +173,52 @@ export const OrderPayment: React.FC<OrderPaymentProps> = ({
 /* -------------------- Styled Components -------------------- */
 
 const Container = styled(Stack)`
-  flex-direction: column;
-  gap: 2rem;
-  width: 100%;
-  margin: 0 auto;
-  //padding: 2rem;
-
-  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     flex-direction: column;
-    align-items: flex-start;
-  }
+    gap: 2rem;
+    width: 100%;
+    margin: 0 auto;
+    //padding: 2rem;
+
+    @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 `;
 
 const PaymentForm = styled.form`
-  //margin-top: 1.6rem;
-  width: 100%;
+    //margin-top: 1.6rem;
+    width: 100%;
 `;
 
 const StyledButton = styled(Button)`
-  appearance: none;
-  border: none;
-  background: ${(p) => p.theme.background.accentGreen};
-  text-transform: capitalize !important;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.6rem 0.8rem;
-  border-radius: 12px;
-
-  p {
+    appearance: none;
+    border: none;
+    background: ${p => p.theme.background.accentGreen};
     text-transform: capitalize !important;
-    color: ${(p) => p.theme.background.white};
-  }
-  & > div {
-    color: ${(p) => p.theme.background.white};
-    text-align: center;
-    font-weight: 600;
-    font-size: 20px !important;
-  }
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.6rem 0.8rem;
+    border-radius: 12px;
 
-  &:hover {
-    border: 1px solid ${(p) => p.theme.background.accentGreen};
-      & > div {
-      color: ${(p) => p.theme.background.accentGreen};
+    p {
+        text-transform: capitalize !important;
+        color: ${p => p.theme.background.white};
     }
-  }
+    & > div {
+        color: ${p => p.theme.background.white};
+        text-align: center;
+        font-weight: 600;
+        font-size: 20px !important;
+    }
+
+    &:hover {
+        border: 1px solid ${p => p.theme.background.accentGreen};
+        & > div {
+            color: ${p => p.theme.background.accentGreen};
+        }
+    }
 `;
 
 const HiddenCheckBox = styled.input`
@@ -268,19 +262,17 @@ type PaymentButtonProps = React.InputHTMLAttributes<HTMLInputElement> & {
     icon?: React.ReactNode;
 };
 
-const PaymentButton = React.forwardRef<HTMLInputElement, PaymentButtonProps>(
-    ({ label, icon, ...rest }, ref) => {
-        return (
-            <Stack w100 column itemsCenter gap="0.25rem">
-                <StyledRadioButton active={rest.checked} style={{ width: '100%', justifyContent: 'start' }}>
-                    {icon}
-                    <AbsoluteRadio ref={ref} {...rest} type="radio" />
-                    <label htmlFor={rest.name}>{label}</label>
-                </StyledRadioButton>
-            </Stack>
-        );
-    }
-);
+const PaymentButton = React.forwardRef<HTMLInputElement, PaymentButtonProps>(({ label, icon, ...rest }, ref) => {
+    return (
+        <Stack w100 column itemsCenter gap="0.25rem">
+            <StyledRadioButton active={rest.checked} style={{ width: '100%', justifyContent: 'start' }}>
+                {icon}
+                <AbsoluteRadio ref={ref} {...rest} type="radio" />
+                <label htmlFor={rest.name}>{label}</label>
+            </StyledRadioButton>
+        </Stack>
+    );
+});
 
 const AbsoluteRadio = styled.input`
     position: absolute;

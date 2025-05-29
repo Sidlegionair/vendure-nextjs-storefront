@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, SearchIcon, X } from 'lucide-react';
 import styled from '@emotion/styled';
 import { Link, Stack, TP, TypoGraphy } from '@/src/components/atoms';
-import { ProductImageWithInfo } from '../../molecules/ProductImageWithInfo';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigationSearch } from './hooks';
 import { PopularSearches } from './PopularSearches';
@@ -19,14 +18,14 @@ import { Pagination } from 'swiper/modules';
 SwiperCore.use([Pagination]);
 
 export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> = ({
-                                                                                       loading,
-                                                                                       searchQuery,
-                                                                                       searchResults,
-                                                                                       totalItems,
-                                                                                       setSearchQuery,
-                                                                                       closeSearch,
-                                                                                       onSubmit,
-                                                                                   }) => {
+    loading,
+    searchQuery,
+    searchResults,
+    totalItems,
+    setSearchQuery,
+    closeSearch,
+    onSubmit,
+}) => {
     const { t, ready } = useTranslation('common');
     const popularSearches = ['Dupraz', 'D1', 'Snowboards'];
 
@@ -92,11 +91,12 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                         type="text"
                     />
                     {searchQuery ? (
-                        <SearchButton onClick={() => {
-                            setSearchQuery('');
-                            closeSearch();
-                            setIsPanelVisible(false);
-                        }}>
+                        <SearchButton
+                            onClick={() => {
+                                setSearchQuery('');
+                                closeSearch();
+                                setIsPanelVisible(false);
+                            }}>
                             <X size="1.5rem" />
                         </SearchButton>
                     ) : (
@@ -118,19 +118,18 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                         </PopularSearchesWrapper>
                         <SearchResultsWrapper>
                             {searchQuery.length === 0 ? (
-                                <Stack column gap='16px'>
-                                    <MobileHeading size={'18px'} weight={400}>{t('search-query-start-typing')}</MobileHeading>
+                                <Stack column gap="16px">
+                                    <MobileHeading size={'18px'} weight={400}>
+                                        {t('search-query-start-typing')}
+                                    </MobileHeading>
                                     <MobileHeadingOpacity italic size={'16px'} weight={300}>
-                                        <Trans
-                                            i18nKey="search-query-to-short"
-                                            components={{ strong: <BoldText /> }}
-                                        />
+                                        <Trans i18nKey="search-query-to-short" components={{ strong: <BoldText /> }} />
                                     </MobileHeadingOpacity>
                                 </Stack>
                             ) : searchQuery.length < 3 ? (
                                 <MobileText>{t('search-query-to-short')}</MobileText>
                             ) : loading ? (
-                                <Stack column gap='24px'>
+                                <Stack column gap="24px">
                                     <MobileHeading size="20px" weight={600} noWrap>
                                         {t('search-results-header')}
                                     </MobileHeading>
@@ -145,7 +144,9 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                                             components={{ 1: <strong></strong> }}
                                         />
                                     </MobileText>
-                                    <MobileHeadingOpacity size={'18px'} weight={300}>{t('search-query-try-searching-something-else')}</MobileHeadingOpacity>
+                                    <MobileHeadingOpacity size={'18px'} weight={300}>
+                                        {t('search-query-try-searching-something-else')}
+                                    </MobileHeadingOpacity>
                                 </Stack>
                             ) : (
                                 <Wrapper column w100 gap={'0rem'}>
@@ -160,8 +161,7 @@ export const NavigationSearch: React.FC<ReturnType<typeof useNavigationSearch>> 
                                                     spaceBetween={40} // Adjust as needed
                                                     pagination={{
                                                         clickable: true,
-                                                    }}
-                                                >
+                                                    }}>
                                                     {searchResults.slice(0, 6).map(result => (
                                                         <StyledSwiperSlide key={result.slug}>
                                                             <ProductTile product={result} />
@@ -212,7 +212,7 @@ const StyledSwiper = styled(Swiper)`
     .swiper-pagination-bullet {
         width: 10px;
         height: 10px;
-         background: transparent;
+        background: transparent;
         border: 1px solid black;
         opacity: 1;
     }
@@ -298,12 +298,13 @@ const SearchResultsWrapper = styled(Stack)`
     }
 `;
 
-const ResultCard = styled(Stack)`
-    flex-basis: calc(100% / 2);
-    @media (min-width: ${p => p.theme.breakpoints.ssm}) {
-        flex-basis: calc(100% / 3);
-    }
-`;
+// Commented out as it's not currently used but might be needed in the future
+// const ResultCard = styled(Stack)`
+//     flex-basis: calc(100% / 2);
+//     @media (min-width: ${p => p.theme.breakpoints.ssm}) {
+//         flex-basis: calc(100% / 3);
+//     }
+// `;
 
 const SearchPosition = styled(Stack)`
     position: absolute;
@@ -440,7 +441,6 @@ const Wrapper = styled(Stack)``;
 const BoldText = styled.strong`
     font-weight: bold;
 `;
-
 
 const MobileHeadingOpacity = styled(TypoGraphy)`
     opacity: 0.5;

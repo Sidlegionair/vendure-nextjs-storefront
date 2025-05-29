@@ -108,7 +108,7 @@ export const CustomerResetPasswordForm: React.FC = () => {
             exit={{ opacity: 0 }}
             transition={{
                 duration: 0.2,
-                ease: "easeInOut"
+                ease: 'easeInOut',
             }}>
             <Form onSubmit={handleSubmit(onPasswordChange)} noValidate>
                 <Banner

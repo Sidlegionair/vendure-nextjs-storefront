@@ -2,14 +2,12 @@
 
 import { useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
-import { GetStaticProps, GetStaticPaths, InferGetStaticPropsType } from 'next';
+import { GetStaticPaths, InferGetStaticPropsType } from 'next';
 import StoryPage from '@/src/components/pages/storyblok/index';
 import { ContextModel, makeStaticProps } from '@/src/lib/getStatic';
-import { channels, DEFAULT_LOCALE, DEFAULT_CHANNEL, DEFAULT_CHANNEL_SLUG } from '@/src/lib/consts';
-import { fetchStory, fetchNavigation, fetchRelatedArticles } from '@/src/lib/storyblok';
+import { channels, DEFAULT_LOCALE } from '@/src/lib/consts';
+import { fetchStory, fetchRelatedArticles } from '@/src/lib/storyblok';
 import { getStoryblokApi } from '@storyblok/react';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { arrayToTree, RootNode } from '@/src/util/arrayToTree';
 import { getCollections } from '@/src/graphql/sharedQueries';
 import { getNavigationTree } from '@/src/lib/menuConfig';
 
@@ -18,7 +16,7 @@ interface StoryItem {
     id: string;
     name: string;
     content?: {
-        [key: string]: any;
+        [key: string]: unknown;
     };
     first_published_at: string;
     slug: string;
@@ -26,20 +24,20 @@ interface StoryItem {
 }
 
 const StoryPageWrapper = ({
-                              slug,
-                              story,
-                              relatedArticles,
-                              navigation,
-                              subnavigation,
-                              categories,
-                              isOverview,
-                              articleGridProps,
-                              articles,
-                              contentAboveGrid,
-                              contentBelowGrid,
-                              locale,
-                              channel,
-                          }: InferGetStaticPropsType<typeof getStaticProps>) => {
+    slug,
+    story,
+    relatedArticles,
+    navigation,
+    subnavigation,
+    categories,
+    isOverview,
+    articleGridProps,
+    articles,
+    contentAboveGrid,
+    contentBelowGrid,
+    locale,
+    channel,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
     const { i18n } = useTranslation();
 
     useEffect(() => {
@@ -79,8 +77,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
         if (!data?.stories) throw new Error('No content found');
 
-        const shippingLocales = channels.map((channel) => channel.slug); // e.g., ['en', 'nl']
-        const defaultLocale = DEFAULT_LOCALE; // e.g., 'en'
+        const shippingLocales = channels.map(channel => channel.slug); // e.g., ['en', 'nl']
 
         const paths: {
             params: { channel: string; slug: string[] };
@@ -91,7 +88,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
             const slugParts = story.full_slug.split('/').slice(1); // Remove 'content'
 
-            shippingLocales.forEach((shippingLocale) => {
+            shippingLocales.forEach(shippingLocale => {
                 paths.push({
                     params: {
                         channel: shippingLocale,
@@ -106,18 +103,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
         return { paths, fallback: 'blocking' };
     } catch (error) {
-        console.error('Error fetching content from Storyblok in getStaticPaths for /[channel]/content/[...slug]:', error);
+        console.error(
+            'Error fetching content from Storyblok in getStaticPaths for /[channel]/content/[...slug]:',
+            error,
+        );
         return { paths: [], fallback: 'blocking' };
     }
-};
-
-/**
- * Helper function to fetch all stories.
- * You can define this in storyblok.ts or another utility file.
- */
-const fetchStoryblokStories = async () => {
-    const storyblokApi = getStoryblokApi();
-    return await storyblokApi.get('cdn/stories', { version: 'draft' });
 };
 
 export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>) => {
@@ -130,10 +121,7 @@ export const getStaticProps = async (context: ContextModel<{ slug?: string[] }>)
 
     const r = await makeStaticProps(['common', 'collections'])(_context);
     const collections = await getCollections(r.context);
-    const { navigation, subnavigation } = await getNavigationTree(
-        r.context,
-        collections
-    );
+    const { navigation, subnavigation } = await getNavigationTree(r.context, collections);
 
     // Extract channel and slug from params
     const { channel } = context.params as {

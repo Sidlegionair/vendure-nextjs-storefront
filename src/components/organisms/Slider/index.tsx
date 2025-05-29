@@ -15,18 +15,18 @@ interface SliderProps {
 }
 
 export const Slider: React.FC<SliderProps> = ({
-                                                  slides,
-                                                  withDots = false,
-                                                  spacing = 60,
-                                                  loop = true,
-                                                  height = 'auto',
-                                                  slideWidth = '300px',
-                                              }) => {
+    slides,
+    withDots = false,
+    spacing = 60,
+    loop = true,
+    height = 'auto',
+    slideWidth = '300px',
+}) => {
     if (!slides?.length) return null;
 
     // Get viewport width to determine how many slides can fit.
     const [containerWidth, setContainerWidth] = useState<number>(
-        typeof window !== 'undefined' ? window.innerWidth : 1024
+        typeof window !== 'undefined' ? window.innerWidth : 1024,
     );
 
     useEffect(() => {
@@ -51,8 +51,7 @@ export const Slider: React.FC<SliderProps> = ({
             loop={loop}
             loopAdditionalSlides={slidesInView} // Provide additional looped slides for smooth swiping
             autoHeight={height === 'auto'}
-            style={{ height }}
-        >
+            style={{ height }}>
             {slides.map((slide, index) => (
                 <SwiperSlide key={index} style={{ width: slideWidth }}>
                     {slide}

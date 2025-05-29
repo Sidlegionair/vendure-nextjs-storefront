@@ -34,7 +34,8 @@ export const SearchPage: React.FC<InferGetServerSidePropsType<typeof getServerSi
     return (
         <Layout
             categories={props.collections}
-            navigation={props.navigation} subnavigation={props.subnavigation}
+            navigation={props.navigation}
+            subnavigation={props.subnavigation}
             pageTitle={t('search-results') + ' ' + searchPhrase}>
             <ContentContainer>
                 <AnimatePresence>
@@ -90,9 +91,7 @@ export const SearchPage: React.FC<InferGetServerSidePropsType<typeof getServerSi
                         </Filters>
                         <SortBy sort={sort} handleSort={handleSort} />
                     </Stack>
-                    <MainGrid>
-                        {products?.map(p => <ProductTile product={p} key={p.slug} />)}
-                    </MainGrid>
+                    <MainGrid>{products?.map(p => <ProductTile product={p} key={p.slug} />)}</MainGrid>
                     <Pagination
                         page={paginationInfo.currentPage}
                         changePage={changePage}

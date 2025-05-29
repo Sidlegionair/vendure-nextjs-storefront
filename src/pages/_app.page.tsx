@@ -51,27 +51,27 @@ import ScaleWrapper from '@/src/components/storyblok/ScaleWrapper';
 // Register your components
 const components = {
     'all-articles': AllArticles,
-    'article': Article,
+    article: Article,
     'article-teaser': ArticleTeaser,
-    'feature': Feature,
-    'footer': Footer,
-    'grid': Grid,
+    feature: Feature,
+    footer: Footer,
+    grid: Grid,
     'two-col-grid': TwoColGrid,
     'multi-col-grid': MultiColGrid,
-    'hero': Hero,
-    'layout': Layout,
-    'navigation': Navigation,
-    'page': Page,
+    hero: Hero,
+    layout: Layout,
+    navigation: Navigation,
+    page: Page,
     'popular-articles': PopularArticles,
-    'teaser': Teaser,
+    teaser: Teaser,
     'about-us-block': AboutUsBlock,
     'about-us-block-inverted': AboutUsBlockInverted,
-    'carousel': Carousel,
+    carousel: Carousel,
     'rich-text-editor': RichTextEditor,
     'mosaic-block': MosaicBlock,
     'page-heading': PageHeading,
     'container-block': ContainerBlock,
-    'Blogpost': BlogPost,
+    Blogpost: BlogPost,
     'article-card': ArticleCard,
     'article-grid': ArticleGrid,
     'article-overview-page': ArticlesOverviewPage,
@@ -81,8 +81,8 @@ const components = {
     'hubspot-form-block': HubspotFormBlock,
     'gorgias-form-block': GorgiasFormBlock,
     'gorgias-help-center-block': GorgiasHelpCenterBlock,
-    'CookieFirstComponent': CookieFirstComponent,
-    'scale-wrapper': ScaleWrapper
+    CookieFirstComponent: CookieFirstComponent,
+    'scale-wrapper': ScaleWrapper,
     // 'vendure-collection-slider': VendureCollectionSlider,
 };
 
@@ -103,8 +103,8 @@ const App = ({ Component, pageProps }: AppProps) => {
         const isTestingAgent = /lighthouse|Google Page Speed Insights/i.test(navigator.userAgent);
         if (isPageSpeedQuery || isTestingAgent) return;
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     setShowCookieBanner(true);
                     observer.disconnect();

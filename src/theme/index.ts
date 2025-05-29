@@ -44,8 +44,8 @@ type DetailTheme = {
     button: {
         back: string;
         front: string;
-        icon: { front: string; back: string; };
-        hover: { front: string; back: string; };
+        icon: { front: string; back: string };
+        hover: { front: string; back: string };
         border: string;
     };
     border: {
@@ -121,7 +121,10 @@ const themeTransform = (t: MainTheme): Gen<DetailTheme> => {
             if (typeof value === 'string') {
                 obj[key] = (fn: Emotional) => {
                     const result = prefix.concat(key).reduce(
-                        (acc: Record<string, unknown> | string | undefined, prop: string): string | Record<string, unknown> | undefined => {
+                        (
+                            acc: Record<string, unknown> | string | undefined,
+                            prop: string,
+                        ): string | Record<string, unknown> | undefined => {
                             if (typeof acc === 'object' && acc !== null) {
                                 return acc[prop] as string | Record<string, unknown> | undefined;
                             }
@@ -131,14 +134,14 @@ const themeTransform = (t: MainTheme): Gen<DetailTheme> => {
                     );
                     return result as string;
                 };
-
             } else if (value && typeof value === 'object') {
                 tree(value as Record<string, unknown>, [...prefix, key]);
             }
         });
     };
 
-    const { gray, accent, borderRadius, grayAlpha, ...rest } = t;
+    // Skip destructuring the function properties to avoid ESLint warnings
+    const { ...rest } = t;
     const restCopy = JSON.parse(JSON.stringify(rest));
     tree(restCopy);
     return restCopy as Gen<DetailTheme>;
@@ -157,18 +160,20 @@ export const createTheme = (
     };
 };
 
-
 const defaultThemeFunction = (hue: number): FunctionTheme => ({
-    accent: (l) => `hsl(${hue}, 100%, ${l}%)`,
-    gray: (l) => `hsl(0, 0%, ${l}%)`,
+    accent: l => `hsl(${hue}, 100%, ${l}%)`,
+    gray: l => `hsl(0, 0%, ${l}%)`,
     grayAlpha: (l, alpha) => `hsla(0, 0%, ${l}%, ${alpha})`,
-    borderRadius: "8px",
+    borderRadius: '8px',
     withOpacity: (color, opacity) => {
         // Helper function to convert hex to RGB
         const hexToRgb = (hex: string): [number, number, number] => {
             let cleanHex = hex.replace('#', '');
             if (cleanHex.length === 3) {
-                cleanHex = cleanHex.split('').map((x) => x + x).join('');
+                cleanHex = cleanHex
+                    .split('')
+                    .map(x => x + x)
+                    .join('');
             }
             const bigint = parseInt(cleanHex, 16);
             return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255];
@@ -180,9 +185,7 @@ const defaultThemeFunction = (hue: number): FunctionTheme => ({
             rgb = hexToRgb(color);
         } else if (color.startsWith('rgb') || color.startsWith('hsl')) {
             // Return the color directly if it is already in a valid format
-            return color.replace(/(rgba?|hsla?)\((.*?)\)/, (_, prefix, inner) =>
-                `${prefix}(${inner}, ${opacity})`
-            );
+            return color.replace(/(rgba?|hsla?)\((.*?)\)/, (_, prefix, inner) => `${prefix}(${inner}, ${opacity})`);
         } else {
             throw new Error(`Invalid color format: ${color}`);
         }
@@ -192,9 +195,8 @@ const defaultThemeFunction = (hue: number): FunctionTheme => ({
     },
 });
 
-
 // Define default theme settings
-export const LightTheme = createTheme(300, (t) => ({
+export const LightTheme = createTheme(300, t => ({
     background: {
         main: '#fff',
         secondary: '#fff',
@@ -290,7 +292,6 @@ export const LightTheme = createTheme(300, (t) => ({
         lightGray: '#5F5F5F',
     },
 }));
-
 
 // Transform the theme object for use in a UI
 export const thv = themeTransform(LightTheme);

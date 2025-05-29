@@ -13,7 +13,6 @@ import { useTranslation } from 'next-i18next';
 import { Absolute, Form, FormContainer, FormContent, FormWrapper } from '../components/shared';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TP } from '@/src/components/atoms/TypoGraphy';
 import { usePush } from '@/src/lib/redirect';
 import { getServerSideProps } from './props';
 import { useChannels } from '@/src/state/channels';
@@ -94,7 +93,11 @@ export const SignUpPage: React.FC<InferGetServerSidePropsType<typeof getServerSi
     };
 
     return (
-        <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation} pageTitle={t('signUpTitle')}>
+        <Layout
+            categories={props.collections}
+            navigation={props.navigation}
+            subnavigation={props.subnavigation}
+            pageTitle={t('signUpTitle')}>
             <StyledAuthContainer>
                 <FormContainer>
                     <StyledFormWrapper column itemsCenter gap="3.5rem">
@@ -144,7 +147,6 @@ export const SignUpPage: React.FC<InferGetServerSidePropsType<typeof getServerSi
     );
 };
 
-
 const StyledLink = styled(Link)`
     font-family: "Suisse BP Int'l antique", sans-serif;
     position: relative;
@@ -160,7 +162,6 @@ const StyledLink = styled(Link)`
     }
 `;
 
-
 const StyledH3 = styled.h3`
     font-family: "Suisse BP Int'l antique", sans-serif;
 `;
@@ -169,9 +170,7 @@ const StyledFormWrapper = styled(FormWrapper)`
     //background: white;
     opacity: 0.8;
     background: ${({ theme }) => theme.background.main};
-
 `;
-
 
 const StyledAuthContainer = styled(ContentContainer)`
     z-index: 0;
@@ -195,9 +194,6 @@ const StyledAuthContainer = styled(ContentContainer)`
         padding: 0 1.5rem;
     }
 
-
-
-
     position: relative;
     height: 100%;
     min-height: 150%;
@@ -217,14 +213,13 @@ const StyledAuthContainer = styled(ContentContainer)`
     }
 `;
 
-
 const StyledInput = styled(Input)`
     width: 100%;
 
     label {
         font-weight: bold;
     }
-`
+`;
 
 const StyledButton = styled(Button)`
     align-self: center;
@@ -233,9 +228,10 @@ const StyledButton = styled(Button)`
     background-color: ${({ theme }) => theme.background.accent};
     color: ${({ theme }) => theme.background.main};
 
-    &:hover, &:focus{
+    &:hover,
+    &:focus {
         color: ${({ theme }) => theme.text.accent};
 
         border: 1px solid ${({ theme }) => theme.background.accent};
     }
-`
+`;

@@ -3,33 +3,52 @@ import {
     CollectionTileSelector,
     CollectionTileProductVariantType,
     CollectionTileProductVariantSelector,
-    ServiceLocationSelector,
     ServiceLocationType,
 } from '@/src/graphql/selectors';
 import { SortOrder } from '@/src/zeus';
-import { DEFAULT_CHANNEL, DEFAULT_CHANNEL_SLUG } from '@/src/lib/consts';
+import { DEFAULT_CHANNEL } from '@/src/lib/consts';
 
+export const GetMainNavigation = () => {};
 
-export const GetMainNavigation = (params: { locale: string; channel: string }) => {
-
-};
-
-export const GetSubNavigation = () => {
-
-}
+export const GetSubNavigation = () => {};
 
 export const getServiceLocationForProduct = async (
     params: { locale: string; channel: string },
-    productId: string
+    productId: string,
 ): Promise<ServiceLocationType | null> => {
     try {
+        // Use ServiceDealerSelector directly for the query
         const result = await storefrontApiQuery(params)({
-            getServiceLocationForProduct: [
+            selectVendorForVariation: [
                 { productId },
-                ServiceLocationSelector
-            ]
+                {
+                    sellerId: true,
+                    name: true,
+                    firstName: true,
+                    lastName: true,
+                    emailAddress: true,
+                    address: true,
+                    postalCode: true,
+                    country: true,
+                    vendorType: true,
+                    slug: true,
+                    channel: true,
+                    locales: true,
+                    nationalLocale: true,
+                },
+            ],
         });
-        return result.getServiceLocationForProduct;
+
+        // Transform the result to match the expected ServiceLocationType structure
+        if (result.selectVendorForVariation) {
+            return {
+                serviceDealer: result.selectVendorForVariation,
+                serviceAgentAvailable: true, // Default value
+                scenario: true, // Default value
+            } as ServiceLocationType;
+        }
+
+        return null;
     } catch (error) {
         console.error('Error fetching service location:', error);
         return null;

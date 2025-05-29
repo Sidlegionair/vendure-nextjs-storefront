@@ -96,7 +96,11 @@ export const HistoryPage: React.FC<InferGetServerSidePropsType<typeof getServerS
     };
 
     return (
-        <Layout categories={props.collections} navigation={props.navigation} subnavigation={props.subnavigation} pageTitle={t('ordersPage.title')}>
+        <Layout
+            categories={props.collections}
+            navigation={props.navigation}
+            subnavigation={props.subnavigation}
+            pageTitle={t('ordersPage.title')}>
             <StyledContentContainer>
                 <Stack w100 justifyCenter>
                     <CustomerNavigation />
@@ -105,43 +109,41 @@ export const HistoryPage: React.FC<InferGetServerSidePropsType<typeof getServerS
                     <FormWrapper>
                         <CustomerWrap w100 itemsStart gap="1.75rem">
                             <Stack column w100 gap="1rem">
-                        <TP size="2.5rem" weight={600}>
-                            {t('ordersPage.title')}
-                        </TP>
-                        <Main column w100 gap="1.5rem">
-                            <Input
-                                label={t('ordersPage.searchOrder')}
-                                placeholder={t('ordersPage.lookForOrder')}
-                                onChange={onSearch}
-                            />
-                            <Wrap flexWrap w100 ref={scrollableRef}>
-                                {!loading ? (
-                                    activeOrders?.map(order => <OrderBox key={order.id} order={order} />)
-                                ) : (
-                                    <TP>{t('ordersPage.loading')}</TP>
-                                )}
-                            </Wrap>
-                            {props.activeCustomer?.orders.totalItems > activeOrders?.length && (
-                                <ButtonWrap w100>
-                                    <StyledButton loading={more} onClick={onLoadMore}>
-                                        {t('ordersPage.loadMore')}
-                                    </StyledButton>
-                                </ButtonWrap>
-                            )}
-                        </Main>
-                    </Stack>
-                </CustomerWrap>
+                                <TP size="2.5rem" weight={600}>
+                                    {t('ordersPage.title')}
+                                </TP>
+                                <Main column w100 gap="1.5rem">
+                                    <Input
+                                        label={t('ordersPage.searchOrder')}
+                                        placeholder={t('ordersPage.lookForOrder')}
+                                        onChange={onSearch}
+                                    />
+                                    <Wrap flexWrap w100 ref={scrollableRef}>
+                                        {!loading ? (
+                                            activeOrders?.map(order => <OrderBox key={order.id} order={order} />)
+                                        ) : (
+                                            <TP>{t('ordersPage.loading')}</TP>
+                                        )}
+                                    </Wrap>
+                                    {props.activeCustomer?.orders.totalItems > activeOrders?.length && (
+                                        <ButtonWrap w100>
+                                            <StyledButton loading={more} onClick={onLoadMore}>
+                                                {t('ordersPage.loadMore')}
+                                            </StyledButton>
+                                        </ButtonWrap>
+                                    )}
+                                </Main>
+                            </Stack>
+                        </CustomerWrap>
                     </FormWrapper>
                 </FormContainer>
-
             </StyledContentContainer>
         </Layout>
     );
 };
 
 const Main = styled(Stack)`
-
-    @media(min-width: 767px) {
+    @media (min-width: 767px) {
         min-width: 600px;
     }
 `;
@@ -204,9 +206,6 @@ const StyledContentContainer = styled(ContentContainer)`
         width: 100%;
         padding: 4rem 1.5rem 2rem;
     }
-
-
-
 
     position: relative;
     height: 100%;

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Stack, TP } from '@/src/components/atoms';
+import { Stack } from '@/src/components/atoms';
 import styled from '@emotion/styled';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, Check, X } from 'lucide-react';
@@ -23,35 +23,28 @@ interface FacetGroupDropdownProps {
     onToggleFilter: (group: FacetGroup, value: FacetValue) => void;
 }
 
-export const FacetGroupDropdown: React.FC<FacetGroupDropdownProps> = ({
-                                                                          facetGroup,
-                                                                          selected,
-                                                                          onToggleFilter,
-                                                                      }) => {
+export const FacetGroupDropdown: React.FC<FacetGroupDropdownProps> = ({ facetGroup, selected, onToggleFilter }) => {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
     useOutsideClick(ref, () => setOpen(false));
 
     // Get the selected values (both their id and name).
-    const selectedOptions = facetGroup.values.filter((v) => selected.includes(v.id));
-    const selectedNames = selectedOptions.map((v) => v.name);
+    const selectedOptions = facetGroup.values.filter(v => selected.includes(v.id));
+    const selectedNames = selectedOptions.map(v => v.name);
     // If there are selected options, display them after the facet group name.
     const displayText = selectedNames.length > 0 ? selectedNames.join(', ') : '';
 
     // Reset function: remove all active filters for this group.
     const resetFilters = (e: React.MouseEvent) => {
         e.stopPropagation(); // Prevent toggling the dropdown.
-        selectedOptions.forEach((value) => {
+        selectedOptions.forEach(value => {
             onToggleFilter(facetGroup, value);
         });
     };
 
     return (
         <DropdownContainer ref={ref}>
-            <DropdownHeader
-                selected={selectedOptions.length > 0}
-                onClick={() => setOpen(!open)}
-            >
+            <DropdownHeader selected={selectedOptions.length > 0} onClick={() => setOpen(!open)}>
                 <Stack column>
                     <small>
                         <b>{facetGroup.name}</b>
@@ -77,14 +70,12 @@ export const FacetGroupDropdown: React.FC<FacetGroupDropdownProps> = ({
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        transition={{ duration: 0.2, ease: 'easeInOut' }}
-                    >
-                        {facetGroup.values.map((value) => (
+                        transition={{ duration: 0.2, ease: 'easeInOut' }}>
+                        {facetGroup.values.map(value => (
                             <DropdownItem
                                 key={value.id}
                                 selected={selected.includes(value.id)}
-                                onClick={() => onToggleFilter(facetGroup, value)}
-                            >
+                                onClick={() => onToggleFilter(facetGroup, value)}>
                                 <small>{value.name}</small>
                                 {selected.includes(value.id) && (
                                     <CheckIcon>
@@ -112,14 +103,11 @@ const DropdownHeader = styled(Stack)<{ selected: boolean }>`
     min-height: 65px;
     gap: 15px;
     min-width: 188px;
-    border: 1px solid ${({ theme, selected }) =>
-            selected ? theme.background.accent : '#4d4d4d'};
+    border: 1px solid ${({ theme, selected }) => (selected ? theme.background.accent : '#4d4d4d')};
 
     border-radius: 8px;
-    background-color: ${({ theme, selected }) =>
-            selected ? theme.background.accent : theme.background.main};
-    color: ${({ theme, selected }) =>
-            selected ? theme.background.main : 'inherit'};
+    background-color: ${({ theme, selected }) => (selected ? theme.background.accent : theme.background.main)};
+    color: ${({ theme, selected }) => (selected ? theme.background.main : 'inherit')};
 `;
 
 const SelectedText = styled.small`
@@ -168,14 +156,10 @@ const DropdownItem = styled.div<{ selected: boolean }>`
     padding: 1rem;
     display: flex;
     align-items: center;
-    background-color: ${({ theme, selected }) =>
-            selected ? theme.background.accent : 'unset'};
-    color: ${({ theme, selected }) =>
-            selected ? theme.background.main : 'inherit'};
+    background-color: ${({ theme, selected }) => (selected ? theme.background.accent : 'unset')};
+    color: ${({ theme, selected }) => (selected ? theme.background.main : 'inherit')};
     &:hover {
         background-color: ${({ theme }) => theme.background.third};
-        color: ${({ theme, selected }) =>
-                selected ? theme.text.main : 'inherit'};
-
+        color: ${({ theme, selected }) => (selected ? theme.text.main : 'inherit')};
     }
 `;

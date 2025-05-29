@@ -16,23 +16,16 @@ export const Ratings: React.FC<{ rating: number }> = ({ rating }) => {
 
     return (
         <Stack>
-            {stars.map((star) => (
+            {stars.map(star => (
                 <RatingsWrapper
                     key={star}
                     style={{
                         position: 'relative',
                         height: '15px',
                         width: '15px',
-                    }}
-                >
+                    }}>
                     {/* EMPTY STAR as background */}
-                    <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             fillRule="evenodd"
                             clipRule="evenodd"
@@ -49,8 +42,7 @@ export const Ratings: React.FC<{ rating: number }> = ({ rating }) => {
                         height="16"
                         viewBox="0 0 16 16"
                         fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
+                        xmlns="http://www.w3.org/2000/svg">
                         <path
                             fillRule="evenodd"
                             clipRule="evenodd"

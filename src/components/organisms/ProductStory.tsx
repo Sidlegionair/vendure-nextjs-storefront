@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { storyblokEditable, getStoryblokApi, StoryblokComponent } from '@storyblok/react';
+import { storyblokEditable, getStoryblokApi, StoryblokComponent, SbBlokData } from '@storyblok/react';
 import styled from '@emotion/styled';
 import { useTranslation } from 'next-i18next';
 
@@ -9,7 +9,7 @@ interface ProductStoryProps {
 
 export const ProductStory: React.FC<ProductStoryProps> = ({ slug }) => {
     const { i18n } = useTranslation(); // Use i18n for locale detection
-    const [storyContent, setStoryContent] = useState<any>(null);
+    const [storyContent, setStoryContent] = useState<SbBlokData | null>(null);
     const [loading, setLoading] = useState<boolean>(true); // Loading state
     const [error, setError] = useState<string | null>(null); // Error state
 

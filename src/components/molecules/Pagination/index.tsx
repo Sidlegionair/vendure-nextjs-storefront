@@ -39,7 +39,7 @@ const PaginationWrapper = styled(Stack)`
 
 const PaginationText = styled.a<{ isCurrent?: boolean }>`
     font-size: 18px;
-    
+
     font-weight: 500;
     color: ${p => (p.isCurrent ? p.theme.text.accent : p.theme.text.subtitle)};
     cursor: pointer;

@@ -3,19 +3,12 @@ import { createContainer } from 'unstated-next';
 import { ChannelsContainerType, ChannelState } from './types';
 import { channelsEmptyState } from './utils';
 
-function useChannelsHook(
-    initialState?: ChannelState
-): ChannelsContainerType {
-
+function useChannelsHook(initialState?: ChannelState): ChannelsContainerType {
     // active channel slug
-    const [channel, setChannel] = useState(
-        initialState?.channel ?? channelsEmptyState.channel
-    );
+    const [channel, setChannel] = useState(initialState?.channel ?? channelsEmptyState.channel);
 
     // current locale
-    const [locale, setLocale] = useState(
-        initialState?.locale ?? channelsEmptyState.locale
-    );
+    const [locale, setLocale] = useState(initialState?.locale ?? channelsEmptyState.locale);
 
     return {
         channel,

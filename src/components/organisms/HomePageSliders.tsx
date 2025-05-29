@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import {
     HomePageSlidersType,
-    ProductDetailType,
     ProductSearchType as OriginalProductSearchType,
-    ProductTileSelector,
     ProductVariantTileType,
 } from '@/src/graphql/selectors';
-import { TH2, TP } from '@/src/components/atoms/TypoGraphy';
 import { Slider } from '@/src/components/organisms/Slider';
 import styled from '@emotion/styled';
-import { Link, Stack } from '@/src/components/atoms';
+import { Stack } from '@/src/components/atoms';
 import { ProductTile } from '@/src/components/molecules/ProductTile';
 import { ProductVariantTile } from '@/src/components/molecules/ProductVariantTile';
 
@@ -18,12 +15,14 @@ type ProductSearchType = OriginalProductSearchType & {
         brand?: string;
     };
     facetValues?: Array<{
+        id: string; // Add id property to match FacetValueType
         code: string;
         name: string;
-        value: string;
-        facet?: {
+        value?: string; // Make value optional to match FacetValueType
+        facet: {
             code: string;
             name: string;
+            id: string;
         };
     }>;
 };
@@ -34,7 +33,7 @@ type SliderType = Omit<Partial<HomePageSlidersType>, 'productVariants'> & {
     name?: string;
     id?: string;
     slug?: string;
-    assets?: any;
+    assets?: { source: string }[];
     productVariants?: {
         items?: ProductVariantTileType[];
         totalItems?: number;
@@ -45,16 +44,11 @@ type SliderType = Omit<Partial<HomePageSlidersType>, 'productVariants'> & {
 };
 
 interface BestOfI {
-    seeAllText: string;
     sliders: SliderType[];
     useVariants?: boolean;
 }
 
-export const HomePageSliders: React.FC<BestOfI> = ({
-                                                       sliders,
-                                                       seeAllText,
-                                                       useVariants = false,
-                                                   }) => {
+export const HomePageSliders: React.FC<BestOfI> = ({ sliders, useVariants = false }) => {
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -74,8 +68,8 @@ export const HomePageSliders: React.FC<BestOfI> = ({
 
     return (
         <Stack w100 column gap="8rem">
-            {sliders.map((slider) => {
-                const { slug, parent, name, productVariants, products, id } = slider;
+            {sliders.map(slider => {
+                const { slug, productVariants, products, id } = slider;
                 let slides;
 
                 if (useVariants && productVariants?.items?.length) {
@@ -109,19 +103,4 @@ const StyledSection = styled.section`
     display: flex;
     flex-direction: column;
     gap: 2rem;
-`;
-
-const Header = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-`;
-
-const StyledLink = styled(Link)`
-    padding: 1rem 2rem;
-    background-color: ${({ theme }) => theme.text.main};
-    display: flex;
-    align-items: center;
-    justify-content: center;
 `;
